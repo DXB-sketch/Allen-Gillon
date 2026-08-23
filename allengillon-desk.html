@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allen Gillon — The Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Courier+Prime:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --felt:   oklch(0.35 0.028 165);      /* desk surface, muted grey-green */
+    --felt-2: oklch(0.31 0.026 165);
+    --paper:  oklch(0.955 0.010 95);
+    --paper-2:oklch(0.925 0.014 92);
+    --ink:    oklch(0.26 0.018 220);
+    --soft:   oklch(0.45 0.015 220);
+    --ochre:  oklch(0.585 0.115 68);
+    --blue:   oklch(0.45 0.055 245);
+    --line:   oklch(0.83 0.012 95);
+    --maxw:1080px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--felt);color:var(--ink);font-family:"Lora",Georgia,serif;font-size:19px;line-height:1.6;-webkit-font-smoothing:antialiased;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");}
+  a{color:inherit;text-decoration:none;}
+  .mono{font-family:"Courier Prime",monospace;}
+  .hand{font-family:"Caveat",cursive;}
+  h1,h2,h3{margin:0;line-height:1.12;font-weight:600;}
+  :focus-visible{outline:3px solid var(--ochre);outline-offset:3px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px;}
+
+  /* masthead: a strip of tape / label on the desk */
+  .mast{display:flex;justify-content:space-between;align-items:center;gap:20px;max-width:var(--maxw);margin:0 auto;padding:20px 26px;color:var(--paper);}
+  .mast .who{font-family:"Caveat",cursive;font-size:1.9rem;font-weight:600;}
+  .mast nav{display:flex;gap:4px;flex-wrap:wrap;align-items:center;}
+  .mast nav a{font-family:"Courier Prime",monospace;font-size:.82rem;letter-spacing:.02em;padding:10px 11px;min-height:44px;display:inline-flex;align-items:center;color:oklch(0.86 0.02 165);}
+  .mast nav a:hover{color:var(--paper);}
+  .mast .cart{color:var(--felt);background:var(--ochre);border-radius:2px;}
+
+  /* a sheet of paper laid on the desk */
+  .card{background:var(--paper);border-radius:2px;box-shadow:0 18px 40px -18px oklch(0 0 0 / .55);position:relative;}
+  .card::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 1px 0 oklch(1 0 0 / .5);}
+  .tape{position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(-2deg);width:120px;height:26px;background:oklch(0.85 0.05 68 / .6);box-shadow:0 2px 4px oklch(0 0 0 / .2);}
+
+  /* hero sheet */
+  .hero{margin:8px auto 0;padding:56px clamp(28px,6vw,72px) 52px;}
+  .hero .filed{font-family:"Courier Prime",monospace;font-size:.78rem;color:var(--soft);letter-spacing:.04em;}
+  .hero h1{font-size:clamp(2.5rem,6vw,4.2rem);margin:18px 0 0;letter-spacing:-.01em;max-width:16ch;}
+  .hero h1 em{font-style:italic;color:var(--ochre);font-weight:500;}
+  .hero .say{font-size:1.2rem;max-width:52ch;margin-top:22px;color:var(--ink);}
+  .hero .say b{font-weight:600;}
+  .hero .scrawl{font-family:"Caveat",cursive;font-size:1.5rem;color:var(--blue);margin-top:24px;transform:rotate(-1.5deg);}
+
+  /* three "objects" on the desk */
+  .objects{max-width:var(--maxw);margin:34px auto 0;padding:0 26px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .obj{padding:26px 24px 24px;min-height:190px;display:flex;flex-direction:column;position:relative;}
+  .obj .kind{font-family:"Courier Prime",monospace;font-size:.74rem;letter-spacing:.06em;color:var(--soft);}
+  .obj h2{font-size:1.7rem;margin:8px 0 0;}
+  .obj p{font-size:.98rem;color:var(--soft);margin:10px 0 0;max-width:26ch;}
+  .obj .go{margin-top:auto;padding-top:16px;font-family:"Caveat",cursive;font-size:1.35rem;color:var(--ochre);}
+  .obj .go::after{content:" →";}
+  .obj.plays{transform:rotate(-1deg);}
+  .obj.books{transform:rotate(.6deg);}
+  .obj.music{transform:rotate(-.4deg);}
+  .obj:hover{transform:rotate(0) translateY(-3px);transition:transform .3s cubic-bezier(.2,.8,.2,1);}
+
+  /* work sheets */
+  .sheaf{max-width:var(--maxw);margin:56px auto 0;padding:0 26px;}
+  .sheaf > h2{color:var(--paper);font-size:2rem;margin-bottom:4px;}
+  .sheaf > .sub{color:oklch(0.85 0.02 165);max-width:48ch;margin-bottom:26px;font-style:italic;}
+
+  .leaf{margin-bottom:22px;padding:24px clamp(22px,4vw,40px);display:grid;grid-template-columns:1fr 190px;gap:30px;}
+  .leaf:nth-child(odd){transform:rotate(-.3deg);}
+  .leaf:nth-child(even){transform:rotate(.3deg);}
+  .leaf h3{font-size:1.45rem;}
+  .leaf .kind{font-family:"Courier Prime",monospace;font-size:.72rem;color:var(--ochre);letter-spacing:.05em;margin-bottom:4px;}
+  .leaf .desc{color:var(--ink);margin:8px 0 14px;max-width:52ch;}
+  .leaf .buyrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .cost{font-family:"Courier Prime",monospace;font-weight:700;font-size:1.1rem;}
+  .cost.free{color:var(--ochre);}
+  .btn{font-family:"Lora",serif;font-weight:600;font-size:.95rem;padding:11px 18px;min-height:44px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer;border-radius:2px;}
+  .btn:hover{background:var(--ochre);border-color:var(--ochre);color:var(--felt);}
+  .btn.o{background:transparent;color:var(--ink);}
+  .btn.o:hover{background:var(--ink);color:var(--paper);}
+  .read{font-style:italic;color:var(--soft);border-bottom:1.5px solid var(--ochre);}
+  .read:hover{color:var(--ink);}
+
+  /* the index-card note carries the metadata */
+  .note{background:var(--paper-2);border-radius:2px;padding:14px 16px;font-family:"Courier Prime",monospace;font-size:.82rem;color:var(--ink);line-height:1.85;box-shadow:0 4px 12px -6px oklch(0 0 0 / .3);align-self:start;}
+  .note .h{font-family:"Caveat",cursive;font-size:1.15rem;color:var(--blue);display:block;margin-bottom:4px;}
+  .note .k{color:var(--soft);}
+
+  /* music leaf shows staff paper + player */
+  .staff{grid-column:1/-1;margin-top:14px;padding:16px;background:
+    repeating-linear-gradient(var(--paper-2) 0 1px, transparent 1px 11px) 0 6px/100% 66px no-repeat,
+    var(--paper);
+    border:1px solid var(--line);display:none;}
+  .staff.open{display:block;}
+  .trk{display:flex;align-items:center;gap:14px;padding:9px 0;}
+  .pl{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--ink);background:var(--paper);cursor:pointer;font-family:"Courier Prime",monospace;}
+  .pl:hover{background:var(--ochre);color:var(--felt);border-color:var(--ochre);}
+  .trk .tn{flex:1;}
+  .trk .td{font-family:"Courier Prime",monospace;font-size:.82rem;color:var(--soft);}
+
+  /* about: a photo pinned to the desk */
+  .about{max-width:var(--maxw);margin:60px auto 0;padding:0 26px;}
+  .about-in{padding:44px clamp(24px,5vw,56px);display:grid;grid-template-columns:220px 1fr;gap:44px;align-items:center;transform:rotate(-.4deg);}
+  .snap{aspect-ratio:4/5;background:var(--paper-2);border:10px solid var(--paper);box-shadow:0 12px 26px -12px oklch(0 0 0 / .5);display:flex;align-items:flex-end;padding:12px;font-family:"Caveat",cursive;font-size:1.2rem;color:var(--soft);transform:rotate(-2deg);}
+  .about h2{font-size:1.7rem;margin-bottom:14px;}
+  .about p{max-width:56ch;margin:0 0 14px;}
+  .about .where{font-family:"Courier Prime",monospace;font-size:.82rem;color:var(--soft);}
+
+  footer{max-width:var(--maxw);margin:56px auto 0;padding:40px 26px 56px;color:oklch(0.85 0.02 165);}
+  footer .frow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline;}
+  footer .who{font-family:"Caveat",cursive;font-size:1.7rem;color:var(--paper);}
+  footer nav a{font-family:"Courier Prime",monospace;font-size:.82rem;margin-left:16px;color:oklch(0.85 0.02 165);}
+  footer nav a:hover{color:var(--paper);}
+  footer .base{margin-top:26px;padding-top:16px;border-top:1px solid oklch(0.5 0.02 165);font-family:"Courier Prime",monospace;font-size:.78rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+
+  @media (max-width:820px){
+    .objects{grid-template-columns:1fr;}
+    .obj,.leaf:nth-child(odd),.leaf:nth-child(even),.about-in{transform:none;}
+    .leaf{grid-template-columns:1fr;gap:16px;}
+    .about-in{grid-template-columns:1fr;}
+    .snap{max-width:220px;transform:rotate(-2deg);}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;} .obj,.leaf,.about-in,.hero .scrawl,.snap{transform:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="mast">
+  <a class="who" href="#">Allen Gillon</a>
+  <nav>
+    <a href="#sheaf">PLAYS</a><a href="#sheaf">BOOKS</a><a href="#sheaf">MUSIC</a><a href="#about">ABOUT</a>
+    <a class="cart" href="#">cart <span id="cN">0</span></a>
+  </nav>
+</div>
+
+<header class="wrap">
+  <div class="card hero">
+    <div class="tape" aria-hidden="true"></div>
+    <div class="filed">FROM THE DESK OF A. GILLON</div>
+    <h1>A lifetime of writing, <em>laid out on one table.</em></h1>
+    <p class="say"><b>Allen Gillon</b> writes school plays for young performers, communication books for the classroom, and stories for children. He also records jazz.</p>
+    <p class="scrawl">the writing you can buy · the music is free →</p>
+  </div>
+</header>
+
+<section class="objects">
+  <a class="card obj plays" href="#sheaf"><span class="kind">SCRIPTS</span><h2>Plays</h2><p>Class-sized scripts for ages 10 to 13, cast and run time noted on each.</p><span class="go">go to the scripts</span></a>
+  <a class="card obj books" href="#sheaf"><span class="kind">WORKBOOKS & STORIES</span><h2>Books</h2><p>Communication workbooks to teach from, picture books to read aloud.</p><span class="go">open the books</span></a>
+  <a class="card obj music" href="#sheaf"><span class="kind">RECORDINGS</span><h2>Music</h2><p>Jazz standards and originals, recorded at home. Free to play.</p><span class="go">put a record on</span></a>
+</section>
+
+<main>
+  <section class="sheaf" id="sheaf">
+    <h2>Everything so far</h2>
+    <p class="sub">Some of it is digitised, some is on its way. What is ready is here.</p>
+
+    <article class="card leaf">
+      <div>
+        <div class="kind">SCRIPT · PLAY</div>
+        <h3>The Last Lighthouse Keeper</h3>
+        <p class="desc">A town forgets why the light still matters, until one child asks. Speaking parts split as far as a whole class needs.</p>
+        <div class="buyrow"><span class="cost">$12.00</span><button class="btn" onclick="addC(this)">Add script</button><a class="read" href="#">Read scene one</a></div>
+      </div>
+      <aside class="note"><span class="h">for the teacher</span><div><span class="k">ages </span>10–13</div><div><span class="k">cast </span>12, to 24</div><div><span class="k">runs </span>30 min</div></aside>
+    </article>
+
+    <article class="card leaf">
+      <div>
+        <div class="kind">WORKBOOK</div>
+        <h3>Say It Clearly, Book 1</h3>
+        <p class="desc">Speaking, listening, and turn-taking, with exercises you can run straight from the page.</p>
+        <div class="buyrow"><span class="cost">$18.00</span><button class="btn" onclick="addC(this)">Add book</button><a class="read" href="#">Preview six pages</a></div>
+      </div>
+      <aside class="note"><span class="h">for the class</span><div><span class="k">years </span>5–7</div><div><span class="k">format </span>workbook</div><div><span class="k">length </span>48 pp</div></aside>
+    </article>
+
+    <article class="card leaf">
+      <div>
+        <div class="kind">PICTURE BOOK</div>
+        <h3>Wombat's Umbrella</h3>
+        <p class="desc">A story about sharing shelter. An early reading is on YouTube while a new recording is made.</p>
+        <div class="buyrow"><span class="cost">$16.00</span><button class="btn" onclick="addC(this)">Add book</button><a class="read" href="#">Hear old reading</a></div>
+      </div>
+      <aside class="note"><span class="h">for the reader</span><div><span class="k">ages </span>5–8</div><div><span class="k">pages </span>32</div><div><span class="k">audio </span>new one soon</div></aside>
+    </article>
+
+    <article class="card leaf">
+      <div>
+        <div class="kind">ALBUM · FREE</div>
+        <h3>Late Set</h3>
+        <p class="desc">Jazz standards recorded live in one room, the album the old site opened with.</p>
+        <div class="buyrow"><span class="cost free">Free</span><button class="btn o" aria-expanded="false" onclick="tog(this)">Put it on</button></div>
+        <div class="staff" id="s1">
+          <div class="trk"><button class="pl" onclick="pt(this)">▶</button><span class="tn">Autumn Leaves</span><span class="td">4:12</span></div>
+          <div class="trk"><button class="pl" onclick="pt(this)">▶</button><span class="tn">Misty</span><span class="td">3:48</span></div>
+          <div class="trk"><button class="pl" onclick="pt(this)">▶</button><span class="tn">Blue in Green</span><span class="td">5:03</span></div>
+        </div>
+      </div>
+      <aside class="note"><span class="h">the record</span><div><span class="k">tracks </span>9</div><div><span class="k">length </span>41 min</div><div><span class="k">year </span>2019</div></aside>
+    </article>
+  </section>
+
+  <section class="about" id="about">
+    <div class="card about-in">
+      <div class="snap">Allen, 2024</div>
+      <div>
+        <h2>Still at the desk at 81.</h2>
+        <p>Allen has spent most of his life writing for children and for the people who teach them. The plays and workbooks grew out of years of watching what actually holds a class of ten-year-olds. The music is the other half of him.</p>
+        <p>He is putting the back catalogue online a piece at a time. Some of it is here now.</p>
+        <p class="where">Bribie Island, Queensland · writing since the 1960s</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="frow">
+      <span class="who">Allen Gillon</span>
+      <nav><a href="#sheaf">Plays</a><a href="#sheaf">Books</a><a href="#sheaf">Music</a><a href="mailto:allen@allengillon.com">Contact</a></nav>
+    </div>
+    <div class="base"><span>© 2026 Allen Gillon · allengillon.com</span><span>Mockup · The Desk</span></div>
+  </footer>
+</main>
+
+<script>
+  let c=0; function addC(b){c++;document.getElementById('cN').textContent=c;const t=b.textContent;b.textContent='Added';setTimeout(()=>b.textContent=t,900);}
+  function tog(b){const p=b.closest('.leaf').querySelector('.staff');const o=p.classList.toggle('open');b.textContent=o?'Lift the needle':'Put it on';b.setAttribute('aria-expanded',o);if(!o)stop();}
+  let cur=null;
+  function stop(){document.querySelectorAll('.pl').forEach(p=>p.textContent='▶');cur=null;}
+  function pt(b){if(cur===b){stop();return;}stop();cur=b;b.textContent='❚❚';}
+</script>
+</body>
+</html>

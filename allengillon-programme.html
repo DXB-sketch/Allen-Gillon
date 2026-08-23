@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Allen Gillon — Programme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:  oklch(0.955 0.004 250);
+    --card:   oklch(0.978 0.004 250);
+    --ink:    oklch(0.245 0.015 250);
+    --soft:   oklch(0.44 0.015 250);
+    --green:  oklch(0.375 0.070 156);
+    --red:    oklch(0.495 0.160 30);
+    --line:   oklch(0.82 0.012 250);
+    --maxw:1020px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Newsreader",Georgia,serif;font-size:19px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .cond{font-family:"Saira Condensed",sans-serif;}
+  h1,h2,h3{margin:0;line-height:1.1;font-weight:500;}
+  .sc{font-variant-caps:small-caps;letter-spacing:.03em;}
+  :focus-visible{outline:3px solid var(--red);outline-offset:2px;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 30px;}
+
+  .mast{border-bottom:2px solid var(--green);}
+  .mast-in{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 30px;max-width:var(--maxw);margin:0 auto;}
+  .mast .who{font-family:"Saira Condensed",sans-serif;font-weight:700;font-size:1.3rem;letter-spacing:.02em;text-transform:uppercase;color:var(--green);}
+  .mast nav{display:flex;gap:2px;flex-wrap:wrap;align-items:center;}
+  .mast nav a{font-family:"Saira Condensed",sans-serif;font-weight:600;font-size:1rem;letter-spacing:.03em;text-transform:uppercase;padding:10px 12px;min-height:44px;display:inline-flex;align-items:center;color:var(--soft);}
+  .mast nav a:hover{color:var(--green);}
+  .mast .cart{color:var(--ink);border:2px solid var(--red);}
+  .mast .cart:hover{background:var(--red);color:var(--card);}
+
+  /* programme cover */
+  .cover{text-align:center;padding:80px 0 62px;border-bottom:1px solid var(--line);}
+  .cover .pres{font-family:"Saira Condensed",sans-serif;font-weight:600;letter-spacing:.34em;text-transform:uppercase;font-size:.8rem;color:var(--red);}
+  .cover h1{font-size:clamp(2.8rem,7vw,5rem);margin:22px 0 6px;font-weight:500;letter-spacing:-.01em;}
+  .cover .sub{font-style:italic;color:var(--soft);font-size:1.3rem;}
+  .cover .strap{max-width:52ch;margin:30px auto 0;}
+  .cover .rule{width:64px;height:2px;background:var(--red);margin:34px auto 0;}
+
+  /* running order */
+  .order{padding:56px 0 20px;}
+  .order .act{padding:40px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:150px 1fr;gap:36px;}
+  .order .act:first-child{border-top:0;}
+  .act-no{font-family:"Saira Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  .act-no .rom{font-size:2.6rem;line-height:1;color:var(--green);display:block;}
+  .act-no .lbl{color:var(--red);font-size:1rem;}
+  .act-no .cnt{color:var(--soft);font-size:.9rem;display:block;margin-top:8px;}
+  .act h2{font-size:1.9rem;margin-bottom:6px;}
+  .act .intro{color:var(--soft);max-width:52ch;margin:0 0 22px;font-style:italic;}
+
+  /* a listed item, programme-credit style */
+  .item{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:baseline;padding:16px 0;border-bottom:1px dotted var(--line);}
+  .item:last-child{border-bottom:0;}
+  .item h3{font-size:1.4rem;display:inline;}
+  .item .credit{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:.92rem;color:var(--soft);margin-top:6px;}
+  .item .credit b{color:var(--green);font-weight:600;}
+  .item .desc{color:var(--ink);margin:8px 0 0;max-width:56ch;}
+  .item .right{text-align:right;white-space:nowrap;}
+  .cost{font-family:"Saira Condensed",sans-serif;font-weight:700;font-size:1.3rem;}
+  .cost.free{color:var(--red);}
+  .actions{margin-top:10px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;}
+  .btn{font-family:"Saira Condensed",sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.04em;font-size:.92rem;padding:10px 18px;min-height:44px;border:2px solid var(--green);background:var(--green);color:var(--card);cursor:pointer;}
+  .btn:hover{background:oklch(0.32 0.07 156);}
+  .btn.o{background:transparent;color:var(--green);}
+  .btn.o:hover{background:var(--green);color:var(--card);}
+  .sample{font-style:italic;color:var(--soft);border-bottom:1.5px solid var(--red);align-self:center;}
+  .sample:hover{color:var(--ink);}
+
+  .player{grid-column:1/-1;margin-top:14px;padding:16px;background:var(--card);border:1px solid var(--line);display:none;}
+  .player.open{display:block;}
+  .trk{display:flex;align-items:center;gap:14px;padding:9px 0;border-bottom:1px dotted var(--line);}
+  .trk:last-child{border-bottom:0;}
+  .pl{width:44px;height:44px;border-radius:50%;border:2px solid var(--green);background:var(--paper);cursor:pointer;color:var(--green);}
+  .pl:hover{background:var(--green);color:var(--card);}
+  .trk .tn{flex:1;}
+  .trk .td{font-family:"Saira Condensed",sans-serif;color:var(--soft);}
+
+  /* interval / about */
+  .about{background:var(--green);color:var(--card);}
+  .about .wrap{padding:64px 30px;}
+  .about .il{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.3em;font-size:.8rem;opacity:.8;}
+  .about h2{font-size:2.1rem;color:var(--card);margin:14px 0 18px;max-width:20ch;}
+  .about p{max-width:58ch;margin:0 0 14px;opacity:.94;}
+  .about .where{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.05em;font-size:.9rem;color:oklch(0.86 0.09 30);margin-top:10px;}
+
+  footer{padding:46px 0 54px;}
+  footer .frow{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:baseline;}
+  footer .who{font-family:"Saira Condensed",sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.03em;font-size:1.2rem;color:var(--green);}
+  footer nav a{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:.9rem;color:var(--soft);margin-left:18px;}
+  footer nav a:hover{color:var(--green);}
+  footer .base{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:.82rem;color:var(--soft);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+
+  @media (max-width:720px){
+    .order .act{grid-template-columns:1fr;gap:14px;}
+    .item{grid-template-columns:1fr;}
+    .item .right{text-align:left;}
+    .actions{justify-content:flex-start;}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="mast-in">
+    <a class="who" href="#">Allen Gillon</a>
+    <nav>
+      <a href="#p1">Act I</a><a href="#p2">Act II</a><a href="#p3">Act III</a><a href="#about">Interval</a>
+      <a class="cart" href="#">Cart&nbsp;<span id="cN">0</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="cover">
+    <div class="wrap">
+      <div class="pres">The collected works of</div>
+      <h1>Allen Gillon</h1>
+      <div class="sub">plays for the young, books for the classroom, and an evening of music</div>
+      <p class="strap">One programme, three acts. The scripts and books are here to buy or licence for schools. The music is yours to hear, free of charge.</p>
+      <div class="rule"></div>
+    </div>
+  </section>
+
+  <section class="order">
+    <div class="wrap">
+
+      <!-- ACT I: PLAYS -->
+      <div class="act" id="p1">
+        <div class="act-no"><span class="rom">I</span><span class="lbl">Plays</span><span class="cnt">14 scripts</span></div>
+        <div>
+          <h2 class="sc">For young performers</h2>
+          <p class="intro">Class-sized scripts for ages ten to thirteen, with a full cast and credit note on each.</p>
+
+          <div class="item">
+            <div>
+              <h3>The Last Lighthouse Keeper</h3>
+              <div class="credit"><b>cast</b> 12, to 24 &nbsp;·&nbsp; <b>ages</b> 10–13 &nbsp;·&nbsp; <b>running time</b> 30 min</div>
+              <p class="desc">A town forgets why the light still matters, until one child asks. Speaking parts split as far as a whole class needs.</p>
+            </div>
+            <div class="right"><span class="cost">$12.00</span><div class="actions"><a class="sample" href="#">Read scene one</a><button class="btn" onclick="addC(this)">Add</button></div></div>
+          </div>
+
+          <div class="item">
+            <div>
+              <h3>Marbles and Kings</h3>
+              <div class="credit"><b>cast</b> 8, to 15 &nbsp;·&nbsp; <b>ages</b> 10–12 &nbsp;·&nbsp; <b>running time</b> 25 min</div>
+              <p class="desc">A playground becomes a kingdom over one lunchtime. Short, quick scenes, good for a first production.</p>
+            </div>
+            <div class="right"><span class="cost">$12.00</span><div class="actions"><a class="sample" href="#">Read scene one</a><button class="btn" onclick="addC(this)">Add</button></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACT II: BOOKS -->
+      <div class="act" id="p2">
+        <div class="act-no"><span class="rom">II</span><span class="lbl">Books</span><span class="cnt">9 titles</span></div>
+        <div>
+          <h2 class="sc">For the classroom and the shelf</h2>
+          <p class="intro">Communication workbooks to teach from, and picture books to read aloud.</p>
+
+          <div class="item">
+            <div>
+              <h3>Say It Clearly, Book 1</h3>
+              <div class="credit"><b>years</b> 5–7 &nbsp;·&nbsp; <b>format</b> workbook &nbsp;·&nbsp; <b>length</b> 48 pp</div>
+              <p class="desc">Speaking, listening, and turn-taking, with exercises you can run straight from the page.</p>
+            </div>
+            <div class="right"><span class="cost">$18.00</span><div class="actions"><a class="sample" href="#">Preview</a><button class="btn" onclick="addC(this)">Add</button></div></div>
+          </div>
+
+          <div class="item">
+            <div>
+              <h3>Wombat's Umbrella</h3>
+              <div class="credit"><b>ages</b> 5–8 &nbsp;·&nbsp; <b>pages</b> 32 &nbsp;·&nbsp; <b>audio</b> new recording soon</div>
+              <p class="desc">A picture book about sharing shelter. An early reading is on YouTube while the new one is made.</p>
+            </div>
+            <div class="right"><span class="cost">$16.00</span><div class="actions"><a class="sample" href="#">Hear old reading</a><button class="btn" onclick="addC(this)">Add</button></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACT III: MUSIC -->
+      <div class="act" id="p3">
+        <div class="act-no"><span class="rom">III</span><span class="lbl">Music</span><span class="cnt">6 albums</span></div>
+        <div>
+          <h2 class="sc">An evening of jazz</h2>
+          <p class="intro">Studio recordings of standards and originals. Free to play, no account.</p>
+
+          <div class="item">
+            <div>
+              <h3>Late Set</h3>
+              <div class="credit"><b>tracks</b> 9 &nbsp;·&nbsp; <b>length</b> 41 min &nbsp;·&nbsp; <b>recorded</b> 2019</div>
+              <p class="desc">Jazz standards recorded live in one room, the album the old site opened with.</p>
+            </div>
+            <div class="right"><span class="cost free">Free</span><div class="actions"><button class="btn o" aria-expanded="false" onclick="tog(this)">Programme</button></div></div>
+            <div class="player" id="pl1">
+              <div class="trk"><button class="pl" onclick="pt(this)">▶</button><span class="tn sc">Autumn Leaves</span><span class="td">4:12</span></div>
+              <div class="trk"><button class="pl" onclick="pt(this)">▶</button><span class="tn sc">Misty</span><span class="td">3:48</span></div>
+              <div class="trk"><button class="pl" onclick="pt(this)">▶</button><span class="tn sc">Blue in Green</span><span class="td">5:03</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="il">The Interval</div>
+      <h2>A word about the author.</h2>
+      <p>Allen has spent most of his life writing for children and for the people who teach them. The plays and the workbooks came from years of watching what actually holds a class of ten-year-olds. The music is the other half of him.</p>
+      <p>He is 81, still writing, and bringing the back catalogue to the stage a piece at a time.</p>
+      <p class="where">Bribie Island, Queensland</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="frow">
+        <span class="who">Allen Gillon</span>
+        <nav><a href="#p1">Plays</a><a href="#p2">Books</a><a href="#p3">Music</a><a href="mailto:allen@allengillon.com">Contact</a></nav>
+      </div>
+      <div class="base"><span>© 2026 Allen Gillon · allengillon.com</span><span>Mockup · Programme</span></div>
+    </div>
+  </footer>
+</main>
+
+<script>
+  let c=0; function addC(b){c++;document.getElementById('cN').textContent=c;const t=b.textContent;b.textContent='✓';setTimeout(()=>b.textContent=t,900);}
+  function tog(b){const p=b.closest('.item').querySelector('.player');const o=p.classList.toggle('open');b.textContent=o?'Hide':'Programme';b.setAttribute('aria-expanded',o);if(!o)stop();}
+  let cur=null;
+  function stop(){document.querySelectorAll('.pl').forEach(p=>p.textContent='▶');cur=null;}
+  function pt(b){if(cur===b){stop();return;}stop();cur=b;b.textContent='❚❚';}
+</script>
+</body>
+</html>
