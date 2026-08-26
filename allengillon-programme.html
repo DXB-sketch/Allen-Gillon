@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Saira+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="gallery.css">
 <style>
   :root{
     --paper:  oklch(0.955 0.004 250);
@@ -97,6 +98,22 @@
   footer nav a:hover{color:var(--green);}
   footer .base{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:.82rem;color:var(--soft);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 
+  /* cover photo */
+  .cover .gx-hero{max-width:520px;margin:34px auto 0;aspect-ratio:4/3;border:1px solid var(--line);}
+
+  /* The Life of Allen: the running order */
+  .lifelist{padding:56px 0 8px;border-bottom:1px solid var(--line);}
+  .lifelist h2{font-size:2rem;text-align:center;}
+  .lifelist .click{text-align:center;font-style:italic;color:var(--soft);font-size:1.15rem;margin:8px 0 30px;}
+  ol.life{list-style:none;margin:0;padding:0;}
+  ol.life li{display:flex;align-items:center;gap:24px;padding:14px 0;border-bottom:1px dotted var(--line);}
+  ol.life li:first-child{border-top:1px dotted var(--line);}
+  ol.life .no{font-family:"Saira Condensed",sans-serif;font-weight:700;font-size:1.8rem;color:var(--green);min-width:2.2ch;text-align:right;}
+  ol.life a.t{flex:1;font-size:1.25rem;min-height:44px;display:flex;flex-direction:column;justify-content:center;padding:6px 0;}
+  ol.life a.t:hover{color:var(--red);}
+  ol.life a.t small{font-family:"Saira Condensed",sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:.85rem;color:var(--soft);margin-top:2px;}
+  ol.life li.res .t{flex:1;font-style:italic;color:var(--soft);font-size:1.1rem;}
+
   @media (max-width:720px){
     .order .act{grid-template-columns:1fr;gap:14px;}
     .item{grid-template-columns:1fr;}
@@ -121,11 +138,30 @@
 <main>
   <section class="cover">
     <div class="wrap">
-      <div class="pres">The collected works of</div>
+      <div class="pres">Tonight's principal performer</div>
       <h1>Allen Gillon</h1>
-      <div class="sub">plays for the young, books for the classroom, and an evening of music</div>
-      <p class="strap">One programme, three acts. The scripts and books are here to buy or licence for schools. The music is yours to hear, free of charge.</p>
+      <div class="sub">guitarist, songwriter, author, playwright</div>
+      <div class="gx-hero" data-pool="personal" data-start="promo-allen-gillon-guitarist-gibson.jpg"></div>
       <div class="rule"></div>
+    </div>
+  </section>
+
+  <section class="lifelist" id="life">
+    <div class="wrap">
+      <h2 class="sc">The Life of Allen</h2>
+      <p class="click">Click on your interest.</p>
+      <ol class="life">
+        <li><span class="no">1</span><span class="gx-sm" data-pool="personal" data-start="allen-playing-red-gibson-waterfront.jpg"></span><a class="t" href="#p3">Restaurant Guitarist <small>plays jazz</small></a></li>
+        <li><span class="no">2</span><span class="gx-sm" data-pool="albums" data-start="album-thats-the-time.jpg"></span><a class="t" href="#p3">Three Popular Albums <small>Click &amp; Listen — free to stream</small></a></li>
+        <li><span class="no">3</span><span class="gx-sm" data-pool="personal" data-start="duo-live-on-stage.jpg"></span><a class="t" href="#p3">Professional Duet "Timeless" <small>with Ann</small></a></li>
+        <li><span class="no">4</span><span class="gx-sm" data-pool="albums" data-start="album-originals.jpg"></span><a class="t" href="#p3">Original Songs by Allen Gillon</a></li>
+        <li><span class="no">5</span><span class="gx-sm" data-pool="personal" data-start="matthew-allen-5-band-photo.jpg"></span><a class="t" href="#p3">Bandleader <small>The New Breed &amp; Page One Revue (Elvis Across America)</small></a></li>
+        <li><span class="no">6</span><span class="gx-sm" data-pool="personal" data-start="current-portrait-allen-and-ann-dressed-up.jpg"></span><a class="t" href="#p2">Author <small>Children's Books</small></a></li>
+        <li><span class="no">7</span><span class="gx-sm" data-pool="personal" data-start="performance-ann-and-allen-onstage.jpg"></span><a class="t" href="#p1">Playwright <small>5 Plays written &amp; performed</small></a></li>
+        <li><span class="no">8</span><span class="gx-sm" data-pool="personal" data-start="gig-poster-italia-on-marina.jpg"></span><a class="t" href="#p2">School Text Books</a></li>
+        <li><span class="no">9</span><span class="gx-sm" data-pool="personal" data-start="current-allen-and-ann-bribie-cap.jpg"></span><a class="t" href="#about">Family Man <small>"You may like to read"</small></a></li>
+        <li class="res"><span class="no">10</span><span class="gx-empty">reserved</span><span class="t">Reserved for Allen's tenth item, to be confirmed</span></li>
+      </ol>
     </div>
   </section>
 
@@ -228,7 +264,7 @@
         <span class="who">Allen Gillon</span>
         <nav><a href="#p1">Plays</a><a href="#p2">Books</a><a href="#p3">Music</a><a href="mailto:allen@allengillon.com">Contact</a></nav>
       </div>
-      <div class="base"><span>© 2026 Allen Gillon · allengillon.com</span><span>Mockup · Programme</span></div>
+      <div class="base"><span>© 2026 Allen Gillon</span><span>Mockup · Programme</span></div>
     </div>
   </footer>
 </main>
@@ -240,5 +276,6 @@
   function stop(){document.querySelectorAll('.pl').forEach(p=>p.textContent='▶');cur=null;}
   function pt(b){if(cur===b){stop();return;}stop();cur=b;b.textContent='❚❚';}
 </script>
+<script src="gallery.js"></script>
 </body>
 </html>

@@ -1,0 +1,31 @@
+/* Shared image-swapper styles for all five Allen Gillon mockups. */
+.gx{position:relative;overflow:hidden;background:#d8d8d4;}
+.gx .gx-img{width:100%;height:100%;object-fit:cover;display:block;}
+.gx .gx-missing{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:8px;background:#cfcfcb;color:#333;
+  font:600 13px/1.4 system-ui,sans-serif;}
+.gx .gx-btn{position:absolute;top:50%;transform:translateY(-50%);
+  width:44px;height:44px;border:0;border-radius:4px;padding:0;
+  background:rgba(0,0,0,.68);color:#fff;font-size:24px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s;}
+.gx .gx-btn:hover{background:rgba(0,0,0,.88);}
+.gx .gx-prev{left:5px;}
+.gx .gx-next{right:5px;}
+.gx .gx-cap{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;
+  align-items:baseline;gap:8px;padding:5px 8px;background:rgba(0,0,0,.62);color:#fff;
+  font:600 12px/1.3 system-ui,sans-serif;opacity:0;transition:opacity .15s;pointer-events:none;}
+.gx .gx-cap .gx-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gx:hover .gx-btn,.gx:focus-within .gx-btn,
+.gx:hover .gx-cap,.gx:focus-within .gx-cap{opacity:1;}
+.gx .gx-btn:focus-visible{outline:3px solid #fff;outline-offset:2px;opacity:1;}
+/* Tablets and phones: no hover, so the controls stay visible. */
+@media (hover:none){.gx .gx-btn,.gx .gx-cap{opacity:1;}}
+/* Default sizes; each mockup may refine them in its own stylesheet. */
+.gx-hero{width:100%;aspect-ratio:4/3;}
+.gx-sm{width:108px;height:108px;flex:0 0 auto;}
+.gx-sm .gx-cap .gx-label{display:none;}
+/* The reserved row ten: a labelled empty box, not a swap slot. */
+.gx-empty{width:108px;height:108px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:8px;background:#d0d0cc;color:#444;
+  font:600 12px/1.4 system-ui,sans-serif;box-sizing:border-box;}
+@media (max-width:560px){.gx-sm,.gx-empty{width:84px;height:84px;}}

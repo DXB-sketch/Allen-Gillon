@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="gallery.css">
 <style>
   :root{
     /* cool pale ground, systematic catalogue palette */
@@ -243,8 +244,22 @@
     font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-soft);
   }
 
+  /* ---------------- hero + The Life of Allen ---------------- */
+  .heroGrid{display:grid;grid-template-columns:1fr 1.1fr;gap:var(--sp-12);align-items:center;}
+  .heroGrid .gx-hero{border:1px solid var(--line-strong);}
+  .lifelist{padding:var(--sp-16) 0 var(--sp-8);}
+  .lifelist .index-head h2{font-size:2rem;}
+  ol.life{list-style:none;margin:var(--sp-2) 0 0;padding:0;}
+  ol.life li{display:flex;align-items:center;gap:var(--sp-6);padding:var(--sp-4) 0;border-bottom:1px solid var(--line);}
+  ol.life .no{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:1rem;color:var(--ink-soft);min-width:3ch;text-align:right;}
+  ol.life a.t{flex:1;font-size:1.22rem;font-weight:600;min-height:44px;display:flex;flex-direction:column;justify-content:center;padding:6px 0;}
+  ol.life a.t:hover{text-decoration:underline;}
+  ol.life a.t small{font-family:"IBM Plex Mono",monospace;font-weight:400;font-size:.78rem;color:var(--ink-soft);margin-top:3px;}
+  ol.life li.res .t{flex:1;font-family:"IBM Plex Mono",monospace;font-size:.9rem;color:var(--ink-soft);}
+
   /* ---------------- responsive ---------------- */
   @media (max-width:860px){
+    .heroGrid{grid-template-columns:1fr;}
     .dividers{grid-template-columns:1fr;}
     .divider{min-height:auto;padding-bottom:var(--sp-12);}
     .row{grid-template-columns:44px 1fr;gap:var(--sp-3) var(--sp-4);}
@@ -291,9 +306,33 @@
   <!-- FRONT MATTER -->
   <section class="front">
     <div class="wrap">
-      <h1>Sixty years of things written to be read aloud.</h1>
-      <p class="intro">Allen Gillon writes <b>school plays</b> for young performers, <b>communication-skills books</b> for the classroom, and <b>children's stories</b>. He also records jazz. The scripts and books are here to buy or licence; the music is here to play, free.</p>
-      <p class="filed">Everything is filed in one index. Browse it below, or go straight to a shelf.</p>
+      <div class="heroGrid">
+        <div class="gx-hero" data-pool="personal" data-start="promo-allen-gillon-guitarist-gibson.jpg"></div>
+        <div>
+          <h1>Allen Gillon</h1>
+          <p class="intro"><b>Guitarist, songwriter, author, playwright.</b> Sixty years of work, filed in one index. The scripts and books are here to buy or licence; the music is here to play, free.</p>
+          <p class="filed">Browse the life below, or go straight to a shelf.</p>
+        </div>
+      </div>
+
+      <div class="lifelist" id="life">
+        <div class="index-head">
+          <h2>The Life of Allen</h2>
+          <p class="note">Click on your interest.</p>
+        </div>
+        <ol class="life">
+          <li><span class="no">01</span><span class="gx-sm" data-pool="personal" data-start="allen-playing-red-gibson-waterfront.jpg"></span><a class="t" href="#index" onclick="setFilter('music');return false;">Restaurant Guitarist <small>plays jazz</small></a></li>
+          <li><span class="no">02</span><span class="gx-sm" data-pool="albums" data-start="album-thats-the-time.jpg"></span><a class="t" href="#index" onclick="setFilter('music');return false;">Three Popular Albums <small>Click &amp; Listen — free to stream</small></a></li>
+          <li><span class="no">03</span><span class="gx-sm" data-pool="personal" data-start="duo-live-on-stage.jpg"></span><a class="t" href="#index" onclick="setFilter('music');return false;">Professional Duet "Timeless" <small>with Ann</small></a></li>
+          <li><span class="no">04</span><span class="gx-sm" data-pool="albums" data-start="album-originals.jpg"></span><a class="t" href="#index" onclick="setFilter('music');return false;">Original Songs by Allen Gillon</a></li>
+          <li><span class="no">05</span><span class="gx-sm" data-pool="personal" data-start="matthew-allen-5-band-photo.jpg"></span><a class="t" href="#index" onclick="setFilter('music');return false;">Bandleader <small>The New Breed &amp; Page One Revue (Elvis Across America)</small></a></li>
+          <li><span class="no">06</span><span class="gx-sm" data-pool="personal" data-start="current-portrait-allen-and-ann-dressed-up.jpg"></span><a class="t" href="#index" onclick="setFilter('books');return false;">Author <small>Children's Books</small></a></li>
+          <li><span class="no">07</span><span class="gx-sm" data-pool="personal" data-start="performance-ann-and-allen-onstage.jpg"></span><a class="t" href="#index" onclick="setFilter('plays');return false;">Playwright <small>5 Plays written &amp; performed</small></a></li>
+          <li><span class="no">08</span><span class="gx-sm" data-pool="personal" data-start="gig-poster-italia-on-marina.jpg"></span><a class="t" href="#index" onclick="setFilter('books');return false;">School Text Books</a></li>
+          <li><span class="no">09</span><span class="gx-sm" data-pool="personal" data-start="current-allen-and-ann-bribie-cap.jpg"></span><a class="t" href="#about">Family Man <small>"You may like to read"</small></a></li>
+          <li class="res"><span class="no">10</span><span class="gx-empty">reserved</span><span class="t">RESERVED — Allen's tenth item, to be confirmed</span></li>
+        </ol>
+      </div>
 
       <div class="dividers">
         <a class="divider plays" href="#index" onclick="setFilter('plays');return false;">
@@ -522,7 +561,7 @@
   <!-- ABOUT: the one human moment -->
   <section class="about" id="about">
     <div class="about-in">
-      <div class="portrait">portrait to come</div>
+      <div class="portrait" data-pool="personal" data-start="current-allen-and-ann-bribie-cap.jpg"></div>
       <div>
         <h2>Allen Gillon</h2>
         <p>Allen has spent most of his life writing for children and for the people who teach them. The plays came out of years of watching what actually holds a class of ten-year-olds; the communication books came out of the same place. The music is the other half of him.</p>
@@ -547,12 +586,12 @@
       </div>
       <div>
         <h4>ENQUIRIES</h4>
-        <a href="mailto:allen@allengillon.com">allen@allengillon.com</a>
+        <a href="mailto:allen@allengillon.com">Email Allen</a>
         <a href="#">Licensing for schools</a>
         <a href="#about">About Allen</a>
       </div>
       <div class="bottom">
-        <span>© 2026 Allen Gillon · allengillon.com</span>
+        <span>© 2026 Allen Gillon</span>
         <span>Design mockup · Catalogue</span>
       </div>
     </div>
@@ -608,5 +647,6 @@
     setTimeout(()=>btn.textContent=t,900);
   }
 </script>
+<script src="gallery.js"></script>
 </body>
 </html>

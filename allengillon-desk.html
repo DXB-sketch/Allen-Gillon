@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Courier+Prime:wght@400;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="gallery.css">
 <style>
   :root{
     --felt:   oklch(0.35 0.028 165);      /* desk surface, muted grey-green */
@@ -118,7 +119,28 @@
   footer nav a:hover{color:var(--paper);}
   footer .base{margin-top:26px;padding-top:16px;border-top:1px solid oklch(0.5 0.02 165);font-family:"Courier Prime",monospace;font-size:.78rem;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
 
+  /* hero: his photograph laid on the desk */
+  .heroGrid{display:grid;grid-template-columns:340px 1fr;gap:40px;align-items:center;}
+  .heroGrid .gx-hero{aspect-ratio:4/5;border:10px solid var(--paper);box-shadow:0 12px 26px -12px oklch(0 0 0 / .5);transform:rotate(-1.5deg);}
+
+  /* The Life of Allen: index cards on the desk */
+  .lifelist{max-width:var(--maxw);margin:40px auto 0;padding:0 26px;}
+  .lifelist > h2{color:var(--paper);font-size:2rem;}
+  .lifelist > .click{font-family:"Caveat",cursive;font-size:1.6rem;color:oklch(0.85 0.05 68);margin:4px 0 22px;transform:rotate(-1deg);}
+  ol.life{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;}
+  ol.life li{display:flex;align-items:center;gap:20px;padding:14px 18px;}
+  ol.life li:nth-child(odd){transform:rotate(-.35deg);}
+  ol.life li:nth-child(even){transform:rotate(.35deg);}
+  ol.life .no{font-family:"Caveat",cursive;font-weight:600;font-size:1.9rem;color:var(--blue);min-width:2ch;text-align:right;}
+  ol.life a.t{flex:1;font-size:1.2rem;min-height:44px;display:flex;flex-direction:column;justify-content:center;padding:6px 0;}
+  ol.life a.t:hover{color:var(--ochre);}
+  ol.life a.t small{font-family:"Courier Prime",monospace;font-size:.8rem;color:var(--soft);margin-top:2px;}
+  ol.life li.res .t{flex:1;font-family:"Caveat",cursive;font-size:1.3rem;color:var(--soft);}
+
   @media (max-width:820px){
+    .heroGrid{grid-template-columns:1fr;}
+    .heroGrid .gx-hero{max-width:300px;}
+    ol.life li:nth-child(odd),ol.life li:nth-child(even){transform:none;}
     .objects{grid-template-columns:1fr;}
     .obj,.leaf:nth-child(odd),.leaf:nth-child(even),.about-in{transform:none;}
     .leaf{grid-template-columns:1fr;gap:16px;}
@@ -142,11 +164,33 @@
   <div class="card hero">
     <div class="tape" aria-hidden="true"></div>
     <div class="filed">FROM THE DESK OF A. GILLON</div>
-    <h1>A lifetime of writing, <em>laid out on one table.</em></h1>
-    <p class="say"><b>Allen Gillon</b> writes school plays for young performers, communication books for the classroom, and stories for children. He also records jazz.</p>
-    <p class="scrawl">the writing you can buy · the music is free →</p>
+    <div class="heroGrid">
+      <div class="gx-hero" data-pool="personal" data-start="promo-allen-gillon-guitarist-gibson.jpg"></div>
+      <div>
+        <h1>Allen <em>Gillon</em></h1>
+        <p class="say"><b>Guitarist, songwriter, author, playwright.</b> A lifetime of making things, laid out on one table.</p>
+        <p class="scrawl">the writing you can buy · the music is free →</p>
+      </div>
+    </div>
   </div>
 </header>
+
+<section class="lifelist" id="life">
+  <h2>The Life of Allen</h2>
+  <p class="click">click on your interest →</p>
+  <ol class="life">
+    <li class="card"><span class="no">1</span><span class="gx-sm" data-pool="personal" data-start="allen-playing-red-gibson-waterfront.jpg"></span><a class="t" href="#sheaf">Restaurant Guitarist <small>plays jazz</small></a></li>
+    <li class="card"><span class="no">2</span><span class="gx-sm" data-pool="albums" data-start="album-thats-the-time.jpg"></span><a class="t" href="#sheaf">Three Popular Albums <small>Click &amp; Listen — free to stream</small></a></li>
+    <li class="card"><span class="no">3</span><span class="gx-sm" data-pool="personal" data-start="duo-live-on-stage.jpg"></span><a class="t" href="#sheaf">Professional Duet "Timeless" <small>with Ann</small></a></li>
+    <li class="card"><span class="no">4</span><span class="gx-sm" data-pool="albums" data-start="album-originals.jpg"></span><a class="t" href="#sheaf">Original Songs by Allen Gillon</a></li>
+    <li class="card"><span class="no">5</span><span class="gx-sm" data-pool="personal" data-start="matthew-allen-5-band-photo.jpg"></span><a class="t" href="#sheaf">Bandleader <small>The New Breed &amp; Page One Revue (Elvis Across America)</small></a></li>
+    <li class="card"><span class="no">6</span><span class="gx-sm" data-pool="personal" data-start="current-portrait-allen-and-ann-dressed-up.jpg"></span><a class="t" href="#sheaf">Author <small>Children's Books</small></a></li>
+    <li class="card"><span class="no">7</span><span class="gx-sm" data-pool="personal" data-start="performance-ann-and-allen-onstage.jpg"></span><a class="t" href="#sheaf">Playwright <small>5 Plays written &amp; performed</small></a></li>
+    <li class="card"><span class="no">8</span><span class="gx-sm" data-pool="personal" data-start="gig-poster-italia-on-marina.jpg"></span><a class="t" href="#sheaf">School Text Books</a></li>
+    <li class="card"><span class="no">9</span><span class="gx-sm" data-pool="personal" data-start="current-allen-and-ann-bribie-cap.jpg"></span><a class="t" href="#about">Family Man <small>"You may like to read"</small></a></li>
+    <li class="card res"><span class="no">10</span><span class="gx-empty">reserved</span><span class="t">reserved for Allen's tenth item, to be confirmed</span></li>
+  </ol>
+</section>
 
 <section class="objects">
   <a class="card obj plays" href="#sheaf"><span class="kind">SCRIPTS</span><h2>Plays</h2><p>Class-sized scripts for ages 10 to 13, cast and run time noted on each.</p><span class="go">go to the scripts</span></a>
@@ -207,7 +251,7 @@
 
   <section class="about" id="about">
     <div class="card about-in">
-      <div class="snap">Allen, 2024</div>
+      <div class="snap" data-pool="personal" data-start="current-allen-and-ann-bribie-cap.jpg"></div>
       <div>
         <h2>Still at the desk at 81.</h2>
         <p>Allen has spent most of his life writing for children and for the people who teach them. The plays and workbooks grew out of years of watching what actually holds a class of ten-year-olds. The music is the other half of him.</p>
@@ -222,7 +266,7 @@
       <span class="who">Allen Gillon</span>
       <nav><a href="#sheaf">Plays</a><a href="#sheaf">Books</a><a href="#sheaf">Music</a><a href="mailto:allen@allengillon.com">Contact</a></nav>
     </div>
-    <div class="base"><span>© 2026 Allen Gillon · allengillon.com</span><span>Mockup · The Desk</span></div>
+    <div class="base"><span>© 2026 Allen Gillon</span><span>Mockup · The Desk</span></div>
   </footer>
 </main>
 
@@ -233,5 +277,6 @@
   function stop(){document.querySelectorAll('.pl').forEach(p=>p.textContent='▶');cur=null;}
   function pt(b){if(cur===b){stop();return;}stop();cur=b;b.textContent='❚❚';}
 </script>
+<script src="gallery.js"></script>
 </body>
 </html>
