@@ -47,7 +47,7 @@
 
     slot.classList.add("gx");
     slot.innerHTML =
-      '<img class="gx-img" alt="">' +
+      '<img class="gx-img" src="' + pool[i].src + '" alt="' + pool[i].label + '">' +
       '<div class="gx-missing" hidden></div>' +
       '<button type="button" class="gx-btn gx-prev" aria-label="Previous picture">‹</button>' +
       '<button type="button" class="gx-btn gx-next" aria-label="Next picture">›</button>' +

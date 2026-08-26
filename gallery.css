@@ -4,6 +4,7 @@
 .gx .gx-missing{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
   text-align:center;padding:8px;background:#cfcfcb;color:#333;
   font:600 13px/1.4 system-ui,sans-serif;}
+.gx .gx-missing[hidden]{display:none;}
 .gx .gx-btn{position:absolute;top:50%;transform:translateY(-50%);
   width:44px;height:44px;border:0;border-radius:4px;padding:0;
   background:rgba(0,0,0,.68);color:#fff;font-size:24px;line-height:1;cursor:pointer;
