@@ -16,7 +16,7 @@
   --maxw: 1120px;
 }
 *{box-sizing:border-box;}
-html{-webkit-text-size-adjust:100%;}
+html{-webkit-text-size-adjust:100%;overflow-x:clip;}
 body{overflow-x:clip;}
 body{
   margin:0;background-color:var(--paper);color:var(--ink);
@@ -111,7 +111,13 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
 .sleeve:hover .disc,.sleeve:focus-visible .disc{transform:translateX(44%) rotate(80deg);}
 .album.open .disc{animation:discspin 7s linear infinite;}
 @keyframes discspin{from{transform:translateX(44%) rotate(0deg);}to{transform:translateX(44%) rotate(360deg);}}
-@media (hover:none){.disc{transform:translateX(12%);}}
+/* Touch devices: no hover, so the record sits mostly behind the sleeve and
+   spins in place when open — never sliding far enough to overflow the screen. */
+@media (hover:none){
+  .disc{transform:translateX(12%);}
+  .album.open .disc{animation:discspin-touch 7s linear infinite;}
+  @keyframes discspin-touch{from{transform:translateX(12%) rotate(0deg);}to{transform:translateX(12%) rotate(360deg);}}
+}
 .album h3{font-size:1.45rem;margin:14px 0 0;}
 .album .meta{color:var(--soft);font-size:1rem;margin:2px 0 0;}
 .trkpanel{margin-top:12px;}
@@ -156,8 +162,8 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
   .mnav{justify-content:center;}
   .mnav a{font-size:1rem;padding:10px 10px;}
   .wrap{padding:0 18px;}
-  .albums{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:36px 64px;}
-  .sleeve{max-width:260px;}
+  .albums{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:36px 48px;}
+  .sleeve{max-width:220px;}
   footer .wrap{padding:28px 18px 40px;justify-content:center;text-align:center;}
   footer nav{justify-content:center;}
 }
@@ -165,7 +171,9 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
   h1.script{font-size:clamp(2.6rem,13vw,3.4rem);}
   h2.script{font-size:clamp(2rem,9vw,2.6rem);}
   .albums{grid-template-columns:1fr;justify-items:center;}
-  .album{width:100%;max-width:340px;}
+  .album{width:100%;max-width:320px;}
+  .sleeve{max-width:min(220px,78vw);margin:0 auto;}
+  .album h3,.album .meta{text-align:center;}
   .nowbar .wrap{flex-wrap:wrap;gap:10px;padding:10px 16px;}
   .nowbar input[type=range]{flex:1 1 100%;order:3;}
 }
