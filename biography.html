@@ -19,6 +19,18 @@
   .era.red{color:var(--red);}
   @media (max-width:900px){.bio{grid-template-columns:1fr;}.bio aside{position:static;flex-direction:row;flex-wrap:wrap;}.bio aside figure{flex:1 1 260px;margin:0;}}
   .bio aside figure{margin:0;}
+  /* On phones the photo column disappears and each photo sits inline,
+     directly under the era title it belongs to. */
+  .bio figure.inline{display:none;}
+  @media (max-width:640px){
+    .pagehead .plain{padding-left:12px;padding-right:4px;}
+    .prose{padding-left:12px;padding-right:4px;}
+    .prose p{max-width:34ch;}
+    .bio aside{display:none;}
+    .bio figure.inline{display:block;margin:14px auto 6px;max-width:min(280px,78vw);}
+    .bio figure.inline .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:4/3;}
+    .bio figure.inline figcaption{font-size:.95rem;color:var(--soft);margin-top:6px;text-align:center;}
+  }
 </style>
 </head>
 <body>
@@ -55,13 +67,25 @@
         <p>In Bangkok, Page One Revue had their own weekly half-hour Countdown television show. Ann did voice-overs, radio and newspaper spreads for Ford, and played an English doctor in a Thai film in 1971.</p>
 
         <h2 class="era">Ann and Allen Ray</h2>
+        <figure class="inline">
+          <img class="gx-hero" src="images/personal/performance-ann-and-allen-onstage.jpg" alt="Ann and Allen performing on stage" loading="lazy">
+          <figcaption>Ann and Allen on stage.</figcaption>
+        </figure>
         <p>Back home, they left band work and became a duet, Ann and Allen Ray, playing all the big Sydney clubs alongside the top acts of the day. By invitation, they performed on stage at the Chicago Theatre for a convention of three thousand delegates.</p>
         <p>Through the seventies and eighties they set aside time for their family of four beautiful children, and Allen combined the duet with his first occupation, teaching school.</p>
 
         <h2 class="era red">The Matthew Allen 5</h2>
+        <figure class="inline">
+          <img class="gx-hero" src="images/personal/matthew-allen-5-band-photo.jpg" alt="The Matthew Allen 5 band" loading="lazy">
+          <figcaption>The Matthew Allen 5.</figcaption>
+        </figure>
         <p>The family moved to the Gold Coast in 1990 when their son Matthew became sick. Matthew, their beautiful fifteen-year-old, died of cancer in February 1991. In his honour the family formed a band called The Matthew Allen 5, later known as the MA 5. Through the nineties this first-class band worked the corporate venues and clubs of the Gold Coast, Brisbane and the Sunshine Coast.</p>
 
         <h2 class="era">Timeless</h2>
+        <figure class="inline">
+          <img class="gx-hero" src="images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy">
+          <figcaption>Allen and the Gibson, on the water.</figcaption>
+        </figure>
         <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann still sings lead, and plays alto sax and flute. As the duet Timeless, they especially love entertaining diners in restaurants around Bribie Island, which is exactly where you can <a href="hire.html">book them</a>.</p>
       </div>
 
