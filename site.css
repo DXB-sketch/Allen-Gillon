@@ -108,15 +108,19 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
 .albums .album:nth-child(5n+3) .disc{--label:oklch(0.72 0.13 85);}
 .albums .album:nth-child(5n+4) .disc{--label:oklch(0.55 0.10 195);}
 .albums .album:nth-child(5n+5) .disc{--label:oklch(0.50 0.14 320);}
-.sleeve:hover .disc,.sleeve:focus-visible .disc{transform:translateX(44%) rotate(80deg);}
-.album.open .disc{animation:discspin 7s linear infinite;}
+.album.open .disc{transform:translateX(44%);animation:discspin 7s linear infinite;}
 @keyframes discspin{from{transform:translateX(44%) rotate(0deg);}to{transform:translateX(44%) rotate(360deg);}}
-/* Touch devices: no hover, so the record sits mostly behind the sleeve and
-   spins in place when open — never sliding far enough to overflow the screen. */
+/* Slide-on-hover only on devices that truly hover; on touch the browser's
+   "sticky hover" after a tap would leave the record out when the list closes. */
+@media (hover:hover){
+  .sleeve:hover .disc,.sleeve:focus-visible .disc{transform:translateX(44%) rotate(80deg);}
+}
+/* Touch devices: record peeks at rest, slides out and spins while the track
+   list is open — 26% keeps it inside the screen on small phones. */
 @media (hover:none){
-  .disc{transform:translateX(12%);}
-  .album.open .disc{animation:discspin-touch 7s linear infinite;}
-  @keyframes discspin-touch{from{transform:translateX(12%) rotate(0deg);}to{transform:translateX(12%) rotate(360deg);}}
+  .disc{transform:translateX(8%);}
+  .album.open .disc{transform:translateX(26%);animation-name:discspin-touch;}
+  @keyframes discspin-touch{from{transform:translateX(26%) rotate(0deg);}to{transform:translateX(26%) rotate(360deg);}}
 }
 .album h3{font-size:1.45rem;margin:14px 0 0;}
 .album .meta{color:var(--soft);font-size:1rem;margin:2px 0 0;}
