@@ -122,6 +122,12 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
   .album.open .disc{transform:translateX(26%);animation-name:discspin-touch;}
   @keyframes discspin-touch{from{transform:translateX(26%) rotate(0deg);}to{transform:translateX(26%) rotate(360deg);}}
 }
+/* Phones: covers are small enough (52vw cap) that the record can slide
+   halfway out, far enough to show its coloured centre label. */
+@media (hover:none) and (max-width:480px){
+  .album.open .disc{transform:translateX(50%);animation-name:discspin-phone;}
+  @keyframes discspin-phone{from{transform:translateX(50%) rotate(0deg);}to{transform:translateX(50%) rotate(360deg);}}
+}
 .album h3{font-size:1.45rem;margin:14px 0 0;}
 .album .meta{color:var(--soft);font-size:1rem;margin:2px 0 0;}
 .trkpanel{margin-top:12px;}
@@ -176,7 +182,7 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
   h2.script{font-size:clamp(2rem,9vw,2.6rem);}
   .albums{grid-template-columns:1fr;justify-items:center;}
   .album{width:100%;max-width:320px;}
-  .sleeve{max-width:min(220px,78vw);margin:0 auto;}
+  .sleeve{max-width:min(185px,52vw);margin:0 auto;}
   .album h3,.album .meta{text-align:center;}
   .nowbar .wrap{flex-wrap:wrap;gap:10px;padding:10px 16px;}
   .nowbar input[type=range]{flex:1 1 100%;order:3;}
