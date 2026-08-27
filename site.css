@@ -85,8 +85,8 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
 .btn:hover{background:var(--red-deep);border-color:var(--red-deep);}
 
 /* Albums: vinyl sleeves. Hover slides the record out; click opens the tracks. */
-.albums{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
-  gap:44px 40px;align-items:start;padding:32px 0 8px;}
+.albums{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:48px 130px;align-items:start;padding:32px 0 8px;}
 .album{margin:0;}
 .sleeve{position:relative;display:block;width:100%;max-width:300px;padding:0;border:0;
   background:none;cursor:pointer;font:inherit;color:inherit;text-align:left;}
@@ -98,10 +98,16 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
     radial-gradient(circle, var(--paper) 0 2.2%, transparent 2.2%),
     conic-gradient(from 20deg, transparent 0 40deg, oklch(1 0 0 / 0.07) 60deg, transparent 85deg,
       transparent 200deg, oklch(1 0 0 / 0.06) 225deg, transparent 250deg),
-    radial-gradient(circle, oklch(0.20 0.01 300) 0 12%, var(--red) 12% 31%, oklch(0.20 0.01 300) 31% 33%, transparent 33%),
+    radial-gradient(circle, oklch(0.20 0.01 300) 0 12%, var(--label, var(--red)) 12% 31%, oklch(0.20 0.01 300) 31% 33%, transparent 33%),
     repeating-radial-gradient(circle, oklch(0.24 0.01 300) 0 5px, oklch(0.17 0.01 300) 5px 10px);
   box-shadow:2px 3px 12px oklch(0 0 0 / 0.35);
   transition:transform .5s cubic-bezier(.2,.7,.3,1);}
+/* One label colour per album, cycling through the shelf */
+.albums .album:nth-child(5n+1) .disc{--label:var(--red);}
+.albums .album:nth-child(5n+2) .disc{--label:var(--blue);}
+.albums .album:nth-child(5n+3) .disc{--label:oklch(0.72 0.13 85);}
+.albums .album:nth-child(5n+4) .disc{--label:oklch(0.55 0.10 195);}
+.albums .album:nth-child(5n+5) .disc{--label:oklch(0.50 0.14 320);}
 .sleeve:hover .disc,.sleeve:focus-visible .disc{transform:translateX(44%) rotate(80deg);}
 .album.open .disc{animation:discspin 7s linear infinite;}
 @keyframes discspin{from{transform:translateX(44%) rotate(0deg);}to{transform:translateX(44%) rotate(360deg);}}
@@ -150,7 +156,7 @@ footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex
   .mnav{justify-content:center;}
   .mnav a{font-size:1rem;padding:10px 10px;}
   .wrap{padding:0 18px;}
-  .albums{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:36px 28px;}
+  .albums{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:36px 64px;}
   .sleeve{max-width:260px;}
   footer .wrap{padding:28px 18px 40px;justify-content:center;text-align:center;}
   footer nav{justify-content:center;}
