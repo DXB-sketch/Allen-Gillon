@@ -14,7 +14,8 @@
   .hero{padding:40px 0 24px;}
   .heroGrid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:start;}
   .heroGrid .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:4/3;}
-  .heroIntro{font-size:1.15rem;margin:18px 0 0;max-width:52ch;}
+  .heroIntro{font-size:1.15rem;margin:18px 0 0;max-width:52ch;padding-left:18px;border-left:6px solid var(--red);}
+  .heroIntro + .heroIntro{border-left-color:var(--blue);}
   .hero .say{font-size:1.25rem;max-width:44ch;margin:14px 0 30px;}
   .hero .click{font-size:1.1rem;font-style:italic;color:var(--soft);margin:0 0 4px;}
 
@@ -30,8 +31,7 @@
   .idx-art img{width:100%;height:100%;object-fit:cover;display:block;border:2px solid var(--ink);border-radius:2px;}
   .idx-empty{width:84px;height:84px;flex:0 0 auto;margin:8px 0;background:var(--paper-2);border:2px solid var(--ink);border-radius:2px;}
 
-  .intro{padding:56px 0 0;}
-  .intro p{font-size:1.15rem;margin:0 0 16px;}
+  ol.idx li:nth-child(even) .no{color:var(--blue);}
 
   @media (max-width:860px){
     .heroGrid{grid-template-columns:1fr;gap:28px;}
@@ -45,11 +45,12 @@
 <div class="mast">
   <a class="logo" href="index.html">Allen <em>Gillon</em></a>
   <nav class="mnav" aria-label="Site">
-    <a href="music.html">His Music</a>
-    <a href="hire.html">Hire Allen</a>
-    <a href="books.html">Children's Books</a>
-    <a href="plays.html">School Plays</a>
-    <a href="biography.html">His Story</a>
+    <a href="index.html">Home</a>
+    <a href="music.html">Albums</a>
+    <a href="plays.html">Plays</a>
+    <a href="books.html">Books</a>
+    <a href="biography.html">About Me</a>
+    <a href="hire.html">Hire Me</a>
   </nav>
 </div>
 
@@ -59,6 +60,7 @@
       <div>
         <div class="gx-hero" data-pool="personal" data-start="current-allen-and-ann-bribie-cap.jpg"></div>
         <p class="heroIntro">Allen and Ann Gillon are local musicians performing around the Bribie Island area. Here they share the albums they have recorded, free for you to enjoy.</p>
+        <p class="heroIntro">Away from the guitar, Allen is a qualified teacher who has written storybooks for children, five school plays, and classroom textbooks. All of it lives here now, in the one place.</p>
       </div>
       <div>
         <h1 class="script">Allen <span class="ink-r">Gillon</span></h1>
@@ -95,11 +97,6 @@
     </div>
   </header>
 
-  <section class="intro">
-    <div class="wrap">
-      <p>Away from the guitar, Allen is a qualified teacher who has written storybooks for children, five school plays, and classroom textbooks. All of it lives here now, in the one place.</p>
-    </div>
-  </section>
 </main>
 
 <footer>
@@ -109,11 +106,12 @@
       <p>Bribie Island, Queensland</p>
     </div>
     <nav aria-label="Footer">
-      <a href="music.html">His Music</a>
-      <a href="hire.html">Hire Allen</a>
-      <a href="books.html">Children's Books</a>
-      <a href="plays.html">School Plays</a>
-      <a href="biography.html">His Story</a>
+      <a href="index.html">Home</a>
+      <a href="music.html">Albums</a>
+      <a href="plays.html">Plays</a>
+      <a href="books.html">Books</a>
+      <a href="biography.html">About Me</a>
+      <a href="hire.html">Hire Me</a>
     </nav>
     <p>&copy; 2026 Allen Gillon</p>
   </div>
