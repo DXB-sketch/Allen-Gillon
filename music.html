@@ -13,7 +13,12 @@
   .duet{display:grid;grid-template-columns:320px 1fr;gap:36px;align-items:start;padding:40px 0 8px;}
   .duet .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:1/1;max-width:320px;}
   .duet p{font-size:1.1rem;margin:0 0 16px;}
-  @media (max-width:820px){.duet{grid-template-columns:1fr;}.duet .gx-hero{max-width:280px;}}
+  @media (max-width:820px){
+    .duet{grid-template-columns:1fr;}
+    .duet .gx-hero{max-width:min(240px,65vw);margin:0 auto;}
+    .duet h2{text-align:center;}
+    .duet p{max-width:34ch;margin:0 auto 16px;}
+  }
   section{padding-top:16px;}
   .secrule{border:0;border-top:var(--rule);margin:56px 0 0;}
 </style>
