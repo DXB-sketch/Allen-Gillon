@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dynalight&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
-<link rel="stylesheet" href="gallery.css">
 <style>
   .duet{display:grid;grid-template-columns:320px 1fr;gap:36px;align-items:start;padding:40px 0 8px;}
   .duet .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:1/1;max-width:320px;}
@@ -36,18 +35,21 @@
 <main>
   <header class="pagehead">
     <div class="wrap">
-      <h1 class="script">His <span class="ink-r">Music</span></h1>
-      <p class="plain">Five albums, recorded in the studio, free to hear right here. Press play on any track. If you would rather have Allen in the room, <a href="hire.html">he still takes bookings</a>.</p>
+      <h1 class="script">His Music</h1>
+      <p class="plain">Five albums, recorded in the studio, free to hear right here. Click a cover to open its tracks, then press play on any of them. If you would rather have Allen in the room, <a href="hire.html">he still takes bookings</a>.</p>
     </div>
   </header>
 
   <section aria-label="Albums">
-    <div class="wrap">
+    <div class="wrap albums">
       <article class="album" id="thats-the-time">
-        <div class="cover"><img src="images/albums/album-thats-the-time.jpg" alt="That&#x27;s The Time album cover" loading="lazy"></div>
-        <div>
-          <h3>That&#x27;s The Time</h3>
-          <p class="meta">Allen Gillon Guitarist &middot; 12 tracks</p>
+        <button type="button" class="sleeve" aria-expanded="false" aria-controls="trk-thats-the-time">
+          <span class="disc" aria-hidden="true"></span>
+          <img src="images/albums/album-thats-the-time.jpg" alt="That&#x27;s The Time album cover" loading="lazy">
+        </button>
+        <h3>That&#x27;s The Time</h3>
+        <p class="meta">Allen Gillon Guitarist &middot; 12 tracks</p>
+        <div class="trkpanel" id="trk-thats-the-time" hidden>
           <ol class="trklist">
             <li><button type="button" class="tplay" data-src="audio/thats-the-time/01-that-s-the-time.mp3" data-name="That&#x27;s The Time"></button><span class="tname">That&#x27;s The Time</span><span class="ttime">2:26</span></li>
             <li><button type="button" class="tplay" data-src="audio/thats-the-time/02-you-don-t-know-me.mp3" data-name="You Don&#x27;t Know Me"></button><span class="tname">You Don&#x27;t Know Me</span><span class="ttime">3:53</span></li>
@@ -65,10 +67,13 @@
         </div>
       </article>
       <article class="album" id="wonderful-world">
-        <div class="cover"><img src="images/albums/album-wonderful-world-PHOTO-of-allen.png" alt="Wonderful World album cover" loading="lazy"></div>
-        <div>
-          <h3>Wonderful World</h3>
-          <p class="meta">Allen Gillon &middot; 10 tracks</p>
+        <button type="button" class="sleeve" aria-expanded="false" aria-controls="trk-wonderful-world">
+          <span class="disc" aria-hidden="true"></span>
+          <img src="images/albums/album-wonderful-world-PHOTO-of-allen.png" alt="Wonderful World album cover" loading="lazy">
+        </button>
+        <h3>Wonderful World</h3>
+        <p class="meta">Allen Gillon &middot; 10 tracks</p>
+        <div class="trkpanel" id="trk-wonderful-world" hidden>
           <ol class="trklist">
             <li><button type="button" class="tplay" data-src="audio/wonderful-world/01-and-i-love-her.mp3" data-name="And I Love Her"></button><span class="tname">And I Love Her</span><span class="ttime">3:43</span></li>
             <li><button type="button" class="tplay" data-src="audio/wonderful-world/02-days-of-wine-and-roses.mp3" data-name="Days Of Wine And Roses"></button><span class="tname">Days Of Wine And Roses</span><span class="ttime">2:45</span></li>
@@ -84,10 +89,13 @@
         </div>
       </article>
       <article class="album" id="misty">
-        <div class="cover"><img src="images/personal/album-misty-PHOTO-of-ann.jpg" alt="Misty album cover" loading="lazy"></div>
-        <div>
-          <h3>Misty</h3>
-          <p class="meta">Ann &amp; Allen Gillon &middot; 8 tracks</p>
+        <button type="button" class="sleeve" aria-expanded="false" aria-controls="trk-misty">
+          <span class="disc" aria-hidden="true"></span>
+          <img src="images/personal/album-misty-PHOTO-of-ann.jpg" alt="Misty album cover" loading="lazy">
+        </button>
+        <h3>Misty</h3>
+        <p class="meta">Ann &amp; Allen Gillon &middot; 8 tracks</p>
+        <div class="trkpanel" id="trk-misty" hidden>
           <ol class="trklist">
             <li><button type="button" class="tplay" data-src="audio/misty/01-cry-me-a-river.mp3" data-name="Cry Me A River"></button><span class="tname">Cry Me A River</span><span class="ttime">2:50</span></li>
             <li><button type="button" class="tplay" data-src="audio/misty/02-embraceable-you.mp3" data-name="Embraceable You"></button><span class="tname">Embraceable You</span><span class="ttime">3:48</span></li>
@@ -101,10 +109,13 @@
         </div>
       </article>
       <article class="album" id="i-just-called">
-        <div class="cover"><img src="images/albums/album-i-just-called.jpg" alt="I Just Called album cover" loading="lazy"></div>
-        <div>
-          <h3>I Just Called</h3>
-          <p class="meta">Allen Gillon &middot; 12 tracks</p>
+        <button type="button" class="sleeve" aria-expanded="false" aria-controls="trk-i-just-called">
+          <span class="disc" aria-hidden="true"></span>
+          <img src="images/albums/album-i-just-called.jpg" alt="I Just Called album cover" loading="lazy">
+        </button>
+        <h3>I Just Called</h3>
+        <p class="meta">Allen Gillon &middot; 12 tracks</p>
+        <div class="trkpanel" id="trk-i-just-called" hidden>
           <ol class="trklist">
             <li><button type="button" class="tplay" data-src="audio/i-just-called/01-lately.mp3" data-name="Lately"></button><span class="tname">Lately</span><span class="ttime">3:33</span></li>
             <li><button type="button" class="tplay" data-src="audio/i-just-called/02-how-deep-is-your-love.mp3" data-name="How Deep Is Your Love"></button><span class="tname">How Deep Is Your Love</span><span class="ttime">2:36</span></li>
@@ -122,10 +133,13 @@
         </div>
       </article>
       <article class="album" id="dedicated-to-tim-hughes">
-        <div class="cover"><img src="images/albums/album-dedicated-to-tim-hughes.jpg" alt="Dedicated To Tim Hughes album cover" loading="lazy"></div>
-        <div>
-          <h3>Dedicated To Tim Hughes</h3>
-          <p class="meta">Ann &amp; Allen Gillon with Tim Hughes &middot; 11 tracks &middot; previews only</p>
+        <button type="button" class="sleeve" aria-expanded="false" aria-controls="trk-dedicated-to-tim-hughes">
+          <span class="disc" aria-hidden="true"></span>
+          <img src="images/albums/album-dedicated-to-tim-hughes.jpg" alt="Dedicated To Tim Hughes album cover" loading="lazy">
+        </button>
+        <h3>Dedicated To Tim Hughes</h3>
+        <p class="meta">Ann &amp; Allen Gillon with Tim Hughes &middot; 11 tracks &middot; previews only</p>
+        <div class="trkpanel" id="trk-dedicated-to-tim-hughes" hidden>
           <ol class="trklist">
             <li><button type="button" class="tplay" data-src="audio/dedicated-to-tim-hughes/01-don-t-get-around-much.mp3" data-name="Don&#x27;t Get Around Much"></button><span class="tname">Don&#x27;t Get Around Much</span><span class="ttime">4:01</span></li>
             <li><button type="button" class="tplay" data-src="audio/dedicated-to-tim-hughes/02-my-funny-valentine.mp3" data-name="My Funny Valentine"></button><span class="tname">My Funny Valentine</span><span class="ttime">5:47</span></li>
@@ -148,9 +162,9 @@
 
   <section id="timeless" aria-label="The duet Timeless">
     <div class="wrap duet">
-      <div class="gx-hero" data-pool="personal" data-start="duo-live-on-stage.jpg"></div>
+      <img class="gx-hero" src="images/personal/duo-live-on-stage.jpg" alt="The duet Timeless live on stage" loading="lazy">
       <div>
-        <h2 class="script">Timeless, <span class="ink-b">with Ann</span></h2>
+        <h2 class="script">Timeless, with Ann</h2>
         <p>Allen and Ann have played together since 1967, from Sydney clubs to a convention stage in Chicago. These days the duet is called Timeless: Allen on his Trini Lopez Gibson, Ann on vocals, alto sax and flute.</p>
         <p>Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or event, see <a href="hire.html">Hire Allen</a>.</p>
       </div>
@@ -161,7 +175,7 @@
 
   <section id="originals" aria-label="Original songs">
     <div class="wrap">
-      <h2 class="script" style="margin-top:40px;">Original <span class="ink-r">Songs</span></h2>
+      <h2 class="script" style="margin-top:40px;">Original Songs</h2>
       <p class="plain" style="margin-bottom:8px;">Written by Allen Gillon, filmed for YouTube. More are on the way.</p>
       <div class="videos">
         <figure class="video">
@@ -216,7 +230,18 @@
   </div>
 </footer>
 
-<script src="gallery.js"></script>
+<script>
+document.querySelectorAll(".sleeve").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    var album = btn.closest(".album");
+    var panel = document.getElementById(btn.getAttribute("aria-controls"));
+    var open = panel.hidden;
+    panel.hidden = !open;
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+    album.classList.toggle("open", open);
+  });
+});
+</script>
 <script src="player.js"></script>
 </body>
 </html>
