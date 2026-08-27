@@ -41,10 +41,21 @@ selects one. Until then that block stays empty on purpose.
   acquire action. Children's storybooks note when a new recording is coming.
 - **Cart:** one cart, paid items only, kept simple.
 
-## Chosen direction (fill on selection)
-- Palette (OKLCH roles): [TBD]
-- Color strategy: [TBD]
-- Display / body / utility type: [TBD]
-- Elevation, texture, borders: [TBD]
-- Signature element: [TBD]
-- Motion budget: [TBD]
+## Chosen direction (locked 2026-08-27)
+- Base: Small Press (two-ink overprint on paper), carried over from the chosen mockup.
+- Palette (OKLCH roles): paper 0.972/0.010/92, ink 0.22/0.02/300, red 0.615/0.195/33,
+  blue 0.455/0.150/262, soft 0.40/0.03/300. Red = music and performance accents,
+  blue = the written work.
+- Color strategy: restrained two-ink. Red and blue only ever as accents on paper and ink.
+- Display / body / utility type: **Dynalight** for titles (Allen's request, e.g. his name),
+  **Times New Roman** for all body and utility text (Allen's request). Dynalight is a script,
+  so it appears only at large sizes (>=2rem); everything that must be read fast is Times.
+- Elevation, texture, borders: flat, 2px ink rules, 3px ink borders on photos, faint SVG
+  noise on the paper. No shadows, no glass.
+- Signature element: the numbered index with Dynalight numerals in red, next to the hero.
+- Motion budget: none beyond the gallery-arrow opacity fade. Player state changes are instant.
+
+## Implementation note (current build)
+Static multi-page site: index, music, hire, books, plays, biography. Shared `site.css`,
+`gallery.js` image swapper kept from the mockup phase, `player.js` for the free album
+streaming (audio pulled from the old Wix site, see project context file).

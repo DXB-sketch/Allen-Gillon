@@ -130,6 +130,25 @@ No user accounts or membership needed for V1. Likely light **enquiry paths**: sc
 
 ---
 
+## 11b. Content recovered from the old Wix site (2026-08-27)
+
+- **Audio:** all five albums' streams were pulled from the old site's Wix Music players into
+  `audio/<album>/` (53 mp3s, ~128 MB, 128 kbps). Four albums are **full-length free streams**
+  (sourced from the old "Listen FREE" page): That's The Time (12), Wonderful World (10),
+  Misty (8), I Just Called (12). **Dedicated To Tim Hughes only ever had 30-second previews**
+  publicly; the full files sit behind Wix's paid download and could not be pulled. Ask Allen
+  for the original recordings to replace the previews (and for higher-quality masters generally).
+- **Original songs:** five YouTube videos found on the old site's Originals page and embedded
+  on `music.html`: Jamie (AWTyzHr4eaI), At Last I'm Free (6idFN_r1Dlw), Trippin' On My Senses
+  (nqTpPzs9boQ), Travellin' Road (VnXBwH5PcxU), Taking Chances (21kIAn9ED28). Dexter may
+  supply more links later.
+- **Biography:** the old site's Timeline page ("A Timeless Story") was rewritten onto
+  `biography.html`. The duet's current name is **Timeless**; earlier act was **Ann and Allen Ray**.
+- **Contact:** the old site publicly listed TIMELESS Music **0438 747 882 / 0438 747 883**;
+  these are now on `hire.html`. Email still TBC, so no email is shown anywhere yet.
+- **Shows page:** old site had a Matthew Allen 5 at Chandler Theatre 1998 video (10 numbers);
+  not yet used, the video itself was not recoverable as a direct link.
+
 ## 12. Outstanding items & next actions
 
 **Waiting on the client (Allen):**
