@@ -1,0 +1,79 @@
+import Link from "next/link";
+
+export const metadata = {
+  title: "Hire Allen · Allen Gillon",
+  description:
+    "Book Allen Gillon, restaurant guitarist, for dining rooms, functions and events around Bribie Island and Queensland.",
+};
+
+export default function HirePage() {
+  return (
+    <>
+      <style>{`
+  .hireGrid{display:grid;grid-template-columns:1fr 380px;gap:44px;align-items:start;padding:16px 0;}
+  .hireGrid .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:3/4;}
+  .offer{margin:26px 0 0;}
+  .offer li{padding:16px 0;display:flex;flex-direction:column;gap:2px;}
+  .offer .what{font-size:1.3rem;font-weight:700;}
+  .offer .how{color:var(--soft);font-size:1.05rem;max-width:52ch;}
+  .book{margin-top:44px;background:var(--ink);color:var(--on);border-radius:3px;}
+  .book .pad{padding:32px 30px 34px;}
+  .book h2{margin:0 0 8px;}
+  .book p{margin:0 0 12px;font-size:1.1rem;max-width:52ch;}
+  .book a{color:var(--on);}
+  .phones{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;}
+  .phones a{font-size:1.25rem;font-weight:700;text-decoration:none;border:2px solid var(--on);border-radius:3px;padding:12px 20px;min-height:48px;display:inline-flex;align-items:center;}
+  .phones a:hover{background:var(--red);border-color:var(--red);}
+  @media (max-width:860px){.hireGrid{grid-template-columns:1fr;}.hireGrid .gx-hero{max-width:340px;}}
+  @media (max-width:640px){
+    .pagehead .plain{padding-left:12px;padding-right:4px;}
+    .offer li{padding-left:12px;padding-right:4px;}
+    .offer .how{max-width:34ch;}
+    .hireGrid .gx-hero{max-width:min(300px,78vw);margin:0 auto;}
+    .book .pad{padding:26px 22px 28px;}
+  }
+`}</style>
+      <main>
+        <header className="pagehead">
+          <div className="wrap">
+            <h1 className="script">Hire Allen</h1>
+            <p className="plain">Live jazz guitar for rooms where people are eating, talking and enjoying themselves. Allen has been doing exactly this since 1967, and he still loves a full diary.</p>
+          </div>
+        </header>
+
+        <section>
+          <div className="wrap hireGrid">
+            <div>
+              <ul className="ruled offer">
+                <li>
+                  <span className="what">Restaurant guitarist</span>
+                  <span className="how">Solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. Standards, bossa and easy listening, at dinner volume. Hear the sound on <Link href="/music">the albums</Link>.</span>
+                </li>
+                <li>
+                  <span className="what">Functions and events</span>
+                  <span className="how">Weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him what the occasion needs and he will shape the set to it.</span>
+                </li>
+              </ul>
+            </div>
+            <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
+          </div>
+        </section>
+
+        <section aria-label="Bookings">
+          <div className="wrap">
+            <div className="book">
+              <div className="pad">
+                <h2 className="script">Book a <span style={{ color: "var(--red)" }}>date</span></h2>
+                <p>Ring Timeless Music and talk to Allen directly. Tell him the venue, the date and the sort of night you have in mind. You can also reach Allen on Facebook.</p>
+                <div className="phones">
+                  <a href="tel:+61438747882">0438 747 882</a>
+                  <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </>
+  );
+}
