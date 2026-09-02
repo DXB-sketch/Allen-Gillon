@@ -2,9 +2,9 @@ import Link from "next/link";
 import Album from "../../components/Album";
 
 export const metadata = {
-  title: "His Music · Allen Gillon",
+  title: "Al's Music · Allen Gillon",
   description:
-    "Hear Allen Gillon's albums free: That's The Time, Wonderful World, Misty, I Just Called and Dedicated To Tim Hughes, plus his original songs.",
+    "Hear Allen Gillon's albums free: That's The Time, Wonderful World, Misty and I Just Called, plus his original songs.",
 };
 
 const albums = [
@@ -86,6 +86,12 @@ const albums = [
       { src: "/audio/i-just-called/12-django-s-castle.mp3", name: "Django's Castle", time: "2:45" },
     ],
   },
+];
+
+/* Hidden from the site for now at Allen's request. Keep the data here so the
+   album can be restored later by moving it back into the `albums` array. */
+// eslint-disable-next-line no-unused-vars
+const hiddenAlbums = [
   {
     id: "dedicated-to-tim-hughes",
     title: "Dedicated To Tim Hughes",
@@ -127,9 +133,9 @@ export default function MusicPage() {
       <main>
         <header className="pagehead">
           <div className="wrap">
-            <h1 className="script">His Music</h1>
+            <h1 className="script">Al&rsquo;s Music</h1>
             <p className="plain">
-              Five albums, recorded in the studio, free to hear right here. Many of the backing tracks are Allen's own
+              Four albums, recorded in the studio, free to hear right here. Many of the backing tracks are Allen's own
               arrangements, like the Desafinado backing on That's The Time. Click a cover to open its tracks, then press
               play on any of them. If you would rather have Allen in the room,{" "}
               <Link href="/hire">he still takes bookings</Link>.

@@ -71,8 +71,20 @@ export function PlayerProvider({ children }) {
     else audio.pause();
   }, []);
 
+  const close = useCallback(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute("src");
+    }
+    currentRef.current = null;
+    playlistRef.current = null;
+    setCurrent(null);
+    setPlaying(false);
+  }, []);
+
   return (
-    <PlayerContext.Provider value={{ current, playing, toggle, togglePause, audioRef }}>
+    <PlayerContext.Provider value={{ current, playing, toggle, togglePause, close, audioRef }}>
       {children}
     </PlayerContext.Provider>
   );
@@ -83,7 +95,7 @@ export function usePlayer() {
 }
 
 export function NowBar() {
-  const { current, playing, togglePause, audioRef } = usePlayer();
+  const { current, playing, togglePause, close, audioRef } = usePlayer();
   const [pos, setPos] = useState(0);
   const [timeText, setTimeText] = useState("0:00 / 0:00");
 
@@ -131,6 +143,15 @@ export function NowBar() {
         <span className="nowtime" id="nowtime">
           {timeText}
         </span>
+        <button
+          type="button"
+          className="nowclose"
+          aria-label="Close player"
+          title="Close player"
+          onClick={close}
+        >
+          ✕
+        </button>
       </div>
     </div>
   );

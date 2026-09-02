@@ -50,7 +50,7 @@ export default function BiographyPage() {
               </figure>
               <p>Allen was a qualified teacher and Ann a psychiatric nurse, but music became the love of their lives. New management soon had The New Breed playing venues in Sydney, Mount Isa and Melbourne, then took them to Vietnam for an exciting and dangerous six-month tour of the war. While Allen was away, Ann sang with The Fugitives in Sydney hotels.</p>
               <p>After that tour, Allen and Ann were married in Parramatta in 1968. Management sent The New Breed straight back out: three more months through Vietnam, Guam, Okinawa, South Korea, Taiwan and the Philippines.</p>
-              <p>Allen trained at the Sydney Conservatorium of Music in the 1970s, passing orchestral musical arrangement, and became a member of the Musical Arrangers Guild of Australia. In the club and hotel bands of the day, every musician on stage needed a written chart, and Allen wrote them.</p>
+              <p>While living in NSW in the 1970's, Allen attended Sydney Conservatorium of Music, achieving a pass in orchestral musical arrangement. He also received recognition as a member of MAGA, (Musical Arrangers Guild of Australia). (Club and Hotel Bands back then required charts for each musician on stage.)</p>
 
               <h2 className="era">Page One Revue</h2>
               <p>A new band followed, Page One Revue. They played the Gold Coast, Melbourne hotels, nine months at the Whiskey Au-Go-Go and a run at The Lido in Melbourne. Then came an eighteen-month tour of Asia: six months at the Siam Intercontinental in Bangkok, then Singapore, Guam, Okinawa, South Korea, Saipan and three months playing private clubs in Japan.</p>
@@ -69,7 +69,7 @@ export default function BiographyPage() {
                 <img className="gx-hero" src="/images/personal/matthew-allen-5-band-photo.jpg" alt="The Matthew Allen 5 band" loading="lazy" />
                 <figcaption>The Matthew Allen 5.</figcaption>
               </figure>
-              <p>The family moved to the Gold Coast in 1990 when their son Matthew became sick. Matthew, their beautiful fifteen-year-old, died of cancer in February 1991. In his honour the family formed a band called The Matthew Allen 5, later known as the MA 5. Through the nineties this first-class band worked the corporate venues and clubs of the Gold Coast, Brisbane and the Sunshine Coast.</p>
+              <p>The family moved to the Gold Coast in 1990 when their son Matthew became sick. Matthew, their beautiful fifteen-year-old, died of cancer in February 1991. In his honour the family formed a band called The Matthew Allen 5, later known as the MA 5. Through the nineties this first-class band worked the corporate venues and clubs of the Gold Coast, Brisbane and the Sunshine Coast. <Link href="/shows">Learn more about the Matthew Allen 5</Link>.</p>
 
               <h2 className="era">Timeless</h2>
               <figure className="inline">

@@ -55,15 +55,17 @@ export default function Page() {
                   making things, gathered on one page. The music comes free.
                 </p>
                 <p className="heroIntro">
-                  Allen Gillon is a local musician performing around the Bribie
-                  Island area. Here he shares the albums he has recorded, free
-                  for you to enjoy.
+                  Allen is a popular guitarist, providing upmarket restaurants
+                  and their visiting diners with smooth guitar memories. No
+                  microphones needed, just listen to the professional solo
+                  Gibson guitar. Client&rsquo;s comments include,
+                  &ldquo;Beautiful!&rdquo;, &ldquo;Unforgettable!&rdquo;,
+                  &ldquo;I love Al&rsquo;s light jazz&rdquo;, &ldquo;Pour me
+                  another glass!&rdquo;.
                 </p>
                 <p className="heroIntro">
-                  Away from the guitar, Allen is a qualified teacher who has
-                  written storybooks for children, five school plays, and
-                  classroom textbooks. All of it lives here now, in the one
-                  place.
+                  Read Allen and Ann&rsquo;s life story on the{" "}
+                  <Link href="/biography">Timeline</Link>.
                 </p>
               </div>
               <div>
@@ -80,7 +82,7 @@ export default function Page() {
                     <Link href="/music">
                       Listen Free{" "}
                       <small>
-                        Five albums to hear free, and his original songs
+                        Four albums to hear free, and his original songs
                       </small>
                     </Link>
                   </li>

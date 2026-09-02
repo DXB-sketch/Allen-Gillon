@@ -16,7 +16,7 @@ export default function HirePage() {
   .offer li{padding:16px 0;display:flex;flex-direction:column;gap:2px;}
   .offer .what{font-size:1.3rem;font-weight:700;}
   .offer .how{color:var(--soft);font-size:1.05rem;max-width:52ch;}
-  .book{margin-top:44px;background:var(--ink);color:var(--on);border-radius:3px;}
+  .book{margin-top:8px;background:var(--ink);color:var(--on);border-radius:3px;}
   .book .pad{padding:32px 30px 34px;}
   .book h2{margin:0 0 8px;}
   .book p{margin:0 0 12px;font-size:1.1rem;max-width:52ch;}
@@ -41,13 +41,28 @@ export default function HirePage() {
           </div>
         </header>
 
+        <section aria-label="Bookings">
+          <div className="wrap">
+            <div className="book">
+              <div className="pad">
+                <h2 className="script">Book a <span style={{ color: "var(--red)" }}>date</span></h2>
+                <p>Speak with Allen directly. Tell him the venue, the date and the sort of night you have in mind. You can also reach Allen on Facebook.</p>
+                <div className="phones">
+                  <a href="tel:+61438747882">0438 747 882</a>
+                  <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section>
           <div className="wrap hireGrid">
             <div>
               <ul className="ruled offer">
                 <li>
                   <span className="what">Restaurant guitarist</span>
-                  <span className="how">Solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. Standards, bossa and easy listening. Allen plays from more than three hundred melodies held in memory, on a solo Gibson, at dinner volume, and wrote many of the backing tracks himself. Hear the sound on <Link href="/music">the albums</Link>.</span>
+                  <span className="how">Solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. Standards, bossa and easy listening, at dinner volume. Allen chooses from more than 300 memorised melodies when he plays for customers at restaurants. Many of the backing tracks were written by Allen &mdash; listen to the &ldquo;Desafinado&rdquo; backing track on his album That&rsquo;s The Time. Hear the sound on <Link href="/music">the albums</Link>.</span>
                 </li>
                 <li>
                   <span className="what">Functions and events</span>
@@ -67,20 +82,6 @@ export default function HirePage() {
           </div>
         </section>
 
-        <section aria-label="Bookings">
-          <div className="wrap">
-            <div className="book">
-              <div className="pad">
-                <h2 className="script">Book a <span style={{ color: "var(--red)" }}>date</span></h2>
-                <p>Ring Timeless Music and talk to Allen directly. Tell him the venue, the date and the sort of night you have in mind. You can also reach Allen on Facebook.</p>
-                <div className="phones">
-                  <a href="tel:+61438747882">0438 747 882</a>
-                  <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </>
   );
