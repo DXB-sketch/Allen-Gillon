@@ -19,6 +19,8 @@ export default function PlaysPage() {
   .texts .ruled li{padding:16px 0;}
   .texts h3{font-size:1.3rem;}
   .texts .ruled p{margin:4px 0 0;color:var(--soft);font-size:1.05rem;max-width:56ch;}
+  .plays .btn,.texts .btn{margin-top:14px;}
+  .btnrow{display:flex;gap:12px;flex-wrap:wrap;}
 `}</style>
       <main>
         <header className="pagehead">
@@ -31,11 +33,11 @@ export default function PlaysPage() {
         <section aria-label="The five plays">
           <div className="wrap">
             <ol className="ruled plays">
-              <li><span className="pno">1</span><div><h3>Melting Pot</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p></div></li>
-              <li><span className="pno">2</span><div><h3>The Other Man&rsquo;s Grass</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p></div></li>
-              <li><span className="pno">3</span><div><h3>Tribute to Calamity Jane</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p></div></li>
-              <li><span className="pno">4</span><div><h3>Three Heroes of Sherwood</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p></div></li>
-              <li><span className="pno">5</span><div><h3>Breakout</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p></div></li>
+              <li><span className="pno">1</span><div><h3>Melting Pot</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/melting-pot">Read the script</Link></div></li>
+              <li><span className="pno">2</span><div><h3>The Other Man&rsquo;s Grass</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/the-other-mans-grass">Read the script</Link></div></li>
+              <li><span className="pno">3</span><div><h3>Tribute to Calamity Jane</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/tribute-to-calamity-jane">Read the script</Link></div></li>
+              <li><span className="pno">4</span><div><h3>Three Heroes of Sherwood</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/three-heroes-of-sherwood">Read the script</Link></div></li>
+              <li><span className="pno">5</span><div><h3>Breakout</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/breakout">Read the script</Link></div></li>
             </ol>
 
             <div className="note">
@@ -52,10 +54,15 @@ export default function PlaysPage() {
               <li>
                 <h3>Riddled with Language</h3>
                 <p>A comprehension book, published by Modern Teaching Aids.</p>
+                <Link className="btn b" href="/read/riddled-with-language">Open the book</Link>
               </li>
               <li>
                 <h3>Practice in Communication, Book 1 and Book 2</h3>
                 <p>Classroom discussion, published by Primary Education Publications Pty Ltd.</p>
+                <div className="btnrow">
+                  <Link className="btn b" href="/read/practice-in-communication-book-1">Open Book 1</Link>
+                  <Link className="btn b" href="/read/practice-in-communication-book-2">Open Book 2</Link>
+                </div>
               </li>
             </ul>
           </div>

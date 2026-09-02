@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = {
   title: "Children's Books · Allen Gillon",
   description:
@@ -6,7 +8,11 @@ export const metadata = {
 
 export default function BooksPage() {
   return (
-    <main>
+    <>
+      <style>{`
+  .video .btn{align-self:flex-start;margin-top:4px;}
+`}</style>
+      <main>
       <header className="pagehead">
         <div className="wrap">
           <h1 className="script">Children's Books</h1>
@@ -28,6 +34,7 @@ export default function BooksPage() {
                 ></iframe>
               </div>
               <figcaption>Funny Fah Learns When to Stop</figcaption>
+              <Link className="btn b" href="/read/funny-fah-learns-when-to-stop">Read the book</Link>
             </figure>
             <figure className="video">
               <div className="frame">
@@ -40,6 +47,7 @@ export default function BooksPage() {
                 ></iframe>
               </div>
               <figcaption>Imaginative Little Mee</figcaption>
+              <Link className="btn b" href="/read/imaginative-little-mee">Read the book</Link>
             </figure>
             <figure className="video">
               <div className="frame">
@@ -52,6 +60,7 @@ export default function BooksPage() {
                 ></iframe>
               </div>
               <figcaption>Hi Doh</figcaption>
+              <Link className="btn b" href="/read/hi-doh">Read the book</Link>
             </figure>
             <figure className="video">
               <div className="frame">
@@ -64,10 +73,12 @@ export default function BooksPage() {
                 ></iframe>
               </div>
               <figcaption>Little Ray</figcaption>
+              <Link className="btn b" href="/read/little-ray">Read the book</Link>
             </figure>
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }

@@ -26,6 +26,14 @@ export default function Footer() {
           >
             Facebook
           </a>
+          <a
+            className="yt"
+            href="https://www.youtube.com/@allengillon1079"
+            target="_blank"
+            rel="noopener"
+          >
+            YouTube
+          </a>
         </nav>
         <p>&copy; 2026 Allen Gillon</p>
       </div>
