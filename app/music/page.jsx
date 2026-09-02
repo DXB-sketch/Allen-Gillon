@@ -129,7 +129,8 @@ export default function MusicPage() {
           <div className="wrap">
             <h1 className="script">His Music</h1>
             <p className="plain">
-              Five albums, recorded in the studio, free to hear right here. Click a cover to open its tracks, then press
+              Five albums, recorded in the studio, free to hear right here. Many of the backing tracks are Allen's own
+              arrangements, like the Desafinado backing on That's The Time. Click a cover to open its tracks, then press
               play on any of them. If you would rather have Allen in the room,{" "}
               <Link href="/hire">he still takes bookings</Link>.
             </p>

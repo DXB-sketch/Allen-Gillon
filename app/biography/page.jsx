@@ -44,8 +44,13 @@ export default function BiographyPage() {
           <div className="wrap bio">
             <div className="prose">
               <h2 className="era">The New Breed</h2>
+              <figure className="inline">
+                <img className="gx-hero" src="/images/personal/current-portrait-allen-2026.jpg" alt="Allen Gillon at Bribie Island" loading="lazy" />
+                <figcaption>Allen today, Bribie Island.</figcaption>
+              </figure>
               <p>Allen was a qualified teacher and Ann a psychiatric nurse, but music became the love of their lives. New management soon had The New Breed playing venues in Sydney, Mount Isa and Melbourne, then took them to Vietnam for an exciting and dangerous six-month tour of the war. While Allen was away, Ann sang with The Fugitives in Sydney hotels.</p>
               <p>After that tour, Allen and Ann were married in Parramatta in 1968. Management sent The New Breed straight back out: three more months through Vietnam, Guam, Okinawa, South Korea, Taiwan and the Philippines.</p>
+              <p>Allen trained at the Sydney Conservatorium of Music in the 1970s, passing orchestral musical arrangement, and became a member of the Musical Arrangers Guild of Australia. In the club and hotel bands of the day, every musician on stage needed a written chart, and Allen wrote them.</p>
 
               <h2 className="era">Page One Revue</h2>
               <p>A new band followed, Page One Revue. They played the Gold Coast, Melbourne hotels, nine months at the Whiskey Au-Go-Go and a run at The Lido in Melbourne. Then came an eighteen-month tour of Asia: six months at the Siam Intercontinental in Bangkok, then Singapore, Guam, Okinawa, South Korea, Saipan and three months playing private clubs in Japan.</p>
@@ -75,6 +80,10 @@ export default function BiographyPage() {
             </div>
 
             <aside aria-label="Photographs">
+              <figure>
+                <img className="gx-hero" src="/images/personal/current-portrait-allen-2026.jpg" alt="Allen Gillon at Bribie Island" loading="lazy" />
+                <figcaption>Allen today, Bribie Island.</figcaption>
+              </figure>
               <figure>
                 <img className="gx-hero" src="/images/personal/matthew-allen-5-band-photo.jpg" alt="The Matthew Allen 5 band" loading="lazy" />
                 <figcaption>The Matthew Allen 5.</figcaption>

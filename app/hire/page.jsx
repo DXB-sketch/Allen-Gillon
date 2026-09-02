@@ -47,7 +47,7 @@ export default function HirePage() {
               <ul className="ruled offer">
                 <li>
                   <span className="what">Restaurant guitarist</span>
-                  <span className="how">Solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. Standards, bossa and easy listening, at dinner volume. Hear the sound on <Link href="/music">the albums</Link>.</span>
+                  <span className="how">Solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. Standards, bossa and easy listening. Allen plays from more than three hundred melodies held in memory, on a solo Gibson, at dinner volume, and wrote many of the backing tracks himself. Hear the sound on <Link href="/music">the albums</Link>.</span>
                 </li>
                 <li>
                   <span className="what">Functions and events</span>
@@ -56,6 +56,14 @@ export default function HirePage() {
               </ul>
             </div>
             <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
+          </div>
+        </section>
+
+        <section aria-label="What diners say">
+          <div className="wrap">
+            <div className="note">
+              <p>Heard between courses: &ldquo;Beautiful.&rdquo; &ldquo;Unforgettable.&rdquo; &ldquo;I love Al&rsquo;s light jazz.&rdquo; &ldquo;Pour me another glass.&rdquo;</p>
+            </div>
           </div>
         </section>
 
