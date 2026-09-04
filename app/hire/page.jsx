@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Hire Allen · Allen Gillon",
+  title: "Bookings · Allen Gillon",
   description:
     "Book Allen Gillon, restaurant guitarist, for dining rooms, functions and events around Bribie Island and Queensland.",
 };
@@ -16,6 +16,8 @@ export default function HirePage() {
   .offer li{padding:16px 0;display:flex;flex-direction:column;gap:2px;}
   .offer .what{font-size:1.3rem;font-weight:700;}
   .offer .how{color:var(--soft);font-size:1.05rem;max-width:52ch;}
+  .offer .ytlinks{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+  .offer .ytlinks a{font-size:1.1rem;}
   .book{margin-top:8px;background:var(--ink);color:var(--on);border-radius:3px;}
   .book .pad{padding:32px 30px 34px;}
   .book h2{margin:0 0 8px;}
@@ -36,8 +38,8 @@ export default function HirePage() {
       <main>
         <header className="pagehead">
           <div className="wrap">
-            <h1 className="script">Hire Allen</h1>
-            <p className="plain">Live jazz guitar for rooms where people are eating, talking and enjoying themselves. Allen has been doing exactly this since 1967, and he still loves a full diary.</p>
+            <h1 className="script">Bookings</h1>
+            <p className="plain">Live jazz guitar for rooms where people are eating, talking, drinking and enjoying themselves. Allen has been doing exactly this since 1967, and he still loves a full diary.</p>
           </div>
         </header>
 
@@ -48,7 +50,7 @@ export default function HirePage() {
                 <h2 className="script">Book a <span style={{ color: "var(--red)" }}>date</span></h2>
                 <p>Speak with Allen directly. Tell him the venue, the date and the sort of night you have in mind. You can also reach Allen on Facebook.</p>
                 <div className="phones">
-                  <a href="tel:+61438747882">0438 747 882</a>
+                  <a href="sms:+61438747882">Text 0438 747 882</a>
                   <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
                 </div>
               </div>
@@ -67,6 +69,15 @@ export default function HirePage() {
                 <li>
                   <span className="what">Functions and events</span>
                   <span className="how">Weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him what the occasion needs and he will shape the set to it.</span>
+                </li>
+                <li>
+                  <span className="what">Allen and Ann on youtube</span>
+                  <span className="how ytlinks">
+                    <a href="https://www.youtube.com/watch?v=MRRzSDKg_hg" target="_blank" rel="noopener">Allen Gillon Cavatina</a>
+                    <a href="https://www.youtube.com/watch?v=WKoBhThrn8o" target="_blank" rel="noopener">Allen Gillon Sleep Walk</a>
+                    <a href="https://www.youtube.com/watch?v=G7lyKx7fK4s" target="_blank" rel="noopener">Ann Gillon Body and Soul</a>
+                    <a href="https://www.youtube.com/watch?v=Bf6CuHArmDw" target="_blank" rel="noopener">Ann Gillon Embraceable You</a>
+                  </span>
                 </li>
               </ul>
             </div>

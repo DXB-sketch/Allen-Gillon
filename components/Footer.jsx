@@ -8,16 +8,17 @@ export default function Footer() {
           <div className="fscript">Allen Gillon</div>
           <p>Bribie Island, Queensland</p>
           <p>
-            <a href="tel:+61438747882">0438 747 882</a>
+            <a href="sms:+61438747882">Text 0438 747 882</a>
           </p>
         </div>
         <nav aria-label="Footer">
           <Link href="/">Home</Link>
           <Link href="/music">Albums</Link>
           <Link href="/plays">Plays</Link>
-          <Link href="/books">Books</Link>
-          <Link href="/biography">About Me</Link>
-          <Link href="/hire">Hire Me</Link>
+          <Link href="/books">Publications</Link>
+          <Link href="/anns-art">Ann's art</Link>
+          <Link href="/biography">About Al</Link>
+          <Link href="/hire">Bookings</Link>
           <a
             className="fb"
             href="https://www.facebook.com/people/Allen-Gillon/100011388424486/"

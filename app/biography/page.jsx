@@ -53,6 +53,14 @@ export default function BiographyPage() {
               <p>While living in NSW in the 1970's, Allen attended Sydney Conservatorium of Music, achieving a pass in orchestral musical arrangement. He also received recognition as a member of MAGA, (Musical Arrangers Guild of Australia). (Club and Hotel Bands back then required charts for each musician on stage.)</p>
 
               <h2 className="era">Page One Revue</h2>
+              <figure className="inline">
+                <img className="gx-hero" src="/images/personal/page-one-revue-1968-whiskey-a-go-go.jpg" alt="Page One Revue in 1968, Ann out front with the band" loading="lazy" />
+                <figcaption>Page One Revue, 1968.</figcaption>
+              </figure>
+              <figure className="inline">
+                <img className="gx-hero" style={{ aspectRatio: "3/4" }} src="/images/personal/ann-singing-page-one-revue.jpg" alt="Ann singing at the microphone" loading="lazy" />
+                <figcaption>Ann singing.</figcaption>
+              </figure>
               <p>A new band followed, Page One Revue. They played the Gold Coast, Melbourne hotels, nine months at the Whiskey Au-Go-Go and a run at The Lido in Melbourne. Then came an eighteen-month tour of Asia: six months at the Siam Intercontinental in Bangkok, then Singapore, Guam, Okinawa, South Korea, Saipan and three months playing private clubs in Japan.</p>
               <p>In Bangkok, Page One Revue had their own weekly half-hour Countdown television show. Ann did voice-overs, radio and newspaper spreads for Ford, and played an English doctor in a Thai film in 1971.</p>
 
@@ -61,7 +69,7 @@ export default function BiographyPage() {
                 <img className="gx-hero" src="/images/personal/performance-ann-and-allen-onstage.jpg" alt="Ann and Allen performing on stage" loading="lazy" />
                 <figcaption>Ann and Allen on stage.</figcaption>
               </figure>
-              <p>Back home, they left band work and became a duet, Ann and Allen Ray, playing all the big Sydney clubs alongside the top acts of the day. By invitation, they performed on stage at the Chicago Theatre for a convention of three thousand delegates.</p>
+              <p>Back home, they left band work and became a duet, Ann and Allen Ray, playing all the big Sydney clubs alongside the top acts of the day, Col Joy and the Joy Boys, Little Patty, Tony Pantano. By invitation, they performed on stage at the Chicago Theatre for a convention of three thousand delegates.</p>
               <p>Through the seventies and eighties they set aside time for their family of four beautiful children, and Allen combined the duet with his first occupation, teaching school.</p>
 
               <h2 className="era red">The Matthew Allen 5</h2>
@@ -76,13 +84,21 @@ export default function BiographyPage() {
                 <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
                 <figcaption>Allen and the Gibson, on the water.</figcaption>
               </figure>
-              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann still sings lead, and plays alto sax and flute. As the duet Timeless, they especially love entertaining diners in restaurants around Bribie Island, which is exactly where you can <Link href="/hire">book them</Link>.</p>
+              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann still sings lead, and plays piano. As the duet Timeless, they especially love entertaining diners in restaurants around Bribie Island, which is exactly where you can <Link href="/hire">book them</Link>.</p>
             </div>
 
             <aside aria-label="Photographs">
               <figure>
                 <img className="gx-hero" src="/images/personal/current-portrait-allen-2026.jpg" alt="Allen Gillon at Bribie Island" loading="lazy" />
                 <figcaption>Allen today, Bribie Island.</figcaption>
+              </figure>
+              <figure>
+                <img className="gx-hero" src="/images/personal/page-one-revue-1968-whiskey-a-go-go.jpg" alt="Page One Revue in 1968, Ann out front with the band" loading="lazy" />
+                <figcaption>Page One Revue, 1968. Melbourne Whiskey Au-Go-Go.</figcaption>
+              </figure>
+              <figure>
+                <img className="gx-hero" style={{ aspectRatio: "3/4" }} src="/images/personal/ann-singing-page-one-revue.jpg" alt="Ann singing at the microphone" loading="lazy" />
+                <figcaption>Ann singing.</figcaption>
               </figure>
               <figure>
                 <img className="gx-hero" src="/images/personal/matthew-allen-5-band-photo.jpg" alt="The Matthew Allen 5 band" loading="lazy" />

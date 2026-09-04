@@ -165,11 +165,11 @@ export default function MusicPage() {
               <h2 className="script">Timeless, with Ann</h2>
               <p>
                 Allen and Ann have played together since 1967, from Sydney clubs to a convention stage in Chicago. These
-                days the duet is called Timeless: Allen on his Trini Lopez Gibson, Ann on vocals, alto sax and flute.
+                days the duet is called Timeless: Allen on his Trini Lopez Gibson, Ann on Vocals/piano.
               </p>
               <p>
                 Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or
-                event, see <Link href="/hire">Hire Allen</Link>.
+                event, see <Link href="/hire">Contact Allen</Link>.
               </p>
             </div>
           </div>
@@ -189,20 +189,6 @@ export default function MusicPage() {
               <figure className="video">
                 <div className="frame">
                   <iframe
-                    src="https://www.youtube-nocookie.com/embed/AWTyzHr4eaI"
-                    title="Jamie"
-                    loading="lazy"
-                    allow="encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <figcaption>
-                  Jamie <small>written by Allen Gillon and Barry Cochran</small>
-                </figcaption>
-              </figure>
-              <figure className="video">
-                <div className="frame">
-                  <iframe
                     src="https://www.youtube-nocookie.com/embed/6idFN_r1Dlw"
                     title="At Last I'm Free"
                     loading="lazy"
@@ -212,6 +198,20 @@ export default function MusicPage() {
                 </div>
                 <figcaption>
                   At Last I'm Free <small>written by Allen Gillon</small>
+                </figcaption>
+              </figure>
+              <figure className="video">
+                <div className="frame">
+                  <iframe
+                    src="https://www.youtube-nocookie.com/embed/AWTyzHr4eaI"
+                    title="Jamie"
+                    loading="lazy"
+                    allow="encrypted-media; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+                <figcaption>
+                  Jamie <small>written by Allen Gillon and Barry Cochran</small>
                 </figcaption>
               </figure>
               <figure className="video">

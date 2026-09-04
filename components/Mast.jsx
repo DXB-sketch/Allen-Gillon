@@ -7,9 +7,10 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/music", label: "Albums" },
   { href: "/plays", label: "Plays" },
-  { href: "/books", label: "Books" },
-  { href: "/biography", label: "About Me" },
-  { href: "/hire", label: "Hire Me" },
+  { href: "/books", label: "Publications" },
+  { href: "/anns-art", label: "Ann's art" },
+  { href: "/biography", label: "About Al" },
+  { href: "/hire", label: "Bookings" },
 ];
 
 export default function Mast() {

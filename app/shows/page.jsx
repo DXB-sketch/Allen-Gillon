@@ -56,7 +56,7 @@ export default function ShowsPage() {
             <div>
               <ShowSetlist tracks={tracks} />
               <p className="likeit">
-                Like what you hear? <Link href="/hire">Let us know!</Link>
+                Like what you hear? <Link href="/comments">Write a comment</Link>
               </p>
               <p className="likeit">
                 <Link href="/biography">&larr; Back to the story</Link>
