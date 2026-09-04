@@ -84,7 +84,7 @@ export default function BiographyPage() {
                 <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
                 <figcaption>Allen and the Gibson, on the water.</figcaption>
               </figure>
-              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann still sings lead, and plays piano. As the duet Timeless, they especially love entertaining diners in restaurants around Bribie Island, which is exactly where you can <Link href="/hire">book them</Link>.</p>
+              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann still sings lead, and plays piano. She also paints &mdash; see <Link href="/anns-art">Ann&rsquo;s art</Link>. As the duet Timeless, they especially love entertaining diners in restaurants around Bribie Island, which is exactly where you can <Link href="/hire">book them</Link>.</p>
             </div>
 
             <aside aria-label="Photographs">

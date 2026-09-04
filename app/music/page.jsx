@@ -168,6 +168,9 @@ export default function MusicPage() {
                 days the duet is called Timeless: Allen on his Trini Lopez Gibson, Ann on Vocals/piano.
               </p>
               <p>
+                Ann is also a painter &mdash; her works are on <Link href="/anns-art">Ann&rsquo;s art</Link>.
+              </p>
+              <p>
                 Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or
                 event, see <Link href="/hire">Contact Allen</Link>.
               </p>
