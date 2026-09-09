@@ -1,70 +1,183 @@
+import { readFile, access } from "node:fs/promises";
+import path from "node:path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import BookReader from "../../../components/BookReader";
 
-const works = {
-  "melting-pot": { title: "Melting Pot", kind: "script", back: "/plays", backLabel: "Back to School Plays" },
-  "the-other-mans-grass": { title: "The Other Man's Grass", kind: "script", back: "/plays", backLabel: "Back to School Plays" },
-  "tribute-to-calamity-jane": { title: "Tribute to Calamity Jane", kind: "script", back: "/plays", backLabel: "Back to School Plays" },
-  "three-heroes-of-sherwood": { title: "Three Heroes of Sherwood", kind: "script", back: "/plays", backLabel: "Back to School Plays" },
-  "breakout": { title: "Breakout", kind: "script", back: "/plays", backLabel: "Back to School Plays" },
-  "riddled-with-language": { title: "Riddled with Language", kind: "textbook", back: "/plays", backLabel: "Back to School Plays" },
-  "practice-in-communication-book-1": { title: "Practice in Communication, Book 1", kind: "textbook", back: "/plays", backLabel: "Back to School Plays" },
-  "practice-in-communication-book-2": { title: "Practice in Communication, Book 2", kind: "textbook", back: "/plays", backLabel: "Back to School Plays" },
-  "funny-fah-learns-when-to-stop": { title: "Funny Fah Learns When to Stop", kind: "storybook", back: "/books", backLabel: "Back to Children's Books" },
-  "imaginative-little-mee": { title: "Imaginative Little Mee", kind: "storybook", back: "/books", backLabel: "Back to Children's Books" },
-  "hi-doh": { title: "Hi Doh", kind: "storybook", back: "/books", backLabel: "Back to Children's Books" },
-  "little-ray": { title: "Little Ray", kind: "storybook", back: "/books", backLabel: "Back to Children's Books" },
-};
+const BOOKS_DIR = path.join(process.cwd(), "public", "books");
+const exists = (p) => access(p).then(() => true, () => false);
 
-const kindLine = {
-  script:
-    "This play is being digitised. When it is ready, the full script will open right here, page by page, free of charge and free of copyright. Until then, Allen sends scripts by email on request.",
-  textbook:
-    "This book is being digitised. When it is ready, its pages will open right here so teachers can look through it before using it in class.",
-  storybook:
-    "This storybook is being digitised. When it is ready, the full story will open right here to read along with, or without, the narration.",
+async function readIndex() {
+  try {
+    return JSON.parse(await readFile(path.join(BOOKS_DIR, "index.json"), "utf8"));
+  } catch {
+    return [];
+  }
+}
+
+async function readManifest(slug) {
+  try {
+    return JSON.parse(await readFile(path.join(BOOKS_DIR, slug, "manifest.json"), "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+// Storybooks that are on YouTube but not yet digitised: keep a plain
+// placeholder page for each until their scans arrive.
+const placeholders = {
+  "funny-fah-learns-when-to-stop": "Funny Fah Learns When to Stop",
+  "imaginative-little-mee": "Imaginative Little Mee",
+  "little-ray": "Little Ray",
 };
 
 export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return Object.keys(works).map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const index = await readIndex();
+  const slugs = new Set([...index.map((b) => b.slug), ...Object.keys(placeholders)]);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const work = works[slug];
-  if (!work) return {};
-  return {
-    title: `${work.title} · Allen Gillon`,
-    description: `${work.title} by Allen Gillon, being digitised for reading on this site.`,
-  };
+  const index = await readIndex();
+  const entry = index.find((b) => b.slug === slug);
+  if (entry && entry.status === "free") {
+    return {
+      title: `${entry.title} · Allen Gillon`,
+      description: entry.blurb,
+      openGraph: {
+        title: entry.title,
+        description: entry.blurb,
+        images: [{ url: `/books/${slug}/p001.webp` }],
+      },
+    };
+  }
+  if (entry) {
+    return {
+      title: `${entry.title} · Allen Gillon`,
+      description: `${entry.title}, a published classroom title by Allen Gillon.`,
+    };
+  }
+  if (placeholders[slug]) {
+    return {
+      title: `${placeholders[slug]} · Allen Gillon`,
+      description: `${placeholders[slug]} by Allen Gillon, being digitised for reading on this site.`,
+    };
+  }
+  return {};
 }
 
 export default async function ReadPage({ params }) {
   const { slug } = await params;
-  const work = works[slug];
-  if (!work) notFound();
-  return (
-    <main>
-      <header className="pagehead">
-        <div className="wrap">
-          <h1 className="script">{work.title}</h1>
-          <p className="plain">{kindLine[work.kind]}</p>
-        </div>
-      </header>
-      <section aria-label="Coming soon">
-        <div className="wrap">
-          <div className="note">
-            <p>
-              Nothing to read just yet: the pages are on their way from Allen&rsquo;s shelf to this one. If you would
-              like a copy in the meantime, <Link href="/hire">get in touch</Link>.
+  const index = await readIndex();
+  const entry = index.find((b) => b.slug === slug);
+
+  if (!entry && !placeholders[slug]) notFound();
+
+  // Not yet digitised: plain placeholder, nothing heavy.
+  if (!entry) {
+    const title = placeholders[slug];
+    return (
+      <main>
+        <header className="pagehead">
+          <div className="wrap">
+            <h1 className="script">{title}</h1>
+            <p className="plain">
+              This storybook is being digitised. When it is ready, the full story will open right here to read along
+              with, or without, the narration.
             </p>
           </div>
-          <p style={{ marginTop: "24px" }}>
-            <Link className="btn b" href={work.back}>
-              {work.backLabel}
-            </Link>
+        </header>
+        <section aria-label="Coming soon">
+          <div className="wrap">
+            <div className="note">
+              <p>
+                Nothing to read just yet: the pages are on their way from Allen&rsquo;s shelf to this one. If you would
+                like a copy in the meantime, <Link href="/hire">get in touch</Link>.
+              </p>
+            </div>
+            <p style={{ marginTop: "24px" }}>
+              <Link className="btn b" href="/books">Back to Children&rsquo;s Books</Link>
+            </p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  // Published elsewhere; web rights not confirmed. Listed only.
+  if (entry.status !== "free") {
+    return (
+      <main>
+        <header className="pagehead">
+          <div className="wrap">
+            <h1 className="script">{entry.title}</h1>
+            <p className="plain">{entry.blurb}</p>
+          </div>
+        </header>
+        <section aria-label="Availability">
+          <div className="wrap">
+            <div className="note">
+              <p>
+                {entry.title} is a published title available to schools through its publisher. It is not available to
+                read or download on this site. For help finding a copy, <Link href="/hire">get in touch</Link>.
+              </p>
+            </div>
+            <p style={{ marginTop: "24px" }}>
+              <Link className="btn b" href="/plays">Back to School Plays</Link>
+            </p>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  const manifest = await readManifest(slug);
+  if (!manifest) notFound();
+
+  let ocrText = null;
+  const textPath = path.join(BOOKS_DIR, slug, "text.txt");
+  if (await exists(textPath)) {
+    ocrText = await readFile(textPath, "utf8");
+  }
+
+  const backHref = entry.section === "plays" ? "/plays" : "/books";
+  const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to Children's Books";
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    name: manifest.title,
+    author: { "@type": "Person", name: "Allen Gillon" },
+    bookFormat: "https://schema.org/EBook",
+    inLanguage: "en",
+    numberOfPages: manifest.pageCount,
+    description: manifest.blurb,
+  };
+
+  return (
+    <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <header className="pagehead">
+        <div className="wrap">
+          <h1 className="script">{manifest.title}</h1>
+          <p className="plain">
+            {manifest.blurb} {manifest.pageCount} pages. Read it right here, or download the PDF to keep.
+          </p>
+        </div>
+      </header>
+      <section aria-label={`Read ${manifest.title}`}>
+        <div className="wrap">
+          <BookReader manifest={manifest} />
+          {ocrText ? (
+            <div className="visually-hidden" aria-label={`Full text of ${manifest.title}`}>
+              {ocrText}
+            </div>
+          ) : null}
+          <p style={{ marginTop: "32px" }}>
+            <Link className="btn b" href={backHref}>{backLabel}</Link>
           </p>
         </div>
       </section>

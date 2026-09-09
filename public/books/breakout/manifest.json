@@ -1,0 +1,14 @@
+{
+  "slug": "breakout",
+  "title": "Breakout",
+  "author": "Allen Gillon",
+  "section": "plays",
+  "status": "free",
+  "blurb": "A caper play for young performers. Grades 3 to 12.",
+  "pageCount": 26,
+  "aspect": [
+    1080,
+    1526
+  ],
+  "hasDownload": true
+}

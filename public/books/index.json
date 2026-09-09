@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "tribute-to-calamity-jane",
+    "title": "Tribute to Calamity Jane",
+    "section": "plays",
+    "status": "free",
+    "pageCount": 21,
+    "blurb": "A humorous wild-west school play. Grades 3 to 12."
+  },
+  {
+    "slug": "melting-pot",
+    "title": "Melting Pot",
+    "section": "plays",
+    "status": "free",
+    "pageCount": 47,
+    "blurb": "A play about inter-racial acceptance. Grades 3 to 12."
+  },
+  {
+    "slug": "the-other-mans-grass",
+    "title": "The Other Man's Grass",
+    "section": "plays",
+    "status": "free",
+    "pageCount": 27,
+    "blurb": "An emotional play on intolerance, disability and bullying. Grades 3 to 12."
+  },
+  {
+    "slug": "three-heroes-of-sherwood",
+    "title": "Three Heroes of Sherwood",
+    "section": "plays",
+    "status": "free",
+    "pageCount": 26,
+    "blurb": "A Robin Hood adventure for the stage. Grades 3 to 12."
+  },
+  {
+    "slug": "breakout",
+    "title": "Breakout",
+    "section": "plays",
+    "status": "free",
+    "pageCount": 26,
+    "blurb": "A caper play for young performers. Grades 3 to 12."
+  },
+  {
+    "slug": "little-hi-doh",
+    "title": "Little Hi-Doh",
+    "section": "childrens",
+    "status": "free",
+    "pageCount": 2,
+    "blurb": "A Chinese Chimes story with a gentle moral."
+  },
+  {
+    "slug": "practice-in-communication-book-1",
+    "title": "Practice in Communication, Book 1",
+    "section": "teaching",
+    "status": "restricted",
+    "pageCount": 0,
+    "blurb": "Classroom communication activities."
+  },
+  {
+    "slug": "practice-in-communication-book-2",
+    "title": "Practice in Communication, Book 2",
+    "section": "teaching",
+    "status": "restricted",
+    "pageCount": 0,
+    "blurb": "Classroom communication activities."
+  },
+  {
+    "slug": "riddled-with-language",
+    "title": "Riddled with Language",
+    "section": "teaching",
+    "status": "restricted",
+    "pageCount": 0,
+    "blurb": "Practical exercises in language skills."
+  }
+]

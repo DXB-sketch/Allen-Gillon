@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import Link from "next/link";
 
 export const metadata = {
@@ -6,7 +8,29 @@ export const metadata = {
     "Five school plays written and performed, free of charge and copyright, plus classroom communication textbooks, by Allen Gillon, qualified teacher.",
 };
 
-export default function PlaysPage() {
+// The order the plays appear on the page (index.json keeps config order).
+const playOrder = [
+  "melting-pot",
+  "the-other-mans-grass",
+  "tribute-to-calamity-jane",
+  "three-heroes-of-sherwood",
+  "breakout",
+];
+
+async function readIndex() {
+  try {
+    return JSON.parse(await readFile(path.join(process.cwd(), "public", "books", "index.json"), "utf8"));
+  } catch {
+    return [];
+  }
+}
+
+export default async function PlaysPage() {
+  const index = await readIndex();
+  const bySlug = Object.fromEntries(index.map((b) => [b.slug, b]));
+  const plays = playOrder.map((slug) => bySlug[slug]).filter(Boolean);
+  const teaching = index.filter((b) => b.section === "teaching");
+
   return (
     <>
       <style>{`
@@ -19,7 +43,7 @@ export default function PlaysPage() {
   .texts .ruled li{padding:16px 0;}
   .texts h3{font-size:1.3rem;}
   .texts .ruled p{margin:4px 0 0;color:var(--soft);font-size:1.05rem;max-width:56ch;}
-  .plays .btn,.texts .btn{margin-top:14px;}
+  .plays .btnrow,.texts .btnrow{margin-top:14px;}
   .btnrow{display:flex;gap:12px;flex-wrap:wrap;}
 `}</style>
       <main>
@@ -33,15 +57,23 @@ export default function PlaysPage() {
         <section aria-label="The five plays">
           <div className="wrap">
             <ol className="ruled plays">
-              <li><span className="pno">1</span><div><h3>Melting Pot</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/melting-pot">Read the script</Link></div></li>
-              <li><span className="pno">2</span><div><h3>The Other Man&rsquo;s Grass</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/the-other-mans-grass">Read the script</Link></div></li>
-              <li><span className="pno">3</span><div><h3>Tribute to Calamity Jane</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/tribute-to-calamity-jane">Read the script</Link></div></li>
-              <li><span className="pno">4</span><div><h3>Three Heroes of Sherwood</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/three-heroes-of-sherwood">Read the script</Link></div></li>
-              <li><span className="pno">5</span><div><h3>Breakout</h3><p>Written for a primary-school end-of-year production, and performed on school stages. Age band, cast size and running time to be listed here.</p><Link className="btn b" href="/read/breakout">Read the script</Link></div></li>
+              {plays.map((play, i) => (
+                <li key={play.slug}>
+                  <span className="pno">{i + 1}</span>
+                  <div>
+                    <h3>{play.title}</h3>
+                    <p>{play.blurb} {play.pageCount} pages. Age band, cast size and running time to be listed here.</p>
+                    <div className="btnrow">
+                      <Link className="btn b" href={`/read/${play.slug}`}>Read online</Link>
+                      <a className="btn" href={`/books/${play.slug}/${play.slug}.pdf`} download>Download PDF</a>
+                    </div>
+                  </div>
+                </li>
+              ))}
             </ol>
 
             <div className="note">
-              <p>Teachers: Allen gives these scripts away free, in electronic form, to any school that would like to perform them. Age band, cast size, running time and classroom notes will be added here as Allen supplies them. To request a script now, <Link href="/hire">get in touch</Link>.</p>
+              <p>Teachers: Allen gives these scripts away free. Read any play right here, or download the PDF to print and hand out. Age band, cast size, running time and classroom notes will be added as Allen supplies them. For anything else, <Link href="/hire">get in touch</Link>.</p>
             </div>
           </div>
         </section>
@@ -49,21 +81,14 @@ export default function PlaysPage() {
         <section className="texts" aria-label="Classroom textbooks">
           <div className="wrap">
             <h2 className="script">Classroom Textbooks</h2>
-            <p className="plain" style={{ marginTop: "6px" }}>Alongside the plays, Allen wrote classroom texts used by teachers and pupils across twenty-five years of teaching. These titles were published by educational publishers.</p>
+            <p className="plain" style={{ marginTop: "6px" }}>Alongside the plays, Allen wrote classroom texts used by teachers and pupils across twenty-five years of teaching. These titles were published by educational publishers, so they are listed here rather than offered to read or download.</p>
             <ul className="ruled" aria-label="Published classroom texts">
-              <li>
-                <h3>Riddled with Language</h3>
-                <p>A comprehension book, published by Modern Teaching Aids.</p>
-                <Link className="btn b" href="/read/riddled-with-language">Open the book</Link>
-              </li>
-              <li>
-                <h3>Practice in Communication, Book 1 and Book 2</h3>
-                <p>Classroom discussion, published by Primary Education Publications Pty Ltd.</p>
-                <div className="btnrow">
-                  <Link className="btn b" href="/read/practice-in-communication-book-1">Open Book 1</Link>
-                  <Link className="btn b" href="/read/practice-in-communication-book-2">Open Book 2</Link>
-                </div>
-              </li>
+              {teaching.map((book) => (
+                <li key={book.slug}>
+                  <h3>{book.title}</h3>
+                  <p>{book.blurb} A published title, available to schools through its publisher. <Link href="/hire">Get in touch</Link> for help finding a copy.</p>
+                </li>
+              ))}
             </ul>
           </div>
         </section>
