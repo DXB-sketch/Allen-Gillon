@@ -1,5 +1,6 @@
 "use client";
 
+import CommentLink from "./CommentLink";
 import { useState } from "react";
 import { usePlayer } from "./Player";
 
@@ -21,6 +22,7 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
       </button>
       <h3>{title}</h3>
       <p className="meta">{meta}</p>
+      <CommentLink subject={title} returnTo={`/music#${id}`} returnLabel={title} />
       <div className="trkpanel" id={"trk-" + id} hidden={!open}>
         <ol className="trklist">
           {tracks.map((track) => {
@@ -36,7 +38,7 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
                 >
                   {isCurrentAndPlaying ? "❚❚" : "▶"}
                 </button>
-                <span className="tname">{track.name}</span>
+                <span className="tname">{track.name}<CommentLink subject={`${track.name} (${title})`} returnTo={`/music#${id}`} returnLabel={title}>Comment</CommentLink></span>
                 <span className="ttime">{track.time}</span>
               </li>
             );

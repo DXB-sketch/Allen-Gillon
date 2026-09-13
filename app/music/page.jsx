@@ -1,8 +1,9 @@
+import CommentLink from "../../components/CommentLink";
 import Link from "next/link";
 import Album from "../../components/Album";
 
 export const metadata = {
-  title: "Al's Music · Allen Gillon",
+  title: "Al's music style · Allen Gillon",
   description:
     "Hear Allen Gillon's albums free: That's The Time, Wonderful World, Misty and I Just Called, plus his original songs.",
 };
@@ -133,10 +134,10 @@ export default function MusicPage() {
       <main>
         <header className="pagehead">
           <div className="wrap">
-            <h1 className="script">Al&rsquo;s Music</h1>
+            <h1 className="script">Al&rsquo;s music style</h1>
             <p className="plain">
               Four albums, recorded in the studio, free to hear right here. Many of the backing tracks are Allen's own
-              arrangements, like the Desafinado backing on That's The Time. Click a cover to open its tracks, then press
+              arrangements, like the Desafinado backing on Girl from Ipanema. Click a cover to open its tracks, then press
               play on any of them. If you would rather have Allen in the room,{" "}
               <Link href="/hire">he still takes bookings</Link>.
             </p>
@@ -201,6 +202,7 @@ export default function MusicPage() {
                 </div>
                 <figcaption>
                   At Last I'm Free <small>written by Allen Gillon</small>
+                  <CommentLink subject={"At Last I'm Free"} returnTo="/music#originals" returnLabel="Original Songs" />
                 </figcaption>
               </figure>
               <figure className="video">
@@ -215,6 +217,7 @@ export default function MusicPage() {
                 </div>
                 <figcaption>
                   Jamie <small>written by Allen Gillon and Barry Cochran</small>
+                  <CommentLink subject={"Jamie"} returnTo="/music#originals" returnLabel="Original Songs" />
                 </figcaption>
               </figure>
               <figure className="video">
@@ -229,6 +232,7 @@ export default function MusicPage() {
                 </div>
                 <figcaption>
                   Trippin' On My Senses <small>written by Allen Gillon</small>
+                  <CommentLink subject={"Trippin' On My Senses"} returnTo="/music#originals" returnLabel="Original Songs" />
                 </figcaption>
               </figure>
               <figure className="video">
@@ -243,6 +247,7 @@ export default function MusicPage() {
                 </div>
                 <figcaption>
                   Travellin' Road <small>written by Allen Gillon</small>
+                  <CommentLink subject={"Travellin' Road"} returnTo="/music#originals" returnLabel="Original Songs" />
                 </figcaption>
               </figure>
               <figure className="video">
@@ -257,6 +262,7 @@ export default function MusicPage() {
                 </div>
                 <figcaption>
                   Taking Chances <small>written by Allen Gillon</small>
+                  <CommentLink subject={"Taking Chances"} returnTo="/music#originals" returnLabel="Original Songs" />
                 </figcaption>
               </figure>
             </div>

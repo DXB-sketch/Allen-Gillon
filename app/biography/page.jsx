@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "His Story · Allen Gillon",
+  title: "Timeless · Allen Gillon",
   description:
     "The story of Allen and Ann Gillon: The New Breed, Vietnam tours, Page One Revue, television in Bangkok, the Matthew Allen 5, and sixty years of music together.",
 };
@@ -35,7 +35,7 @@ export default function BiographyPage() {
       <main>
         <header className="pagehead">
           <div className="wrap">
-            <h1 className="script">A Timeless Story</h1>
+            <h1 className="script">Timeless</h1>
             <p className="plain">Allen met Ann in 1967, when his band The New Breed was playing Parramatta. From that night on, their lives merged into one long tour of music, singing, travel and family.</p>
           </div>
         </header>

@@ -1,3 +1,4 @@
+import CommentLink from "../../../components/CommentLink";
 import { readFile, access } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
@@ -84,6 +85,7 @@ export default async function ReadPage({ params }) {
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">{title}</h1>
+            <CommentLink subject={title} returnTo={`/read/${slug}`} returnLabel={title} />
             <p className="plain">
               This storybook is being digitised. When it is ready, the full story will open right here to read along
               with, or without, the narration.
@@ -99,7 +101,7 @@ export default async function ReadPage({ params }) {
               </p>
             </div>
             <p style={{ marginTop: "24px" }}>
-              <Link className="btn b" href="/books">Back to Children&rsquo;s Books</Link>
+              <Link className="btn b" href="/books">Back to Ebooks</Link>
             </p>
           </div>
         </section>
@@ -114,6 +116,7 @@ export default async function ReadPage({ params }) {
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">{entry.title}</h1>
+            <CommentLink subject={entry.title} returnTo={`/read/${slug}`} returnLabel={entry.title} />
             <p className="plain">{entry.blurb}</p>
           </div>
         </header>
@@ -144,7 +147,7 @@ export default async function ReadPage({ params }) {
   }
 
   const backHref = entry.section === "plays" ? "/plays" : "/books";
-  const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to Children's Books";
+  const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to Ebooks";
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -163,6 +166,7 @@ export default async function ReadPage({ params }) {
       <header className="pagehead">
         <div className="wrap">
           <h1 className="script">{manifest.title}</h1>
+            <CommentLink subject={manifest.title} returnTo={`/read/${slug}`} returnLabel={manifest.title} />
           <p className="plain">
             {manifest.blurb} {manifest.pageCount} pages. Read it right here, or download the PDF to keep.
           </p>

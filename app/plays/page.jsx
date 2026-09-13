@@ -1,3 +1,4 @@
+import CommentLink from "../../components/CommentLink";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
@@ -64,6 +65,7 @@ export default async function PlaysPage() {
                     <h3>{play.title}</h3>
                     <p>{play.blurb} {play.pageCount} pages. Age band, cast size and running time to be listed here.</p>
                     <div className="btnrow">
+                      <CommentLink subject={play.title} returnTo="/plays" returnLabel="School Plays" />
                       <Link className="btn b" href={`/read/${play.slug}`}>Read online</Link>
                       <a className="btn" href={`/books/${play.slug}/${play.slug}.pdf`} download>Download PDF</a>
                     </div>
@@ -86,6 +88,7 @@ export default async function PlaysPage() {
               {teaching.map((book) => (
                 <li key={book.slug}>
                   <h3>{book.title}</h3>
+                  <CommentLink subject={book.title} returnTo="/plays" returnLabel="Classroom Textbooks" />
                   <p>{book.blurb} A published title, available to schools through its publisher. <Link href="/hire">Get in touch</Link> for help finding a copy.</p>
                 </li>
               ))}

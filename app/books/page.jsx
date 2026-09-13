@@ -1,9 +1,10 @@
+import CommentLink from "../../components/CommentLink";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Children's Books · Allen Gillon",
+  title: "Ebooks · Allen Gillon",
   description:
     "The Chinese Chimes stories: short ebooks with a gentle moral for young readers, written and narrated by Allen Gillon.",
 };
@@ -39,9 +40,10 @@ export default async function BooksPage() {
       <main>
       <header className="pagehead">
         <div className="wrap">
-          <h1 className="script">Children's Books</h1>
+          <h1 className="script">Ebooks</h1>
           <p className="plain">The Chinese Chimes stories: short stories for young readers, each with a gentle moral, written by Allen the teacher. Released as ebooks and narrated on YouTube. The current recordings use an older computer voice; fresh recordings are on the way.</p>
         </div>
+      <p className="wrap"><Link href="/plays">Explore School Plays and Classroom Textbooks</Link></p>
       </header>
 
       <section aria-label="The Chinese Chimes stories">
@@ -63,6 +65,7 @@ export default async function BooksPage() {
                   </div>
                   <figcaption>{story.title}</figcaption>
                   <div className="btnrow">
+                    <CommentLink subject={story.title} returnTo="/books" returnLabel="Ebooks" />
                     <Link className="btn b" href={`/read/${story.readSlug}`}>Read the book</Link>
                     {readable ? (
                       <a className="btn" href={`/books/${story.readSlug}/${story.readSlug}.pdf`} download>Download PDF</a>

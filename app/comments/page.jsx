@@ -1,12 +1,18 @@
+import Link from "next/link";
 import CommentForm from "../../components/CommentForm";
 
 export const metadata = {
   title: "Write a comment · Allen Gillon",
   description:
-    "Write a comment for Allen Gillon and the Matthew Allen 5 — it goes straight to Allen as a text message.",
+    "Write a comment about Allen Gillon’s books, plays, songs, albums or the Matthew Allen 5 — it goes straight to Allen as a text message.",
 };
 
-export default function CommentsPage() {
+export default async function CommentsPage({ searchParams }) {
+  const query = await searchParams;
+  const subject = typeof query.subject === "string" ? query.subject.slice(0, 300) : "";
+  const requestedReturn = typeof query.returnTo === "string" ? query.returnTo : "";
+  const returnTo = /^\/(?:music(?:#[a-z0-9-]+)?|books|plays|shows|read\/[a-z0-9-]+)$/.test(requestedReturn) ? requestedReturn : "/shows";
+  const returnLabel = returnTo === "/shows" ? "MA5" : typeof query.returnLabel === "string" ? query.returnLabel.slice(0, 300) : "the page";
   return (
     <>
       <style>{`
@@ -26,8 +32,8 @@ export default function CommentsPage() {
           <div className="wrap">
             <h1 className="script">Write a comment</h1>
             <p className="plain">
-              Heard the Matthew Allen 5, or one of Allen and Ann&rsquo;s shows or
-              albums? Leave your comment here. Venue managers interested in a
+              Read a book or play, or heard a song, album or show? Leave your
+              comment here. Venue managers interested in a
               booking are very welcome to use this page too.
             </p>
           </div>
@@ -35,7 +41,9 @@ export default function CommentsPage() {
 
         <section aria-label="Write a comment">
           <div className="wrap cwrap">
-            <CommentForm />
+            <Link className="btn b" href={returnTo}>Back to {returnLabel}</Link>
+            {subject ? <p>Commenting on: <strong>{subject}</strong></p> : null}
+            <CommentForm subject={subject} />
           </div>
         </section>
       </main>

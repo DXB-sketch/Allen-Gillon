@@ -7,11 +7,11 @@ import { useState } from "react";
    composes the message and hands it to the visitor's SMS app. */
 const PHONE = "+61438747882";
 
-export default function CommentForm() {
+export default function CommentForm({ subject = "" }) {
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
 
-  const body = `${comment}${name ? `\n— ${name}` : ""}`;
+  const body = `${subject ? `About: ${subject}\n\n` : ""}${comment}${name ? `\n— ${name}` : ""}`;
   const smsHref = `sms:${PHONE}?&body=${encodeURIComponent(body)}`;
 
   return (

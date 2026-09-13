@@ -39,7 +39,7 @@ export default function HirePage() {
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">Bookings</h1>
-            <p className="plain">Live jazz guitar for rooms where people are eating, talking, drinking and enjoying themselves. Allen has been doing exactly this since 1967, and he still loves a full diary.</p>
+            <p className="plain">Light jazz guitar for restaurants where people are eating, drinking and enjoying themselves. Allen has been doing exactly this since 1967, and he still loves a full diary.</p>
           </div>
         </header>
 

@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Ann's art · Allen Gillon",
+  title: "Ann · Allen Gillon",
   description:
     "Paintings by Ann Gillon: African Wild Dog, Arrow, Ghost Town and Kimberley Trail. Originals available — text Allen to enquire.",
 };
@@ -59,7 +59,7 @@ export default function AnnsArtPage() {
       <main>
         <header className="pagehead">
           <div className="wrap">
-            <h1 className="script">Ann&rsquo;s art</h1>
+            <h1 className="script">Ann</h1>
             <p className="plain">
               When she is not singing, Ann paints. Here are some of her works in
               acrylic and watercolour. Originals are for sale &mdash; to enquire

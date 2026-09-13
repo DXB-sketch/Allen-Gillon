@@ -1,3 +1,4 @@
+import CommentLink from "../../components/CommentLink";
 import Link from "next/link";
 import ShowSetlist from "../../components/ShowSetlist";
 
@@ -56,7 +57,7 @@ export default function ShowsPage() {
             <div>
               <ShowSetlist tracks={tracks} />
               <p className="likeit">
-                Like what you hear? <Link href="/comments">Write a comment</Link>
+                Like what you hear? <CommentLink subject="The Matthew Allen 5" returnTo="/shows" returnLabel="MA5">Write a comment</CommentLink>
               </p>
               <p className="likeit">
                 <Link href="/biography">&larr; Back to the story</Link>

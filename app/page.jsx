@@ -50,10 +50,6 @@ export default function Page() {
                   src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
                   alt="Allen playing his red Gibson on the Bribie Island waterfront"
                 />
-                <p className="say">
-                  Guitarist, songwriter, author and playwright. Sixty years of
-                  making things, gathered on one page. The music comes free.
-                </p>
                 <p className="heroIntro">
                   Allen is a popular guitarist, providing upmarket restaurants
                   and their visiting diners with smooth guitar memories. No
@@ -62,10 +58,6 @@ export default function Page() {
                   &ldquo;Beautiful!&rdquo;, &ldquo;Unforgettable!&rdquo;,
                   &ldquo;I love Al&rsquo;s light jazz&rdquo;, &ldquo;Pour me
                   another glass!&rdquo;.
-                </p>
-                <p className="heroIntro">
-                  Read Allen and Ann&rsquo;s life story on the{" "}
-                  <Link href="/biography">Timeline</Link>.
                 </p>
               </div>
               <div>
@@ -95,7 +87,7 @@ export default function Page() {
                       />
                     </span>
                     <Link href="/hire">
-                      Shows{" "}
+                      Bookings{" "}
                       <small>
                         Restaurant guitarist, jazz for dining rooms, functions
                         and events

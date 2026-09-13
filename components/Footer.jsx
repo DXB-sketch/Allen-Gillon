@@ -14,11 +14,10 @@ export default function Footer() {
         <nav aria-label="Footer">
           <Link href="/">Home</Link>
           <Link href="/music">Albums</Link>
-          <Link href="/plays">Plays</Link>
-          <Link href="/books">Publications</Link>
-          <Link href="/anns-art">Ann's art</Link>
-          <Link href="/biography">About Al</Link>
+          <Link href="/biography">Timeless</Link>
           <Link href="/hire">Bookings</Link>
+          <Link href="/books">Ebooks</Link>
+          <Link href="/anns-art">Ann</Link>
           <a
             className="fb"
             href="https://www.facebook.com/people/Allen-Gillon/100011388424486/"

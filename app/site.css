@@ -238,3 +238,7 @@ footer nav a.yt::before{content:"";width:18px;height:18px;flex:none;background:c
 /* Visually hidden but readable by screen readers and search engines. */
 .visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
   clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}
+
+.comment-link{display:inline-flex;align-items:center;min-height:44px;padding:8px 0;line-height:1.4;}
+.tname .comment-link{display:flex;font-size:1rem;}
+.video figcaption .comment-link{display:flex;}
