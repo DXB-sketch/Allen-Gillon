@@ -3,3 +3,6 @@ node_modules/
 out/
 *.tsbuildinfo
 scripts/incoming/
+.env*
+!.env.example
+art-review/
