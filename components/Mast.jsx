@@ -8,8 +8,8 @@ const links = [
   { href: "/music", label: "Albums" },
   { href: "/biography", label: "Timeless" },
   { href: "/hire", label: "Bookings" },
-  { href: "/books", label: "Ebooks" },
-  { href: "/anns-art", label: "Ann" },
+  { href: "/books", label: "eBooks" },
+  { href: "/anns-art", label: "Ann Gillon" },
 ];
 
 export default function Mast() {
@@ -17,7 +17,7 @@ export default function Mast() {
   return (
     <div className="mast">
       <Link className="logo" href="/">
-        Allen <em>Gillon</em>
+        Allen Gillon
       </Link>
       <nav className="mnav" aria-label="Site">
         {links.map((l) => (

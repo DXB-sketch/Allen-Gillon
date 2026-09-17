@@ -51,7 +51,7 @@ export default async function PlaysPage() {
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">School Plays</h1>
-            <p className="plain">Five plays written in the 1980s for primary-school end-of-year productions, and all performed on real school stages. Written by a teacher who knows what holds a class and what fills a hall. Allen offers the scripts free of charge and free of copyright.</p>
+            <p className="plain">Five plays written in the 1980s for primary-school end-of-year productions, and all performed on school stages. Written by a teacher who knows what holds a class and what fills a hall. Allen offers the scripts free of charge and free of copyright.</p>
           </div>
         </header>
 

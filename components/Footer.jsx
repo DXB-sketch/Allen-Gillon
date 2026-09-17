@@ -16,8 +16,8 @@ export default function Footer() {
           <Link href="/music">Albums</Link>
           <Link href="/biography">Timeless</Link>
           <Link href="/hire">Bookings</Link>
-          <Link href="/books">Ebooks</Link>
-          <Link href="/anns-art">Ann</Link>
+          <Link href="/books">eBooks</Link>
+          <Link href="/anns-art">Ann Gillon</Link>
           <a
             className="fb"
             href="https://www.facebook.com/people/Allen-Gillon/100011388424486/"
@@ -28,7 +28,7 @@ export default function Footer() {
           </a>
           <a
             className="yt"
-            href="https://www.youtube.com/@allengillon1079"
+            href="https://www.youtube.com/watch?v=6idFN_r1Dlw"
             target="_blank"
             rel="noopener"
           >

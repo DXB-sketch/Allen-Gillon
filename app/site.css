@@ -52,12 +52,18 @@ img.gx-hero{width:100%;object-fit:cover;display:block;}
 .mast{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;
   max-width:var(--maxw);margin:0 auto;padding:18px 24px 10px;border-bottom:var(--rule);
   box-shadow:0 5px 0 -2px var(--red);}
-.mast .logo{font-family:"Dynalight","Times New Roman",cursive;font-size:2.1rem;text-decoration:none;line-height:1;}
-.mast .logo em{font-style:normal;color:var(--red);}
+.mast .logo{font-family:"Dynalight","Times New Roman",cursive;font-size:2.1rem;text-decoration:none;line-height:1;color:var(--red);text-shadow:0.045em 0.055em 0 oklch(0.455 0.150 262 / 0.30);}
 .mnav{display:flex;gap:2px;flex-wrap:wrap;}
 .mnav a{font-size:1.02rem;text-decoration:none;padding:10px 12px;min-height:44px;display:inline-flex;align-items:center;}
 .mnav a:hover{color:var(--red);}
 .mnav a[aria-current="page"]{color:var(--red);border-bottom:3px solid var(--red);}
+.page-reader{max-width:var(--maxw);margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.9rem;}
+.page-reader button,.page-reader select{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--ink);border-radius:3px;min-height:36px;padding:4px 10px;cursor:pointer;}
+.page-reader button:first-child{background:var(--blue);border-color:var(--blue);color:var(--on);}
+.page-reader label{display:flex;align-items:center;gap:6px;}
+.page-reader select{max-width:180px;}
+.upcoming-books{margin-top:56px;max-width:480px;}
+.upcoming-books li{padding:10px 4px;}
 
 /* Page opening */
 .pagehead{padding:44px 0 8px;}
@@ -73,7 +79,8 @@ footer{margin-top:80px;border-top:var(--rule);background:var(--ink);color:var(--
   box-shadow:inset 0 5px 0 -2px var(--red);}
 footer .wrap{padding:32px 24px 44px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:baseline;}
 footer .fscript{font-family:"Dynalight","Times New Roman",cursive;font-size:2rem;}
-footer .fscript,footer nav a:hover{color:oklch(0.78 0.13 33);}
+footer .fscript{color:var(--red);text-shadow:0.045em 0.055em 0 oklch(0.455 0.150 262 / 0.45);}
+footer nav a:hover{color:oklch(0.78 0.13 33);}
 footer p{margin:0;color:oklch(0.80 0.02 92);font-size:1rem;}
 footer p a{color:inherit;}
 footer p a:hover{color:oklch(0.78 0.13 33);}

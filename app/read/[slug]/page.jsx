@@ -101,7 +101,7 @@ export default async function ReadPage({ params }) {
               </p>
             </div>
             <p style={{ marginTop: "24px" }}>
-              <Link className="btn b" href="/books">Back to Ebooks</Link>
+              <Link className="btn b" href="/books">Back to eBooks</Link>
             </p>
           </div>
         </section>
@@ -147,7 +147,7 @@ export default async function ReadPage({ params }) {
   }
 
   const backHref = entry.section === "plays" ? "/plays" : "/books";
-  const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to Ebooks";
+  const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to eBooks";
 
   const jsonLd = {
     "@context": "https://schema.org",

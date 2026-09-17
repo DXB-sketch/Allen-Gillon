@@ -2,6 +2,7 @@ import "./site.css";
 import Mast from "../components/Mast";
 import Footer from "../components/Footer";
 import { PlayerProvider, NowBar } from "../components/Player";
+import PageReader from "../components/PageReader";
 
 export const metadata = {
   title: "Allen Gillon",
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       <body>
         <PlayerProvider>
           <Mast />
+          <PageReader />
           {children}
           <NowBar />
           <Footer />

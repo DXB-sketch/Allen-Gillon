@@ -4,9 +4,9 @@ import path from "node:path";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Ebooks · Allen Gillon",
+  title: "eBooks · Allen Gillon",
   description:
-    "The Chinese Chimes stories: short ebooks with a gentle moral for young readers, written and narrated by Allen Gillon.",
+    "The Chinese Chimes stories: short eBooks with a moral for young readers, written and narrated by Allen Gillon.",
 };
 
 // The four Chinese Chimes stories as they appear on YouTube. readSlug points at
@@ -40,8 +40,8 @@ export default async function BooksPage() {
       <main>
       <header className="pagehead">
         <div className="wrap">
-          <h1 className="script">Ebooks</h1>
-          <p className="plain">The Chinese Chimes stories: short stories for young readers, each with a gentle moral, written by Allen the teacher. Released as ebooks and narrated on YouTube. The current recordings use an older computer voice; fresh recordings are on the way.</p>
+          <h1 className="script">eBooks</h1>
+          <p className="plain">The Chinese Chimes stories: short stories for young readers, each with a moral, written by Allen the teacher. Released as eBooks and narrated on YouTube. The current recordings use an older computer voice; fresh recordings are on the way.</p>
         </div>
       <p className="wrap"><Link href="/plays">Explore School Plays and Classroom Textbooks</Link></p>
       </header>
@@ -65,7 +65,7 @@ export default async function BooksPage() {
                   </div>
                   <figcaption>{story.title}</figcaption>
                   <div className="btnrow">
-                    <CommentLink subject={story.title} returnTo="/books" returnLabel="Ebooks" />
+                    <CommentLink subject={story.title} returnTo="/books" returnLabel="eBooks" />
                     <Link className="btn b" href={`/read/${story.readSlug}`}>Read the book</Link>
                     {readable ? (
                       <a className="btn" href={`/books/${story.readSlug}/${story.readSlug}.pdf`} download>Download PDF</a>
@@ -74,6 +74,12 @@ export default async function BooksPage() {
                 </figure>
               );
             })}
+          </div>
+          <div className="upcoming-books">
+            <h2 className="script">Upcoming children&rsquo;s books</h2>
+            <ul className="ruled">
+              {["Doh", "Soh", "Lah", "Tee"].map((title) => <li key={title}>{title}</li>)}
+            </ul>
           </div>
         </div>
       </section>
