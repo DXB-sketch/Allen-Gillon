@@ -167,7 +167,7 @@ export default function BookReader({ manifest }) {
           </a>
         ) : null}
       </div>
-      <p className="bkr-hint">Turn pages with the arrow keys, the buttons above, or by dragging a page corner.</p>
+      <p className="bkr-hint">Use the buttons above or drag a page corner. The arrow keys work too.</p>
     </div>
   );
 }

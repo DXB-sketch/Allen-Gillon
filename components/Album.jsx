@@ -3,8 +3,9 @@
 import CommentLink from "./CommentLink";
 import { useState } from "react";
 import { usePlayer } from "./Player";
+import PurchaseLink from "./PurchaseLink";
 
-export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
+export default function Album({ id, title, meta, cover, coverAlt, tracks, price, purchaseUrl }) {
   const [open, setOpen] = useState(false);
   const { current, playing, toggle } = usePlayer();
 
@@ -22,6 +23,8 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
       </button>
       <h3>{title}</h3>
       <p className="meta">{meta}</p>
+      <p className="album-price">DVD copy: {price}</p>
+      <PurchaseLink href={purchaseUrl}>Buy the DVD</PurchaseLink>
       <CommentLink subject={title} returnTo={`/music#${id}`} returnLabel={title} />
       <div className="trkpanel" id={"trk-" + id} hidden={!open}>
         <ol className="trklist">

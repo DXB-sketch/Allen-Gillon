@@ -4,7 +4,7 @@ import CommentForm from "../../components/CommentForm";
 export const metadata = {
   title: "Write a comment · Allen Gillon",
   description:
-    "Write a comment about Allen Gillon’s books, plays, songs, albums or the Matthew Allen 5 — it goes straight to Allen as a text message.",
+    "Write a comment about Allen Gillon's work. The message goes straight to Allen by text.",
 };
 
 export default async function CommentsPage({ searchParams }) {

@@ -4,6 +4,8 @@ import path from "node:path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookReader from "../../../components/BookReader";
+import PurchaseLink from "../../../components/PurchaseLink";
+import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
 
 const BOOKS_DIR = path.join(process.cwd(), "public", "books");
 const exists = (p) => access(p).then(() => true, () => false);
@@ -148,6 +150,8 @@ export default async function ReadPage({ params }) {
 
   const backHref = entry.section === "plays" ? "/plays" : "/books";
   const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to eBooks";
+  const isPlay = entry.section === "plays";
+  const readerManifest = isPlay ? { ...manifest, hasDownload: false } : manifest;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -168,13 +172,14 @@ export default async function ReadPage({ params }) {
           <h1 className="script">{manifest.title}</h1>
             <CommentLink subject={manifest.title} returnTo={`/read/${slug}`} returnLabel={manifest.title} />
           <p className="plain">
-            {manifest.blurb} {manifest.pageCount} pages. Read it right here, or download the PDF to keep.
+            {manifest.blurb} {manifest.pageCount} pages. {isPlay ? `Read it here before buying the ${formatAud(playPrice)} file.` : "Read it here, or download the PDF to keep."}
           </p>
+          {isPlay ? <PurchaseLink href={stripePaymentLink(`play-${slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink> : null}
         </div>
       </header>
       <section aria-label={`Read ${manifest.title}`}>
         <div className="wrap">
-          <BookReader manifest={manifest} />
+          <BookReader manifest={readerManifest} />
           {ocrText ? (
             <div className="visually-hidden" aria-label={`Full text of ${manifest.title}`}>
               {ocrText}

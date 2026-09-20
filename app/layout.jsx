@@ -5,9 +5,10 @@ import { PlayerProvider, NowBar } from "../components/Player";
 import PageReader from "../components/PageReader";
 
 export const metadata = {
+  metadataBase: new URL("https://allengillon.com"),
   title: "Allen Gillon",
   description:
-    "Allen Gillon: guitarist, songwriter, author and playwright from Bribie Island, Queensland. Hear his albums free, hire him for a gig, and read his story.",
+    "Allen Gillon is a guitarist, songwriter, author and playwright from Bribie Island, Queensland.",
 };
 
 export default function RootLayout({ children }) {

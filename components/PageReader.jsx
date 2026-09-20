@@ -6,9 +6,9 @@ import { usePathname } from "next/navigation";
 function pageText() {
   const main = document.querySelector("main");
   if (!main) return [];
-  return [...main.querySelectorAll("h1,h2,h3,h4,p,li,figcaption")]
-    .filter((node) => !node.closest("nav,button,form,[aria-hidden='true'],.bkr") &&
-      ![...node.children].some((child) => child.matches?.("h1,h2,h3,h4,p,li,figcaption")))
+  return [...main.querySelectorAll("h1,h2,h3,h4,p,li")]
+    .filter((node) => !node.closest("nav,button,form,[aria-hidden='true'],[data-reader-skip],.bkr,.trklist,.artgrid") &&
+      ![...node.children].some((child) => child.matches?.("h1,h2,h3,h4,p,li")))
     .map((node) => node.innerText.trim())
     .filter(Boolean);
 }

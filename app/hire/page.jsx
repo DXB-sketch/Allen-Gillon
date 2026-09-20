@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "Bookings · Allen Gillon",
   description:
-    "Book Allen Gillon, restaurant guitarist, for dining rooms, functions and events around Bribie Island and Queensland.",
+    "Book Allen Gillon to play guitar at your venue around Bribie Island and South East Queensland.",
 };
 
 export default function HirePage() {
@@ -48,7 +48,7 @@ export default function HirePage() {
             <div className="book">
               <div className="pad">
                 <h2 className="script">Book a <span style={{ color: "var(--red)" }}>date</span></h2>
-                <p>Speak with Allen directly. Tell him the venue, the date and the sort of night you have in mind. You can also reach Allen on Facebook.</p>
+                <p>Speak with Allen directly. Tell him the date and venue you have in mind. You can also reach Allen on Facebook.</p>
                 <div className="phones">
                   <a href="sms:+61438747882">Text 0438 747 882</a>
                   <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
@@ -64,14 +64,14 @@ export default function HirePage() {
               <ul className="ruled offer">
                 <li>
                   <span className="what">Restaurant guitarist</span>
-                  <span className="how">Solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. Standards, bossa and easy listening, at dinner volume. Allen chooses from more than 300 memorised melodies when he plays for customers at restaurants. Many of the backing tracks were written by Allen &mdash; listen to the &ldquo;Desafinado&rdquo; backing track on his album That&rsquo;s The Time. Hear the sound on <Link href="/music">the albums</Link>.</span>
+                  <span className="how">Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; on That&rsquo;s The Time, or hear more on <Link href="/music">the albums page</Link>.</span>
                 </li>
                 <li>
                   <span className="what">Functions and events</span>
-                  <span className="how">Weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him what the occasion needs and he will shape the set to it.</span>
+                  <span className="how">Allen plays weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him about the occasion and he will shape the set around it.</span>
                 </li>
                 <li>
-                  <span className="what">Allen and Ann on youtube</span>
+                  <span className="what">Allen and Ann on YouTube</span>
                   <span className="how ytlinks">
                     <a href="https://www.youtube.com/watch?v=MRRzSDKg_hg" target="_blank" rel="noopener">Allen Gillon Cavatina</a>
                     <a href="https://www.youtube.com/watch?v=WKoBhThrn8o" target="_blank" rel="noopener">Allen Gillon Sleep Walk</a>

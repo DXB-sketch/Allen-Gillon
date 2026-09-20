@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "Allen Gillon",
   description:
-    "Allen Gillon: guitarist, songwriter, author and playwright from Bribie Island, Queensland. Hear his albums free, hire him for a gig, and read his story.",
+    "Allen Gillon is a guitarist from Bribie Island, Queensland. Listen to his albums or book him for a venue.",
 };
 
 export default function Page() {
@@ -11,10 +11,14 @@ export default function Page() {
     <>
       <style>{String.raw`
   .hero{padding:28px 0 24px;}
-  .hero h1{text-align:center;margin:0 0 30px;}
+  .hero h1{text-align:center;margin:0 0 30px;color:var(--blue);text-shadow:none;}
   .heroGrid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:start;}
-  .heroGrid .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:1/1;}
-  .heroIntro{font-size:1.1rem;margin:14px 0 0;max-width:52ch;}
+  .heroPhotos{position:relative;min-height:570px;margin-bottom:18px;}
+  .heroPhotos .mainPhoto{width:82%;border:3px solid var(--ink);border-radius:3px;aspect-ratio:1/1;object-fit:cover;display:block;}
+  .heroPhotos .smallPhoto{position:absolute;width:38%;aspect-ratio:4/5;object-fit:cover;border:3px solid var(--ink);border-radius:3px;background:var(--paper);box-shadow:5px 6px 0 oklch(0.22 0.02 300 / .16);}
+  .heroPhotos .photoTwo{right:0;top:12%;transform:rotate(4deg);}
+  .heroPhotos .photoThree{right:8%;bottom:0;transform:rotate(-5deg);}
+  .heroIntro{font-size:1.1rem;margin:24px 0 0;max-width:48ch;}
   .hero .say{font-size:1.25rem;max-width:48ch;margin:16px 0 0;font-style:italic;color:var(--soft);}
   .hero .click{font-size:1.1rem;font-style:italic;color:var(--soft);margin:0 0 4px;}
 
@@ -35,6 +39,9 @@ export default function Page() {
 
   @media (max-width:860px){
     .heroGrid{grid-template-columns:1fr;gap:28px;}
+    .heroPhotos{min-height:0;padding-bottom:18%;}
+    .heroPhotos .mainPhoto{width:78%;}
+    .heroPhotos .smallPhoto{width:34%;}
     ol.idx a{font-size:1.18rem;min-height:64px;}
     .idx-art,.idx-empty{width:68px;height:68px;}
   }
@@ -44,21 +51,14 @@ export default function Page() {
           <div className="wrap">
             <h1 className="script">Allen Gillon</h1>
             <div className="heroGrid">
-              <div>
+              <div className="heroPhotos" data-reader-skip>
                 <img
-                  className="gx-hero"
+                  className="mainPhoto"
                   src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
                   alt="Allen playing his red Gibson on the Bribie Island waterfront"
                 />
-                <p className="heroIntro">
-                  Allen is a popular guitarist, providing upmarket restaurants
-                  and their visiting diners with smooth guitar memories. No
-                  microphones needed, just listen to the professional solo
-                  Gibson guitar. Client&rsquo;s comments include,
-                  &ldquo;Beautiful!&rdquo;, &ldquo;Unforgettable!&rdquo;,
-                  &ldquo;I love Al&rsquo;s light jazz&rdquo;, &ldquo;Pour me
-                  another glass!&rdquo;.
-                </p>
+                <img className="smallPhoto photoTwo" src="/images/personal/current-portrait-allen-2026.jpg" alt="Allen Gillon at Bribie Island" />
+                <img className="smallPhoto photoThree" src="/images/personal/promo-allen-gillon-guitarist-gibson.jpg" alt="Allen with his Gibson guitar" />
               </div>
               <div>
                 <p className="click">Click on your interest.</p>
@@ -89,50 +89,14 @@ export default function Page() {
                     <Link href="/hire">
                       Bookings{" "}
                       <small>
-                        Restaurant guitarist, jazz for dining rooms, functions
-                        and events
-                      </small>
-                    </Link>
-                  </li>
-                  <li>
-                    <span className="no">3</span>
-                    <span className="idx-empty" aria-hidden="true"></span>
-                    <Link href="/books">
-                      Children's Books{" "}
-                      <small>
-                        Storybooks written by Allen, read-along recordings on
-                        the way
-                      </small>
-                    </Link>
-                  </li>
-                  <li>
-                    <span className="no">4</span>
-                    <span className="idx-empty" aria-hidden="true"></span>
-                    <Link href="/plays">
-                      School Plays{" "}
-                      <small>
-                        Five plays written and performed, plus classroom
-                        textbooks
-                      </small>
-                    </Link>
-                  </li>
-                  <li>
-                    <span className="no">5</span>
-                    <span className="idx-art">
-                      <img
-                        src="/images/personal/matthew-allen-5-band-photo.jpg"
-                        alt=""
-                      />
-                    </span>
-                    <Link href="/biography">
-                      A Timeless Story{" "}
-                      <small>
-                        Bandleader, Vietnam tours, television in Bangkok, and
-                        family
+                        Solo guitar for restaurants and private bookings
                       </small>
                     </Link>
                   </li>
                 </ol>
+                <p className="heroIntro">
+                  Allen plays smooth guitar in restaurants around Bribie Island. There is no microphone and no fuss, just his Gibson at a comfortable dinner volume. Diners have called the music &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.
+                </p>
               </div>
             </div>
           </div>

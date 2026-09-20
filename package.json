@@ -6,15 +6,12 @@
     "build": "next build",
     "build:books": "node scripts/build-books.mjs",
     "start": "next start",
-    "test": "node --test tests/*.test.mjs",
-    "shop:setup": "node --env-file=.env.local scripts/setup-shop.mjs",
-    "shop:reconcile": "node --env-file=.env.local scripts/reconcile-shop.mjs"
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@napi-rs/canvas": "0.1.65",
     "next": "^15",
     "pdfjs-dist": "4.10.38",
-    "postgres": "^3.4.9",
     "react": "^19",
     "react-dom": "^19",
     "react-pageflip": "2.0.3",

@@ -26,14 +26,6 @@ export default function Footer() {
           >
             Facebook
           </a>
-          <a
-            className="yt"
-            href="https://www.youtube.com/watch?v=6idFN_r1Dlw"
-            target="_blank"
-            rel="noopener"
-          >
-            YouTube
-          </a>
         </nav>
         <p>&copy; 2026 Allen Gillon</p>
       </div>

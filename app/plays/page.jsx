@@ -2,11 +2,13 @@ import CommentLink from "../../components/CommentLink";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
+import PurchaseLink from "../../components/PurchaseLink";
+import { formatAud, playPrice, stripePaymentLink } from "../../lib/storefront.mjs";
 
 export const metadata = {
   title: "School Plays · Allen Gillon",
   description:
-    "Five school plays written and performed, free of charge and copyright, plus classroom communication textbooks, by Allen Gillon, qualified teacher.",
+    "Five school plays by Allen Gillon, available as $50 AUD file downloads, plus his classroom communication textbooks.",
 };
 
 // The order the plays appear on the page (index.json keeps config order).
@@ -51,7 +53,7 @@ export default async function PlaysPage() {
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">School Plays</h1>
-            <p className="plain">Five plays written in the 1980s for primary-school end-of-year productions, and all performed on school stages. Written by a teacher who knows what holds a class and what fills a hall. Allen offers the scripts free of charge and free of copyright.</p>
+            <p className="plain">Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each one was performed on a school stage. You can read them online, and each script will be available to download for {formatAud(playPrice)}.</p>
           </div>
         </header>
 
@@ -67,7 +69,7 @@ export default async function PlaysPage() {
                     <div className="btnrow">
                       <CommentLink subject={play.title} returnTo="/plays" returnLabel="School Plays" />
                       <Link className="btn b" href={`/read/${play.slug}`}>Read online</Link>
-                      <a className="btn" href={`/books/${play.slug}/${play.slug}.pdf`} download>Download PDF</a>
+                      <PurchaseLink href={stripePaymentLink(`play-${play.slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
                     </div>
                   </div>
                 </li>
@@ -75,7 +77,7 @@ export default async function PlaysPage() {
             </ol>
 
             <div className="note">
-              <p>Teachers: Allen gives these scripts away free. Read any play right here, or download the PDF to print and hand out. Age band, cast size, running time and classroom notes will be added as Allen supplies them. For anything else, <Link href="/hire">get in touch</Link>.</p>
+              <p>Teachers can read each play online before buying the file. Downloads will be supplied as PDFs that can be printed for rehearsals and performances. Allen will add age bands, cast sizes, running times and classroom notes when those details are ready. For anything else, <Link href="/hire">get in touch</Link>.</p>
             </div>
           </div>
         </section>

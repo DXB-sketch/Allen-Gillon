@@ -1,11 +1,12 @@
 import CommentLink from "../../components/CommentLink";
 import Link from "next/link";
 import Album from "../../components/Album";
+import { albumPrice, formatAud, stripePaymentLink } from "../../lib/storefront.mjs";
 
 export const metadata = {
   title: "Al's music style · Allen Gillon",
   description:
-    "Hear Allen Gillon's albums free: That's The Time, Wonderful World, Misty and I Just Called, plus his original songs.",
+    "Listen to Allen Gillon's albums and order a DVD copy for $10 AUD.",
 };
 
 const albums = [
@@ -136,9 +137,9 @@ export default function MusicPage() {
           <div className="wrap">
             <h1 className="script">Al&rsquo;s music style</h1>
             <p className="plain">
-              Four albums, recorded in the studio, free to hear right here. Many of the backing tracks are Allen's own
-              arrangements, like the Desafinado backing on Girl from Ipanema. Click a cover to open its tracks, then press
-              play on any of them. If you would rather have Allen in the room,{" "}
+              Listen to Allen&rsquo;s four studio albums here. He arranged many of the backing tracks himself, including
+              &ldquo;Desafinado&rdquo; on &ldquo;Girl from Ipanema&rdquo;. Click a cover to open the track list, then choose a song.
+              DVD copies are {formatAud(albumPrice)} each. If you would rather have Allen in the room,{" "}
               <Link href="/hire">he still takes bookings</Link>.
             </p>
           </div>
@@ -147,7 +148,7 @@ export default function MusicPage() {
         <section aria-label="Albums">
           <div className="wrap albums">
             {albums.map((album) => (
-              <Album key={album.id} {...album} />
+              <Album key={album.id} {...album} price={formatAud(albumPrice)} purchaseUrl={stripePaymentLink(`album-${album.id}`)} />
             ))}
           </div>
         </section>
@@ -165,11 +166,10 @@ export default function MusicPage() {
             <div>
               <h2 className="script">Timeless, with Ann</h2>
               <p>
-                Allen and Ann have played together since 1967, from Sydney clubs to a convention stage in Chicago. These
-                days the duet is called Timeless: Allen on his Trini Lopez Gibson, Ann on Vocals/piano.
+                Allen and Ann have played together since 1967. Their duet, Timeless, has taken them from Sydney clubs to a convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
               </p>
               <p>
-                Ann is also a painter &mdash; her works are on <Link href="/anns-art">Ann&rsquo;s art</Link>.
+                Ann also paints. You can see her work on <Link href="/anns-art">Ann&rsquo;s art page</Link>.
               </p>
               <p>
                 Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or
@@ -187,7 +187,7 @@ export default function MusicPage() {
               Original Songs
             </h2>
             <p className="plain" style={{ marginBottom: "8px" }}>
-              Written by Allen Gillon, filmed for YouTube. More are on the way.
+              Songs written by Allen Gillon. More are on the way.
             </p>
             <div className="videos">
               <figure className="video">

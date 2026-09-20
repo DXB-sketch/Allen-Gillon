@@ -1,15 +1,14 @@
 "use client";
 import { useMemo,useState } from "react";
-import Link from "next/link";
 import { formatPrice } from "../lib/art-catalog.mjs";
 
 const categories = ["All paintings","Animals","Coast & country","Colour & imagination"];
-function Painting({ art,state,checkoutEnabled }) {
+function Painting({ art,checkoutUrl,checkoutEnabled }) {
   const [imageIndex,setImageIndex] = useState(0);
   const image = art.images[imageIndex];
   const enquiry = art.availability !== "available";
-  const unavailable = enquiry || state === "sold" || state === "pending";
-  const status = state === "sold" ? "Sold" : state === "pending" ? "Payment being confirmed" : enquiry ? "Enquiry only" : "Original painting";
+  const unavailable = enquiry;
+  const status = enquiry ? "Enquiry only" : "Original painting";
   const message = `Hello Allen, I would like to enquire about ${art.title} (${art.id}), listed at ${formatPrice(art.priceCents)}.`;
   return <article className="painting" id={art.id}>
     <a className="painting-photo" href={image.src} target="_blank" rel="noopener" aria-label={`View ${art.title} at full size`}>
@@ -23,12 +22,12 @@ function Painting({ art,state,checkoutEnabled }) {
       <p className="painting-price">{enquiry ? "Guide price: " : ""}{formatPrice(art.priceCents)}</p>
       <p className="painting-status">{status}</p>
       {art.note ? <p className="painting-note">{art.note}</p> : null}
-      {!unavailable && checkoutEnabled && state === "available" ? <Link className="btn" href={`/checkout/${art.id}`}>Buy this painting</Link> :
+      {!unavailable && checkoutEnabled && checkoutUrl ? <a className="btn" href={checkoutUrl} rel="noopener">Buy this painting</a> :
         <a className="painting-enquire" href={`sms:+61438747882?&body=${encodeURIComponent(message)}`}>Enquire about this painting</a>}
     </div>
   </article>;
 }
-export default function ArtGallery({ artworks,stock,checkoutEnabled }) {
+export default function ArtGallery({ artworks,checkoutLinks,checkoutEnabled }) {
   const [category,setCategory] = useState("All paintings");
   const [query,setQuery] = useState("");
   const paintings = useMemo(()=>artworks.filter(art=>(category === "All paintings" || art.category === category) &&
@@ -38,6 +37,6 @@ export default function ArtGallery({ artworks,stock,checkoutEnabled }) {
     <label className="gallery-search">Find a painting<input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Title or medium" /></label>
   </div>
   <p className="gallery-count" role="status">{paintings.length} {paintings.length === 1 ? "painting" : "paintings"}{category !== "All paintings" ? ` in ${category.toLowerCase()}` : ""}</p>
-  <div className="artgrid">{paintings.map(art=><Painting key={art.id} art={art} state={stock[art.id]} checkoutEnabled={checkoutEnabled} />)}</div>
+  <div className="artgrid" data-reader-skip>{paintings.map(art=><Painting key={art.id} art={art} checkoutUrl={checkoutLinks[art.id]} checkoutEnabled={checkoutEnabled} />)}</div>
   {!paintings.length ? <p>No paintings match. Try another title or subject.</p> : null}</>;
 }

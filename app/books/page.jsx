@@ -41,9 +41,9 @@ export default async function BooksPage() {
       <header className="pagehead">
         <div className="wrap">
           <h1 className="script">eBooks</h1>
-          <p className="plain">The Chinese Chimes stories: short stories for young readers, each with a moral, written by Allen the teacher. Released as eBooks and narrated on YouTube. The current recordings use an older computer voice; fresh recordings are on the way.</p>
+          <p className="plain">Allen wrote the Chinese Chimes stories for young readers. Each story has a moral. You can read the eBooks here or listen to the YouTube narrations. The videos use an older computer voice, and Allen plans to record them again.</p>
         </div>
-      <p className="wrap"><Link href="/plays">Explore School Plays and Classroom Textbooks</Link></p>
+      <p className="wrap"><Link href="/plays">See School Plays and Classroom Textbooks</Link></p>
       </header>
 
       <section aria-label="The Chinese Chimes stories">

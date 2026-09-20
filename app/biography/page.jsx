@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "Timeless · Allen Gillon",
   description:
-    "The story of Allen and Ann Gillon: The New Breed, Vietnam tours, Page One Revue, television in Bangkok, the Matthew Allen 5, and sixty years of music together.",
+    "Allen and Ann Gillon have made music together since 1967. This is their story.",
 };
 
 export default function BiographyPage() {
@@ -36,7 +36,7 @@ export default function BiographyPage() {
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">Timeless</h1>
-            <p className="plain">Allen met Ann in 1967, when his band The New Breed was playing Parramatta. From that night on, their lives merged into one long tour of music, singing, travel and family.</p>
+            <p className="plain">Allen met Ann in 1967 while his band, The New Breed, was playing in Parramatta. They have shared a life in music ever since.</p>
           </div>
         </header>
 
@@ -62,7 +62,7 @@ export default function BiographyPage() {
                 <figcaption>Ann singing.</figcaption>
               </figure>
               <p>A new band followed, Page One Revue. They played the Gold Coast, Melbourne hotels, nine months at the Whiskey Au-Go-Go and a run at The Lido in Melbourne. Then came an eighteen-month tour of Asia: six months at the Siam Intercontinental in Bangkok, then Singapore, Guam, Okinawa, South Korea, Saipan and three months playing private clubs in Japan.</p>
-              <p>In Bangkok, Page One Revue had their own weekly half-hour Countdown television show. Ann did voice-overs, radio and newspaper spreads for Ford, and played an English doctor in a Thai film in 1971.</p>
+              <p>In Bangkok, Page One Revue had a weekly half-hour television show called Countdown. Ann recorded voice-overs, appeared in Ford advertising and played an English doctor in a Thai film in 1971.</p>
 
               <h2 className="era">Ann and Allen Ray</h2>
               <figure className="inline">
@@ -84,7 +84,7 @@ export default function BiographyPage() {
                 <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
                 <figcaption>Allen and the Gibson, on the water.</figcaption>
               </figure>
-              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann still sings lead, and plays piano. She also paints &mdash; see <Link href="/anns-art">Ann&rsquo;s art</Link>. As the duet Timeless, they especially love entertaining diners in restaurants around Bribie Island, which is exactly where you can <Link href="/hire">book them</Link>.</p>
+              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless, they enjoy playing for diners around Bribie Island. You can <Link href="/hire">book them here</Link>.</p>
             </div>
 
             <aside aria-label="Photographs">

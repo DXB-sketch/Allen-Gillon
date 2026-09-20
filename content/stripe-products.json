@@ -1,0 +1,11 @@
+[
+  {"id":"album-thats-the-time","name":"That's The Time","description":"DVD copy of Allen Gillon's album That's The Time","type":"physical","unitAmount":1000,"currency":"aud"},
+  {"id":"album-wonderful-world","name":"Wonderful World","description":"DVD copy of Allen Gillon's album Wonderful World","type":"physical","unitAmount":1000,"currency":"aud"},
+  {"id":"album-misty","name":"Misty","description":"DVD copy of Ann and Allen Gillon's album Misty","type":"physical","unitAmount":1000,"currency":"aud"},
+  {"id":"album-i-just-called","name":"I Just Called","description":"DVD copy of Allen Gillon's album I Just Called","type":"physical","unitAmount":1000,"currency":"aud"},
+  {"id":"play-melting-pot","name":"Melting Pot","description":"Downloadable PDF of the school play Melting Pot by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
+  {"id":"play-the-other-mans-grass","name":"The Other Man's Grass","description":"Downloadable PDF of the school play The Other Man's Grass by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
+  {"id":"play-tribute-to-calamity-jane","name":"Tribute to Calamity Jane","description":"Downloadable PDF of the school play Tribute to Calamity Jane by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
+  {"id":"play-three-heroes-of-sherwood","name":"Three Heroes of Sherwood","description":"Downloadable PDF of the school play Three Heroes of Sherwood by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
+  {"id":"play-breakout","name":"Breakout","description":"Downloadable PDF of the school play Breakout by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"}
+]
