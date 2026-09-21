@@ -1,20 +1,22 @@
-# Stripe handoff
+# Stripe catalogue
 
-The site is ready for Stripe Payment Links. No Stripe secret keys are required in the repository or browser.
+Allen Gillon's live Stripe account contains 38 active products and Payment Links:
 
-1. Create the nine products listed in `content/stripe-products.json` in Allen's Stripe account.
-2. Create one Payment Link for each product. Collect a delivery address for the four physical DVD products. Do not collect one for the five digital play files.
-3. In Vercel, add a sensitive environment variable named `STRIPE_PAYMENT_LINKS_JSON`. Its value is a JSON object that maps each catalogue `id` to its `https://buy.stripe.com/...` Payment Link.
-4. Redeploy and confirm that every album and play shows a working buy button.
-5. Configure Stripe's receipt or post-payment message to supply the purchased play file. The play PDFs must not be restored as public download links.
+- Four album DVDs at A$10 each.
+- Five downloadable PDF plays at A$50 each.
+- Twenty-nine original paintings currently marked available.
 
-Example shape:
+Album and painting checkouts accept Australian delivery addresses only. Each painting Payment Link is limited to one completed checkout because it is a one-off original. Sold, commissioned, not-for-sale and availability-unconfirmed paintings remain enquiry-only and were not added as purchasable products.
 
-```json
-{
-  "album-thats-the-time": "https://buy.stripe.com/...",
-  "play-melting-pot": "https://buy.stripe.com/..."
-}
-```
+Live public URLs are mapped to stable website product IDs in `content/stripe-payment-links.mjs`. `STRIPE_PAYMENT_LINKS_JSON` remains available as an optional deployment override.
 
-Use Stripe test mode first. Check each item, amount, receipt and delivery flow before creating live Payment Links.
+Stripe Checkout confirms that play PDFs will be emailed to the address used for the purchase. The private PDF files must not be moved back into `public/`.
+
+## Changing a painting price
+
+The website is static, so it cannot securely read live Stripe prices in a visitor's browser. Stripe Price amounts are immutable. To change a painting price:
+
+1. Create a new Price for the existing Stripe product.
+2. Update the product's Payment Link to use that Price.
+3. Change the matching `priceCents` value in `content/artworks.mjs`.
+4. Redeploy the site.

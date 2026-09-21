@@ -53,7 +53,7 @@ export default async function PlaysPage() {
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">School Plays</h1>
-            <p className="plain">Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each one was performed on a school stage. You can read them online, and each script will be available to download for {formatAud(playPrice)}.</p>
+            <p className="plain">Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each one was performed on a school stage. You can read them online, then buy the PDF for {formatAud(playPrice)}.</p>
           </div>
         </header>
 
@@ -77,7 +77,7 @@ export default async function PlaysPage() {
             </ol>
 
             <div className="note">
-              <p>Teachers can read each play online before buying the file. Downloads will be supplied as PDFs that can be printed for rehearsals and performances. Allen will add age bands, cast sizes, running times and classroom notes when those details are ready. For anything else, <Link href="/hire">get in touch</Link>.</p>
+              <p>Teachers can read each play online before buying the file. Allen will email the PDF to the address used at checkout. It can be printed for rehearsals and performances. Allen will add age bands, cast sizes, running times and classroom notes when those details are ready. For anything else, <Link href="/hire">get in touch</Link>.</p>
             </div>
           </div>
         </section>

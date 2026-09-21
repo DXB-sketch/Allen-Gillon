@@ -1,11 +1,472 @@
 [
-  {"id":"album-thats-the-time","name":"That's The Time","description":"DVD copy of Allen Gillon's album That's The Time","type":"physical","unitAmount":1000,"currency":"aud"},
-  {"id":"album-wonderful-world","name":"Wonderful World","description":"DVD copy of Allen Gillon's album Wonderful World","type":"physical","unitAmount":1000,"currency":"aud"},
-  {"id":"album-misty","name":"Misty","description":"DVD copy of Ann and Allen Gillon's album Misty","type":"physical","unitAmount":1000,"currency":"aud"},
-  {"id":"album-i-just-called","name":"I Just Called","description":"DVD copy of Allen Gillon's album I Just Called","type":"physical","unitAmount":1000,"currency":"aud"},
-  {"id":"play-melting-pot","name":"Melting Pot","description":"Downloadable PDF of the school play Melting Pot by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
-  {"id":"play-the-other-mans-grass","name":"The Other Man's Grass","description":"Downloadable PDF of the school play The Other Man's Grass by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
-  {"id":"play-tribute-to-calamity-jane","name":"Tribute to Calamity Jane","description":"Downloadable PDF of the school play Tribute to Calamity Jane by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
-  {"id":"play-three-heroes-of-sherwood","name":"Three Heroes of Sherwood","description":"Downloadable PDF of the school play Three Heroes of Sherwood by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"},
-  {"id":"play-breakout","name":"Breakout","description":"Downloadable PDF of the school play Breakout by Allen Gillon","type":"digital","unitAmount":5000,"currency":"aud"}
+  {
+    "id": "album-thats-the-time",
+    "name": "That's The Time",
+    "description": "DVD copy of Allen Gillon's album That's The Time",
+    "type": "physical",
+    "unitAmount": 1000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ]
+  },
+  {
+    "id": "album-wonderful-world",
+    "name": "Wonderful World",
+    "description": "DVD copy of Allen Gillon's album Wonderful World",
+    "type": "physical",
+    "unitAmount": 1000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ]
+  },
+  {
+    "id": "album-misty",
+    "name": "Misty",
+    "description": "DVD copy of Ann and Allen Gillon's album Misty",
+    "type": "physical",
+    "unitAmount": 1000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ]
+  },
+  {
+    "id": "album-i-just-called",
+    "name": "I Just Called",
+    "description": "DVD copy of Allen Gillon's album I Just Called",
+    "type": "physical",
+    "unitAmount": 1000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ]
+  },
+  {
+    "id": "play-melting-pot",
+    "name": "Melting Pot",
+    "description": "Downloadable PDF of the school play Melting Pot by Allen Gillon",
+    "type": "digital",
+    "unitAmount": 5000,
+    "currency": "aud",
+    "digitalDelivery": true
+  },
+  {
+    "id": "play-the-other-mans-grass",
+    "name": "The Other Man's Grass",
+    "description": "Downloadable PDF of the school play The Other Man's Grass by Allen Gillon",
+    "type": "digital",
+    "unitAmount": 5000,
+    "currency": "aud",
+    "digitalDelivery": true
+  },
+  {
+    "id": "play-tribute-to-calamity-jane",
+    "name": "Tribute to Calamity Jane",
+    "description": "Downloadable PDF of the school play Tribute to Calamity Jane by Allen Gillon",
+    "type": "digital",
+    "unitAmount": 5000,
+    "currency": "aud",
+    "digitalDelivery": true
+  },
+  {
+    "id": "play-three-heroes-of-sherwood",
+    "name": "Three Heroes of Sherwood",
+    "description": "Downloadable PDF of the school play Three Heroes of Sherwood by Allen Gillon",
+    "type": "digital",
+    "unitAmount": 5000,
+    "currency": "aud",
+    "digitalDelivery": true
+  },
+  {
+    "id": "play-breakout",
+    "name": "Breakout",
+    "description": "Downloadable PDF of the school play Breakout by Allen Gillon",
+    "type": "digital",
+    "unitAmount": 5000,
+    "currency": "aud",
+    "digitalDelivery": true
+  },
+  {
+    "id": "art-ann-426502619623139",
+    "name": "Blue Macaws",
+    "description": "One-off original painting by Ann Gillon. Acrylic on canvas. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-736815624413901",
+    "name": "Slip Slop Slap",
+    "description": "One-off original painting by Ann Gillon. Acrylic. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 20000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-736813651080765",
+    "name": "Pelican Landing",
+    "description": "One-off original painting by Ann Gillon. Acrylic. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 20000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-618568679571930",
+    "name": "Ghost Town",
+    "description": "One-off original painting by Ann Gillon. Acrylic on board. Framed. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-275778083850993",
+    "name": "Fantasy Horses, Black and White",
+    "description": "One-off original painting by Ann Gillon. Mixed media on canvas. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 25000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-141915083903961",
+    "name": "Mare and Foal",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 20000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-132644071497729",
+    "name": "Wild Cat in the Reeds",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-132640404831429",
+    "name": "Jaguar Fishing",
+    "description": "One-off original painting by Ann Gillon. Mixed media. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130749738353829",
+    "name": "Country Scene",
+    "description": "One-off original painting by Ann Gillon. Acrylic. 75 × 75 cm. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 25000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130748481687288",
+    "name": "Salamander",
+    "description": "One-off original painting by Ann Gillon. Enamel. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 17500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130747855020684",
+    "name": "Jazz Groove",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130745851687551",
+    "name": "Beach Fun Time",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 20000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130744718354331",
+    "name": "Pumicestone Passage",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130741611687975",
+    "name": "Hidden Creatures",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130659065029563",
+    "name": "Rounding up the Brumbies",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 20000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130607308368072",
+    "name": "Cool and Relaxing Waves",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 20000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130268275068642",
+    "name": "Dreaming Time",
+    "description": "One-off original painting by Ann Gillon. Acrylic on board. Framed. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130267361735400",
+    "name": "Beautiful Reflections",
+    "description": "One-off original painting by Ann Gillon. Acrylic on board. Framed. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130266885068781",
+    "name": "Reflections in Green",
+    "description": "One-off original painting by Ann Gillon. Acrylic on board. Framed. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 15000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130266355068834",
+    "name": "Reflections in Blue",
+    "description": "One-off original painting by Ann Gillon. Framed on board. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 15000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130239481738188",
+    "name": "The Old Country Garage",
+    "description": "One-off original painting by Ann Gillon. Acrylic on canvas. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130231781738958",
+    "name": "Animal Mash",
+    "description": "One-off original painting by Ann Gillon. Canvas. 60 × 60 cm. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130229581739178",
+    "name": "White Bird",
+    "description": "One-off original painting by Ann Gillon. Gouache and pastels. 8 × 10 in; framed. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 12500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130227828406020",
+    "name": "City by Night",
+    "description": "One-off original painting by Ann Gillon. Canvas. 60 × 90 cm. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 25000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130225231739613",
+    "name": "Wild Surf",
+    "description": "One-off original painting by Ann Gillon. Canvas. 30 × 30 (units not supplied). Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 15000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-130199925075477",
+    "name": "Enamel Fish",
+    "description": "One-off original painting by Ann Gillon. Enamel. 8 × 10 in. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 12500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-129350115160458",
+    "name": "Lion's Roar",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 22500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-127394872022649",
+    "name": "Horse in Black and White",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 17500,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  },
+  {
+    "id": "art-ann-105021430926660",
+    "name": "Sunset Surf",
+    "description": "One-off original painting by Ann Gillon. Free delivery in Australia",
+    "type": "physical",
+    "unitAmount": 20000,
+    "currency": "aud",
+    "collectShippingAddress": true,
+    "allowedShippingCountries": [
+      "AU"
+    ],
+    "completedSessionsLimit": 1
+  }
 ]
