@@ -57,8 +57,8 @@ export default function Page() {
                   src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
                   alt="Allen playing his red Gibson on the Bribie Island waterfront"
                 />
-                <img className="smallPhoto photoTwo" src="/images/personal/current-portrait-allen-2026.jpg" alt="Allen Gillon at Bribie Island" />
-                <img className="smallPhoto photoThree" src="/images/personal/promo-allen-gillon-guitarist-gibson.jpg" alt="Allen with his Gibson guitar" />
+                <img className="smallPhoto photoTwo" src="/images/personal/allen-playing-chandler-theatre.jpg" alt="Allen playing guitar at Chandler Theatre" />
+                <img className="smallPhoto photoThree" src="/images/personal/current-allen-and-ann-bribie-cap.jpg" alt="Allen and Ann wearing sunglasses at Bribie Island" />
               </div>
               <div>
                 <p className="click">Click on your interest.</p>
