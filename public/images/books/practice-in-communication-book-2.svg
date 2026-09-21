@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Practice in Communication, Book 2</title>
+  <desc id="desc">A blue and cream classroom text cover with speech marks.</desc>
+  <rect width="600" height="900" fill="#f1e8d8"/>
+  <rect width="600" height="190" fill="#173a59"/>
+  <path d="M0 650 600 500v400H0z" fill="#b44934"/>
+  <text x="48" y="280" fill="#17222c" font-family="Georgia,serif" font-size="62" font-weight="700">PRACTICE IN</text>
+  <text x="48" y="354" fill="#17222c" font-family="Georgia,serif" font-size="56" font-weight="700">COMMUNICATION</text>
+  <text x="52" y="420" fill="#173a59" font-family="Arial,sans-serif" font-size="32" letter-spacing="6">BOOK TWO</text>
+  <text x="52" y="485" fill="#35424c" font-family="Georgia,serif" font-size="29">A. R. GILLON</text>
+  <text x="360" y="700" fill="#f1e8d8" font-family="Georgia,serif" font-size="210">“</text>
+  <text x="455" y="800" fill="#f1e8d8" font-family="Georgia,serif" font-size="210">”</text>
+</svg>

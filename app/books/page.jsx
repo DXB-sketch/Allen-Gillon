@@ -34,6 +34,8 @@ export default async function BooksPage() {
   return (
     <>
       <style>{`
+  .ebook-links{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;}
+  .ebook-links a{font-size:1.25rem;font-weight:700;text-decoration-thickness:1px;text-underline-offset:4px;}
   .video .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
   .video .btn{align-self:flex-start;}
 `}</style>
@@ -42,11 +44,15 @@ export default async function BooksPage() {
         <div className="wrap">
           <h1 className="script">eBooks</h1>
           <p className="plain">Allen wrote the Chinese Chimes stories for young readers. Each story has a moral. You can read the eBooks here or listen to the YouTube narrations. The videos use an older computer voice, and Allen plans to record them again.</p>
+          <nav className="ebook-links" aria-label="eBook sections">
+            <Link href="#stories">Stories</Link>
+            <Link href="/plays#school-plays">School Plays</Link>
+            <Link href="/plays#classroom-texts">Classroom Texts</Link>
+          </nav>
         </div>
-      <p className="wrap"><Link href="/plays">See School Plays and Classroom Textbooks</Link></p>
       </header>
 
-      <section aria-label="The Chinese Chimes stories">
+      <section id="stories" aria-label="The Chinese Chimes stories">
         <div className="wrap">
           <div className="videos">
             {stories.map((story) => {
