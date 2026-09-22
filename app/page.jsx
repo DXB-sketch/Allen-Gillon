@@ -18,9 +18,13 @@ export default function Page() {
   .heroPhotos .smallPhoto{position:absolute;width:38%;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--ink);background:var(--paper);box-shadow:5px 6px 0 oklch(0.22 0.02 300 / .16);}
   .heroPhotos .photoTwo{right:0;top:12%;transform:rotate(4deg);}
   .heroPhotos .photoThree{right:5%;bottom:0;width:44%;aspect-ratio:1/1;object-position:56% 28%;transform:rotate(-5deg);z-index:3;}
+  .venueCollage{display:flex;align-items:baseline;justify-content:center;gap:2px 18px;flex-wrap:wrap;width:92%;margin:16px 0 0;padding:8px 0;border-top:1px solid oklch(0.22 0.02 300 / .28);}
+  .venueCollage span{font-weight:600;line-height:1.25;white-space:nowrap;color:var(--ink);}
+  .venueCollage span:nth-child(3n+1){color:var(--red);font-family:"Dynalight","Times New Roman",cursive;font-size:1.55rem;transform:rotate(-2deg);}
+  .venueCollage span:nth-child(3n+2){color:var(--blue);font-size:.9rem;letter-spacing:.04em;text-transform:uppercase;transform:rotate(1deg);}
+  .venueCollage span:nth-child(3n){font-style:italic;font-size:1.02rem;transform:rotate(-1deg);}
   .heroIntro{font-size:1.1rem;margin:24px 0 0;max-width:48ch;}
   .hero .say{font-size:1.25rem;max-width:48ch;margin:16px 0 0;font-style:italic;color:var(--soft);}
-  .hero .click{font-size:1.1rem;font-style:italic;color:var(--soft);margin:0 0 4px;}
 
   ol.idx{list-style:none;margin:0;padding:0;border-top:var(--rule);border-bottom:var(--rule);}
   ol.idx li{display:flex;align-items:center;gap:18px;}
@@ -44,6 +48,9 @@ export default function Page() {
     .heroPhotos .smallPhoto{width:34%;}
     ol.idx a{font-size:1.18rem;min-height:64px;}
     .idx-art,.idx-empty{width:68px;height:68px;}
+    .venueCollage{width:100%;gap:3px 14px;margin-top:10px;}
+    .venueCollage span:nth-child(3n+1){font-size:1.4rem;}
+    .venueCollage span:nth-child(3n+2){font-size:.78rem;}
   }
 `}</style>
       <main>
@@ -51,17 +58,26 @@ export default function Page() {
           <div className="wrap">
             <h1 className="script">Allen Gillon</h1>
             <div className="heroGrid">
-              <div className="heroPhotos" data-reader-skip>
-                <img
-                  className="mainPhoto"
-                  src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
-                  alt="Allen playing his red Gibson on the Bribie Island waterfront"
-                />
-                <img className="smallPhoto photoTwo" src="/images/personal/allen-playing-chandler-theatre.jpg" alt="Allen playing guitar at Chandler Theatre" />
-                <img className="smallPhoto photoThree" src="/images/personal/current-allen-and-ann-bribie-cap.jpg" alt="Allen and Ann wearing sunglasses at Bribie Island" />
+              <div className="heroVisual">
+                <div className="heroPhotos" data-reader-skip>
+                  <img
+                    className="mainPhoto"
+                    src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
+                    alt="Allen playing his red Gibson on the Bribie Island waterfront"
+                  />
+                  <img className="smallPhoto photoTwo" src="/images/personal/allen-playing-chandler-theatre.jpg" alt="Allen playing guitar at Chandler Theatre" />
+                  <img className="smallPhoto photoThree" src="/images/personal/current-allen-and-ann-bribie-cap.jpg" alt="Allen and Ann wearing sunglasses at Bribie Island" />
+                </div>
+                <div className="venueCollage" aria-label="Venues where Allen has played">
+                  <span>Cafe 191</span>
+                  <span>Coffee Club</span>
+                  <span>Steakout Restaurant</span>
+                  <span>The Jetty</span>
+                  <span>Bowls Club</span>
+                  <span>Serenity Golf Club</span>
+                </div>
               </div>
               <div>
-                <p className="click">Click on your interest.</p>
                 <ol className="idx">
                   <li>
                     <span className="no">1</span>

@@ -199,6 +199,8 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
   footer nav{justify-content:center;}
 }
 @media (max-width:480px){
+  .mast.home-mast{padding-top:6px;}
+  .mast.home-mast .logo{display:none;}
   h1.script{font-size:clamp(2.6rem,13vw,3.4rem);}
   h2.script{font-size:clamp(2rem,9vw,2.6rem);}
   .albums{grid-template-columns:1fr;justify-items:center;}

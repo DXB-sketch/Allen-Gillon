@@ -15,7 +15,7 @@ const links = [
 export default function Mast() {
   const pathname = usePathname();
   return (
-    <div className="mast">
+    <div className={`mast${pathname === "/" ? " home-mast" : ""}`}>
       <Link className="logo" href="/">
         Allen Gillon
       </Link>
