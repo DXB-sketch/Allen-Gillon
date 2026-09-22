@@ -89,8 +89,7 @@ export default async function ReadPage({ params }) {
             <h1 className="script">{title}</h1>
             <CommentLink subject={title} returnTo={`/read/${slug}`} returnLabel={title} />
             <p className="plain">
-              This storybook is being digitised. When it is ready, the full story will open right here to read along
-              with, or without, the narration.
+              This storybook is being digitised. Its scanned pages will be added here when they are ready.
             </p>
           </div>
         </header>
@@ -98,12 +97,11 @@ export default async function ReadPage({ params }) {
           <div className="wrap">
             <div className="note">
               <p>
-                Nothing to read just yet: the pages are on their way from Allen&rsquo;s shelf to this one. If you would
-                like a copy in the meantime, <Link href="/hire">get in touch</Link>.
+                If you would like a copy in the meantime, <Link href="/hire">contact Allen</Link>.
               </p>
             </div>
             <p style={{ marginTop: "24px" }}>
-              <Link className="btn b" href="/books">Back to eBooks</Link>
+              <Link className="btn b" href="/books#stories">Back to Stories</Link>
             </p>
           </div>
         </section>
@@ -131,7 +129,7 @@ export default async function ReadPage({ params }) {
               </p>
             </div>
             <p style={{ marginTop: "24px" }}>
-              <Link className="btn b" href="/plays">Back to School Plays</Link>
+              <Link className="btn b" href="/books#classroom-texts">Back to Classroom Texts</Link>
             </p>
           </div>
         </section>
@@ -148,8 +146,8 @@ export default async function ReadPage({ params }) {
     ocrText = await readFile(textPath, "utf8");
   }
 
-  const backHref = entry.section === "plays" ? "/plays" : "/books";
-  const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to eBooks";
+  const backHref = entry.section === "plays" ? "/books#school-plays" : "/books#stories";
+  const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to Stories";
   const isPlay = entry.section === "plays";
   const readerManifest = isPlay ? { ...manifest, hasDownload: false } : manifest;
 

@@ -29,7 +29,8 @@ function preferredVoice(voices, gender) {
 
 export default function PageReader() {
   const pathname = usePathname();
-  const preferredGender = pathname.startsWith("/anns-art") ? "female" : "male";
+  const allenPages = pathname === "/" || pathname.startsWith("/music") || pathname.startsWith("/biography") || pathname.startsWith("/hire") || pathname.startsWith("/shows");
+  const preferredGender = allenPages ? "male" : "female";
   const [supported, setSupported] = useState(true);
   const [status, setStatus] = useState("idle");
   const [voices, setVoices] = useState([]);

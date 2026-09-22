@@ -14,10 +14,10 @@ export default function Page() {
   .hero h1{text-align:center;margin:0 0 30px;color:var(--blue);text-shadow:none;}
   .heroGrid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:start;}
   .heroPhotos{position:relative;min-height:570px;margin-bottom:18px;}
-  .heroPhotos .mainPhoto{width:82%;border:3px solid var(--ink);border-radius:3px;aspect-ratio:1/1;object-fit:cover;display:block;}
-  .heroPhotos .smallPhoto{position:absolute;width:38%;aspect-ratio:4/5;object-fit:cover;border:3px solid var(--ink);border-radius:3px;background:var(--paper);box-shadow:5px 6px 0 oklch(0.22 0.02 300 / .16);}
+  .heroPhotos .mainPhoto{width:82%;border:1px solid var(--ink);aspect-ratio:1/1;object-fit:cover;display:block;box-shadow:7px 8px 0 oklch(0.22 0.02 300 / .1);}
+  .heroPhotos .smallPhoto{position:absolute;width:38%;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--ink);background:var(--paper);box-shadow:5px 6px 0 oklch(0.22 0.02 300 / .16);}
   .heroPhotos .photoTwo{right:0;top:12%;transform:rotate(4deg);}
-  .heroPhotos .photoThree{right:8%;bottom:0;aspect-ratio:1/1;object-position:center;transform:rotate(-5deg);}
+  .heroPhotos .photoThree{right:5%;bottom:0;width:44%;aspect-ratio:1/1;object-position:56% 28%;transform:rotate(-5deg);z-index:3;}
   .heroIntro{font-size:1.1rem;margin:24px 0 0;max-width:48ch;}
   .hero .say{font-size:1.25rem;max-width:48ch;margin:16px 0 0;font-style:italic;color:var(--soft);}
   .hero .click{font-size:1.1rem;font-style:italic;color:var(--soft);margin:0 0 4px;}

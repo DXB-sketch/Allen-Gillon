@@ -1,23 +1,29 @@
 import CommentLink from "../../components/CommentLink";
+import PurchaseLink from "../../components/PurchaseLink";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import Link from "next/link";
+import { formatAud, playPrice, stripePaymentLink } from "../../lib/storefront.mjs";
 
 export const metadata = {
-  title: "eBooks · Allen Gillon",
-  description:
-    "The Chinese Chimes stories: short eBooks with a moral for young readers, written and narrated by Allen Gillon.",
+  title: "Stories, Plays and Textbooks · Allen Gillon",
+  description: "Read Allen Gillon's Chinese Chimes stories, school plays and published classroom textbooks.",
 };
 
-// The four Chinese Chimes stories as they appear on YouTube. readSlug points at
-// the digitised book where one exists (see public/books/index.json); the rest
-// keep their placeholder pages until their scans arrive.
 const stories = [
   { video: "OAu1PmILqeA", title: "Funny Fah Learns When to Stop", readSlug: "funny-fah-learns-when-to-stop" },
   { video: "ZwzVEIQp3Cw", title: "Imaginative Little Mee", readSlug: "imaginative-little-mee" },
   { video: "Ynu-5Rt7Vyw", title: "Hi Doh", readSlug: "little-hi-doh" },
   { video: "cEuPWVPPN0o", title: "Little Ray", readSlug: "little-ray" },
 ];
+
+const playOrder = ["melting-pot", "the-other-mans-grass", "tribute-to-calamity-jane", "three-heroes-of-sherwood", "breakout"];
+
+const teachingCovers = {
+  "practice-in-communication-book-1": "/images/books/practice-in-communication-book-1.webp",
+  "practice-in-communication-book-2": "/images/books/practice-in-communication-book-2.webp",
+  "riddled-with-language": "/images/books/riddled-with-language.webp",
+};
 
 async function readIndex() {
   try {
@@ -29,67 +35,107 @@ async function readIndex() {
 
 export default async function BooksPage() {
   const index = await readIndex();
-  const bySlug = Object.fromEntries(index.map((b) => [b.slug, b]));
+  const bySlug = Object.fromEntries(index.map((book) => [book.slug, book]));
+  const plays = playOrder.map((slug) => bySlug[slug]).filter(Boolean);
+  const teaching = index.filter((book) => book.section === "teaching");
 
   return (
-    <>
-      <style>{`
-  .ebook-links{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;}
-  .ebook-links a{font-size:1.25rem;font-weight:700;text-decoration-thickness:1px;text-underline-offset:4px;}
-  .video .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
-  .video .btn{align-self:flex-start;}
-`}</style>
-      <main>
-      <header className="pagehead">
+    <main className="writing-page">
+      <header className="writing-head">
         <div className="wrap">
-          <h1 className="script">eBooks</h1>
-          <p className="plain">Allen wrote the Chinese Chimes stories for young readers. Each story has a moral. You can read the eBooks here or listen to the YouTube narrations. The videos use an older computer voice, and Allen plans to record them again.</p>
-          <nav className="ebook-links" aria-label="eBook sections">
-            <Link href="#stories">Stories</Link>
-            <Link href="/plays#school-plays">School Plays</Link>
-            <Link href="/plays#classroom-texts">Classroom Texts</Link>
+          <h1 className="visually-hidden">Allen Gillon&rsquo;s stories, plays and textbooks</h1>
+          <nav className="writing-nav" aria-label="Writing sections">
+            <Link className="script" href="#stories">Stories</Link>
+            <Link className="script" href="#school-plays">Plays</Link>
+            <Link className="script" href="#classroom-texts">Textbooks</Link>
           </nav>
+          <p className="writing-intro">Allen wrote for children, school stages and classrooms. His work is gathered here in one place.</p>
         </div>
       </header>
 
-      <section id="stories" aria-label="The Chinese Chimes stories">
+      <section className="writing-section" id="stories" aria-labelledby="stories-title">
         <div className="wrap">
-          <div className="videos">
+          <div className="section-heading">
+            <h2 className="script" id="stories-title">Chinese Chimes stories</h2>
+            <p>Four stories for young readers, each with a moral. Read the books or hear the original YouTube narrations.</p>
+          </div>
+          <div className="videos story-grid">
             {stories.map((story) => {
               const book = bySlug[story.readSlug];
               const readable = book && book.status === "free";
               return (
                 <figure className="video" key={story.video}>
                   <div className="frame">
-                    <iframe
-                      src={`https://www.youtube-nocookie.com/embed/${story.video}`}
-                      title={story.title}
-                      loading="lazy"
-                      allow="encrypted-media; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                    <iframe src={`https://www.youtube-nocookie.com/embed/${story.video}`} title={story.title} loading="lazy" allow="encrypted-media; picture-in-picture" allowFullScreen />
                   </div>
                   <figcaption>{story.title}</figcaption>
                   <div className="btnrow">
-                    <CommentLink subject={story.title} returnTo="/books" returnLabel="eBooks" />
                     <Link className="btn b" href={`/read/${story.readSlug}`}>Read the book</Link>
-                    {readable ? (
-                      <a className="btn" href={`/books/${story.readSlug}/${story.readSlug}.pdf`} download>Download PDF</a>
-                    ) : null}
+                    {readable ? <a className="btn" href={`/books/${story.readSlug}/${story.readSlug}.pdf`} download>Download PDF</a> : null}
+                    <CommentLink subject={story.title} returnTo="/books#stories" returnLabel="Stories" />
                   </div>
                 </figure>
               );
             })}
           </div>
           <div className="upcoming-books">
-            <h2 className="script">Upcoming children&rsquo;s books</h2>
-            <ul className="ruled">
-              {["Doh", "Soh", "Lah", "Tee"].map((title) => <li key={title}>{title}</li>)}
-            </ul>
+            <h3>More Chinese Chimes stories</h3>
+            <p>Doh, Soh, Lah and Tee are still to come.</p>
           </div>
         </div>
       </section>
-      </main>
-    </>
+
+      <section className="writing-section" id="school-plays" aria-labelledby="plays-title">
+        <div className="wrap">
+          <div className="section-heading">
+            <h2 className="script" id="plays-title">School plays</h2>
+            <p>Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each script costs {formatAud(playPrice)} as a PDF.</p>
+          </div>
+          <ol className="ruled plays">
+            {plays.map((play, indexNumber) => (
+              <li key={play.slug}>
+                <span className="pno">{indexNumber + 1}</span>
+                <div>
+                  <h3>{play.title}</h3>
+                  <p>{play.blurb} {play.pageCount} pages.</p>
+                  <div className="btnrow">
+                    <Link className="btn b" href={`/read/${play.slug}`}>Read online</Link>
+                    <PurchaseLink href={stripePaymentLink(`play-${play.slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
+                    <CommentLink subject={play.title} returnTo="/books#school-plays" returnLabel="School Plays" />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="note"><p>Read a play online before buying it. After checkout, Allen will email the PDF to the address used for payment.</p></div>
+        </div>
+      </section>
+
+      <section className="writing-section" id="classroom-texts" aria-labelledby="texts-title">
+        <div className="wrap">
+          <div className="section-heading">
+            <h2 className="script" id="texts-title">Classroom texts</h2>
+            <p>These books come from Allen&rsquo;s twenty-five years of teaching. They were published for use in schools.</p>
+          </div>
+          <ul className="ruled texts-list" aria-label="Published classroom texts">
+            {teaching.map((book) => (
+              <li key={book.slug}>
+                <a className="cover-link" href={teachingCovers[book.slug]} target="_blank" rel="noreferrer" aria-label={`View the front cover of ${book.title} at full size`}>
+                  <img className="text-cover" src={teachingCovers[book.slug]} width="1000" height="1414" loading="lazy" alt={`Original front cover of ${book.title}`} />
+                </a>
+                <div>
+                  <h3>{book.title}</h3>
+                  <p>{book.blurb} Contact Allen if you would like help finding a copy.</p>
+                  <div className="btnrow">
+                    <Link className="btn b" href={`/read/${book.slug}`}>View details</Link>
+                    <CommentLink subject={book.title} returnTo="/books#classroom-texts" returnLabel="Classroom Texts" />
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </main>
   );
 }

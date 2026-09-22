@@ -16,7 +16,7 @@ export default function Footer() {
           <Link href="/music">Albums</Link>
           <Link href="/biography">Timeless</Link>
           <Link href="/hire">Bookings</Link>
-          <Link href="/books">eBooks</Link>
+          <Link href="/books">Stories</Link>
           <Link href="/anns-art">Ann Gillon</Link>
           <a
             className="fb"

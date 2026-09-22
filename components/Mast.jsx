@@ -8,7 +8,7 @@ const links = [
   { href: "/music", label: "Albums" },
   { href: "/biography", label: "Timeless" },
   { href: "/hire", label: "Bookings" },
-  { href: "/books", label: "eBooks" },
+  { href: "/books", label: "Stories" },
   { href: "/anns-art", label: "Ann Gillon" },
 ];
 

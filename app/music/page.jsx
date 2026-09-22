@@ -132,13 +132,24 @@ export default function MusicPage() {
   section{padding-top:16px;}
   .secrule{border:0;border-top:var(--rule);margin:56px 0 0;}
 `}</style>
-      <main>
+      <main className="music-page">
+        <div className="music-ornament" aria-hidden="true">
+          <svg viewBox="0 0 90 210" fill="none" stroke="currentColor" strokeWidth="3">
+            <path d="M55 8c-7 28-10 51-8 72l-9 30c-4 13-14 20-25 29-13 11-12 34 3 47 15 14 38 10 49-4 9-11 13-23 9-35-4-10-9-19-9-29l7-38c5-20 7-43 7-67Z" />
+            <path d="m45 81 27 7M37 115l29 20M22 159c8-9 21-10 30-2 8 7 9 20 2 29M50 10l29 5" />
+            <circle cx="42" cy="165" r="8" />
+          </svg>
+          <svg className="ornament-mic" viewBox="0 0 60 120" fill="none" stroke="currentColor" strokeWidth="3">
+            <rect x="18" y="5" width="24" height="54" rx="12" />
+            <path d="M10 45v4c0 16 9 26 20 26s20-10 20-26v-4M30 75v25M17 100h26" />
+          </svg>
+        </div>
         <header className="pagehead">
           <div className="wrap">
             <h1 className="script">Al&rsquo;s music style</h1>
             <p className="plain">
               Listen to Allen&rsquo;s four studio albums here. He arranged many of the backing tracks himself, including
-              &ldquo;Desafinado&rdquo; on &ldquo;Girl from Ipanema&rdquo;. Click a cover to open the track list, then choose a song.
+              &ldquo;Desafinado&rdquo; and &ldquo;Girl from Ipanema&rdquo;. Click a cover to open the track list, then choose a song.
               DVD copies are {formatAud(albumPrice)} each. If you would rather have Allen in the room,{" "}
               <Link href="/hire">he still takes bookings</Link>.
             </p>
@@ -187,7 +198,7 @@ export default function MusicPage() {
               Original Songs
             </h2>
             <p className="plain" style={{ marginBottom: "8px" }}>
-              Songs written by Allen Gillon. More are on the way.
+              Songs written by Allen Gillon.
             </p>
             <div className="videos">
               <figure className="video">
