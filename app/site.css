@@ -59,7 +59,6 @@ img.gx-hero{width:100%;object-fit:cover;display:block;}
 .mnav a:hover{color:var(--red);}
 .mnav a[aria-current="page"]{color:var(--red);border-bottom:3px solid var(--red);}
 .mnav a.nav-booking{color:var(--red-deep);font-weight:700;}
-.mnav a.nav-booking::before{content:"";width:7px;height:7px;margin-right:7px;border-radius:50%;background:var(--red);}
 .page-reader{max-width:var(--maxw);margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.9rem;}
 .page-reader button,.page-reader select{font:inherit;color:var(--ink);background:transparent;border:1px solid oklch(0.22 0.02 300 / .45);border-radius:0;min-height:38px;padding:5px 11px;cursor:pointer;}
 .page-reader button:first-child{background:var(--blue);border-color:var(--blue);color:var(--on);}
