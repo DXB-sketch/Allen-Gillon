@@ -148,7 +148,7 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 }
 .album h3{font-size:1.45rem;margin:14px 0 0;}
 .album .meta{color:var(--soft);font-size:1rem;margin:2px 0 0;}
-.album .album-price{font-weight:700;margin:8px 0 0;}
+.album-download-toggle{margin-top:10px;}
 .trkpanel{margin-top:12px;}
 .trkpanel[hidden]{display:none;}
 .trklist{list-style:none;margin:0;padding:0;}
@@ -160,6 +160,8 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .tplay.playing{background:var(--red);border-color:var(--red);color:var(--on);}
 .tname{flex:1;font-size:1.02rem;}
 .ttime{font-size:.95rem;color:var(--soft);font-variant-numeric:tabular-nums;}
+.track-download{font-size:.88rem;font-weight:700;color:var(--blue);text-underline-offset:3px;}
+.track-download:hover{color:var(--red);}
 .nowbar{position:sticky;bottom:0;background:var(--ink);color:var(--on);display:none;}
 .nowbar.on{display:block;}
 .nowbar .wrap{display:flex;align-items:center;gap:16px;padding:12px 24px;}
@@ -335,4 +337,10 @@ button:disabled{cursor:wait;opacity:.65;}
   .texts-list li{grid-template-columns:1fr;gap:22px;}
   .cover-link{width:min(220px,65vw);}
   .music-ornament{display:none;}
+}
+@media (max-width:480px){
+  .trklist li{display:grid;grid-template-columns:44px 1fr auto;gap:4px 10px;padding:8px 0;}
+  .tplay{grid-row:1/3;}
+  .ttime{align-self:end;}
+  .track-download{grid-column:2/4;justify-self:start;min-height:32px;display:inline-flex;align-items:center;}
 }

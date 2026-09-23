@@ -3,9 +3,8 @@
 import CommentLink from "./CommentLink";
 import { useState } from "react";
 import { usePlayer } from "./Player";
-import PurchaseLink from "./PurchaseLink";
 
-export default function Album({ id, title, meta, cover, coverAlt, tracks, price, purchaseUrl }) {
+export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
   const [open, setOpen] = useState(false);
   const { current, playing, toggle } = usePlayer();
 
@@ -23,8 +22,15 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks, price,
       </button>
       <h3>{title}</h3>
       <p className="meta">{meta}</p>
-      <p className="album-price">DVD copy: {price}</p>
-      <PurchaseLink href={purchaseUrl}>Buy the DVD</PurchaseLink>
+      <button
+        type="button"
+        className="btn album-download-toggle"
+        aria-expanded={open ? "true" : "false"}
+        aria-controls={"trk-" + id}
+        onClick={() => setOpen(!open)}
+      >
+        Free downloads
+      </button>
       <CommentLink subject={title} returnTo={`/music#${id}`} returnLabel={title} />
       <div className="trkpanel" id={"trk-" + id} hidden={!open}>
         <ol className="trklist">
@@ -43,6 +49,7 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks, price,
                 </button>
                 <span className="tname">{track.name}<CommentLink subject={`${track.name} (${title})`} returnTo={`/music#${id}`} returnLabel={title}>Comment</CommentLink></span>
                 <span className="ttime">{track.time}</span>
+                <a className="track-download" href={track.src} download aria-label={`Download ${track.name}`}>Download</a>
               </li>
             );
           })}

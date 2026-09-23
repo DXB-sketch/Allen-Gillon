@@ -13,12 +13,13 @@ export default function Page() {
   .hero{padding:28px 0 24px;}
   .hero h1{text-align:center;margin:0 0 30px;color:var(--blue);text-shadow:none;}
   .heroGrid{display:grid;grid-template-columns:1.05fr 1fr;gap:44px;align-items:start;}
-  .heroPhotos{position:relative;min-height:570px;margin-bottom:18px;}
-  .heroPhotos .mainPhoto{width:82%;border:1px solid var(--ink);aspect-ratio:1/1;object-fit:cover;display:block;box-shadow:7px 8px 0 oklch(0.22 0.02 300 / .1);}
+  .heroPhotos{margin-bottom:18px;}
+  .photoCollage{position:relative;aspect-ratio:1.04/1;}
+  .heroPhotos .mainPhoto{width:78%;border:1px solid var(--ink);aspect-ratio:1/1;object-fit:cover;display:block;box-shadow:7px 8px 0 oklch(0.22 0.02 300 / .1);}
   .heroPhotos .smallPhoto{position:absolute;width:38%;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--ink);background:var(--paper);box-shadow:5px 6px 0 oklch(0.22 0.02 300 / .16);}
-  .heroPhotos .photoTwo{right:0;top:12%;transform:rotate(4deg);}
-  .heroPhotos .photoThree{right:5%;bottom:0;width:44%;aspect-ratio:1/1;object-position:56% 28%;transform:rotate(-5deg);z-index:3;}
-  .venueCollage{position:absolute;z-index:4;left:0;bottom:0;width:64%;min-height:142px;display:grid;
+  .heroPhotos .photoTwo{right:0;top:8%;transform:rotate(4deg);}
+  .heroPhotos .photoThree{right:2%;bottom:1%;width:47%;aspect-ratio:1/1;object-position:center;transform:rotate(-5deg);z-index:3;}
+  .venueCollage{width:100%;min-height:150px;margin-top:18px;display:grid;
     grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,auto);align-items:center;gap:0 6px;
     line-height:1.05;pointer-events:none;}
   .venueCollage span{font-weight:600;white-space:nowrap;justify-self:start;}
@@ -50,17 +51,33 @@ export default function Page() {
 
   @media (max-width:860px){
     .heroGrid{grid-template-columns:1fr;gap:28px;}
-    .heroPhotos{min-height:0;padding-bottom:42%;}
-    .heroPhotos .mainPhoto{width:78%;}
-    .heroPhotos .smallPhoto{width:34%;}
+    .photoCollage{aspect-ratio:1.08/1;max-width:680px;margin:0 auto;}
+    .heroPhotos .mainPhoto{width:76%;}
+    .heroPhotos .smallPhoto{width:36%;}
+    .heroPhotos .photoThree{right:1%;bottom:0;width:48%;}
     ol.idx a{font-size:1.18rem;min-height:64px;}
     .idx-art,.idx-empty{width:68px;height:68px;}
-    .venueCollage{width:68%;min-height:148px;}
+    .venueCollage{width:min(680px,100%);min-height:148px;margin:20px auto 0;}
     .venueCollage span:nth-child(1){font-size:1.4rem;}
     .venueCollage span:nth-child(2),.venueCollage span:nth-child(5){font-size:.78rem;}
     .venueCollage span:nth-child(3){font-size:1.34rem;}
     .venueCollage span:nth-child(4),.venueCollage span:nth-child(7){font-size:.66rem;}
     .venueCollage span:nth-child(6),.venueCollage span:nth-child(8){font-size:1.2rem;}
+  }
+  @media (max-width:520px){
+    .photoCollage{aspect-ratio:1/1.12;}
+    .heroPhotos .mainPhoto{width:82%;}
+    .heroPhotos .photoTwo{width:38%;right:0;top:7%;}
+    .heroPhotos .photoThree{width:53%;right:0;bottom:1%;object-position:center;}
+    .venueCollage{min-height:184px;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(5,auto);gap:4px 8px;}
+    .venueCollage span:nth-child(1){grid-column:1/3;font-size:1.25rem;}
+    .venueCollage span:nth-child(2){grid-column:3/5;font-size:.72rem;}
+    .venueCollage span:nth-child(3){grid-column:1/2;font-size:1.2rem;}
+    .venueCollage span:nth-child(4){grid-column:2/5;font-size:.62rem;justify-self:center;}
+    .venueCollage span:nth-child(5){grid-column:1/4;font-size:.76rem;}
+    .venueCollage span:nth-child(6){grid-column:4/5;font-size:1.08rem;justify-self:end;}
+    .venueCollage span:nth-child(7){grid-column:1/3;font-size:.62rem;}
+    .venueCollage span:nth-child(8){grid-column:2/5;font-size:1.08rem;justify-self:end;}
   }
 `}</style>
       <main>
@@ -70,13 +87,15 @@ export default function Page() {
             <div className="heroGrid">
               <div className="heroVisual">
                 <div className="heroPhotos" data-reader-skip>
-                  <img
-                    className="mainPhoto"
-                    src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
-                    alt="Allen playing his red Gibson on the Bribie Island waterfront"
-                  />
-                  <img className="smallPhoto photoTwo" src="/images/personal/allen-playing-chandler-theatre.jpg" alt="Allen playing guitar at Chandler Theatre" />
-                  <img className="smallPhoto photoThree" src="/images/personal/current-allen-and-ann-bribie-cap.jpg" alt="Allen and Ann wearing sunglasses at Bribie Island" />
+                  <div className="photoCollage">
+                    <img
+                      className="mainPhoto"
+                      src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
+                      alt="Allen playing his red Gibson on the Bribie Island waterfront"
+                    />
+                    <img className="smallPhoto photoTwo" src="/images/personal/allen-playing-chandler-theatre.jpg" alt="Allen playing guitar at Chandler Theatre" />
+                    <img className="smallPhoto photoThree" src="/images/personal/current-allen-and-ann-bribie-cap.jpg" alt="Allen and Ann wearing sunglasses at Bribie Island" />
+                  </div>
                   <div className="venueCollage" aria-label="Venues where Allen has played">
                     <span>Serenity Cafe</span>
                     <span>Sunset Pier Cafe</span>

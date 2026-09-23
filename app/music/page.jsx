@@ -1,12 +1,11 @@
 import CommentLink from "../../components/CommentLink";
 import Link from "next/link";
 import Album from "../../components/Album";
-import { albumPrice, formatAud, stripePaymentLink } from "../../lib/storefront.mjs";
 
 export const metadata = {
   title: "Al's music style · Allen Gillon",
   description:
-    "Listen to Allen Gillon's albums and order a DVD copy for $10 AUD.",
+    "Listen to Allen Gillon's albums and download the tracks free.",
 };
 
 const albums = [
@@ -150,7 +149,7 @@ export default function MusicPage() {
             <p className="plain">
               Listen to Allen&rsquo;s four studio albums here. He arranged many of the backing tracks himself, including
               &ldquo;Desafinado&rdquo; and &ldquo;Girl from Ipanema&rdquo;. Click a cover to open the track list, then choose a song.
-              DVD copies are {formatAud(albumPrice)} each. If you would rather have Allen in the room,{" "}
+              Every track is free to download. If you would rather have Allen in the room,{" "}
               <Link href="/hire">he still takes bookings</Link>.
             </p>
           </div>
@@ -159,7 +158,7 @@ export default function MusicPage() {
         <section aria-label="Albums">
           <div className="wrap albums">
             {albums.map((album) => (
-              <Album key={album.id} {...album} price={formatAud(albumPrice)} purchaseUrl={stripePaymentLink(`album-${album.id}`)} />
+              <Album key={album.id} {...album} />
             ))}
           </div>
         </section>
