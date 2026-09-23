@@ -1,4 +1,5 @@
 import CommentLink from "../../components/CommentLink";
+import Audiobook from "../../components/Audiobook";
 import PurchaseLink from "../../components/PurchaseLink";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -11,10 +12,10 @@ export const metadata = {
 };
 
 const stories = [
-  { video: "OAu1PmILqeA", title: "Funny Fah Learns When to Stop", readSlug: "funny-fah-learns-when-to-stop" },
-  { video: "ZwzVEIQp3Cw", title: "Imaginative Little Mee", readSlug: "imaginative-little-mee" },
-  { video: "Ynu-5Rt7Vyw", title: "Hi Doh", readSlug: "little-hi-doh" },
-  { video: "cEuPWVPPN0o", title: "Little Ray", readSlug: "little-ray" },
+  { video: "OAu1PmILqeA", title: "Funny Fah Learns When to Stop", readSlug: "funny-fah-learns-when-to-stop", audio: "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop.mp3" },
+  { video: "ZwzVEIQp3Cw", title: "Imaginative Little Mee", readSlug: "imaginative-little-mee", audio: "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3" },
+  { video: "Ynu-5Rt7Vyw", title: "Hi Doh", readSlug: "little-hi-doh", audio: "/audio/chinese-chimes-audiobooks/hi-doh.mp3" },
+  { video: "cEuPWVPPN0o", title: "Little Ray", readSlug: "little-ray", audio: "/audio/chinese-chimes-audiobooks/little-ray.mp3" },
 ];
 
 const playOrder = ["melting-pot", "the-other-mans-grass", "tribute-to-calamity-jane", "three-heroes-of-sherwood", "breakout"];
@@ -57,27 +58,35 @@ export default async function BooksPage() {
         <div className="wrap">
           <div className="section-heading">
             <h2 className="script" id="stories-title">Chinese Chimes stories</h2>
-            <p>Four stories for young readers, each with a moral. Read the books or hear the original YouTube narrations.</p>
+            <p>Four stories for young readers, each with a moral. Listen to the audiobooks here or read them online.</p>
           </div>
-          <div className="videos story-grid">
-            {stories.map((story) => {
+          <ol className="audiobook-list">
+            {stories.map((story, storyIndex) => {
               const book = bySlug[story.readSlug];
               const readable = book && book.status === "free";
               return (
-                <figure className="video" key={story.video}>
-                  <div className="frame">
-                    <iframe src={`https://www.youtube-nocookie.com/embed/${story.video}`} title={story.title} loading="lazy" allow="encrypted-media; picture-in-picture" allowFullScreen />
+                <li key={story.video}>
+                  <span className="audiobook-number" aria-hidden="true">{storyIndex + 1}</span>
+                  <div className="audiobook-copy">
+                    <h3>{story.title}</h3>
+                    <p>Narrated Chinese Chimes audiobook</p>
+                    <Audiobook title={story.title} src={story.audio} />
                   </div>
-                  <figcaption>{story.title}</figcaption>
-                  <div className="btnrow">
-                    <Link className="btn b" href={`/read/${story.readSlug}`}>Read the book</Link>
-                    {readable ? <a className="btn" href={`/books/${story.readSlug}/${story.readSlug}.pdf`} download>Download PDF</a> : null}
-                    <CommentLink subject={story.title} returnTo="/books#stories" returnLabel="Stories" />
+                  <div className="audiobook-actions">
+                    <Link className="story-read-link" href={`/read/${story.readSlug}`}>Read the book</Link>
+                    <details className="more-menu">
+                      <summary aria-label={`More options for ${story.title}`}><span aria-hidden="true">⋯</span></summary>
+                      <div className="more-popover">
+                        {readable ? <a href={`/books/${story.readSlug}/${story.readSlug}.pdf`} download>Download PDF</a> : null}
+                        <a href={`https://www.youtube.com/watch?v=${story.video}`} target="_blank" rel="noreferrer">Original YouTube narration</a>
+                        <CommentLink subject={story.title} returnTo="/books#stories" returnLabel="Stories">Comment</CommentLink>
+                      </div>
+                    </details>
                   </div>
-                </figure>
+                </li>
               );
             })}
-          </div>
+          </ol>
           <div className="upcoming-books">
             <h3>More Chinese Chimes stories</h3>
             <p>Doh, Soh, Lah and Tee are still to come.</p>
@@ -98,10 +107,15 @@ export default async function BooksPage() {
                 <div>
                   <h3>{play.title}</h3>
                   <p>{play.blurb} {play.pageCount} pages.</p>
-                  <div className="btnrow">
-                    <Link className="btn b" href={`/read/${play.slug}`}>Read online</Link>
-                    <PurchaseLink href={stripePaymentLink(`play-${play.slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
-                    <CommentLink subject={play.title} returnTo="/books#school-plays" returnLabel="School Plays" />
+                  <div className="item-actions">
+                    <Link className="item-primary-link" href={`/read/${play.slug}`}>Read online</Link>
+                    <details className="more-menu">
+                      <summary aria-label={`More options for ${play.title}`}><span aria-hidden="true">⋯</span></summary>
+                      <div className="more-popover">
+                        <PurchaseLink href={stripePaymentLink(`play-${play.slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
+                        <CommentLink subject={play.title} returnTo="/books#school-plays" returnLabel="School Plays">Comment</CommentLink>
+                      </div>
+                    </details>
                   </div>
                 </div>
               </li>
@@ -126,9 +140,14 @@ export default async function BooksPage() {
                 <div>
                   <h3>{book.title}</h3>
                   <p>{book.blurb} Contact Allen if you would like help finding a copy.</p>
-                  <div className="btnrow">
-                    <Link className="btn b" href={`/read/${book.slug}`}>View details</Link>
-                    <CommentLink subject={book.title} returnTo="/books#classroom-texts" returnLabel="Classroom Texts" />
+                  <div className="item-actions">
+                    <Link className="item-primary-link" href={`/read/${book.slug}`}>View details</Link>
+                    <details className="more-menu">
+                      <summary aria-label={`More options for ${book.title}`}><span aria-hidden="true">⋯</span></summary>
+                      <div className="more-popover">
+                        <CommentLink subject={book.title} returnTo="/books#classroom-texts" returnLabel="Classroom Texts">Comment</CommentLink>
+                      </div>
+                    </details>
                   </div>
                 </div>
               </li>

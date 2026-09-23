@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/", label: "Home" },
+  { href: "/hire", label: "Bookings" },
   { href: "/music", label: "Albums" },
   { href: "/biography", label: "Timeless" },
-  { href: "/hire", label: "Bookings" },
   { href: "/books", label: "Stories" },
   { href: "/anns-art", label: "Ann Gillon" },
 ];
@@ -23,6 +23,7 @@ export default function Mast() {
         {links.map((l) => (
           <Link
             key={l.href}
+            className={l.href === "/hire" ? "nav-booking" : undefined}
             href={l.href}
             aria-current={pathname === l.href ? "page" : undefined}
           >

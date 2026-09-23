@@ -114,21 +114,6 @@ export default function Page() {
                     <span className="no">1</span>
                     <span className="idx-art">
                       <img
-                        src="/images/albums/album-thats-the-time.jpg"
-                        alt="That's The Time album cover"
-                      />
-                    </span>
-                    <Link href="/music">
-                      Listen Free{" "}
-                      <small>
-                        Four albums to hear free, and his original songs
-                      </small>
-                    </Link>
-                  </li>
-                  <li>
-                    <span className="no">2</span>
-                    <span className="idx-art">
-                      <img
                         src="/images/personal/promo-allen-gillon-guitarist-gibson.jpg"
                         alt=""
                       />
@@ -137,6 +122,21 @@ export default function Page() {
                       Bookings{" "}
                       <small>
                         Solo guitar for restaurants and private bookings
+                      </small>
+                    </Link>
+                  </li>
+                  <li>
+                    <span className="no">2</span>
+                    <span className="idx-art">
+                      <img
+                        src="/images/albums/album-thats-the-time.jpg"
+                        alt="That's The Time album cover"
+                      />
+                    </span>
+                    <Link href="/music">
+                      Listen Free{" "}
+                      <small>
+                        Four albums to hear free, and his original songs
                       </small>
                     </Link>
                   </li>

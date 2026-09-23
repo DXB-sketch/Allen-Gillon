@@ -58,6 +58,8 @@ img.gx-hero{width:100%;object-fit:cover;display:block;}
 .mnav a{font-size:1.02rem;text-decoration:none;padding:10px 12px;min-height:44px;display:inline-flex;align-items:center;}
 .mnav a:hover{color:var(--red);}
 .mnav a[aria-current="page"]{color:var(--red);border-bottom:3px solid var(--red);}
+.mnav a.nav-booking{color:var(--red-deep);font-weight:700;}
+.mnav a.nav-booking::before{content:"";width:7px;height:7px;margin-right:7px;border-radius:50%;background:var(--red);}
 .page-reader{max-width:var(--maxw);margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.9rem;}
 .page-reader button,.page-reader select{font:inherit;color:var(--ink);background:transparent;border:1px solid oklch(0.22 0.02 300 / .45);border-radius:0;min-height:38px;padding:5px 11px;cursor:pointer;}
 .page-reader button:first-child{background:var(--blue);border-color:var(--blue);color:var(--on);}
@@ -148,7 +150,10 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 }
 .album h3{font-size:1.45rem;margin:14px 0 0;}
 .album .meta{color:var(--soft);font-size:1rem;margin:2px 0 0;}
-.album-download-toggle{margin-top:10px;}
+.album-download-button{margin-top:10px;}
+.tracklist-toggle{display:block;margin-top:10px;padding:5px 0;min-height:38px;border:0;background:transparent;color:var(--blue);
+  font:inherit;font-size:.94rem;font-weight:700;text-decoration:underline;text-underline-offset:4px;cursor:pointer;}
+.tracklist-toggle:hover{color:var(--red);}
 .trkpanel{margin-top:12px;}
 .trkpanel[hidden]{display:none;}
 .trklist{list-style:none;margin:0;padding:0;}
@@ -160,8 +165,16 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .tplay.playing{background:var(--red);border-color:var(--red);color:var(--on);}
 .tname{flex:1;font-size:1.02rem;}
 .ttime{font-size:.95rem;color:var(--soft);font-variant-numeric:tabular-nums;}
-.track-download{font-size:.88rem;font-weight:700;color:var(--blue);text-underline-offset:3px;}
-.track-download:hover{color:var(--red);}
+.more-menu{position:relative;flex:none;}
+.more-menu summary{list-style:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;cursor:pointer;
+  color:var(--ink);font-size:1.5rem;font-weight:700;line-height:1;user-select:none;}
+.more-menu summary::-webkit-details-marker{display:none;}
+.more-menu summary:hover,.more-menu[open] summary{background:oklch(0.90 0.02 92);color:var(--blue);}
+.more-popover{position:absolute;z-index:8;right:0;top:46px;min-width:210px;padding:7px;background:var(--paper);
+  border:1px solid var(--ink);box-shadow:4px 5px 0 oklch(0.22 0.02 300 / .18);}
+.more-popover>a,.more-popover .comment-link,.more-popover .btn{display:flex;width:100%;min-height:42px;align-items:center;padding:8px 10px;
+  border:0;border-radius:0;background:transparent;color:var(--ink);font-size:.9rem;text-decoration:none;box-shadow:none;clip-path:none;}
+.more-popover>a:hover,.more-popover .comment-link:hover,.more-popover .btn:hover{background:oklch(0.93 0.025 262 / .6);color:var(--blue);box-shadow:none;transform:none;clip-path:none;}
 .nowbar{position:sticky;bottom:0;background:var(--ink);color:var(--on);display:none;}
 .nowbar.on{display:block;}
 .nowbar .wrap{display:flex;align-items:center;gap:16px;padding:12px 24px;}
@@ -275,6 +288,20 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .story-grid{margin-top:0;}
 .btnrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;}
 .story-grid figcaption{font-size:1.18rem;font-weight:700;margin-top:5px;}
+.audiobook-list{list-style:none;margin:0;padding:0;border-top:var(--rule);}
+.audiobook-list>li{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:18px;align-items:center;padding:24px 0;border-bottom:var(--rule);}
+.audiobook-number{font-family:"Dynalight","Times New Roman",cursive;font-size:2.4rem;line-height:1;color:var(--red);text-align:center;}
+.audiobook-list>li:nth-child(even) .audiobook-number{color:var(--blue);}
+.audiobook-copy h3{font-size:1.32rem;}
+.audiobook-copy p{margin:2px 0 7px;color:var(--soft);font-size:.96rem;}
+.audiobook-play{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:4px 0;border:0;background:transparent;
+  color:var(--blue);font:inherit;font-size:.98rem;font-weight:700;cursor:pointer;}
+.audiobook-play:hover,.audiobook-play.playing{color:var(--red);}
+.audiobook-play-icon{display:grid;place-items:center;width:36px;height:36px;border:2px solid currentColor;border-radius:50%;font-size:.72rem;}
+.audiobook-actions{display:flex;align-items:center;gap:6px;}
+.story-read-link{display:inline-flex;align-items:center;min-height:44px;padding:4px 8px;color:var(--red-deep);font-weight:700;text-underline-offset:4px;}
+.item-actions{display:flex;align-items:center;gap:6px;margin-top:8px;}
+.item-primary-link{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
 .upcoming-books{margin-top:46px;max-width:620px;padding-left:18px;border-left:4px solid var(--blue);}
 .upcoming-books h3,.upcoming-books p{margin:0;}
 .upcoming-books p{color:var(--soft);}
@@ -337,10 +364,13 @@ button:disabled{cursor:wait;opacity:.65;}
   .texts-list li{grid-template-columns:1fr;gap:22px;}
   .cover-link{width:min(220px,65vw);}
   .music-ornament{display:none;}
+  .audiobook-list>li{grid-template-columns:38px minmax(0,1fr);gap:12px 14px;align-items:start;}
+  .audiobook-actions{grid-column:2;justify-content:space-between;}
+  .audiobook-number{font-size:2rem;padding-top:4px;}
 }
 @media (max-width:480px){
-  .trklist li{display:grid;grid-template-columns:44px 1fr auto;gap:4px 10px;padding:8px 0;}
-  .tplay{grid-row:1/3;}
+  .trklist li{display:grid;grid-template-columns:44px minmax(0,1fr) auto auto;gap:4px 8px;padding:8px 0;}
   .ttime{align-self:end;}
-  .track-download{grid-column:2/4;justify-self:start;min-height:32px;display:inline-flex;align-items:center;}
+  .track-more{align-self:center;}
+  .more-popover{position:fixed;left:18px;right:18px;top:auto;bottom:18px;min-width:0;}
 }
