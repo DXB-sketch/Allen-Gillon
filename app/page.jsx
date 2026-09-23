@@ -18,15 +18,22 @@ export default function Page() {
   .heroPhotos .smallPhoto{position:absolute;width:38%;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--ink);background:var(--paper);box-shadow:5px 6px 0 oklch(0.22 0.02 300 / .16);}
   .heroPhotos .photoTwo{right:0;top:12%;transform:rotate(4deg);}
   .heroPhotos .photoThree{right:5%;bottom:0;width:44%;aspect-ratio:1/1;object-position:56% 28%;transform:rotate(-5deg);z-index:3;}
-  .venueCollage{display:flex;align-items:baseline;justify-content:center;gap:2px 18px;flex-wrap:wrap;width:92%;margin:16px 0 0;padding:8px 0;border-top:1px solid oklch(0.22 0.02 300 / .28);}
-  .venueCollage span{font-weight:600;line-height:1.25;white-space:nowrap;color:var(--ink);}
-  .venueCollage span:nth-child(3n+1){color:var(--red);font-family:"Dynalight","Times New Roman",cursive;font-size:1.55rem;transform:rotate(-2deg);}
-  .venueCollage span:nth-child(3n+2){color:var(--blue);font-size:.9rem;letter-spacing:.04em;text-transform:uppercase;transform:rotate(1deg);}
-  .venueCollage span:nth-child(3n){font-style:italic;font-size:1.02rem;transform:rotate(-1deg);}
+  .venueCollage{position:absolute;z-index:4;left:0;bottom:0;width:64%;min-height:142px;display:grid;
+    grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(4,auto);align-items:center;gap:0 6px;
+    line-height:1.05;pointer-events:none;}
+  .venueCollage span{font-weight:600;white-space:nowrap;justify-self:start;}
+  .venueCollage span:nth-child(1){grid-column:1/4;color:oklch(.49 .12 190);font-family:"Dynalight","Times New Roman",cursive;font-size:1.55rem;transform:rotate(-3deg);}
+  .venueCollage span:nth-child(2){grid-column:3/7;color:oklch(.52 .15 326);font-style:italic;font-size:.94rem;transform:rotate(2deg);}
+  .venueCollage span:nth-child(3){grid-column:1/3;color:var(--red);font-family:"Dynalight","Times New Roman",cursive;font-size:1.48rem;transform:rotate(-2deg);}
+  .venueCollage span:nth-child(4){grid-column:3/6;color:var(--blue);font-size:.76rem;letter-spacing:.045em;text-transform:uppercase;transform:rotate(1deg);}
+  .venueCollage span:nth-child(5){grid-column:1/5;color:oklch(.52 .13 62);font-style:italic;font-size:.94rem;transform:rotate(1deg);}
+  .venueCollage span:nth-child(6){grid-column:5/7;color:var(--red);font-family:"Dynalight","Times New Roman",cursive;font-size:1.35rem;transform:rotate(-4deg);}
+  .venueCollage span:nth-child(7){grid-column:1/4;color:var(--blue);font-size:.8rem;letter-spacing:.035em;text-transform:uppercase;transform:rotate(-1deg);}
+  .venueCollage span:nth-child(8){grid-column:3/7;color:oklch(.47 .13 145);font-family:"Dynalight","Times New Roman",cursive;font-size:1.42rem;transform:rotate(2deg);}
   .heroIntro{font-size:1.1rem;margin:24px 0 0;max-width:48ch;}
   .hero .say{font-size:1.25rem;max-width:48ch;margin:16px 0 0;font-style:italic;color:var(--soft);}
 
-  ol.idx{list-style:none;margin:0;padding:0;border-top:var(--rule);border-bottom:var(--rule);}
+  ol.idx{list-style:none;margin:0;padding:0;border-bottom:var(--rule);}
   ol.idx li{display:flex;align-items:center;gap:18px;}
   ol.idx .no{font-family:"Dynalight","Times New Roman",cursive;font-size:2rem;color:var(--red);min-width:1.4ch;text-align:right;line-height:1;}
   ol.idx a{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px;
@@ -43,14 +50,17 @@ export default function Page() {
 
   @media (max-width:860px){
     .heroGrid{grid-template-columns:1fr;gap:28px;}
-    .heroPhotos{min-height:0;padding-bottom:18%;}
+    .heroPhotos{min-height:0;padding-bottom:42%;}
     .heroPhotos .mainPhoto{width:78%;}
     .heroPhotos .smallPhoto{width:34%;}
     ol.idx a{font-size:1.18rem;min-height:64px;}
     .idx-art,.idx-empty{width:68px;height:68px;}
-    .venueCollage{width:100%;gap:3px 14px;margin-top:10px;}
-    .venueCollage span:nth-child(3n+1){font-size:1.4rem;}
-    .venueCollage span:nth-child(3n+2){font-size:.78rem;}
+    .venueCollage{width:68%;min-height:148px;}
+    .venueCollage span:nth-child(1){font-size:1.4rem;}
+    .venueCollage span:nth-child(2),.venueCollage span:nth-child(5){font-size:.78rem;}
+    .venueCollage span:nth-child(3){font-size:1.34rem;}
+    .venueCollage span:nth-child(4),.venueCollage span:nth-child(7){font-size:.66rem;}
+    .venueCollage span:nth-child(6),.venueCollage span:nth-child(8){font-size:1.2rem;}
   }
 `}</style>
       <main>
@@ -67,14 +77,16 @@ export default function Page() {
                   />
                   <img className="smallPhoto photoTwo" src="/images/personal/allen-playing-chandler-theatre.jpg" alt="Allen playing guitar at Chandler Theatre" />
                   <img className="smallPhoto photoThree" src="/images/personal/current-allen-and-ann-bribie-cap.jpg" alt="Allen and Ann wearing sunglasses at Bribie Island" />
-                </div>
-                <div className="venueCollage" aria-label="Venues where Allen has played">
-                  <span>Cafe 191</span>
-                  <span>Coffee Club</span>
-                  <span>Steakout Restaurant</span>
-                  <span>The Jetty</span>
-                  <span>Bowls Club</span>
-                  <span>Serenity Golf Club</span>
+                  <div className="venueCollage" aria-label="Venues where Allen has played">
+                    <span>Serenity Cafe</span>
+                    <span>Sunset Pier Cafe</span>
+                    <span>Cafe 191</span>
+                    <span>Coffee Club</span>
+                    <span>Steakout Restaurant</span>
+                    <span>The Jetty</span>
+                    <span>Bowls Club</span>
+                    <span>Sandstone Tavern</span>
+                  </div>
                 </div>
               </div>
               <div>
