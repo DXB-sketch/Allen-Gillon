@@ -3,7 +3,7 @@ import Link from "next/link";
 export const metadata = {
   title: "Timeless · Allen Gillon",
   description:
-    "Allen and Ann Gillon have made music together since 1967. This is their story.",
+    "Allen and Ann Gillon have made music together for many years. This is their story.",
 };
 
 export default function BiographyPage() {
