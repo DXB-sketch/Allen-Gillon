@@ -140,26 +140,29 @@ export default function BookReader({ manifest }) {
 
       <div className="bkr-controls">
         <button type="button" className="bkr-btn" onClick={() => flip(-1)} aria-label="Previous page">
-          &#8592; Back
+          <span aria-hidden="true">&#8592;</span>
         </button>
         <span className="bkr-counter" aria-live="polite">
           {Math.min(current + 1, pageCount)} / {pageCount}
         </span>
         <button type="button" className="bkr-btn" onClick={() => flip(1)} aria-label="Next page">
-          Forward &#8594;
+          <span aria-hidden="true">&#8594;</span>
         </button>
-        <form className="bkr-jump" onSubmit={goToPage}>
-          <label htmlFor="bkr-jump-input">Go to page</label>
+        <form className="bkr-jump" onSubmit={goToPage} aria-label="Go to page">
+          <label className="visually-hidden" htmlFor="bkr-jump-input">Page number</label>
           <input
             id="bkr-jump-input"
             type="number"
             inputMode="numeric"
             min="1"
             max={pageCount}
+            placeholder="Page"
             value={jump}
             onChange={(e) => setJump(e.target.value)}
           />
-          <button type="submit" className="bkr-btn">Go</button>
+          <button type="submit" aria-label="Open page">
+            <span aria-hidden="true">&#8629;</span>
+          </button>
         </form>
         {hasDownload ? (
           <a className="btn b bkr-download" href={`/books/${slug}/${slug}.pdf`} download>
@@ -167,7 +170,6 @@ export default function BookReader({ manifest }) {
           </a>
         ) : null}
       </div>
-      <p className="bkr-hint">Use the buttons above or drag a page corner. The arrow keys work too.</p>
     </div>
   );
 }

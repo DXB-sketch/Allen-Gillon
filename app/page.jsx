@@ -39,6 +39,10 @@ export default function Page() {
   .homeTestimonial blockquote::before{content:"“";position:absolute;left:0;top:-20px;color:var(--red);font-family:Georgia,serif;font-size:4.3rem;line-height:1;}
   .homeTestimonial blockquote p{margin:0;font-size:1.08rem;line-height:1.65;}
   .homeTestimonial cite{display:block;margin-top:12px;color:var(--soft);font-size:.95rem;font-style:normal;font-weight:700;}
+  .reviewsLink{display:inline-flex;align-items:center;gap:9px;margin-top:18px;color:var(--blue);font-weight:700;
+    text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;}
+  .reviewsLink span{transition:transform .18s ease;}
+  .reviewsLink:hover span,.reviewsLink:focus-visible span{transform:translateX(4px);}
 
   ol.idx{list-style:none;margin:0;padding:0;border-bottom:var(--rule);}
   ol.idx li{display:flex;align-items:center;gap:18px;}
@@ -154,6 +158,9 @@ export default function Page() {
               <blockquote>
                 <p>Popped into the Banksia Beach Art Centre Cafe last Tuesday for their delicious coffee and cakes. Not only did I get that, but was also entertained by solo guitarist Allen Gillon, playing some terrific instrumental music, oldies but goodies. Thoroughly enjoyed it all.</p>
                 <cite>Jan Hanson</cite>
+                <Link className="reviewsLink" href="/reviews">
+                  Read more audience reviews <span aria-hidden="true">&#8594;</span>
+                </Link>
               </blockquote>
             </section>
           </div>
