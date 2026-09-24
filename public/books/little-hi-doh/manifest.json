@@ -1,14 +1,14 @@
 {
   "slug": "little-hi-doh",
-  "title": "Little Hi-Doh",
+  "title": "Hi-Doh",
   "author": "Allen Gillon",
   "section": "childrens",
   "status": "free",
-  "blurb": "A Chinese Chimes story with a gentle moral.",
-  "pageCount": 2,
+  "blurb": "A Chinese Chimes story about learning to listen to others.",
+  "pageCount": 25,
   "aspect": [
-    1080,
-    1526
+    998,
+    1000
   ],
   "hasDownload": true
 }

@@ -40,12 +40,36 @@
     "blurb": "A caper play for young performers."
   },
   {
-    "slug": "little-hi-doh",
-    "title": "Little Hi-Doh",
+    "slug": "funny-fah-learns-when-to-stop",
+    "title": "Funny Fah Learns When to Stop",
     "section": "childrens",
     "status": "free",
-    "pageCount": 2,
-    "blurb": "A Chinese Chimes story with a gentle moral."
+    "pageCount": 34,
+    "blurb": "A Chinese Chimes story about knowing when to stop."
+  },
+  {
+    "slug": "imaginative-little-mee",
+    "title": "Imaginative Little Mee",
+    "section": "childrens",
+    "status": "free",
+    "pageCount": 29,
+    "blurb": "A Chinese Chimes story about imagination and listening."
+  },
+  {
+    "slug": "little-hi-doh",
+    "title": "Hi-Doh",
+    "section": "childrens",
+    "status": "free",
+    "pageCount": 25,
+    "blurb": "A Chinese Chimes story about learning to listen to others."
+  },
+  {
+    "slug": "little-ray",
+    "title": "Little Ray",
+    "section": "childrens",
+    "status": "free",
+    "pageCount": 19,
+    "blurb": "A Chinese Chimes story about anger, friendship and making amends."
   },
   {
     "slug": "practice-in-communication-book-1",
