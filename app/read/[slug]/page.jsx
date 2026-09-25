@@ -1,31 +1,34 @@
 import CommentLink from "../../../components/CommentLink";
-import { readFile, access } from "node:fs/promises";
-import path from "node:path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookReader from "../../../components/BookReader";
 import SyncedStoryReader from "../../../components/SyncedStoryReader";
 import PurchaseLink from "../../../components/PurchaseLink";
 import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
+import bookIndex from "../../../public/books/index.json";
+import breakoutManifest from "../../../public/books/breakout/manifest.json";
+import funnyFahManifest from "../../../public/books/funny-fah-learns-when-to-stop/manifest.json";
+import imaginativeMeeManifest from "../../../public/books/imaginative-little-mee/manifest.json";
+import hiDohManifest from "../../../public/books/little-hi-doh/manifest.json";
+import littleRayManifest from "../../../public/books/little-ray/manifest.json";
+import meltingPotManifest from "../../../public/books/melting-pot/manifest.json";
+import otherMansGrassManifest from "../../../public/books/the-other-mans-grass/manifest.json";
+import sherwoodManifest from "../../../public/books/three-heroes-of-sherwood/manifest.json";
+import calamityJaneManifest from "../../../public/books/tribute-to-calamity-jane/manifest.json";
 
-const BOOKS_DIR = path.join(process.cwd(), "public", "books");
-const exists = (p) => access(p).then(() => true, () => false);
-
-async function readIndex() {
-  try {
-    return JSON.parse(await readFile(path.join(BOOKS_DIR, "index.json"), "utf8"));
-  } catch {
-    return [];
-  }
-}
-
-async function readManifest(slug) {
-  try {
-    return JSON.parse(await readFile(path.join(BOOKS_DIR, slug, "manifest.json"), "utf8"));
-  } catch {
-    return null;
-  }
-}
+// Workers have no runtime filesystem. Keeping these JSON files as static
+// imports lets both Next.js and Cloudflare bundle the complete reader data.
+const manifests = {
+  breakout: breakoutManifest,
+  "funny-fah-learns-when-to-stop": funnyFahManifest,
+  "imaginative-little-mee": imaginativeMeeManifest,
+  "little-hi-doh": hiDohManifest,
+  "little-ray": littleRayManifest,
+  "melting-pot": meltingPotManifest,
+  "the-other-mans-grass": otherMansGrassManifest,
+  "three-heroes-of-sherwood": sherwoodManifest,
+  "tribute-to-calamity-jane": calamityJaneManifest,
+};
 
 // Storybooks that are on YouTube but not yet digitised: keep a plain
 // placeholder page for each until their scans arrive.
@@ -81,15 +84,13 @@ function pageCuesFor(slug) {
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const index = await readIndex();
-  const slugs = new Set([...index.map((b) => b.slug), ...Object.keys(placeholders)]);
+  const slugs = new Set([...bookIndex.map((b) => b.slug), ...Object.keys(placeholders)]);
   return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const index = await readIndex();
-  const entry = index.find((b) => b.slug === slug);
+  const entry = bookIndex.find((b) => b.slug === slug);
   if (entry && entry.status === "free") {
     return {
       title: `${entry.title} · Allen Gillon`,
@@ -118,8 +119,7 @@ export async function generateMetadata({ params }) {
 
 export default async function ReadPage({ params }) {
   const { slug } = await params;
-  const index = await readIndex();
-  const entry = index.find((b) => b.slug === slug);
+  const entry = bookIndex.find((b) => b.slug === slug);
 
   if (!entry && !placeholders[slug]) notFound();
 
@@ -181,14 +181,8 @@ export default async function ReadPage({ params }) {
     );
   }
 
-  const manifest = await readManifest(slug);
+  const manifest = manifests[slug];
   if (!manifest) notFound();
-
-  let ocrText = null;
-  const textPath = path.join(BOOKS_DIR, slug, "text.txt");
-  if (await exists(textPath)) {
-    ocrText = await readFile(textPath, "utf8");
-  }
 
   const backHref = entry.section === "plays" ? "/books#school-plays" : "/books#stories";
   const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to Stories";
@@ -231,11 +225,6 @@ export default async function ReadPage({ params }) {
           ) : (
             <BookReader manifest={readerManifest} />
           )}
-          {ocrText ? (
-            <div className="visually-hidden" aria-label={`Full text of ${manifest.title}`}>
-              {ocrText}
-            </div>
-          ) : null}
           <p style={{ marginTop: "32px" }}>
             <Link className="btn b" href={backHref}>{backLabel}</Link>
           </p>
