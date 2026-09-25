@@ -119,12 +119,15 @@ export default function MusicPage() {
   return (
     <>
       <style>{`
-  .duet{display:grid;grid-template-columns:320px 1fr;gap:36px;align-items:start;padding:40px 0 8px;}
-  .duet .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:1/1;max-width:320px;}
+  .timelessLead{max-width:760px;margin:40px auto 28px;}
+  .timelessLead video{display:block;width:100%;height:auto;border:3px solid var(--ink);border-radius:3px;background:var(--ink);}
+  .duet{display:grid;grid-template-columns:320px 1fr;gap:36px;align-items:start;padding:0 0 8px;}
+  .duet video{display:block;width:100%;max-width:320px;aspect-ratio:1/1;object-fit:contain;border:3px solid var(--ink);border-radius:3px;background:var(--ink);}
   .duet p{font-size:1.1rem;margin:0 0 16px;}
   @media (max-width:820px){
+    .timelessLead{max-width:min(560px,100%);margin-top:32px;}
     .duet{grid-template-columns:1fr;}
-    .duet .gx-hero{max-width:min(240px,65vw);margin:0 auto;}
+    .duet video{max-width:min(320px,82vw);margin:0 auto;}
     .duet h2{text-align:center;}
     .duet p{max-width:34ch;margin:0 auto 16px;}
   }
@@ -166,13 +169,19 @@ export default function MusicPage() {
         <hr className="secrule" />
 
         <section id="timeless" aria-label="The duet Timeless">
+          <div className="wrap">
+            <div className="timelessLead">
+              <video controls playsInline preload="metadata" aria-label="Ann and Allen performing This Masquerade">
+                <source src="/videos/timeless-masquerade.mp4" type="video/mp4" />
+                Your browser does not support video playback.
+              </video>
+            </div>
+          </div>
           <div className="wrap duet">
-            <img
-              className="gx-hero"
-              src="/images/personal/duo-live-on-stage.jpg"
-              alt="The duet Timeless live on stage"
-              loading="lazy"
-            />
+            <video controls playsInline preload="metadata" aria-label="Ann and Allen performing Unforgettable">
+              <source src="/videos/timeless-unforgettable.mp4" type="video/mp4" />
+              Your browser does not support video playback.
+            </video>
             <div>
               <h2 className="script">Timeless, with Ann</h2>
               <p>

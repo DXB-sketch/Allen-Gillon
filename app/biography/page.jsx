@@ -13,6 +13,7 @@ export default function BiographyPage() {
   .bio{display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start;padding:16px 0;}
   .bio aside{display:flex;flex-direction:column;gap:20px;position:sticky;top:20px;}
   .bio aside .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:4/3;}
+  .bio .gx-video{display:block;width:100%;height:auto;border:3px solid var(--ink);border-radius:3px;background:var(--ink);}
   .bio aside figcaption{font-size:.98rem;color:var(--soft);margin-top:6px;}
   .era{font-family:"Dynalight","Times New Roman",cursive;font-size:2.1rem;color:var(--blue);margin:38px 0 8px;line-height:1.1;}
   .era:first-of-type{margin-top:6px;}
@@ -29,6 +30,7 @@ export default function BiographyPage() {
     .bio aside{display:none;}
     .bio figure.inline{display:block;margin:14px auto 6px;max-width:min(280px,78vw);}
     .bio figure.inline .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:4/3;}
+    .bio figure.inline .gx-video{width:100%;}
     .bio figure.inline figcaption{font-size:.95rem;color:var(--soft);margin-top:6px;text-align:center;}
   }
 `}</style>
@@ -81,8 +83,11 @@ export default function BiographyPage() {
 
               <h2 className="era">Timeless</h2>
               <figure className="inline">
-                <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
-                <figcaption>Allen and the Gibson, on the water.</figcaption>
+                <video className="gx-video" controls playsInline preload="metadata" aria-label="Allen performing at Steakout Restaurant">
+                  <source src="/videos/allen-steakout.mp4" type="video/mp4" />
+                  Your browser does not support video playback.
+                </video>
+                <figcaption>Allen performing at Steakout Restaurant.</figcaption>
               </figure>
               <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless, they enjoy playing for diners around Bribie Island. You can <Link href="/hire">book them here</Link>.</p>
             </div>
@@ -109,8 +114,11 @@ export default function BiographyPage() {
                 <figcaption>Ann and Allen on stage.</figcaption>
               </figure>
               <figure>
-                <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
-                <figcaption>Allen and the Gibson, on the water.</figcaption>
+                <video className="gx-video" controls playsInline preload="metadata" aria-label="Allen performing at Steakout Restaurant">
+                  <source src="/videos/allen-steakout.mp4" type="video/mp4" />
+                  Your browser does not support video playback.
+                </video>
+                <figcaption>Allen performing at Steakout Restaurant.</figcaption>
               </figure>
             </aside>
           </div>

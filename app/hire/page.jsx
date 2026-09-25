@@ -64,7 +64,7 @@ export default function HirePage() {
               <ul className="ruled offer">
                 <li>
                   <span className="what">Restaurant guitarist</span>
-                  <span className="how">Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; on That&rsquo;s The Time, or hear more on <Link href="/music">the albums page</Link>.</span>
+                  <span className="how">Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; and &ldquo;Take Five&rdquo; on <Link href="/music">the albums page</Link>.</span>
                 </li>
                 <li>
                   <span className="what">Functions and events</span>
