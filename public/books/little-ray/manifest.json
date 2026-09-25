@@ -6,6 +6,8 @@
   "status": "free",
   "blurb": "A Chinese Chimes story about anger, friendship and making amends.",
   "pageCount": 19,
+  "largePages": true,
+  "sharedCover": "/images/chinese-chimes-together.webp",
   "aspect": [
     1000,
     1000

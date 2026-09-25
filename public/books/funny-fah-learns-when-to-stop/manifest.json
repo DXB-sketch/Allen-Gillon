@@ -6,6 +6,8 @@
   "status": "free",
   "blurb": "A Chinese Chimes story about knowing when to stop.",
   "pageCount": 34,
+  "largePages": true,
+  "sharedCover": "/images/chinese-chimes-together.webp",
   "aspect": [
     1080,
     607

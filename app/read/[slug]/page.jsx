@@ -4,6 +4,7 @@ import path from "node:path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookReader from "../../../components/BookReader";
+import Audiobook from "../../../components/Audiobook";
 import PurchaseLink from "../../../components/PurchaseLink";
 import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
 
@@ -34,6 +35,13 @@ const placeholders = {
   "little-ray": "Little Ray",
 };
 
+const storyAudio = {
+  "funny-fah-learns-when-to-stop": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop.mp3",
+  "imaginative-little-mee": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
+  "little-hi-doh": "/audio/chinese-chimes-audiobooks/hi-doh.mp3",
+  "little-ray": "/audio/chinese-chimes-audiobooks/little-ray.mp3",
+};
+
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
@@ -53,7 +61,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: entry.title,
         description: entry.blurb,
-        images: [{ url: `/books/${slug}/p001.webp` }],
+        images: [{ url: entry.section === "childrens" ? "/images/chinese-chimes-together.webp" : `/books/${slug}/p001.webp` }],
       },
     };
   }
@@ -177,6 +185,11 @@ export default async function ReadPage({ params }) {
       </header>
       <section aria-label={`Read ${manifest.title}`}>
         <div className="wrap">
+          {storyAudio[slug] ? (
+            <div className="reading-audio">
+              <Audiobook title={manifest.title} src={storyAudio[slug]} />
+            </div>
+          ) : null}
           <BookReader manifest={readerManifest} />
           {ocrText ? (
             <div className="visually-hidden" aria-label={`Full text of ${manifest.title}`}>

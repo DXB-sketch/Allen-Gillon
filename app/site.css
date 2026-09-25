@@ -240,13 +240,19 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .bkr-cover-wait{width:min(92vw,460px);border:1px solid oklch(0.85 0.02 92);
   box-shadow:4px 5px 0 oklch(0.85 0.02 92);}
 .bkr-cover-wait img{display:block;width:100%;height:auto;}
+.bkr-shared-cover{width:min(100%,440px);margin:0 auto 20px;text-align:center;}
+.bkr-shared-cover img{display:block;width:100%;height:auto;object-fit:contain;}
+.bkr-shared-cover figcaption{margin-top:5px;color:var(--blue);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;}
+.bkr-single-page{width:min(96vw,1040px);max-width:100%;margin:0 auto;background:white;border:1px solid oklch(0.85 0.02 92);}
+.bkr-single-page img{display:block;width:100%;height:100%;object-fit:contain;background:white;}
+.bkr-large-pages .bkr-stage{padding-top:0;}
 .bkr-controls{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
   border-top:var(--rule);padding-top:18px;}
 .bkr-btn{font-family:"Lora",Georgia,serif;font-size:1.45rem;font-weight:700;line-height:1;
   width:48px;height:48px;padding:0;border-radius:50%;
   border:2px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;}
 .bkr-btn:hover{background:var(--ink);color:var(--on);}
-.bkr-counter{font-variant-numeric:tabular-nums;font-size:1.1rem;min-width:5.5ch;text-align:center;}
+.bkr-counter{font-variant-numeric:tabular-nums;font-size:1.1rem;min-width:9.5ch;text-align:center;}
 .bkr-jump{display:flex;align-items:stretch;height:48px;border:2px solid var(--ink);border-radius:24px;
   overflow:hidden;background:var(--paper);}
 .bkr-jump:focus-within{outline:2px solid var(--blue);outline-offset:2px;}
@@ -255,7 +261,10 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .bkr-jump input::placeholder{color:var(--soft);opacity:1;}
 .bkr-jump button{width:42px;padding:0;border:0;background:transparent;color:var(--ink);font:700 1.25rem/1 "Lora",Georgia,serif;cursor:pointer;}
 .bkr-jump button:hover{background:var(--ink);color:var(--on);}
+.bkr-introduction{min-height:44px;padding:5px 8px;border:0;background:transparent;color:var(--blue);font:700 1rem/1.2 "Lora",Georgia,serif;cursor:pointer;}
+.bkr-introduction:hover{text-decoration:underline;text-underline-offset:4px;}
 .bkr-download{margin-left:6px;}
+.reading-audio{display:flex;justify-content:center;margin:24px 0 4px;}
 @media (max-width:480px){
   .bkr-controls{gap:10px;}
   .bkr-download{margin-left:0;}
@@ -291,16 +300,17 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .btnrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px;}
 .story-grid figcaption{font-size:1.18rem;font-weight:700;margin-top:5px;}
 .audiobook-list{list-style:none;margin:0;padding:0;border-top:var(--rule);}
-.audiobook-list>li{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:18px;align-items:center;padding:24px 0;border-bottom:var(--rule);}
+.audiobook-list>li{display:grid;grid-template-columns:48px 132px minmax(0,1fr) auto;gap:18px;align-items:center;padding:24px 0;border-bottom:var(--rule);}
 .audiobook-number{font-family:"Dynalight","Times New Roman",cursive;font-size:2.4rem;line-height:1;color:var(--red);text-align:center;}
 .audiobook-list>li:nth-child(even) .audiobook-number{color:var(--blue);}
+.audiobook-cover{display:block;width:132px;height:auto;object-fit:cover;}
 .audiobook-copy h3{font-size:1.32rem;}
 .audiobook-copy p{margin:2px 0 7px;color:var(--soft);font-size:.96rem;}
 .audiobook-play{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:4px 0;border:0;background:transparent;
   color:var(--blue);font:inherit;font-size:.98rem;font-weight:700;cursor:pointer;}
 .audiobook-play:hover,.audiobook-play.playing{color:var(--red);}
 .audiobook-play-icon{display:grid;place-items:center;width:36px;height:36px;border:2px solid currentColor;border-radius:50%;font-size:.72rem;}
-.audiobook-actions{display:flex;align-items:center;gap:6px;}
+.audiobook-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
 .story-read-link{display:inline-flex;align-items:center;min-height:44px;padding:4px 8px;color:var(--red-deep);font-weight:700;text-underline-offset:4px;}
 .item-actions{display:flex;align-items:center;gap:6px;margin-top:8px;}
 .item-primary-link{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
@@ -367,7 +377,9 @@ button:disabled{cursor:wait;opacity:.65;}
   .cover-link{width:min(220px,65vw);}
   .music-ornament{display:none;}
   .audiobook-list>li{grid-template-columns:38px minmax(0,1fr);gap:12px 14px;align-items:start;}
-  .audiobook-actions{grid-column:2;justify-content:space-between;}
+  .audiobook-cover,.audiobook-copy,.audiobook-actions{grid-column:2;}
+  .audiobook-cover{width:min(100%,260px);}
+  .audiobook-actions{justify-content:flex-start;}
   .audiobook-number{font-size:2rem;padding-top:4px;}
 }
 @media (max-width:480px){

@@ -6,6 +6,7 @@
   "status": "free",
   "blurb": "A humorous wild-west school play.",
   "pageCount": 21,
+  "contentStartPage": 5,
   "aspect": [
     1080,
     1526

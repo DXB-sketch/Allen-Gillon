@@ -6,6 +6,8 @@
   "status": "free",
   "blurb": "A Chinese Chimes story about learning to listen to others.",
   "pageCount": 25,
+  "largePages": true,
+  "sharedCover": "/images/chinese-chimes-together.webp",
   "aspect": [
     998,
     1000

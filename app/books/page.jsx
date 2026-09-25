@@ -18,6 +18,8 @@ const stories = [
   { video: "cEuPWVPPN0o", title: "Little Ray", readSlug: "little-ray", audio: "/audio/chinese-chimes-audiobooks/little-ray.mp3" },
 ];
 
+const chimesCover = "/images/chinese-chimes-together.webp";
+
 const playOrder = ["melting-pot", "the-other-mans-grass", "tribute-to-calamity-jane", "three-heroes-of-sherwood", "breakout"];
 
 const playAudio = {
@@ -63,7 +65,7 @@ export default async function BooksPage() {
         <div className="wrap">
           <div className="section-heading">
             <h2 className="script" id="stories-title">Chinese Chimes stories</h2>
-            <p>Four stories for young readers, each with a moral. Listen to the audiobooks here or read them online.</p>
+            <p>Four stories for young readers, each with a moral. Read them online or listen to the audiobooks.</p>
           </div>
           <ol className="audiobook-list">
             {stories.map((story, storyIndex) => {
@@ -72,13 +74,14 @@ export default async function BooksPage() {
               return (
                 <li key={story.video}>
                   <span className="audiobook-number" aria-hidden="true">{storyIndex + 1}</span>
+                  <img className="audiobook-cover" src={chimesCover} width="1080" height="607" loading="lazy" alt="The Chinese Chimes together" />
                   <div className="audiobook-copy">
                     <h3>{story.title}</h3>
                     <p>Narrated Chinese Chimes audiobook</p>
-                    <Audiobook title={story.title} src={story.audio} />
                   </div>
                   <div className="audiobook-actions">
                     <Link className="story-read-link" href={`/read/${story.readSlug}`}>Read the book</Link>
+                    <Audiobook title={story.title} src={story.audio} />
                     <details className="more-menu">
                       <summary aria-label={`More options for ${story.title}`}><span aria-hidden="true">⋯</span></summary>
                       <div className="more-popover">

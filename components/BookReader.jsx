@@ -9,10 +9,21 @@ const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });
 const WINDOW = 2;
 
 export default function BookReader({ manifest }) {
-  const { slug, pageCount, aspect, hasDownload, title } = manifest;
+  const {
+    slug,
+    pageCount,
+    aspect,
+    hasDownload,
+    title,
+    contentStartPage = 1,
+    largePages = false,
+    sharedCover = null,
+  } = manifest;
   const [w, h] = aspect;
+  const contentStartIndex = Math.min(Math.max(contentStartPage - 1, 0), pageCount - 1);
+  const readablePageCount = pageCount - contentStartIndex;
   const bookRef = useRef(null);
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(contentStartIndex);
   const [mounted, setMounted] = useState(false);
   const [portrait, setPortrait] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -46,11 +57,24 @@ export default function BookReader({ manifest }) {
   }, [mounted, current, pageCount, slug]);
 
   const flip = useCallback((dir) => {
+    if (largePages) {
+      setCurrent((page) => Math.min(Math.max(page + dir, 0), pageCount - 1));
+      return;
+    }
     const api = bookRef.current?.pageFlip?.();
     if (!api) return;
     if (dir > 0) api.flipNext();
     else api.flipPrev();
-  }, []);
+  }, [largePages, pageCount]);
+
+  const openPhysicalPage = useCallback((page) => {
+    const target = Math.min(Math.max(page, 0), pageCount - 1);
+    if (largePages) setCurrent(target);
+    else {
+      const api = bookRef.current?.pageFlip?.();
+      if (api) api.flip(target);
+    }
+  }, [largePages, pageCount]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -68,11 +92,10 @@ export default function BookReader({ manifest }) {
     e.preventDefault();
     const n = parseInt(jump, 10);
     if (Number.isNaN(n)) return;
-    const target = Math.min(Math.max(n, 1), pageCount) - 1;
-    const api = bookRef.current?.pageFlip?.();
-    if (api) api.flip(target);
+    const target = contentStartIndex + Math.min(Math.max(n, 1), readablePageCount) - 1;
+    openPhysicalPage(target);
     setJump("");
-  }, [jump, pageCount]);
+  }, [contentStartIndex, jump, openPhysicalPage, readablePageCount]);
 
   // Pages: cover plus anything near the current spread get a real image;
   // everything else is a paper-coloured placeholder at the same aspect.
@@ -99,10 +122,31 @@ export default function BookReader({ manifest }) {
     return out;
   }, [pageCount, current, slug, title, w, h]);
 
+  const imageNumber = String(current + 1).padStart(3, "0");
+  const counter = current < contentStartIndex
+    ? `Introduction ${current + 1} / ${contentStartIndex}`
+    : `Page ${current - contentStartIndex + 1} / ${readablePageCount}`;
+
   return (
-    <div className="bkr">
+    <div className={"bkr" + (largePages ? " bkr-large-pages" : "")}>
+      {sharedCover ? (
+        <figure className="bkr-shared-cover">
+          <img src={sharedCover} width="1080" height="607" alt="The Chinese Chimes together" />
+          <figcaption>The Chinese Chimes</figcaption>
+        </figure>
+      ) : null}
       <div className="bkr-stage">
-        {mounted ? (
+        {mounted && largePages ? (
+          <div className="bkr-single-page" style={{ aspectRatio: `${w} / ${h}` }}>
+            <img
+              src={`/books/${slug}/p${imageNumber}.webp`}
+              alt={`Page ${current + 1} of ${title}`}
+              width={w}
+              height={h}
+              decoding="async"
+            />
+          </div>
+        ) : mounted ? (
           <HTMLFlipBook
             key={portrait ? "portrait" : "spread"}
             ref={bookRef}
@@ -128,8 +172,8 @@ export default function BookReader({ manifest }) {
         ) : (
           <div className="bkr-cover-wait" style={{ aspectRatio: `${w} / ${h}` }}>
             <img
-              src={`/books/${slug}/p001.webp`}
-              alt={`Cover of ${title}`}
+              src={`/books/${slug}/p${String(contentStartIndex + 1).padStart(3, "0")}.webp`}
+              alt={`Opening page of ${title}`}
               width={w}
               height={h}
               decoding="async"
@@ -143,7 +187,7 @@ export default function BookReader({ manifest }) {
           <span aria-hidden="true">&#8592;</span>
         </button>
         <span className="bkr-counter" aria-live="polite">
-          {Math.min(current + 1, pageCount)} / {pageCount}
+          {counter}
         </span>
         <button type="button" className="bkr-btn" onClick={() => flip(1)} aria-label="Next page">
           <span aria-hidden="true">&#8594;</span>
@@ -155,7 +199,7 @@ export default function BookReader({ manifest }) {
             type="number"
             inputMode="numeric"
             min="1"
-            max={pageCount}
+            max={readablePageCount}
             placeholder="Page"
             value={jump}
             onChange={(e) => setJump(e.target.value)}
@@ -164,6 +208,11 @@ export default function BookReader({ manifest }) {
             <span aria-hidden="true">&#8629;</span>
           </button>
         </form>
+        {contentStartIndex > 0 ? (
+          <button type="button" className="bkr-introduction" onClick={() => openPhysicalPage(0)}>
+            Introduction
+          </button>
+        ) : null}
         {hasDownload ? (
           <a className="btn b bkr-download" href={`/books/${slug}/${slug}.pdf`} download>
             Download PDF
