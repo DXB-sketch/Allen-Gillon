@@ -159,7 +159,7 @@ export default function Page() {
                 <p>Popped into the Banksia Beach Art Centre Cafe last Tuesday for their delicious coffee and cakes. Not only did I get that, but was also entertained by solo guitarist Allen Gillon, playing some terrific instrumental music, oldies but goodies. Thoroughly enjoyed it all.</p>
                 <cite>Jan Hanson</cite>
                 <Link className="reviewsLink" href="/reviews">
-                  Read more audience reviews <span aria-hidden="true">&#8594;</span>
+                  See Friendly reviews <span aria-hidden="true">&#8594;</span>
                 </Link>
               </blockquote>
             </section>

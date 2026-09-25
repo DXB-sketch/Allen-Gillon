@@ -1,7 +1,8 @@
 import Link from "next/link";
+import FriendlyReviewForm from "../../components/FriendlyReviewForm";
 
 export const metadata = {
-  title: "Reviews · Allen Gillon",
+  title: "Friendly reviews · Allen Gillon",
   description: "Comments from people who have heard Allen Gillon play around Bribie Island.",
 };
 
@@ -31,6 +32,24 @@ export default function ReviewsPage() {
         .tableComments h2{margin:0;color:var(--ink);font-size:1.08rem;line-height:1.4;}
         .tableComments ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 clamp(24px,6vw,70px);list-style:none;margin:0;padding:0;}
         .tableComments li{padding:0 0 14px;margin:0 0 14px;border-bottom:1px solid oklch(.22 .02 300 / .18);font-size:1.08rem;font-style:italic;}
+        .addReview{display:grid;grid-template-columns:minmax(180px,280px) minmax(0,1fr);gap:clamp(28px,7vw,90px);padding:44px 0;border-top:var(--rule);}
+        .reviewFormIntro h2{margin:3px 0 12px;font-size:clamp(1.65rem,3vw,2.25rem);}
+        .reviewFormIntro p{margin:0;color:var(--soft);}
+        .reviewFormIntro .reviewKicker{color:var(--red);font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;}
+        .friendlyReviewForm{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;}
+        .friendlyReviewForm label{display:flex;flex-direction:column;gap:7px;font-weight:700;font-size:1rem;}
+        .friendlyReviewForm label span{color:var(--soft);font-weight:400;}
+        .friendlyReviewForm input,.friendlyReviewForm textarea{width:100%;padding:10px 2px;font:inherit;font-size:1rem;color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--ink);border-radius:0;}
+        .friendlyReviewForm textarea{padding:10px;border:1px solid oklch(.22 .02 300 / .5);resize:vertical;}
+        .friendlyReviewForm input:focus,.friendlyReviewForm textarea:focus{outline:2px solid var(--blue);outline-offset:3px;}
+        .friendlyReviewForm .reviewField{grid-column:1/-1;}
+        .friendlyReviewForm .btn{grid-column:1/-1;justify-self:start;border:0;cursor:pointer;}
+        .savedReviews{grid-column:2;margin-top:2px;}
+        .savedReviews h3{margin:0 0 14px;font-size:1.1rem;color:var(--blue);}
+        .savedReviews article{padding:18px 0;border-top:1px solid oklch(.22 .02 300 / .2);}
+        .savedReviews blockquote{margin:0;font-size:1.08rem;line-height:1.6;}
+        .savedReviews article p{margin:8px 0;color:var(--soft);font-weight:700;}
+        .savedReviews article button{padding:0;border:0;background:transparent;color:var(--blue);font:inherit;font-size:.9rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
         .reviewsBack{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-weight:700;text-decoration:none;}
         .reviewsBack:hover{text-decoration:underline;text-underline-offset:4px;}
         @media (max-width:680px){
@@ -39,18 +58,21 @@ export default function ReviewsPage() {
           .featuredReview,.tableComments{grid-template-columns:1fr;gap:18px;}
           .featuredReview blockquote{padding-left:32px;}
           .tableComments ul{grid-template-columns:1fr;}
+          .addReview{grid-template-columns:1fr;gap:24px;}
+          .friendlyReviewForm{grid-template-columns:1fr;}
+          .friendlyReviewForm .reviewField,.friendlyReviewForm .btn,.savedReviews{grid-column:1;}
         }
       `}</style>
       <main>
         <header className="reviewsHead">
           <div className="wrap">
             <p className="eyebrow">In their own words</p>
-            <h1 className="script">Reviews</h1>
+            <h1 className="script">Friendly reviews</h1>
             <p className="intro">Comments from people who have heard Allen play around Bribie Island.</p>
           </div>
         </header>
 
-        <section className="reviewsBody" aria-label="Audience reviews">
+        <section className="reviewsBody" aria-label="Friendly reviews">
           <div className="wrap">
             <article className="featuredReview">
               <p className="reviewPlace">Banksia Beach Art Centre Cafe</p>
@@ -68,6 +90,8 @@ export default function ReviewsPage() {
                 ))}
               </ul>
             </section>
+
+            <FriendlyReviewForm />
 
             <Link className="reviewsBack" href="/">
               <span aria-hidden="true">&#8592;</span> Back home

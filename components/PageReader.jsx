@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 function pageText() {
@@ -15,6 +15,8 @@ function pageText() {
 
 const maleNames = /\b(james|david|mark|george|guy|ryan|william|daniel|thomas|liam|michael|alex)\b/i;
 const femaleNames = /\b(catherine|zira|susan|hazel|samantha|karen|natasha|jenny|aria|sara|michelle|sonia|libby)\b/i;
+const PLAYBACK_EVENT = "allen:playback-start";
+const READER_SOURCE = "page-reader";
 
 function preferredVoice(voices, gender) {
   const english = voices.filter((voice) => voice.lang.toLowerCase().startsWith("en"));
@@ -59,16 +61,25 @@ export default function PageReader() {
     return () => { run.current += 1; window.speechSynthesis?.cancel(); };
   }, [pathname]);
 
-  function stop() {
+  const stop = useCallback(() => {
     run.current += 1;
-    window.speechSynthesis.cancel();
+    window.speechSynthesis?.cancel();
     setStatus("idle");
-  }
+  }, []);
+
+  useEffect(() => {
+    const stopForAnotherReader = (event) => {
+      if (event.detail?.source !== READER_SOURCE) stop();
+    };
+    window.addEventListener(PLAYBACK_EVENT, stopForAnotherReader);
+    return () => window.removeEventListener(PLAYBACK_EVENT, stopForAnotherReader);
+  }, [stop]);
 
   function start() {
     const chunks = pageText();
     if (!chunks.length) return;
     stop();
+    window.dispatchEvent(new CustomEvent(PLAYBACK_EVENT, { detail: { source: READER_SOURCE } }));
     const currentRun = run.current;
     const voice = voices.find((item) => item.name === voiceName);
     let index = 0;

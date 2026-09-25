@@ -6,6 +6,12 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
    and a sticky now-playing bar with a seek control. No accounts, no autoplay. */
 
 const PlayerContext = createContext(null);
+const PLAYBACK_EVENT = "allen:playback-start";
+const PLAYER_SOURCE = "shared-audio-player";
+
+function announceAudioPlayback() {
+  window.dispatchEvent(new CustomEvent(PLAYBACK_EVENT, { detail: { source: PLAYER_SOURCE } }));
+}
 
 function fmt(s) {
   if (!isFinite(s)) return "0:00";
@@ -20,6 +26,15 @@ export function PlayerProvider({ children }) {
   const playlistRef = useRef(null); /* [{src, name, time}] | null */
   const [current, setCurrent] = useState(null);
   const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    const stopForAnotherReader = (event) => {
+      if (event.detail?.source === PLAYER_SOURCE) return;
+      audioRef.current?.pause();
+    };
+    window.addEventListener(PLAYBACK_EVENT, stopForAnotherReader);
+    return () => window.removeEventListener(PLAYBACK_EVENT, stopForAnotherReader);
+  }, []);
 
   const getAudio = useCallback(() => {
     if (!audioRef.current) {
@@ -51,10 +66,14 @@ export function PlayerProvider({ children }) {
     (track, playlist) => {
       const audio = getAudio();
       if (currentRef.current && currentRef.current.src === track.src) {
-        if (audio.paused) audio.play();
+        if (audio.paused) {
+          announceAudioPlayback();
+          audio.play();
+        }
         else audio.pause();
         return;
       }
+      announceAudioPlayback();
       playlistRef.current = playlist;
       currentRef.current = { src: track.src, name: track.name };
       setCurrent(currentRef.current);
@@ -67,7 +86,10 @@ export function PlayerProvider({ children }) {
   const togglePause = useCallback(() => {
     const audio = audioRef.current;
     if (!audio || !currentRef.current) return;
-    if (audio.paused) audio.play();
+    if (audio.paused) {
+      announceAudioPlayback();
+      audio.play();
+    }
     else audio.pause();
   }, []);
 
