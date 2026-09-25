@@ -20,6 +20,11 @@ const stories = [
 
 const playOrder = ["melting-pot", "the-other-mans-grass", "tribute-to-calamity-jane", "three-heroes-of-sherwood", "breakout"];
 
+const playAudio = {
+  "melting-pot": "/audio/school-play-audiobooks/melting-pot.mp3",
+  breakout: "/audio/school-play-audiobooks/breakout.mp3",
+};
+
 const teachingCovers = {
   "practice-in-communication-book-1": "/images/books/practice-in-communication-book-1.webp",
   "practice-in-communication-book-2": "/images/books/practice-in-communication-book-2.webp",
@@ -107,6 +112,7 @@ export default async function BooksPage() {
                 <div>
                   <h3>{play.title}</h3>
                   <p>{play.blurb} {play.pageCount} pages.</p>
+                  {playAudio[play.slug] ? <Audiobook title={play.title} src={playAudio[play.slug]} kind="play recording" /> : null}
                   <div className="item-actions">
                     <Link className="item-primary-link" href={`/read/${play.slug}`}>Read online</Link>
                     <details className="more-menu">
