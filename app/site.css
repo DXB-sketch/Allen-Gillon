@@ -264,7 +264,8 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .bkr-introduction{min-height:44px;padding:5px 8px;border:0;background:transparent;color:var(--blue);font:700 1rem/1.2 "Lora",Georgia,serif;cursor:pointer;}
 .bkr-introduction:hover{text-decoration:underline;text-underline-offset:4px;}
 .bkr-download{margin-left:6px;}
-.reading-audio{display:flex;justify-content:center;margin:24px 0 4px;}
+.reading-audio{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:24px 0 4px;}
+.reading-audio-note{margin:0;color:var(--soft);font-size:.92rem;}
 @media (max-width:480px){
   .bkr-controls{gap:10px;}
   .bkr-download{margin-left:0;}

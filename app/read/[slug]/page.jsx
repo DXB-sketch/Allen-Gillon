@@ -4,7 +4,7 @@ import path from "node:path";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import BookReader from "../../../components/BookReader";
-import Audiobook from "../../../components/Audiobook";
+import SyncedStoryReader from "../../../components/SyncedStoryReader";
 import PurchaseLink from "../../../components/PurchaseLink";
 import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
 
@@ -41,6 +41,42 @@ const storyAudio = {
   "little-hi-doh": "/audio/chinese-chimes-audiobooks/hi-doh.mp3",
   "little-ray": "/audio/chinese-chimes-audiobooks/little-ray.mp3",
 };
+
+// These page samples came from the original story videos used to digitise the
+// books. Midpoints between samples approximate each original page turn; the
+// cues are then scaled to the matching ElevenLabs narration.
+const storyPageTiming = {
+  "funny-fah-learns-when-to-stop": {
+    samples: [2, 15, 39, 69, 95, 110, 127, 140, 153, 172, 183, 198, 215, 230, 250, 278, 302, 326, 354, 371, 379, 406, 417, 448, 458, 484, 492, 516, 530, 544, 566, 587, 609, 636],
+    sourceDuration: 647,
+    audioDuration: 746.89,
+  },
+  "imaginative-little-mee": {
+    samples: [2, 16, 31, 48, 65, 84, 104, 123, 138, 161, 183, 199, 207, 224, 240, 245, 252, 265, 301, 335, 361, 392, 426, 452, 473, 488, 507, 522, 537],
+    sourceDuration: 645,
+    audioDuration: 439.93,
+  },
+  "little-hi-doh": {
+    samples: [4, 28, 50, 75, 97, 118, 134, 142, 156, 170, 182, 197, 212, 228, 244, 261, 273, 286, 301, 306, 316, 332, 345, 352, 362],
+    sourceDuration: 372,
+    audioDuration: 302.5,
+  },
+  "little-ray": {
+    samples: [5, 23, 46, 70, 90, 106, 123, 139, 154, 174, 192, 207, 219, 236, 266, 298, 325, 348, 372],
+    sourceDuration: 387,
+    audioDuration: 325.33,
+  },
+};
+
+function pageCuesFor(slug) {
+  const timing = storyPageTiming[slug];
+  if (!timing) return null;
+  return timing.samples.map((sample, index, samples) => {
+    if (index === 0) return 0;
+    const boundary = (samples[index - 1] + sample) / 2;
+    return Number(((boundary / timing.sourceDuration) * timing.audioDuration).toFixed(2));
+  });
+}
 
 export const dynamicParams = false;
 
@@ -158,6 +194,7 @@ export default async function ReadPage({ params }) {
   const backLabel = entry.section === "plays" ? "Back to School Plays" : "Back to Stories";
   const isPlay = entry.section === "plays";
   const readerManifest = isPlay ? { ...manifest, hasDownload: false } : manifest;
+  const storyPageCues = pageCuesFor(slug);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -185,12 +222,15 @@ export default async function ReadPage({ params }) {
       </header>
       <section aria-label={`Read ${manifest.title}`}>
         <div className="wrap">
-          {storyAudio[slug] ? (
-            <div className="reading-audio">
-              <Audiobook title={manifest.title} src={storyAudio[slug]} />
-            </div>
-          ) : null}
-          <BookReader manifest={readerManifest} />
+          {storyAudio[slug] && storyPageCues ? (
+            <SyncedStoryReader
+              manifest={readerManifest}
+              audioSrc={storyAudio[slug]}
+              pageCues={storyPageCues}
+            />
+          ) : (
+            <BookReader manifest={readerManifest} />
+          )}
           {ocrText ? (
             <div className="visually-hidden" aria-label={`Full text of ${manifest.title}`}>
               {ocrText}

@@ -8,7 +8,7 @@ const HTMLFlipBook = dynamic(() => import("react-pageflip"), { ssr: false });
 // How many pages either side of the current one get a real <img>.
 const WINDOW = 2;
 
-export default function BookReader({ manifest }) {
+export default function BookReader({ manifest, followPage = null }) {
   const {
     slug,
     pageCount,
@@ -75,6 +75,13 @@ export default function BookReader({ manifest }) {
       if (api) api.flip(target);
     }
   }, [largePages, pageCount]);
+
+  // The Chinese Chimes audiobooks can provide the physical page currently
+  // being narrated. Seeking in the shared player updates the page as well.
+  useEffect(() => {
+    if (!Number.isInteger(followPage)) return;
+    openPhysicalPage(followPage);
+  }, [followPage, openPhysicalPage]);
 
   useEffect(() => {
     const onKey = (e) => {
