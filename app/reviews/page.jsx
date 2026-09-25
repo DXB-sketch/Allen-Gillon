@@ -44,12 +44,14 @@ export default function ReviewsPage() {
         .friendlyReviewForm input:focus,.friendlyReviewForm textarea:focus{outline:2px solid var(--blue);outline-offset:3px;}
         .friendlyReviewForm .reviewField{grid-column:1/-1;}
         .friendlyReviewForm .btn{grid-column:1/-1;justify-self:start;border:0;cursor:pointer;}
+        .friendlyReviewForm .btn:disabled{cursor:wait;opacity:.68;}
+        .friendlyReviewForm .reviewTrap{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+        .reviewStatus{grid-column:1/-1;margin:0;color:var(--blue);font-weight:700;}
         .savedReviews{grid-column:2;margin-top:2px;}
         .savedReviews h3{margin:0 0 14px;font-size:1.1rem;color:var(--blue);}
         .savedReviews article{padding:18px 0;border-top:1px solid oklch(.22 .02 300 / .2);}
         .savedReviews blockquote{margin:0;font-size:1.08rem;line-height:1.6;}
         .savedReviews article p{margin:8px 0;color:var(--soft);font-weight:700;}
-        .savedReviews article button{padding:0;border:0;background:transparent;color:var(--blue);font:inherit;font-size:.9rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer;}
         .reviewsBack{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-weight:700;text-decoration:none;}
         .reviewsBack:hover{text-decoration:underline;text-underline-offset:4px;}
         @media (max-width:680px){

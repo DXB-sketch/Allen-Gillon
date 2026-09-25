@@ -6,19 +6,35 @@
     "build": "next build",
     "build:books": "node scripts/build-books.mjs",
     "start": "next start",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "dev:vinext": "vinext dev --port 3001",
+    "build:vinext": "vinext build",
+    "start:vinext": "wrangler dev --config dist/server/wrangler.json",
+    "deploy:vinext": "vinext-cloudflare deploy --config dist/server/wrangler.json",
+    "reviews:migrate:local": "wrangler d1 migrations apply allen-gillon-reviews --local",
+    "reviews:migrate:remote": "wrangler d1 migrations apply allen-gillon-reviews --remote",
+    "reviews:pending": "wrangler d1 execute allen-gillon-reviews --remote --command \"SELECT id, name, place, body, created_at FROM reviews WHERE status = 'pending' ORDER BY created_at ASC\""
   },
   "dependencies": {
     "@napi-rs/canvas": "0.1.65",
+    "@vinext/cloudflare": "^1.0.0-beta.10",
     "jszip": "^3.10.1",
-    "next": "^15",
+    "next": "^16.3.6",
     "pdfjs-dist": "4.10.38",
     "react": "^19",
     "react-dom": "^19",
     "react-pageflip": "2.0.3",
-    "sharp": "0.34.3"
+    "react-server-dom-webpack": "^19.3.0",
+    "sharp": "^0.35.4",
+    "vinext": "^1.0.0-beta.12"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.5.8"
-  }
+    "@cloudflare/vite-plugin": "^1.60.0",
+    "@electric-sql/pglite": "^0.5.8",
+    "@vitejs/plugin-react": "^6.1.1",
+    "@vitejs/plugin-rsc": "^0.5.35",
+    "vite": "^8.3.1",
+    "wrangler": "^4.139.0"
+  },
+  "type": "module"
 }

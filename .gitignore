@@ -6,3 +6,6 @@ scripts/incoming/
 .env*
 !.env.example
 art-review/
+/dist/
+.vinext/
+.wrangler/
