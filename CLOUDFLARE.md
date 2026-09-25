@@ -5,8 +5,8 @@ The site runs on Cloudflare Workers through vinext. Visitor reviews are stored i
 ## First deployment
 
 1. Build the Worker with `npm run build:vinext`.
-2. Deploy it with `npm run deploy:vinext`. Wrangler provisions the D1 database declared in `wrangler.jsonc` when it does not already exist.
-3. Apply the database schema with `npm run reviews:migrate:remote`.
+2. Deploy it with `npm run deploy:vinext`. The Worker uses the production D1 database declared in `wrangler.jsonc`.
+3. Apply any new database migrations with `npm run reviews:migrate:remote`.
 4. Open `/reviews` on the deployed Worker and submit a test review.
 
 The existing Next.js build remains available through `npm run build` while the Cloudflare migration is being completed.

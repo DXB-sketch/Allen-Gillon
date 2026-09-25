@@ -9,3 +9,4 @@ art-review/
 /dist/
 .vinext/
 .wrangler/
+worker-configuration.d.ts
