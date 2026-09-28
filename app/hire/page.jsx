@@ -16,8 +16,6 @@ export default function HirePage() {
   .offer li{padding:16px 0;display:flex;flex-direction:column;gap:2px;}
   .offer .what{font-size:1.3rem;font-weight:700;}
   .offer .how{color:var(--soft);font-size:1.05rem;max-width:52ch;}
-  .offer .ytlinks{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
-  .offer .ytlinks a{font-size:1.1rem;}
   .book{margin-top:8px;background:var(--ink);color:var(--on);border-radius:3px;}
   .book .pad{padding:32px 30px 34px;}
   .book h2{margin:0 0 8px;}
@@ -69,15 +67,6 @@ export default function HirePage() {
                 <li>
                   <span className="what">Functions and events</span>
                   <span className="how">Allen plays weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him about the occasion and he will shape the set around it.</span>
-                </li>
-                <li>
-                  <span className="what">Allen and Ann on YouTube</span>
-                  <span className="how ytlinks">
-                    <a href="https://www.youtube.com/watch?v=MRRzSDKg_hg" target="_blank" rel="noopener">Allen Gillon Cavatina</a>
-                    <a href="https://www.youtube.com/watch?v=WKoBhThrn8o" target="_blank" rel="noopener">Allen Gillon Sleep Walk</a>
-                    <a href="https://www.youtube.com/watch?v=G7lyKx7fK4s" target="_blank" rel="noopener">Ann Gillon Body and Soul</a>
-                    <a href="https://www.youtube.com/watch?v=Bf6CuHArmDw" target="_blank" rel="noopener">Ann Gillon Embraceable You</a>
-                  </span>
                 </li>
               </ul>
             </div>

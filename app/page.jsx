@@ -17,7 +17,6 @@ export default function Page() {
   .photoCollage{position:relative;aspect-ratio:.88/1;}
   .heroPhotos .mainPhoto{width:78%;border:1px solid var(--ink);aspect-ratio:1/1;object-fit:cover;display:block;box-shadow:7px 8px 0 oklch(0.22 0.02 300 / .1);}
   .heroPhotos .smallPhoto{position:absolute;width:38%;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--ink);background:var(--paper);box-shadow:5px 6px 0 oklch(0.22 0.02 300 / .16);}
-  .heroPhotos .photoTwo{right:0;top:8%;transform:rotate(4deg);}
   .heroPhotos .photoThree{right:0;bottom:6%;width:47%;aspect-ratio:1/1;object-position:center;transform:rotate(-5deg);z-index:3;}
   .venueCollage{position:absolute;left:0;bottom:0;width:50%;height:29%;display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,1fr);align-items:center;gap:2px 9px;
@@ -63,7 +62,6 @@ export default function Page() {
     .heroGrid{grid-template-columns:1fr;gap:28px;}
     .photoCollage{aspect-ratio:.88/1;max-width:680px;margin:0 auto;}
     .heroPhotos .mainPhoto{width:76%;}
-    .heroPhotos .smallPhoto{width:36%;}
     .heroPhotos .photoThree{right:0;bottom:6%;width:48%;}
     ol.idx a{font-size:1.18rem;min-height:64px;}
     .idx-art,.idx-empty{width:68px;height:68px;}
@@ -73,7 +71,6 @@ export default function Page() {
   @media (max-width:520px){
     .photoCollage{aspect-ratio:.77/1;}
     .heroPhotos .mainPhoto{width:82%;}
-    .heroPhotos .photoTwo{width:38%;right:0;top:7%;}
     .heroPhotos .photoThree{width:53%;right:0;bottom:7%;object-position:center;}
     .venueCollage{width:46%;height:33%;gap:2px 6px;}
     .venueCollage span:nth-child(1){font-size:1.15rem;}
@@ -100,7 +97,6 @@ export default function Page() {
                       src="/images/personal/allen-playing-red-gibson-waterfront.jpg"
                       alt="Allen playing his red Gibson on the Bribie Island waterfront"
                     />
-                    <img className="smallPhoto photoTwo" src="/images/personal/allen-playing-chandler-theatre.jpg" alt="Allen playing guitar at Chandler Theatre" />
                     <img className="smallPhoto photoThree" src="/images/personal/current-allen-and-ann-bribie-cap.jpg" alt="Allen and Ann wearing sunglasses at Bribie Island" />
                     <div className="venueCollage" aria-label="Venues where Allen has played">
                       <span>Serenity Cafe</span>
