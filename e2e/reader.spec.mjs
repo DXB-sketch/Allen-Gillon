@@ -136,11 +136,20 @@ test("the cover opens once, to the first content page", async ({ page }) => {
   await expect(page.locator(".bkr-counter")).toHaveText("Pages 6 and 7 of 98", { timeout: 5000 });
 });
 
-for (const path of ["/read/little-ray", "/read/melting-pot", "/read/practice-in-communication-book-1", "/read/little-ray/text"]) {
-  test(`axe: ${path} has no WCAG A/AA violations`, async ({ page }) => {
-    await page.goto(`${OTHER}${path}`, { waitUntil: "load" });
-    await page.waitForTimeout(1500);
-    const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
-    expect(results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
-  });
+const AXE_ROUTES = ["/read/little-ray", "/read/melting-pot", "/read/practice-in-communication-book-1", "/read/little-ray/text", "/read/riddled-with-language/text"];
+for (const width of [375, 1280]) {
+  for (const path of AXE_ROUTES) {
+    test(`axe at ${width}px: ${path} has no WCAG A/AA violations`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(`${OTHER}${path}`, { waitUntil: "load" });
+      await page.waitForTimeout(1500);
+      /* Open the words panel and the Go to page form too, so they are checked. */
+      for (const name of ["Show the words on this page", "Go to page"]) {
+        const button = page.getByRole("button", { name, exact: true });
+        if (await button.count()) await button.click();
+      }
+      const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
+      expect(results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
+    });
+  }
 }
