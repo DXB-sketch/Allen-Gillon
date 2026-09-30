@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HireSpotlight from "../../../components/illustrations/HireSpotlight";
 import "./hire.css";
 
 export const metadata = {
@@ -7,39 +8,62 @@ export const metadata = {
     "Book Allen Gillon to play guitar at your venue around Bribie Island and South East Queensland.",
 };
 
+const FACEBOOK = "https://www.facebook.com/people/Allen-Gillon/100011388424486/";
+
+const DINERS = ["Beautiful.", "Unforgettable.", "I love Al’s light jazz.", "Pour me another glass."];
+
 export default function HirePage() {
   return (
-    <main>
+    <main className="hire">
       <header className="pagehead band">
         <h1 className="script">Bookings</h1>
         <p className="plain">Light jazz guitar for restaurants where people are eating, drinking and enjoying themselves. Allen has been doing exactly this for many years, and he still loves a full diary.</p>
       </header>
 
-      <section className="book-band band ink" aria-label="Bookings">
-        <h2 className="script">Book a date</h2>
-        <p>Speak with Allen directly. Tell him the date and venue you have in mind. You can also reach Allen on Facebook.</p>
+      {/* The page's one primary thing: the number to text. TODO(human): add a
+          tel: link here only once Allen confirms he takes phone calls. */}
+      <section id="booking" className="book-band band ink" aria-labelledby="book-a-date">
+        <h2 className="script" id="book-a-date">Book a date</h2>
+        <HireSpotlight className="spotlight" ground="ink" draw />
         <div className="phones">
-          <a href="sms:+61438747882">Text 0438 747 882</a>
-          <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
+          <a className="sms" href="sms:+61438747882">
+            <span className="sms-verb">Text</span> <span className="sms-number">0438 747 882</span>
+          </a>
+          <p>Speak with Allen directly. Tell him the date and venue you have in mind. You can also reach <a href={FACEBOOK} target="_blank" rel="noopener">Allen on Facebook</a>.</p>
         </div>
       </section>
 
-      <section className="hire-offers band">
+      <section className="hire-offers band" aria-label="What Allen plays">
         <ul className="offer">
           <li>
-            <span className="what">Restaurant guitarist</span>
-            <span className="how">Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; and &ldquo;Take Five&rdquo; on <Link href="/music">the albums page</Link>.</span>
+            <h2>Restaurant guitarist</h2>
+            <p>Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; and &ldquo;Take Five&rdquo; on <Link href="/music">the albums page</Link>.</p>
           </li>
           <li>
-            <span className="what">Functions and events</span>
-            <span className="how">Allen plays weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him about the occasion and he will shape the set around it.</span>
+            <h2>Functions and events</h2>
+            <p>Allen plays weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him about the occasion and he will shape the set around it.</p>
           </li>
         </ul>
-        <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
+        <img
+          className="gx-hero"
+          src="/images/personal/duo-live-on-stage.jpg"
+          alt="Allen in a flat cap playing his red Gibson on a dark stage, with Ann singing at a microphone across from him and a stage light glowing between them"
+          width="1080"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
       </section>
 
-      <section className="diners band" aria-label="What diners say">
-        <p>Heard between courses: &ldquo;Beautiful.&rdquo; &ldquo;Unforgettable.&rdquo; &ldquo;I love Al&rsquo;s light jazz.&rdquo; &ldquo;Pour me another glass.&rdquo;</p>
+      <section className="diners band" aria-labelledby="diners-say">
+        <h2 id="diners-say">Heard between courses</h2>
+        <ul>
+          {DINERS.map((line) => (
+            <li key={line}>
+              <span className="qm">&ldquo;</span>{line}<span className="qm">&rdquo;</span>
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
