@@ -1,0 +1,468 @@
+{
+  "main": {
+    "/": {
+      "url": "/og/main/home.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Allen Gillon. Guitarist on Bribie Island"
+    },
+    "/hire": {
+      "url": "/og/main/hire.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Book a guitarist. Bribie Island, Moreton Bay, Brisbane and the Sunshine Coast"
+    },
+    "/music": {
+      "url": "/og/main/music.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Free guitar albums. Jazz and easy listening by Allen Gillon"
+    },
+    "/reviews": {
+      "url": "/og/main/reviews.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Reviews. What listeners say about Allen Gillon"
+    },
+    "/shows": {
+      "url": "/og/main/shows.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Shows. Allen Gillon on stage, then and now"
+    },
+    "/privacy": {
+      "url": "/og/main/privacy.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Privacy. How allengillon.com handles your details"
+    },
+    "/terms": {
+      "url": "/og/main/terms.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Terms. Buying from Allen Gillon and Ann Gillon"
+    },
+    "/accessibility": {
+      "url": "/og/main/accessibility.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Accessibility. Large type, strong contrast, no hover-only controls"
+    },
+    "/music#thats-the-time": {
+      "url": "/og/main/music/thats-the-time.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "That's The Time album cover"
+    },
+    "/music#wonderful-world": {
+      "url": "/og/main/music/wonderful-world.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Wonderful World album cover"
+    },
+    "/music#misty": {
+      "url": "/og/main/music/misty.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Misty album cover"
+    },
+    "/music#i-just-called": {
+      "url": "/og/main/music/i-just-called.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "I Just Called album cover"
+    }
+  },
+  "other": {
+    "/": {
+      "url": "/og/other/home.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "More on Allen. Stories, Timeless and Ann's art"
+    },
+    "/biography": {
+      "url": "/og/other/biography.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Timeless. Ann and Allen Gillon, a life in music since 1967"
+    },
+    "/books": {
+      "url": "/og/other/books.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Stories, plays and textbooks. By Allen Gillon"
+    },
+    "/anns-art": {
+      "url": "/og/other/anns-art.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Ann Gillon. Original paintings. Free delivery in Australia"
+    },
+    "/delivery": {
+      "url": "/og/other/delivery.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Delivery and payment. Ann Gillon's original paintings"
+    },
+    "/anns-art/ann-426502619623139": {
+      "url": "/og/other/anns-art/ann-426502619623139.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Blue Macaws, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-736815624413901": {
+      "url": "/og/other/anns-art/ann-736815624413901.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Slip Slop Slap, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-736813651080765": {
+      "url": "/og/other/anns-art/ann-736813651080765.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Pelican Landing, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-618568679571930": {
+      "url": "/og/other/anns-art/ann-618568679571930.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Ghost Town, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-275778083850993": {
+      "url": "/og/other/anns-art/ann-275778083850993.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Fantasy Horses, Black and White, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-274886207273514": {
+      "url": "/og/other/anns-art/ann-274886207273514.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Draught Horses and Beer Barrels, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-142961253799344": {
+      "url": "/og/other/anns-art/ann-142961253799344.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "African Wild Dog, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-141915083903961": {
+      "url": "/og/other/anns-art/ann-141915083903961.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Mare and Foal, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-133772691384867": {
+      "url": "/og/other/anns-art/ann-133772691384867.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Little Ace, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-132644071497729": {
+      "url": "/og/other/anns-art/ann-132644071497729.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Wild Cat in the Reeds, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-132640404831429": {
+      "url": "/og/other/anns-art/ann-132640404831429.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Jaguar Fishing, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-132170828211720": {
+      "url": "/og/other/anns-art/ann-132170828211720.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "The Old Holden Ute, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130749738353829": {
+      "url": "/og/other/anns-art/ann-130749738353829.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Country Scene, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130748481687288": {
+      "url": "/og/other/anns-art/ann-130748481687288.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Salamander, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130747855020684": {
+      "url": "/og/other/anns-art/ann-130747855020684.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Jazz Groove, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130745851687551": {
+      "url": "/og/other/anns-art/ann-130745851687551.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Beach Fun Time, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130744718354331": {
+      "url": "/og/other/anns-art/ann-130744718354331.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Pumicestone Passage, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130741611687975": {
+      "url": "/og/other/anns-art/ann-130741611687975.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Hidden Creatures, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130659065029563": {
+      "url": "/og/other/anns-art/ann-130659065029563.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Rounding up the Brumbies, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130607308368072": {
+      "url": "/og/other/anns-art/ann-130607308368072.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cool and Relaxing Waves, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130268275068642": {
+      "url": "/og/other/anns-art/ann-130268275068642.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Dreaming Time, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130267361735400": {
+      "url": "/og/other/anns-art/ann-130267361735400.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Beautiful Reflections, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130266885068781": {
+      "url": "/og/other/anns-art/ann-130266885068781.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Reflections in Green, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130266355068834": {
+      "url": "/og/other/anns-art/ann-130266355068834.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Reflections in Blue, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130239481738188": {
+      "url": "/og/other/anns-art/ann-130239481738188.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "The Old Country Garage, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130233345072135": {
+      "url": "/og/other/anns-art/ann-130233345072135.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Wild and Free, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130232831738853": {
+      "url": "/og/other/anns-art/ann-130232831738853.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Aussie Native Flowers, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130231781738958": {
+      "url": "/og/other/anns-art/ann-130231781738958.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Animal Mash, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130229581739178": {
+      "url": "/og/other/anns-art/ann-130229581739178.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "White Bird, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130227828406020": {
+      "url": "/og/other/anns-art/ann-130227828406020.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "City by Night, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130225231739613": {
+      "url": "/og/other/anns-art/ann-130225231739613.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Wild Surf, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-130199925075477": {
+      "url": "/og/other/anns-art/ann-130199925075477.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Enamel Fish, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-129686181793518": {
+      "url": "/og/other/anns-art/ann-129686181793518.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Ellie, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-129350115160458": {
+      "url": "/og/other/anns-art/ann-129350115160458.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Lion's Roar, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-127394872022649": {
+      "url": "/og/other/anns-art/ann-127394872022649.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Horse in Black and White, a painting by Ann Gillon"
+    },
+    "/anns-art/ann-105021430926660": {
+      "url": "/og/other/anns-art/ann-105021430926660.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Sunset Surf, a painting by Ann Gillon"
+    },
+    "/read/tribute-to-calamity-jane": {
+      "url": "/og/other/read/tribute-to-calamity-jane.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Tribute to Calamity Jane"
+    },
+    "/read/tribute-to-calamity-jane/text": {
+      "url": "/og/other/read/tribute-to-calamity-jane.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Tribute to Calamity Jane"
+    },
+    "/read/melting-pot": {
+      "url": "/og/other/read/melting-pot.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Melting Pot"
+    },
+    "/read/melting-pot/text": {
+      "url": "/og/other/read/melting-pot.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Melting Pot"
+    },
+    "/read/the-other-mans-grass": {
+      "url": "/og/other/read/the-other-mans-grass.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of The Other Man's Grass"
+    },
+    "/read/the-other-mans-grass/text": {
+      "url": "/og/other/read/the-other-mans-grass.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of The Other Man's Grass"
+    },
+    "/read/three-heroes-of-sherwood": {
+      "url": "/og/other/read/three-heroes-of-sherwood.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Three Heroes of Sherwood"
+    },
+    "/read/three-heroes-of-sherwood/text": {
+      "url": "/og/other/read/three-heroes-of-sherwood.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Three Heroes of Sherwood"
+    },
+    "/read/breakout": {
+      "url": "/og/other/read/breakout.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Breakout"
+    },
+    "/read/breakout/text": {
+      "url": "/og/other/read/breakout.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Breakout"
+    },
+    "/read/funny-fah-learns-when-to-stop": {
+      "url": "/og/other/read/funny-fah-learns-when-to-stop.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Funny Fah Learns When to Stop"
+    },
+    "/read/funny-fah-learns-when-to-stop/text": {
+      "url": "/og/other/read/funny-fah-learns-when-to-stop.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Funny Fah Learns When to Stop"
+    },
+    "/read/imaginative-little-mee": {
+      "url": "/og/other/read/imaginative-little-mee.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Imaginative Little Mee"
+    },
+    "/read/imaginative-little-mee/text": {
+      "url": "/og/other/read/imaginative-little-mee.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Imaginative Little Mee"
+    },
+    "/read/little-hi-doh": {
+      "url": "/og/other/read/little-hi-doh.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Hi-Doh"
+    },
+    "/read/little-hi-doh/text": {
+      "url": "/og/other/read/little-hi-doh.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Hi-Doh"
+    },
+    "/read/little-ray": {
+      "url": "/og/other/read/little-ray.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Little Ray"
+    },
+    "/read/little-ray/text": {
+      "url": "/og/other/read/little-ray.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Little Ray"
+    },
+    "/read/practice-in-communication-book-1": {
+      "url": "/og/other/read/practice-in-communication-book-1.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Practice in Communication, Book 1"
+    },
+    "/read/practice-in-communication-book-1/text": {
+      "url": "/og/other/read/practice-in-communication-book-1.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Practice in Communication, Book 1"
+    },
+    "/read/practice-in-communication-book-2": {
+      "url": "/og/other/read/practice-in-communication-book-2.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Practice in Communication, Book 2"
+    },
+    "/read/practice-in-communication-book-2/text": {
+      "url": "/og/other/read/practice-in-communication-book-2.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Practice in Communication, Book 2"
+    },
+    "/read/riddled-with-language": {
+      "url": "/og/other/read/riddled-with-language.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Riddled with Language"
+    },
+    "/read/riddled-with-language/text": {
+      "url": "/og/other/read/riddled-with-language.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Riddled with Language"
+    }
+  }
+}

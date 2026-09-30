@@ -1,0 +1,34 @@
+{
+  "name": "Allen Gillon",
+  "short_name": "Allen Gillon",
+  "description": "Allen Gillon, guitarist on Bribie Island: bookings and free albums.",
+  "lang": "en-AU",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "theme_color": "#f8f6ee",
+  "background_color": "#f8f6ee",
+  "icons": [
+    {
+      "src": "/icons/main/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/main/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/main/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/main/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
