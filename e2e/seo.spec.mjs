@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { JSDOM } from "jsdom";
 import { artworks } from "../content/artworks.mjs";
+import bookIndex from "../public/books/index.json" with { type: "json" };
 
 // W6 SEO on both hosts of the dev server:
 // - per-host icons, manifest, theme colour, site JSON-LD, robots.txt,
@@ -90,63 +91,6 @@ for (const [site, base] of Object.entries(HOSTS)) {
       expect(website["@id"]).toBe(`${ORIGIN[site]}/#website`);
     });
 
-    test("every route has complete, unique metadata and clean JSON-LD", async ({ request }) => {
-      test.setTimeout(240_000);
-      const seen = { title: new Map(), description: new Map(), canonical: new Map() };
-      const problems = [];
-      const check = (route, ok, message) => {
-        if (!ok) problems.push(`${site} ${route}: ${message}`);
-      };
-      for (const route of ROUTES[site]) {
-        const res = await request.get(`${base}${route}`, { maxRedirects: 0 });
-        check(route, res.status() === 200, `status ${res.status()}`);
-        if (res.status() !== 200) continue;
-        const h = headOf(await res.text());
-        const expectedCanonical = `${ORIGIN[site]}${route}`;
-
-        check(route, h.title.length > 0 && h.title.length <= 60, `title "${h.title}" (${h.title.length} chars)`);
-        check(route, !/Al's music style/.test(h.title), `stale title "${h.title}"`);
-        const d = h.description || "";
-        check(route, d.length >= 150 && d.length <= 160, `description ${d.length} chars: "${d}"`);
-        check(route, h.canonical === expectedCanonical, `canonical ${h.canonical}, expected ${expectedCanonical}`);
-        for (const [key, value] of [["title", h.title], ["description", d], ["canonical", h.canonical]]) {
-          if (seen[key].has(value)) problems.push(`${site} ${route}: ${key} repeats ${seen[key].get(value)}`);
-          else seen[key].set(value, route);
-        }
-
-        check(route, h.og.title === h.title, `og:title "${h.og.title}"`);
-        check(route, h.og.description === d, "og:description differs from the description");
-        check(route, h.og.url === expectedCanonical, `og:url ${h.og.url}`);
-        check(route, h.og.siteName === SITE_NAME[site], `og:site_name ${h.og.siteName}`);
-        check(route, h.og.locale === "en_AU", `og:locale ${h.og.locale}`);
-        check(route, (h.og.image || "").startsWith(`${ORIGIN[site]}/og/${site}/`) && h.og.image.endsWith(".jpg"), `og:image ${h.og.image}`);
-        check(route, h.og.width === "1200" && h.og.height === "630", `og:image size ${h.og.width}x${h.og.height}`);
-        check(route, h.twitter.card === "summary_large_image", `twitter:card ${h.twitter.card}`);
-        check(route, h.twitter.image === h.og.image, `twitter:image ${h.twitter.image}`);
-
-        check(route, h.manifest === `/icons/${site}/manifest.webmanifest`, `manifest ${h.manifest}`);
-        check(route, h.icons.includes(`/icons/${site}/favicon.ico`) && h.icons.includes(`/icons/${site}/icon.svg`), `icons ${h.icons.join(" ")}`);
-        check(route, h.themeColor === "#f8f6ee", `theme-color ${h.themeColor}`);
-        if (NOINDEX.has(route)) check(route, /noindex/.test(h.robots || "") && /follow/.test(h.robots || ""), `robots ${h.robots}`);
-        else check(route, !/noindex/.test(h.robots || ""), `robots ${h.robots}`);
-
-        // /comments is noindex and has no JSON-LD; every other page has at least the site graph.
-        if (!NOINDEX.has(route)) check(route, h.jsonLd.length > 0, "no JSON-LD");
-        for (const text of h.jsonLd) {
-          let doc;
-          try {
-            doc = JSON.parse(text);
-          } catch (err) {
-            check(route, false, `JSON-LD does not parse: ${err.message}`);
-            continue;
-          }
-          const bad = typesIn(doc).filter((t) => FORBIDDEN.includes(t));
-          check(route, bad.length === 0, `forbidden JSON-LD types ${bad.join(", ")}`);
-        }
-      }
-      expect(problems).toEqual([]);
-    });
-
     test("page JSON-LD matches the wiring table", async ({ request }) => {
       const nodes = async (route) => {
         const h = headOf(await (await request.get(`${base}${route}`)).text());
@@ -164,7 +108,15 @@ for (const [site, base] of Object.entries(HOSTS)) {
       } else {
         const books = await nodes("/books");
         expect(types(books)).toContain("CollectionPage");
-        expect(books.filter((n) => n["@type"] === "Book").length).toBeGreaterThanOrEqual(12);
+        // A Book node for every title readable here (the old "restricted"
+        // textbooks have none until W4 opens them); stories carry their PDF.
+        const readable = bookIndex.filter((b) => b.status === undefined || b.status === "free");
+        const bookNodes = books.filter((n) => n["@type"] === "Book");
+        expect(bookNodes.map((n) => n.url).sort()).toEqual(readable.map((b) => `${ORIGIN.other}/read/${b.slug}`).sort());
+        for (const b of readable.filter((x) => x.section === "childrens")) {
+          const node = bookNodes.find((n) => n.url.endsWith(`/read/${b.slug}`));
+          expect(node.encoding?.contentUrl).toBe(`${ORIGIN.other}/books/${b.slug}/${b.slug}.pdf`);
+        }
         expect(types(await nodes("/anns-art"))).toContain("CollectionPage");
         expect(types(await nodes("/biography"))).toContain("BreadcrumbList");
         const forSale = artworks.find((a) => a.availability === "available");
@@ -206,3 +158,64 @@ for (const [site, base] of Object.entries(HOSTS)) {
     });
   });
 }
+
+// One test over both hosts, so titles, descriptions and canonicals must be
+// unique across the two sites, not only within each.
+test("every route on both hosts has complete, unique metadata and clean JSON-LD", async ({ request }) => {
+  test.setTimeout(480_000);
+  const seen = { title: new Map(), description: new Map(), canonical: new Map() };
+  const problems = [];
+  for (const [site, base] of Object.entries(HOSTS)) {
+    const check = (route, ok, message) => {
+      if (!ok) problems.push(`${site} ${route}: ${message}`);
+    };
+    for (const route of ROUTES[site]) {
+      const res = await request.get(`${base}${route}`, { maxRedirects: 0 });
+      check(route, res.status() === 200, `status ${res.status()}`);
+      if (res.status() !== 200) continue;
+      const h = headOf(await res.text());
+      const expectedCanonical = `${ORIGIN[site]}${route}`;
+
+      check(route, h.title.length > 0 && h.title.length <= 60, `title "${h.title}" (${h.title.length} chars)`);
+      check(route, !/Al's music style/.test(h.title), `stale title "${h.title}"`);
+      const d = h.description || "";
+      check(route, d.length >= 150 && d.length <= 160, `description ${d.length} chars: "${d}"`);
+      check(route, h.canonical === expectedCanonical, `canonical ${h.canonical}, expected ${expectedCanonical}`);
+      for (const [key, value] of [["title", h.title], ["description", d], ["canonical", h.canonical]]) {
+        if (seen[key].has(value)) problems.push(`${site} ${route}: ${key} repeats ${seen[key].get(value)}`);
+        else seen[key].set(value, `${site} ${route}`);
+      }
+
+      check(route, h.og.title === h.title, `og:title "${h.og.title}"`);
+      check(route, h.og.description === d, "og:description differs from the description");
+      check(route, h.og.url === expectedCanonical, `og:url ${h.og.url}`);
+      check(route, h.og.siteName === SITE_NAME[site], `og:site_name ${h.og.siteName}`);
+      check(route, h.og.locale === "en_AU", `og:locale ${h.og.locale}`);
+      check(route, (h.og.image || "").startsWith(`${ORIGIN[site]}/og/${site}/`) && h.og.image.endsWith(".jpg"), `og:image ${h.og.image}`);
+      check(route, h.og.width === "1200" && h.og.height === "630", `og:image size ${h.og.width}x${h.og.height}`);
+      check(route, h.twitter.card === "summary_large_image", `twitter:card ${h.twitter.card}`);
+      check(route, h.twitter.image === h.og.image, `twitter:image ${h.twitter.image}`);
+
+      check(route, h.manifest === `/icons/${site}/manifest.webmanifest`, `manifest ${h.manifest}`);
+      check(route, h.icons.includes(`/icons/${site}/favicon.ico`) && h.icons.includes(`/icons/${site}/icon.svg`), `icons ${h.icons.join(" ")}`);
+      check(route, h.themeColor === "#f8f6ee", `theme-color ${h.themeColor}`);
+      if (NOINDEX.has(route)) check(route, h.robots === "noindex, follow", `robots ${h.robots}, expected "noindex, follow"`);
+      else check(route, !/noindex/.test(h.robots || ""), `robots ${h.robots}`);
+
+      // /comments is noindex and has no JSON-LD; every other page has at least the site graph.
+      if (!NOINDEX.has(route)) check(route, h.jsonLd.length > 0, "no JSON-LD");
+      for (const text of h.jsonLd) {
+        let doc;
+        try {
+          doc = JSON.parse(text);
+        } catch (err) {
+          check(route, false, `JSON-LD does not parse: ${err.message}`);
+          continue;
+        }
+        const bad = typesIn(doc).filter((t) => FORBIDDEN.includes(t));
+        check(route, bad.length === 0, `forbidden JSON-LD types ${bad.join(", ")}`);
+      }
+    }
+  }
+  expect(problems).toEqual([]);
+});

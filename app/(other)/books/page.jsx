@@ -6,7 +6,7 @@ import ShelfChimes from "../../../components/illustrations/ShelfChimes";
 import ShelfCurtain from "../../../components/illustrations/ShelfCurtain";
 import ShelfInkwell from "../../../components/illustrations/ShelfInkwell";
 import { stripePaymentLink } from "../../../lib/storefront.mjs";
-import { buildShelves, priceLabel } from "./shelf-data.mjs";
+import { buildShelves, priceLabel, textbookPdf } from "./shelf-data.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
 import { book as bookSchema, collectionPage, jsonLdProps } from "../../../lib/schema.mjs";
 // Workers have no runtime filesystem: the book list and manifests are
@@ -25,16 +25,23 @@ import "./books.css";
 
 export const metadata = pageMetadata("other", "/books");
 
-/* The shelves as one collection, then a Book for each title. Audio stays on
-   each /read page, which owns the audiobooks and the play previews. */
+/* A book that cannot be read on this site yet (the textbooks whose old
+   manifests are not "free", until W4's manifests land) gets no Book node,
+   because book() says free and in stock. The new shape has no status field. */
+const readable = (b) => b.status === undefined || b.status === "free";
+
+/* The shelves as one collection, then a Book for each readable title. Audio
+   stays on each /read page, which owns the audiobooks and the play previews.
+   Images are b.cover: p001.webp once a book has page images, the scan until
+   then. */
 function booksJsonLd({ stories, plays, textbooks }) {
   const all = [...stories, ...plays, ...textbooks];
   return [
     collectionPage(
-      all.map((b) => ({ url: `/read/${b.slug}`, name: b.title, image: `/books/${b.slug}/p001.webp` })),
+      all.map((b) => ({ url: `/read/${b.slug}`, name: b.title, image: b.cover })),
       { url: "/books", name: "Stories, plays and textbooks", site: "other" },
     ),
-    ...all.map((b) =>
+    ...all.filter(readable).map((b) =>
       bookSchema({
         slug: b.slug,
         title: b.title,
@@ -42,7 +49,8 @@ function booksJsonLd({ stories, plays, textbooks }) {
         blurb: b.blurb,
         cover: b.cover,
         pageCount: b.section === "plays" ? b.fullPages : b.pageCount || undefined,
-        downloadUrl: b.section === "teaching" ? b.pdf || undefined : undefined,
+        // Stories and textbooks only, by the same rule as the shelf's PDF link.
+        downloadUrl: b.section === "plays" ? undefined : textbookPdf(b) || undefined,
       }),
     ),
   ];

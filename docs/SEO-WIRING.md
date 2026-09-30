@@ -39,7 +39,20 @@ the legal pages (W7). `/anns-art/[id]` now uses `generateArtworkMetadata`,
 and `lib/seo.mjs` reads the paintings from `lib/art-catalog.mjs` (repeated
 photos removed), so the painting page, its description and the image
 sitemap all count the same views. `e2e/seo.spec.mjs` fetches every wired
-route on both hosts and checks the head tags and JSON-LD.
+route on both hosts and checks the head tags and JSON-LD, with titles,
+descriptions and canonicals unique across both hosts.
+
+- `app/layout.jsx` sets no description either, so `/delivery` and the
+  `/read` pages have none until W7 and W4 wire `pageMetadata`.
+- `/books` renders a Book node only for titles readable here: the three
+  "restricted" textbooks get one once W4's manifests open them. Stories and
+  free textbooks pass `downloadUrl` by the shelf's `textbookPdf()` rule, and
+  the collection images are each book's shelf cover (the scan until a
+  textbook has `p001.webp`).
+- The painting Offer's `merchantReturnLink` to `/terms` is left out while
+  `content/legal.config.json` has `published: false`, so it never links a 404.
+- The `/music` sitemap images come from `albums` in
+  `app/(main)/music/albums.mjs`, so hidden albums stay out.
 
 ## Do not deploy before W4 and W5
 

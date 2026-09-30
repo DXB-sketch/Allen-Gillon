@@ -8,10 +8,10 @@ import { SITE_MARKER_SCRIPT } from "../lib/sites.mjs";
 // stay static. The (main) and (other) group layouts add each site's mast,
 // footer, metadataBase and title template, and also set data-site on their
 // wrapper.
+// No description here on purpose (docs/SEO-WIRING.md): a route that is not
+// wired to pageMetadata yet gets none, rather than one shared duplicate.
 export const metadata = {
   title: "Allen Gillon",
-  description:
-    "Allen Gillon is a guitarist, songwriter, author and playwright from Bribie Island, Queensland.",
 };
 
 export default function RootLayout({ children }) {
