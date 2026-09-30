@@ -1,6 +1,6 @@
-import CommentLink from "../../components/CommentLink";
+import CommentLink from "../../../components/CommentLink";
 import Link from "next/link";
-import Album from "../../components/Album";
+import Album from "../../../components/Album";
 
 export const metadata = {
   title: "Al's music style · Allen Gillon",

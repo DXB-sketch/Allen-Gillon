@@ -1,5 +1,5 @@
 import Link from "next/link";
-import FriendlyReviewForm from "../../components/FriendlyReviewForm";
+import FriendlyReviewForm from "../../../components/FriendlyReviewForm";
 
 export const metadata = {
   title: "Friendly reviews · Allen Gillon",

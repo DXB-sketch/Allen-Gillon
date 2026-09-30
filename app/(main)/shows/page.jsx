@@ -1,6 +1,6 @@
-import CommentLink from "../../components/CommentLink";
+import CommentLink from "../../../components/CommentLink";
 import Link from "next/link";
-import ShowSetlist from "../../components/ShowSetlist";
+import ShowSetlist from "../../../components/ShowSetlist";
 
 export const metadata = {
   title: "The Matthew Allen 5 · Allen Gillon",

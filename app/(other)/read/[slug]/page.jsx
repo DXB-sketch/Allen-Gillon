@@ -1,20 +1,20 @@
-import CommentLink from "../../../components/CommentLink";
+import CommentLink from "../../../../components/CommentLink";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import BookReader from "../../../components/BookReader";
-import SyncedStoryReader from "../../../components/SyncedStoryReader";
-import PurchaseLink from "../../../components/PurchaseLink";
-import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
-import bookIndex from "../../../public/books/index.json";
-import breakoutManifest from "../../../public/books/breakout/manifest.json";
-import funnyFahManifest from "../../../public/books/funny-fah-learns-when-to-stop/manifest.json";
-import imaginativeMeeManifest from "../../../public/books/imaginative-little-mee/manifest.json";
-import hiDohManifest from "../../../public/books/little-hi-doh/manifest.json";
-import littleRayManifest from "../../../public/books/little-ray/manifest.json";
-import meltingPotManifest from "../../../public/books/melting-pot/manifest.json";
-import otherMansGrassManifest from "../../../public/books/the-other-mans-grass/manifest.json";
-import sherwoodManifest from "../../../public/books/three-heroes-of-sherwood/manifest.json";
-import calamityJaneManifest from "../../../public/books/tribute-to-calamity-jane/manifest.json";
+import BookReader from "../../../../components/BookReader";
+import SyncedStoryReader from "../../../../components/SyncedStoryReader";
+import PurchaseLink from "../../../../components/PurchaseLink";
+import { formatAud, playPrice, stripePaymentLink } from "../../../../lib/storefront.mjs";
+import bookIndex from "../../../../public/books/index.json";
+import breakoutManifest from "../../../../public/books/breakout/manifest.json";
+import funnyFahManifest from "../../../../public/books/funny-fah-learns-when-to-stop/manifest.json";
+import imaginativeMeeManifest from "../../../../public/books/imaginative-little-mee/manifest.json";
+import hiDohManifest from "../../../../public/books/little-hi-doh/manifest.json";
+import littleRayManifest from "../../../../public/books/little-ray/manifest.json";
+import meltingPotManifest from "../../../../public/books/melting-pot/manifest.json";
+import otherMansGrassManifest from "../../../../public/books/the-other-mans-grass/manifest.json";
+import sherwoodManifest from "../../../../public/books/three-heroes-of-sherwood/manifest.json";
+import calamityJaneManifest from "../../../../public/books/tribute-to-calamity-jane/manifest.json";
 
 // Workers have no runtime filesystem. Keeping these JSON files as static
 // imports lets both Next.js and Cloudflare bundle the complete reader data.

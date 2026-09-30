@@ -1,11 +1,11 @@
-import CommentLink from "../../components/CommentLink";
-import Audiobook from "../../components/Audiobook";
-import PurchaseLink from "../../components/PurchaseLink";
+import CommentLink from "../../../components/CommentLink";
+import Audiobook from "../../../components/Audiobook";
+import PurchaseLink from "../../../components/PurchaseLink";
 import Link from "next/link";
-import { formatAud, playPrice, stripePaymentLink } from "../../lib/storefront.mjs";
+import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
 // Workers have no runtime filesystem. Importing the index lets both Next.js
 // and Cloudflare bundle the book list at build time.
-import bookIndex from "../../public/books/index.json";
+import bookIndex from "../../../public/books/index.json";
 
 export const metadata = {
   title: "Stories, Plays and Textbooks · Allen Gillon",
