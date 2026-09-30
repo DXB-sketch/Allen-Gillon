@@ -5,8 +5,10 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 
 ## Phase 0 baseline
 - [x] Branch `overhaul` created, `npm install`, existing tests green (3/3)
-- [ ] Baseline screenshots (375/768/1280/1920) in `docs/screenshots/before/`
-- [ ] Baseline axe results recorded
+- [x] Baseline screenshots (375/768/1280/1920) in `docs/screenshots/before/`
+- [x] Baseline axe results recorded (docs/screenshots/before/axe-baseline.json)
+- [x] Toolchain: ffmpeg 9, Ghostscript 10.05.1, Python 3.12 + stable-ts/faster-whisper/yt-dlp/ocrmypdf
+- [x] Textbook PDFs compressed and legibility-checked (scripts/incoming/processed: 13.3, 12.0, 13.5 MiB; text layers intact). No R2 needed.
 
 ## W1 Email fixes
 - [ ] a) Player status machine, words in bar, previews labelled and never auto-advance, mediaSession, aria-live
