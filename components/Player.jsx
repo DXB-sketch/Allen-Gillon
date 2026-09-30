@@ -1,9 +1,21 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  PREVIEW_LABEL,
+  isPreviewTrack,
+  nextTrackAfterEnd,
+  nowBarLabel,
+  statusForAudioEvent,
+  timeText,
+} from "../lib/player-state.mjs";
 
-/* React port of player.js: one shared <audio>, play buttons on each track row,
-   and a sticky now-playing bar with a seek control. No accounts, no autoplay. */
+/* One shared <audio>, play buttons on each track row, and a sticky
+   now-playing bar that says in words what is happening. No autoplay.
+
+   status: idle | loading | playing | paused | ended | error, driven by the
+   audio element's own events. `track` is the track loaded in the player;
+   `current` is set only once its playback has actually started. */
 
 const PlayerContext = createContext(null);
 const PLAYBACK_EVENT = "allen:playback-start";
@@ -13,20 +25,150 @@ function announceAudioPlayback() {
   window.dispatchEvent(new CustomEvent(PLAYBACK_EVENT, { detail: { source: PLAYER_SOURCE } }));
 }
 
-function fmt(s) {
-  if (!isFinite(s)) return "0:00";
-  var m = Math.floor(s / 60),
-    r = Math.floor(s % 60);
-  return m + ":" + (r < 10 ? "0" : "") + r;
+function setMediaSession(track, status) {
+  if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+  try {
+    if (track && typeof window.MediaMetadata === "function") {
+      navigator.mediaSession.metadata = new window.MediaMetadata({
+        title: track.name,
+        artist: track.artist || "Allen Gillon",
+        album: track.album || (isPreviewTrack(track) ? PREVIEW_LABEL : ""),
+        artwork: track.artwork ? [{ src: track.artwork }] : [],
+      });
+    } else if (!track) {
+      navigator.mediaSession.metadata = null;
+    }
+    navigator.mediaSession.playbackState = status === "playing" ? "playing" : track ? "paused" : "none";
+  } catch {
+    /* Media Session is a nicety; ignore browsers that reject it. */
+  }
 }
 
 export function PlayerProvider({ children }) {
   const audioRef = useRef(null);
-  const currentRef = useRef(null); /* {src, name} | null */
-  const playlistRef = useRef(null); /* [{src, name, time}] | null */
+  const trackRef = useRef(null); /* the track loaded in the audio element */
+  const playlistRef = useRef(null); /* the list the listener chose it from */
+  const requestRef = useRef(0); /* bumps on every new play request */
+  const pendingRef = useRef(false); /* true while a play() promise is unsettled */
+  const statusRef = useRef("idle");
+  const [track, setTrack] = useState(null);
   const [current, setCurrent] = useState(null);
-  const [playing, setPlaying] = useState(false);
+  const [status, setStatusState] = useState("idle");
+  const [announcement, setAnnouncement] = useState("");
 
+  const setStatus = useCallback((next) => {
+    statusRef.current = next;
+    setStatusState(next);
+    setMediaSession(trackRef.current, next);
+  }, []);
+
+  const play = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio || !trackRef.current) return;
+    const request = ++requestRef.current;
+    announceAudioPlayback();
+    pendingRef.current = true;
+    if (statusRef.current !== "playing") setStatus("loading");
+    try {
+      await audio.play();
+      if (request !== requestRef.current) return;
+      pendingRef.current = false;
+      setCurrent(trackRef.current);
+      setStatus("playing");
+    } catch (error) {
+      if (request !== requestRef.current) return;
+      pendingRef.current = false;
+      /* pause() before play() settled (for example the page reader started) */
+      if (error?.name === "AbortError" && audio.getAttribute("src")) setStatus(audio.ended ? "ended" : "paused");
+      else setStatus("error");
+    }
+  }, [setStatus]);
+
+  const load = useCallback(
+    (nextTrack, playlist) => {
+      const audio = audioRef.current;
+      if (!audio) return;
+      playlistRef.current = playlist && playlist.length ? playlist : [nextTrack];
+      trackRef.current = nextTrack;
+      setTrack(nextTrack);
+      setCurrent(null);
+      setStatus("loading");
+      audio.src = nextTrack.src;
+      play();
+    },
+    [play, setStatus]
+  );
+
+  const togglePause = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio || !trackRef.current) return;
+    setAnnouncement("");
+    const now = statusRef.current;
+    if (now === "playing" || now === "loading") {
+      audio.pause();
+      return;
+    }
+    if (now === "ended") audio.currentTime = 0;
+    if (now === "error") audio.load();
+    play();
+  }, [play]);
+
+  const toggle = useCallback(
+    (nextTrack, playlist) => {
+      setAnnouncement("");
+      if (trackRef.current && trackRef.current.src === nextTrack.src) {
+        togglePause();
+        return;
+      }
+      load(nextTrack, playlist);
+    },
+    [load, togglePause]
+  );
+
+  const close = useCallback(() => {
+    const audio = audioRef.current;
+    requestRef.current += 1;
+    pendingRef.current = false;
+    if (audio) {
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+    }
+    trackRef.current = null;
+    playlistRef.current = null;
+    setTrack(null);
+    setCurrent(null);
+    setAnnouncement("");
+    setStatus("idle");
+  }, [setStatus]);
+
+  /* Audio element events drive the status. */
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onEvent = (event) => {
+      if (!trackRef.current || !audio.getAttribute("src")) return;
+      if (event.type === "pause" && pendingRef.current && !audio.ended) return;
+      if (event.type === "playing") setCurrent(trackRef.current);
+      setStatus(statusForAudioEvent(event.type, audio, statusRef.current));
+      if (event.type === "error") setAnnouncement(nowBarLabel("error", trackRef.current));
+      if (event.type !== "ended") return;
+      const finished = trackRef.current;
+      const next = nextTrackAfterEnd(finished, playlistRef.current);
+      if (!next) {
+        setAnnouncement(nowBarLabel("ended", finished));
+        return;
+      }
+      /* Moving on through the list the listener chose: say so out loud. */
+      setAnnouncement(`Finished ${finished.name}. Now playing the next track, ${next.name}.`);
+      load({ album: finished.album, artwork: finished.artwork, ...next }, playlistRef.current);
+    };
+    const types = ["playing", "pause", "ended", "error"];
+    types.forEach((type) => audio.addEventListener(type, onEvent));
+    return () => types.forEach((type) => audio.removeEventListener(type, onEvent));
+  }, [load, setStatus]);
+
+  /* Another reader (the page reader) started: pause the music. */
   useEffect(() => {
     const stopForAnotherReader = (event) => {
       if (event.detail?.source === PLAYER_SOURCE) return;
@@ -36,78 +178,23 @@ export function PlayerProvider({ children }) {
     return () => window.removeEventListener(PLAYBACK_EVENT, stopForAnotherReader);
   }, []);
 
-  const getAudio = useCallback(() => {
-    if (!audioRef.current) {
-      const audio = new Audio();
-      audio.addEventListener("play", () => setPlaying(true));
-      audio.addEventListener("pause", () => setPlaying(false));
-      audio.addEventListener("ended", () => {
-        /* step to the next track in the same list, if there is one */
-        const cur = currentRef.current;
-        const list = playlistRef.current;
-        if (!cur || !list) return;
-        for (var i = 0; i < list.length; i++) {
-          if (list[i].src === cur.src && list[i + 1]) {
-            const next = list[i + 1];
-            currentRef.current = { src: next.src, name: next.name };
-            setCurrent(currentRef.current);
-            audio.src = next.src;
-            audio.play();
-            return;
-          }
-        }
-      });
-      audioRef.current = audio;
+  /* Lock-screen and headset play and pause buttons. */
+  useEffect(() => {
+    if (!("mediaSession" in navigator)) return;
+    try {
+      navigator.mediaSession.setActionHandler("play", () => statusRef.current !== "playing" && togglePause());
+      navigator.mediaSession.setActionHandler("pause", () => statusRef.current === "playing" && togglePause());
+    } catch {
+      /* unsupported action */
     }
-    return audioRef.current;
-  }, []);
+  }, [togglePause]);
 
-  const toggle = useCallback(
-    (track, playlist) => {
-      const audio = getAudio();
-      if (currentRef.current && currentRef.current.src === track.src) {
-        if (audio.paused) {
-          announceAudioPlayback();
-          audio.play();
-        }
-        else audio.pause();
-        return;
-      }
-      announceAudioPlayback();
-      playlistRef.current = playlist;
-      currentRef.current = { src: track.src, name: track.name };
-      setCurrent(currentRef.current);
-      audio.src = track.src;
-      audio.play();
-    },
-    [getAudio]
-  );
-
-  const togglePause = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio || !currentRef.current) return;
-    if (audio.paused) {
-      announceAudioPlayback();
-      audio.play();
-    }
-    else audio.pause();
-  }, []);
-
-  const close = useCallback(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      audio.pause();
-      audio.removeAttribute("src");
-    }
-    currentRef.current = null;
-    playlistRef.current = null;
-    setCurrent(null);
-    setPlaying(false);
-  }, []);
+  const playing = status === "playing";
 
   return (
-    <PlayerContext.Provider value={{ current, playing, toggle, togglePause, close, audioRef }}>
+    <PlayerContext.Provider value={{ track, current, status, playing, announcement, toggle, togglePause, close, audioRef }}>
       {children}
+      <audio ref={audioRef} preload="none" hidden data-shared-player="" />
     </PlayerContext.Provider>
   );
 }
@@ -117,20 +204,26 @@ export function usePlayer() {
 }
 
 export function NowBar() {
-  const { current, playing, togglePause, close, audioRef } = usePlayer();
+  const { track, status, announcement, togglePause, close, audioRef } = usePlayer();
   const [pos, setPos] = useState(0);
-  const [timeText, setTimeText] = useState("0:00 / 0:00");
+  const [time, setTime] = useState(timeText(0, NaN));
+  const src = track?.src;
+  const fallbackDuration = track?.time;
 
   useEffect(() => {
+    /* A new source starts from zero, with the listed duration until the real one loads. */
+    setPos(0);
+    setTime(timeText(0, NaN, fallbackDuration));
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio || !src) return;
     function onTimeUpdate() {
-      if (audio.duration) setPos((audio.currentTime / audio.duration) * 1000);
-      setTimeText(fmt(audio.currentTime) + " / " + fmt(audio.duration));
+      setPos(audio.duration ? (audio.currentTime / audio.duration) * 1000 : 0);
+      setTime(timeText(audio.currentTime, audio.duration, fallbackDuration));
     }
-    audio.addEventListener("timeupdate", onTimeUpdate);
-    return () => audio.removeEventListener("timeupdate", onTimeUpdate);
-  }, [audioRef, current]);
+    const types = ["timeupdate", "durationchange", "loadedmetadata", "seeked"];
+    types.forEach((type) => audio.addEventListener(type, onTimeUpdate));
+    return () => types.forEach((type) => audio.removeEventListener(type, onTimeUpdate));
+  }, [audioRef, src, fallbackDuration]);
 
   function onSeek(e) {
     const value = Number(e.target.value);
@@ -139,42 +232,47 @@ export function NowBar() {
     if (audio && audio.duration) audio.currentTime = (value / 1000) * audio.duration;
   }
 
+  const on = Boolean(track) && status !== "idle";
+  const busy = status === "playing" || status === "loading";
+  const buttonLabel = busy ? "Pause" : status === "error" ? "Try again" : "Play";
+
   return (
-    <div className={"nowbar" + (current ? " on" : "")} id="nowbar">
-      <div className="wrap">
-        <button
-          type="button"
-          id="nowplay"
-          aria-label={playing ? "Pause" : "Play"}
-          onClick={togglePause}
-        >
-          {playing ? "❚❚" : "▶"}
-        </button>
-        <span className="nowname" id="nowname">
-          {current ? current.name : ""}
-        </span>
-        <input
-          type="range"
-          id="nowseek"
-          min="0"
-          max="1000"
-          value={pos}
-          onChange={onSeek}
-          aria-label="Seek within track"
-        />
-        <span className="nowtime" id="nowtime">
-          {timeText}
-        </span>
-        <button
-          type="button"
-          className="nowclose"
-          aria-label="Close player"
-          title="Close player"
-          onClick={close}
-        >
-          ✕
-        </button>
+    <>
+      <p className="visually-hidden" aria-live="polite" id="nowannounce">
+        {announcement}
+      </p>
+      <div className={"nowbar" + (on ? " on" : "")} id="nowbar" data-status={status}>
+        <div className="wrap">
+          <button type="button" id="nowplay" aria-label={buttonLabel} onClick={togglePause}>
+            {busy ? "❚❚" : "▶"}
+          </button>
+          <span className="nowname" id="nowname">
+            {on ? nowBarLabel(status, track) : ""}
+          </span>
+          {on && isPreviewTrack(track) ? <span className="nowpreview">{PREVIEW_LABEL}</span> : null}
+          <input
+            type="range"
+            id="nowseek"
+            min="0"
+            max="1000"
+            value={pos}
+            onChange={onSeek}
+            aria-label="Seek within track"
+          />
+          <span className="nowtime" id="nowtime">
+            {time}
+          </span>
+          <button
+            type="button"
+            className="nowclose"
+            aria-label="Close player"
+            title="Close player"
+            onClick={close}
+          >
+            ✕
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

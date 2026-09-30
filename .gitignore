@@ -11,3 +11,5 @@ art-review/
 .wrangler/
 worker-configuration.d.ts
 .claude/
+test-results/
+playwright-report/

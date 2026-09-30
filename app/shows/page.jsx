@@ -12,16 +12,16 @@ export const metadata = {
    is reached through the "Learn more" link on the biography page. */
 
 const tracks = [
-  { src: "/audio/ma5-chandler-theatre/01-i-will-always-love-you.mp3", name: "I Will Always Love You", time: "5:12" },
-  { src: "/audio/ma5-chandler-theatre/02-brazil.mp3", name: "Brazil", time: "2:39" },
-  { src: "/audio/ma5-chandler-theatre/03-masquerade.mp3", name: "Masquerade", time: "2:49" },
-  { src: "/audio/ma5-chandler-theatre/04-pensylvania-medley.mp3", name: "Pennsylvania Medley", time: "6:17" },
-  { src: "/audio/ma5-chandler-theatre/05-saltwater.mp3", name: "Saltwater", time: "4:01" },
-  { src: "/audio/ma5-chandler-theatre/06-boogie-woogie-bugle-boy.mp3", name: "Boogie Woogie Bugle Boy", time: "2:31" },
-  { src: "/audio/ma5-chandler-theatre/07-new-york-new-york.mp3", name: "New York New York", time: "3:12" },
-  { src: "/audio/ma5-chandler-theatre/08-tailfeather.mp3", name: "Tailfeather", time: "3:42" },
-  { src: "/audio/ma5-chandler-theatre/09-power-of-love.mp3", name: "Power Of Love", time: "5:35" },
-  { src: "/audio/ma5-chandler-theatre/10-shake-medley.mp3", name: "Shake Medley", time: "6:25" },
+  { src: "/audio/ma5-chandler-theatre/01-i-will-always-love-you.mp3", name: "I Will Always Love You", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/02-brazil.mp3", name: "Brazil", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/03-masquerade.mp3", name: "Masquerade", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/04-pensylvania-medley.mp3", name: "Pennsylvania Medley", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/05-saltwater.mp3", name: "Saltwater", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/06-boogie-woogie-bugle-boy.mp3", name: "Boogie Woogie Bugle Boy", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/07-new-york-new-york.mp3", name: "New York New York", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/08-tailfeather.mp3", name: "Tailfeather", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/09-power-of-love.mp3", name: "Power Of Love", time: "0:30", preview: true },
+  { src: "/audio/ma5-chandler-theatre/10-shake-medley.mp3", name: "Shake Medley", time: "0:30", preview: true },
 ];
 
 export default function ShowsPage() {
