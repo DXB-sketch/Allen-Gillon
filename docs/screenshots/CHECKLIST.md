@@ -4,10 +4,13 @@ Three sets, all full page, downscaled to 960px wide, JPEG quality 60 (sharp):
 
 - `before/`: phase 0 baseline, taken before the subdomain split (see the notes in the W3 section below).
 - `after-w3/`: after the W3 design foundation, captured with `SITE_DEV_PORT=<port> node scripts/capture-screenshots.mjs docs/screenshots/after-w3`.
-- `after/`: final state of `overhaul` after all workstreams (W1 to W7) and the integration pass (ff325af). Captured on 2026-10-01 by the
-  playwright-matrix-visual verifier against `vinext dev` with **prefers-reduced-motion: reduce**, so every drawing is in its final state and
-  Ann's art shows the salon-hang index (its reduced-motion default). The capture scrolls the whole page once before the shot so lazy images
-  are painted. It adds routes the earlier sets did not have: the 404 page, a story's text route, a textbook reader and a painting route.
+- `after/`: final state of `overhaul` after all workstreams (W1 to W7), the integration pass (ff325af) and fixer round 1 (e5e140c).
+  Re-captured on 2026-10-01 by the playwright-matrix-visual verifier (round 2) against the built Worker (`npm run build:vinext`, then
+  `SITE_DEV_PORT=<port> node scripts/start-local.mjs`) with **prefers-reduced-motion: reduce**, so every drawing is in its final state and
+  Ann's art shows the salon-hang index (its reduced-motion default). The capture scrolls the whole page once and decodes every image before
+  the shot. Note: `scripts/capture-screenshots.mjs` itself does not set reduced motion; this set was taken with a copy that passes
+  `reducedMotion: "reduce"` to `newPage`. It adds routes the earlier sets did not have: the 404 page on both hosts, /comments on the other
+  host, a story's text route, a textbook reader and a painting route.
 
 Each `after/` shot at 1280 and 375 was looked at against the anti-pattern list and the art-direction requirements in
 Allen-Gillon-redesign-plan-and-prompt.md. A box is ticked when that review found nothing blocking; notes follow the list.
@@ -100,17 +103,37 @@ Allen-Gillon-redesign-plan-and-prompt.md. A box is ticked when that review found
   - 1280: before/delivery-1280.jpg / after-w3/delivery-1280.jpg / after/delivery-1280.jpg
   - 1920: before/delivery-1920.jpg / after-w3/delivery-1920.jpg / after/delivery-1920.jpg
 
+- [x] **other.allengillon.com/comments**
+  - 375: after/other-comments-375.jpg
+  - 768: after/other-comments-768.jpg
+  - 1280: after/other-comments-1280.jpg
+  - 1920: after/other-comments-1920.jpg
+- [x] **other.allengillon.com/no-such-page (404)**
+  - 375: after/other-not-found-375.jpg
+  - 768: after/other-not-found-768.jpg
+  - 1280: after/other-not-found-1280.jpg
+  - 1920: after/other-not-found-1920.jpg
+
 ### Review notes (after/)
 
-- Art direction present: instruments on Albums (guitar, flute, microphone on the ink band, piano keys; one guitar headstock peeks from the
-  header at 375), the Timeless pelmet curtain sits in its own strip above the H1 and never covers it or any content, the sideboard home on
-  the other site (three shelves at 375), drawn shelves under the books on /books, and on /anns-art the salon-hang index (reduced motion)
-  plus the hallway with picture rail, 64px arrows and "1 of 36" counter (checked separately with motion allowed; not in this set).
+Round 2 review (every 1280 and 375 shot opened and looked at):
+
+- Art direction present: instruments on Albums (Gibson guitar in the head, flute beside the shelf, microphone on the Timeless ink band,
+  piano-key strip at Original songs; at 375 one guitar headstock peeks from the header), the Timeless pelmet curtain in its own strip above
+  the H1 (measured with motion allowed: curtain bottom 365px, H1 top 378px at 1280; 337px and 341px at 375), the sideboard home on the other
+  site (three doorways on a drawn sideboard, one small shelf each at 375), drawn two-ink shelves under the books on /books and the albums on
+  /music, and on /anns-art the salon-hang index (reduced motion) plus the hallway with picture rail, skirting, 64px arrows and "1 of 36"
+  counter (checked separately with motion allowed; not in this set).
+- Page titles on the other site are now blue on every route; main keeps red.
 - No gradients (other than the allowed vinyl disc), no drop shadows (other than the allowed book-spine insets), no rounded cards, no
-  kicker labels, no hamburger menu seen.
-- Timeless: two scrapbook prints are deliberately tucked over a corner of the neighbouring photo (`.snap--inset`, margin-top:-12%).
-- Titles on the other site (/books, /read/*, /anns-art, /delivery, the painting route) are red like the main site; only the other home and
-  Timeless use blue. Raised for a design decision, not ticked off as a defect here.
+  kicker labels, no hamburger menu, no "View N" chips, one action per book, one Buy or Enquire per painting.
+- No readable text below 16px on any route at 1280 (every visible text node checked).
+- Timeless: two scrapbook prints are deliberately tucked over a corner of the neighbouring photo (`.snap--inset`).
+- Main home hero is half width, recorded as an accepted change in DESIGN.md (the only photo is 600px wide).
+- Open design points, not blocking: "Bookings" is always bold red in the main nav (`.mnav a.nav-booking`), even on /music where Albums is
+  current, which reads as a single recoloured accent word; on the other site the logo and in-prose links (`p a`) are red although the site
+  is blue-led; on short pages (404) at 1280x900 a strip of paper shows under the footer; the reviews form has no privacy link until the
+  legal pages are published (gated by content/legal.config.json).
 
 ## W3 design foundation (after-w3/)
 
