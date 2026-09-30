@@ -40,15 +40,15 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - Notes: --measure is 56ch, not 66ch (66ch at 20px Times gave 68-75 char lines; DESIGN.md rule is 60-72). Filled buttons use red-deep (white on red was 3.78:1). Play gate added: playPrice=100, playLinksCurrent=false, play-* links blank.
 
 ## W4 Reader, audiobooks, textbooks
-- [ ] One BookReader (react-pageflip) for all 12 titles, shared controls
-- [ ] Play previews (previewPages, end panel, counter wording, Buy only)
-- [ ] Play audio preview clips; full recordings moved to private/
-- [ ] Text alternative toggle + /read/[slug]/text for stories and textbooks
-- [ ] books.config.json fields, build-books download gating, preview-only page images
+- [x] One BookReader (react-pageflip) for all 12 titles, shared controls
+- [x] Play previews (previewPages, end panel, counter wording, Buy only)
+- [x] Play audio preview clips; full recordings moved to private/
+- [x] Text alternative toggle + /read/[slug]/text for stories and textbooks
+- [x] books.config.json fields, build-books download gating, preview-only page images
 - [x] Story cues + review reports (HTML + CSV) for 4 stories; unverified => follow off (content/story-cues, docs/cue-review; stable-ts alignment; all verified:false). Reader wiring pending.
-- [ ] Auto-turn behaviour rules
-- [ ] Textbooks live (read online + download PDF)
-- [ ] Gate: story-cues, leak, reader DOM tests pass
+- [x] Auto-turn behaviour rules
+- [x] Textbooks live (read online + download PDF)
+- [x] Gate: story-cues, leak, reader DOM tests pass (build:books --force + build:vinext + npm test 211/211; only story/textbook PDFs public; plays 6 preview images each; full play mp3s in private/)
 
 ## W5 Declutter and art direction
 - [x] Illustration system + motion observer (components/illustrations/TwoInk, MotionObserver, app/illustrations.css)
