@@ -30,7 +30,7 @@ export default async function PaintingPage({ params }) {
     <div>
       <script {...jsonLdProps(jsonLd)} />
       <div className="band painting-page">
-        <p className="painting-back"><Link className="back-link" href="/anns-art">All of Ann&rsquo;s paintings</Link></p>
+        <p className="painting-back"><Link prefetch={false} className="back-link" href="/anns-art">All of Ann&rsquo;s paintings</Link></p>
         <PaintingDetail art={art} checkoutUrl={stripePaymentLink(`art-${art.id}`)} Heading="h1" priority />
       </div>
     </div>

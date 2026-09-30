@@ -61,12 +61,12 @@ export default function Page() {
 
       <nav className="home-doorways band" aria-label="Allen's music">
         <div className="home-doors">
-          <Link className="door" href="/hire">
+          <Link prefetch={false} className="door" href="/hire">
             <Headstock className="door-art door-art--headstock" draw />
             <span className="door-word">Bookings</span>
             <span className="door-line">Solo guitar for restaurants and private bookings</span>
           </Link>
-          <Link className="door" href="/music">
+          <Link prefetch={false} className="door" href="/music">
             <Record className="door-art door-art--record" draw delay={150} />
             <span className="door-word">Albums</span>
             <span className="door-line">Four albums to hear free, and his original songs</span>
@@ -102,7 +102,7 @@ export default function Page() {
           </figcaption>
         </figure>
         <p className="home-reviews">
-          <Link href="/reviews">See Friendly reviews</Link>
+          <Link prefetch={false} href="/reviews">See Friendly reviews</Link>
         </p>
       </section>
 

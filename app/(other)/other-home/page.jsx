@@ -36,7 +36,7 @@ export default function OtherHome() {
       </header>
 
       <div className="doorways">
-        <Link className="doorway doorway-book" href="/books">
+        <Link prefetch={false} className="doorway doorway-book" href="/books">
           <span className="doorway-label">
             <span className="doorway-title">Stories</span>
             <span className="doorway-sub">Chinese Chimes, plays and textbooks</span>
@@ -51,7 +51,7 @@ export default function OtherHome() {
           <SideboardShelf className="doorway-shelf" draw />
         </Link>
 
-        <Link className="doorway doorway-frame" href="/anns-art">
+        <Link prefetch={false} className="doorway doorway-frame" href="/anns-art">
           <span className="doorway-label">
             <span className="doorway-title">Ann Gillon</span>
             <span className="doorway-sub">Ann&rsquo;s original paintings</span>
@@ -74,7 +74,7 @@ export default function OtherHome() {
           <SideboardShelf className="doorway-shelf" draw />
         </Link>
 
-        <Link className="doorway doorway-photo" href="/biography">
+        <Link prefetch={false} className="doorway doorway-photo" href="/biography">
           <span className="doorway-label">
             <span className="doorway-title">Timeless</span>
             <span className="doorway-sub">Allen and Ann&rsquo;s story</span>

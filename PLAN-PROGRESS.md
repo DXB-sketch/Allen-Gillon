@@ -57,11 +57,12 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [ ] Gate: counted checks, screenshots, grep checks
 
 ## W6 SEO
-- [~] Metadata per page, templates, canonicals (lib/seo.mjs ROUTE_META done; per-page wiring per docs/SEO-WIRING.md pending)
+- [x] Metadata per page, templates, canonicals (every page wired, /read and /read/*/text included; docs/SEO-WIRING.md)
 - [x] Host-aware robots + sitemap (lib/seo.mjs, tests/seo.test.mjs)
-- [~] Icons + manifest per host (public/icons/{main,other} built; wiring pending)
-- [~] OG images (65 built via scripts/build-og.mjs + content/og-images.json; wiring pending)
-- [~] JSON-LD lib/schema.mjs + test (library + 19 tests merged; wiring into pages pending)
+- [x] Icons + manifest per host (group layouts and pageMetadata)
+- [x] OG images (65 built via scripts/build-og.mjs; served through pageMetadata)
+- [x] JSON-LD wired into every page (/books: all 12 Book nodes; /read: Book + breadcrumbs; /delivery and legal: breadcrumbs)
+- [~] JS budget 150 KB gzip: 10 of 16 measured routes pass; /music, /reviews, /anns-art, painting pages and /read are over (vinext floor 138.3 KB; docs/PERFORMANCE.md)
 - [ ] Performance: Dynalight self-hosted, _headers, LCP preload
 
 ## W7 Accessibility and legal
@@ -103,5 +104,6 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] Ultra-wide cap, /shows indexing, tel: links, painting dimensions and medium
 - [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py
 - [B] Cue ear-check sign-off per story (docs/cue-review/<slug>/index.html; low-confidence picture pages listed there); ElevenLabs source script if alignment confidence < 0.6
+- [B] JS budget: accept the overage on interactive routes, raise the budget to 160 KB, or choose one of the options in docs/PERFORMANCE.md
 - [B] Confirm "Albums" as the /music H1 wording
 - [B] Confirm /music lede edit: "Individual song downloads are available in each track list." (was "...under the three-dot menus")

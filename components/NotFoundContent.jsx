@@ -6,7 +6,7 @@ export default function NotFoundContent() {
       <header className="pagehead band">
         <h1 className="script">Page not found</h1>
         <p className="plain">
-          That page is not here. <Link href="/">Go to the home page</Link>.
+          That page is not here. <Link prefetch={false} href="/">Go to the home page</Link>.
         </p>
       </header>
     </div>

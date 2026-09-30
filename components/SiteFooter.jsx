@@ -61,7 +61,7 @@ export default function SiteFooter({ site = "main" }) {
         <div className="footer-links">
           <nav aria-label="Footer">
             {NAV[key].map((l) => (
-              <Link key={l.href} href={l.href}>
+              <Link prefetch={false} key={l.href} href={l.href}>
                 {l.label}
               </Link>
             ))}
@@ -79,7 +79,7 @@ export default function SiteFooter({ site = "main" }) {
                     {l.label}
                   </CrossSiteLink>
                 ) : (
-                  <Link key={l.path} href={l.path}>
+                  <Link prefetch={false} key={l.path} href={l.path}>
                     {l.label}
                   </Link>
                 ),

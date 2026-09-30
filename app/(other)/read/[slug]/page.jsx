@@ -5,43 +5,19 @@ import BookReader from "../../../../components/reader/BookReader";
 import { stripePaymentLink } from "../../../../lib/storefront.mjs";
 import { numbering } from "../../../../lib/reader-pages.mjs";
 import { book as bookSchema, breadcrumbs, jsonLdProps } from "../../../../lib/schema.mjs";
-import { ogImages } from "../../../../lib/og.mjs";
+import { generateReadMetadata } from "../../../../lib/seo.mjs";
 import { cueFiles, manifests, pageTexts, readableSlugs, SECTION_BACK } from "../books-data.mjs";
 import "./read.css";
 
-const ORIGIN = "https://other.allengillon.com";
 const aud = (cents) => `A$${(cents / 100).toFixed(cents % 100 ? 2 : 0)}`;
-
-export const dynamicParams = false;
 
 export async function generateStaticParams() {
   return readableSlugs.map((slug) => ({ slug }));
 }
 
-function describe(m) {
-  if (m.section === "plays") {
-    return `Preview the first ${m.shownPages} pages of ${m.title}, a school play by Allen Gillon for primary-school performers. The full ${m.pageCount}-page script is ${aud(m.price)}.`;
-  }
-  if (m.section === "childrens") {
-    return `Read ${m.title}, a Chinese Chimes story by Allen Gillon, as a page-turning book. Listen to the narrated audiobook, show the words, or download the free PDF.`;
-  }
-  return `Read ${m.title} by A. R. Gillon online, page by page, or download the free PDF. ${m.blurb} From Allen's years as a primary teacher.`;
-}
-
-export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const m = manifests[slug];
-  if (!m) return {};
-  const route = `/read/${slug}`;
-  const images = ogImages("other", route);
-  return {
-    title: m.section === "plays" ? `${m.title}, a school play` : m.title,
-    description: describe(m),
-    alternates: { canonical: `${ORIGIN}${route}` },
-    openGraph: { title: m.title, description: describe(m), url: `${ORIGIN}${route}`, type: "book", images },
-    twitter: { card: "summary_large_image", title: m.title, description: describe(m), images },
-  };
-}
+// Title, description, canonical, Open Graph and twitter card come from
+// lib/seo.mjs, the one source for page metadata (docs/SEO-WIRING.md).
+export const generateMetadata = generateReadMetadata;
 
 function lede(m) {
   if (m.section === "plays") {
@@ -70,6 +46,7 @@ export default async function ReadPage({ params }) {
     }),
     breadcrumbs(
       [
+        { name: "Home", url: "/" },
         { name: "Stories, plays and textbooks", url: "/books" },
         { name: m.title, url: `/read/${slug}` },
       ],
@@ -78,7 +55,7 @@ export default async function ReadPage({ params }) {
   ];
 
   return (
-    <main className="read-page">
+    <div className="read-page">
       <script {...jsonLdProps(schema)} />
       <header className="pagehead band read-head">
         <h1 className="script">{m.title}</h1>
@@ -101,13 +78,13 @@ export default async function ReadPage({ params }) {
         <div className="read-links">
           {m.textRoute ? (
             <p>
-              <Link className="read-textlink" href={m.textRoute}>
+              <Link prefetch={false} className="read-textlink" href={m.textRoute}>
                 Read every page as plain text
               </Link>
             </p>
           ) : null}
           <p>
-            <Link className="back-link" href={back.href}>{back.label}</Link>
+            <Link prefetch={false} className="back-link" href={back.href}>{back.label}</Link>
           </p>
         </div>
         {/* The page reader ("Listen to this page") reads the book, not the comment link. */}
@@ -115,6 +92,6 @@ export default async function ReadPage({ params }) {
           <SectionComment subject={m.title} returnTo={`/read/${slug}`} returnLabel={m.title} />
         </div>
       </section>
-    </main>
+    </div>
   );
 }

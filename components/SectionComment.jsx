@@ -6,7 +6,7 @@ export default function SectionComment({ subject, returnTo, returnLabel, lead = 
   return (
     <p className="section-comment">
       {lead ? <>{lead} </> : null}
-      <Link href={{ pathname: "/comments", query: { subject, returnTo, returnLabel } }}>{children}</Link>
+      <Link prefetch={false} href={{ pathname: "/comments", query: { subject, returnTo, returnLabel } }}>{children}</Link>
     </p>
   );
 }

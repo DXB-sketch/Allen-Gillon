@@ -25,6 +25,7 @@ import {
   websiteSchema,
 } from "../lib/schema.mjs";
 import { artworks } from "../content/artworks.mjs";
+import { playLinksCurrent } from "../lib/storefront.mjs";
 
 const booksConfig = JSON.parse(await readFile(new URL("../content/books.config.json", import.meta.url), "utf8"));
 
@@ -165,6 +166,11 @@ test("book: plays cost A$1.00 from Allen, preview audio, teacher audience", () =
   assert.equal(playNode.offers.priceCurrency, "AUD");
   assert.equal(playNode.offers.seller["@id"], IDS.allen);
   assert.equal(playNode.offers.seller.name, "Allen Gillon");
+  assert.equal(
+    playNode.offers.availability,
+    playLinksCurrent ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+    "no in-stock claim while the A$1 play links are not live",
+  );
   assert.equal(playNode.isAccessibleForFree, false);
   assert.equal(playNode.audience.suggestedMinAge, 10);
   assert.equal(playNode.audience.suggestedMaxAge, 13);

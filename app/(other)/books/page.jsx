@@ -25,10 +25,12 @@ import "./books.css";
 
 export const metadata = pageMetadata("other", "/books");
 
-/* A book that cannot be read on this site yet (the textbooks whose old
-   manifests are not "free", until W4's manifests land) gets no Book node,
-   because book() says free and in stock. The new shape has no status field. */
-const readable = (b) => b.status === undefined || b.status === "free";
+/* Every title with pages to read here gets a Book node: stories and
+   textbooks are free (status "free", with the PDF), plays are previews
+   (status "preview") with the A$1 offer. A title that cannot be read here
+   (the old closed textbook shape, or no pages shown) gets none. */
+const readable = (b) =>
+  (b.status === undefined || b.status === "free" || b.status === "preview") && b.shownPages !== 0;
 
 /* The shelves as one collection, then a Book for each readable title. Audio
    stays on each /read page, which owns the audiobooks and the play previews.
@@ -63,7 +65,7 @@ function booksJsonLd({ stories, plays, textbooks }) {
 function Book({ book, index, href, ground, children }) {
   return (
     <li className="book">
-      <Link className="book-cover" href={href} tabIndex={-1} aria-hidden="true">
+      <Link prefetch={false} className="book-cover" href={href} tabIndex={-1} aria-hidden="true">
         <img src={book.cover} width={book.aspect[0]} height={book.aspect[1]} loading="lazy" decoding="async" alt="" />
       </Link>
       <ShelfPlank className="shelf-plank" grain={index} ground={ground} draw delay={index * 90} />
@@ -114,8 +116,8 @@ export default function BooksPage() {
             <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`}>
               <p className="book-blurb">{book.blurb}</p>
               <div className="book-actions">
-                <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read and listen to ${book.title}`}>Read and listen</Link>
-                <Link className="book-text-link" href={`/read/${book.slug}/text`} aria-label={`Text only version of ${book.title}`}>Text only</Link>
+                <Link prefetch={false} className="book-action" href={`/read/${book.slug}`} aria-label={`Read and listen to ${book.title}`}>Read and listen</Link>
+                <Link prefetch={false} className="book-text-link" href={`/read/${book.slug}/text`} aria-label={`Text only version of ${book.title}`}>Text only</Link>
               </div>
             </Book>
           ))}
@@ -137,7 +139,7 @@ export default function BooksPage() {
                 <p className="book-blurb">{book.blurb}</p>
                 <p className="book-price"><strong>{priceLabel(book.price)}</strong> <span>script, {book.fullPages} pages</span></p>
                 <div className="book-actions">
-                  <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read a preview of ${book.title}`}>Read a preview</Link>
+                  <Link prefetch={false} className="book-action" href={`/read/${book.slug}`} aria-label={`Read a preview of ${book.title}`}>Read a preview</Link>
                   {/* While the storefront gate holds the play links back, the
                       "coming soon" note is said once, in the coda below. */}
                   {buyHref ? <PurchaseLink href={buyHref}>Buy the script<span className="visually-hidden"> of {book.title}</span></PurchaseLink> : null}
@@ -165,7 +167,7 @@ export default function BooksPage() {
             <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`} ground="ink">
               <p className="book-blurb">{book.blurb}</p>
               <div className="book-actions">
-                <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read online: ${book.title}`}>Read online</Link>
+                <Link prefetch={false} className="book-action" href={`/read/${book.slug}`} aria-label={`Read online: ${book.title}`}>Read online</Link>
                 {book.pdf ? <a className="book-action" href={book.pdf} download aria-label={`Download PDF of ${book.title}`}>Download PDF</a> : null}
               </div>
             </Book>

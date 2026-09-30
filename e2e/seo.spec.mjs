@@ -7,14 +7,15 @@ import bookIndex from "../public/books/index.json" with { type: "json" };
 // W6 SEO on both hosts of the dev server:
 // - per-host icons, manifest, theme colour, site JSON-LD, robots.txt,
 //   sitemap.xml and the root favicon;
-// - every non-reader route: a unique title of 60 characters or fewer, a
+// - every route (the /read pages and story and textbook text routes too): a unique title of 60 characters or fewer, a
 //   150-160 character description, an absolute unique canonical, Open Graph
 //   (siteName, en_AU, an absolute 1200x630 image) and a summary_large_image
 //   twitter card, read from the server-rendered HTML head;
 // - every JSON-LD block parses and holds no Review, AggregateRating, FAQPage
 //   or Event.
-// The /read routes (W4), /delivery and the legal pages (W7) are left to their
-// own workstreams.
+// The legal pages join ROUTES.main once content/legal.config.json is
+// published (until then they are 404s by design).
+import legalConfig from "../content/legal.config.json" with { type: "json" };
 const port = Number(process.env.SITE_DEV_PORT || 3001);
 const HOSTS = {
   main: `http://localhost:${port}`,
@@ -28,9 +29,17 @@ const SAMPLE = {
   other: ["/", "/biography", "/books", "/anns-art", `/anns-art/${artworks[0].id}`, "/comments"],
 };
 
+const TEXT_SECTIONS = ["childrens", "teaching"];
 const ROUTES = {
-  main: ["/", "/hire", "/music", "/reviews", "/shows", "/comments"],
-  other: ["/", "/biography", "/books", "/anns-art", ...artworks.map((a) => `/anns-art/${a.id}`), "/comments"],
+  main: [
+    "/", "/hire", "/music", "/reviews", "/shows", "/comments",
+    ...(legalConfig.published === true ? ["/privacy", "/terms", "/accessibility"] : []),
+  ],
+  other: [
+    "/", "/biography", "/books", "/anns-art", ...artworks.map((a) => `/anns-art/${a.id}`), "/delivery", "/comments",
+    ...bookIndex.map((b) => `/read/${b.slug}`),
+    ...bookIndex.filter((b) => TEXT_SECTIONS.includes(b.section)).map((b) => `/read/${b.slug}/text`),
+  ],
 };
 const NOINDEX = new Set(["/comments"]);
 const FORBIDDEN = ["Review", "AggregateRating", "FAQPage", "Event"];
@@ -108,15 +117,36 @@ for (const [site, base] of Object.entries(HOSTS)) {
       } else {
         const books = await nodes("/books");
         expect(types(books)).toContain("CollectionPage");
-        // A Book node for every title readable here (the old "restricted"
-        // textbooks have none until W4 opens them); stories carry their PDF.
-        const readable = bookIndex.filter((b) => b.status === undefined || b.status === "free");
+        // A Book node for every title readable here: stories and textbooks
+        // are free with their PDF, plays are A$1 from Allen with no PDF.
         const bookNodes = books.filter((n) => n["@type"] === "Book");
-        expect(bookNodes.map((n) => n.url).sort()).toEqual(readable.map((b) => `${ORIGIN.other}/read/${b.slug}`).sort());
-        for (const b of readable.filter((x) => x.section === "childrens")) {
+        expect(bookNodes.map((n) => n.url).sort()).toEqual(bookIndex.map((b) => `${ORIGIN.other}/read/${b.slug}`).sort());
+        for (const b of bookIndex) {
           const node = bookNodes.find((n) => n.url.endsWith(`/read/${b.slug}`));
-          expect(node.encoding?.contentUrl).toBe(`${ORIGIN.other}/books/${b.slug}/${b.slug}.pdf`);
+          expect(node.offers.seller.name).toBe("Allen Gillon");
+          if (b.section === "plays") {
+            expect(node.offers.price).toBe("1.00");
+            expect(node.encoding).toBeUndefined();
+          } else {
+            expect(node.offers.price).toBe("0.00");
+            expect(node.encoding?.contentUrl).toBe(`${ORIGIN.other}/books/${b.slug}/${b.slug}.pdf`);
+          }
         }
+        // Each /read page: Book and breadcrumbs; the recorded plays carry their preview.
+        for (const b of bookIndex) {
+          const read = await nodes(`/read/${b.slug}`);
+          expect(types(read)).toEqual(expect.arrayContaining(["Book", "BreadcrumbList"]));
+          const node = read.find((n) => n["@type"] === "Book");
+          if (["melting-pot", "breakout"].includes(b.slug)) {
+            expect(node.audio?.contentUrl).toBe(`${ORIGIN.other}/audio/school-play-previews/${b.slug}.mp3`);
+          }
+          if (TEXT_SECTIONS.includes(b.section)) {
+            expect(types(await nodes(`/read/${b.slug}/text`))).toContain("BreadcrumbList");
+          } else {
+            expect((await request.get(`${base}/read/${b.slug}/text`)).status()).toBe(404);
+          }
+        }
+        expect(types(await nodes("/delivery"))).toContain("BreadcrumbList");
         expect(types(await nodes("/anns-art"))).toContain("CollectionPage");
         expect(types(await nodes("/biography"))).toContain("BreadcrumbList");
         const forSale = artworks.find((a) => a.availability === "available");

@@ -131,7 +131,7 @@ export default function BiographyPage() {
             <p className="scene-year">Today</p>
             <div className="scene-text">
               <h2 id="era-timeless">Timeless</h2>
-              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless, they enjoy playing for diners around Bribie Island. You can <CrossSiteLink site="main" path="/hire">book them here</CrossSiteLink>.</p>
+              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link prefetch={false} href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless, they enjoy playing for diners around Bribie Island. You can <CrossSiteLink site="main" path="/hire">book them here</CrossSiteLink>.</p>
               <figure className="scene-video">
                 <video
                   controls

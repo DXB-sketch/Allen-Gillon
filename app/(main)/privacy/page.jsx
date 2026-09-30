@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import legal from "../../../content/legal.config.json";
 import { LEGAL_UPDATED, SUPPORT_EMAIL, legalRouteVisible } from "../../../lib/legal.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "../legal.css";
 
 export const metadata = pageMetadata("main", "/privacy");
@@ -14,10 +15,13 @@ export const metadata = pageMetadata("main", "/privacy");
 
 const mail = <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>;
 
+const CRUMBS = breadcrumbs([{ name: "Home", url: "/" }, { name: "Privacy" }], "main");
+
 export default function PrivacyPage() {
   if (!legalRouteVisible("/privacy", legal)) notFound();
   return (
     <div>
+      <script {...jsonLdProps(CRUMBS)} />
       <header className="pagehead band">
         <h1 className="script">Privacy</h1>
         <p className="plain">
@@ -142,7 +146,7 @@ export default function PrivacyPage() {
             Australian Information Commissioner at <a href="https://www.oaic.gov.au">oaic.gov.au</a>.
           </p>
           <p>
-            How we sell paintings and scripts is set out in the <Link href="/terms">terms of sale</Link>.
+            How we sell paintings and scripts is set out in the <Link prefetch={false} href="/terms">terms of sale</Link>.
           </p>
 
           <p className="legal-updated">Last updated {LEGAL_UPDATED}.</p>

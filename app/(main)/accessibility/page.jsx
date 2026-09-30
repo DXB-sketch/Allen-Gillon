@@ -3,6 +3,7 @@ import Link from "next/link";
 import legal from "../../../content/legal.config.json";
 import { LEGAL_UPDATED, SMS_DISPLAY, SMS_NUMBER, SUPPORT_EMAIL, legalRouteVisible } from "../../../lib/legal.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "../legal.css";
 
 export const metadata = pageMetadata("main", "/accessibility");
@@ -13,10 +14,13 @@ export const metadata = pageMetadata("main", "/accessibility");
 
 const mail = <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>;
 
+const CRUMBS = breadcrumbs([{ name: "Home", url: "/" }, { name: "Accessibility" }], "main");
+
 export default function AccessibilityPage() {
   if (!legalRouteVisible("/accessibility", legal)) notFound();
   return (
     <div>
+      <script {...jsonLdProps(CRUMBS)} />
       <header className="pagehead band">
         <h1 className="script">Accessibility</h1>
         <p className="plain">
@@ -54,7 +58,7 @@ export default function AccessibilityPage() {
           <h2>Known limits</h2>
           <ul>
             <li>
-              The <Link href="/music#originals">original song videos</Link> are on YouTube, so their captions depend
+              The <Link prefetch={false} href="/music#originals">original song videos</Link> are on YouTube, so their captions depend
               on YouTube.
             </li>
             <li>The captions on the Timeless videos describe the music. Sung words there are still being checked with Allen and Ann.</li>

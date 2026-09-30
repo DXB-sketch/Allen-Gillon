@@ -4,6 +4,7 @@ import CrossSiteLink from "../../../components/CrossSiteLink";
 import legal from "../../../content/legal.config.json";
 import { LEGAL_UPDATED, SMS_DISPLAY, SMS_NUMBER, SUPPORT_EMAIL, legalRouteVisible } from "../../../lib/legal.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "../legal.css";
 
 export const metadata = pageMetadata("main", "/terms");
@@ -16,10 +17,13 @@ export const metadata = pageMetadata("main", "/terms");
 
 const mail = <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>;
 
+const CRUMBS = breadcrumbs([{ name: "Home", url: "/" }, { name: "Terms of sale" }], "main");
+
 export default function TermsPage() {
   if (!legalRouteVisible("/terms", legal)) notFound();
   return (
     <div>
+      <script {...jsonLdProps(CRUMBS)} />
       <header className="pagehead band">
         <h1 className="script">Terms of sale</h1>
         <p className="plain">
@@ -121,7 +125,7 @@ export default function TermsPage() {
 
           <h2>Your privacy</h2>
           <p>
-            How we handle your details is explained in the <Link href="/privacy">privacy policy</Link>.
+            How we handle your details is explained in the <Link prefetch={false} href="/privacy">privacy policy</Link>.
           </p>
 
           <h2>Contact</h2>

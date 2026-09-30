@@ -40,7 +40,7 @@ export default function HirePage() {
         <ul className="offer">
           <li>
             <h2>Restaurant guitarist</h2>
-            <p>Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; and &ldquo;Take Five&rdquo; on <Link href="/music">the albums page</Link>.</p>
+            <p>Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; and &ldquo;Take Five&rdquo; on <Link prefetch={false} href="/music">the albums page</Link>.</p>
           </li>
           <li>
             <h2>Functions and events</h2>

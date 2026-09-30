@@ -3,15 +3,19 @@ import CrossSiteLink from "../../../components/CrossSiteLink";
 import legal from "../../../content/legal.config.json";
 import { SMS_DISPLAY, SMS_NUMBER, SUPPORT_EMAIL, isLegalPublished } from "../../../lib/legal.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "./delivery.css";
 
 // Ann Gillon sells the paintings, so this page names her as the seller.
 export const metadata = pageMetadata("other", "/delivery");
 
+const CRUMBS = breadcrumbs([{ name: "Home", url: "/" }, { name: "Ann Gillon", url: "/anns-art" }, { name: "Delivery and payment" }], "other");
+
 export default function DeliveryPage() {
   const termsPublished = isLegalPublished(legal);
   return (
     <div>
+      <script {...jsonLdProps(CRUMBS)} />
       <header className="pagehead band">
         <h1 className="script">Delivery & payment</h1>
       </header>
@@ -35,7 +39,7 @@ export default function DeliveryPage() {
           </p>
           <h2>Buying online</h2>
           <p>
-            Available paintings can be bought from <Link href="/anns-art">Ann&rsquo;s art page</Link>. Stripe collects
+            Available paintings can be bought from <Link prefetch={false} href="/anns-art">Ann&rsquo;s art page</Link>. Stripe collects
             payment and the Australian delivery address. Because every painting is an original, its checkout closes
             after the first completed purchase.
           </p>
@@ -53,7 +57,7 @@ export default function DeliveryPage() {
             </p>
           ) : null}
           <p>
-            <Link href="/anns-art">Back to Ann&rsquo;s paintings</Link>
+            <Link prefetch={false} href="/anns-art">Back to Ann&rsquo;s paintings</Link>
           </p>
         </div>
       </section>

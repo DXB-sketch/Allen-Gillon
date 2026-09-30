@@ -34,7 +34,7 @@ export default async function CommentsPage({ searchParams }) {
           {/* The way back is a text link, never a second button: the page's
               one primary action is "Send as a text to Allen". */}
           <p className="cback">
-            <Link className="back-link" href={returnTo}>Back to {returnLabel}</Link>
+            <Link prefetch={false} className="back-link" href={returnTo}>Back to {returnLabel}</Link>
           </p>
           <h1 className="script">Write a comment</h1>
           <p className="plain">

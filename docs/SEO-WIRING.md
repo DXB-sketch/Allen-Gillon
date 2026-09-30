@@ -32,44 +32,56 @@ the orchestrator makes the changes below. Each one is small.
   /audio an immutable one-year cache. `/books/*` gets
   `max-age=86400, must-revalidate`.
 
-## Wiring status (seo-wiring branch)
+## Wiring status (overhaul, integration pass 2026-10-01)
 
-Wired: every page.jsx on both hosts except `/read/**` (W4), `/delivery` and
-the legal pages (W7). `/anns-art/[id]` now uses `generateArtworkMetadata`,
-and `lib/seo.mjs` reads the paintings from `lib/art-catalog.mjs` (repeated
-photos removed), so the painting page, its description and the image
-sitemap all count the same views. `e2e/seo.spec.mjs` fetches every wired
-route on both hosts and checks the head tags and JSON-LD, with titles,
-descriptions and canonicals unique across both hosts.
+Every page on both hosts is wired. The integration pass closed the last gaps:
 
-- `app/layout.jsx` sets no description either, so `/delivery` and the
-  `/read` pages have none until W7 and W4 wire `pageMetadata`.
-- `/books` renders a Book node only for titles readable here: the three
-  "restricted" textbooks get one once W4's manifests open them. Stories and
-  free textbooks pass `downloadUrl` by the shelf's `textbookPdf()` rule, and
-  the collection images are each book's shelf cover (the scan until a
-  textbook has `p001.webp`).
+- `/read/[slug]` uses `generateReadMetadata` and `/read/[slug]/text` uses
+  `generateReadTextMetadata`. The hand-written metadata in both pages is gone.
+  Neither page sets `dynamicParams = false` any more: an unknown slug, or a
+  play's `/text`, goes through the page's own `notFound()`. With
+  `dynamicParams = false`, vinext rendered the 404 inside the group layout,
+  which gave it two `<main>` elements and a doubled title suffix.
+- `/read/[slug]` renders `[book(...), breadcrumbs(Home > Stories, plays and
+  textbooks > title)]`. Plays are A$1.00 sold by Allen, with no PDF;
+  melting-pot and breakout carry their preview as an AudioObject. Stories and
+  textbooks are free, with the PDF as the Book's `encoding`. Text routes exist
+  for stories and textbooks only (a play's `/text` is a 404) and render
+  breadcrumbs ending in "The words".
+- Play offers say `PreOrder` while `playLinksCurrent` is false in
+  `lib/storefront.mjs`, and `InStock` once the A$1 Payment Links are live.
+  This matches the description line "will soon be an A$1 download".
+- `/books` renders a Book node for all 12 titles. The old filter only let
+  status "free" through, so it dropped every play (status "preview"). The
+  three textbooks are free and public (W4), and each carries its PDF.
+- `/delivery` (`pageMetadata("other", "/delivery")`, wired by W7) and the
+  legal pages (`pageMetadata("main", ...)`) now also render their breadcrumbs.
+  The legal pages stay 404 until `content/legal.config.json` is published.
+- `e2e/seo.spec.mjs` now checks every `/read` route, the story and textbook
+  text routes, and `/delivery` (plus the legal pages once they are published)
+  for head tags, uniqueness and JSON-LD.
+
+Still true from the seo-wiring branch:
+
+- `/anns-art/[id]` uses `generateArtworkMetadata`, and `lib/seo.mjs` reads the
+  paintings from `lib/art-catalog.mjs` (repeated photos removed).
 - The painting Offer's `merchantReturnLink` to `/terms` is left out while
   `content/legal.config.json` has `published: false`, so it never links a 404.
 - The `/music` sitemap images come from `albums` in
   `app/(main)/music/albums.mjs`, so hidden albums stay out.
 
-## Do not deploy before W4 and W5
+## Sitemap check on the built Worker (2026-10-01)
 
-The other host's sitemap is generated from the content data, so it already lists
-routes that other workstreams are still building. Until they merge, these
-entries return 404:
+The W4 text routes, the W5 painting pages and the textbook page images have
+all merged, so the "do not deploy before W4 and W5" warning no longer applies.
+On the built Worker (`SITE_DEV_PORT=4870 npm run start:vinext`):
 
-- all 7 `/read/<slug>/text` routes (W4 text route)
-- all 36 `/anns-art/<id>` pages (W5 painting route)
-- the `/books/<slug>/p001.webp` image entries for the three textbooks
-  (practice-in-communication-book-1, practice-in-communication-book-2,
-  riddled-with-language), until W4 builds their page images
-
-W6 must not reach production until the W4 text route, the W5 painting route and
-the textbook page images are merged. Otherwise Search Console gets 46 dead links.
-After those merges, fetch every `<loc>` and `<image:loc>` in
-`/sitemap.xml` on the built Worker and confirm each returns 200.
+- other host: 60 `<url>` entries with 57 image entries. That is 12 `/read/<slug>`,
+  7 `/read/<slug>/text` (4 stories and 3 textbooks) and 36 `/anns-art/<id>`,
+  plus the static routes.
+- main host: 5 `<url>` entries with 5 image entries (the legal pages are left out
+  while unpublished).
+- All 127 `<loc>` and `<image:loc>` URLs returned 200 on the matching Host.
 
 ## The metadata line for each page
 

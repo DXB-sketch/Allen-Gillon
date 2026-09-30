@@ -15,13 +15,14 @@ export default function SiteMast({ site = "main" }) {
   const isHome = isCurrentNav(home, pathname);
   return (
     <header className={`mast${isHome ? " home-mast" : ""}`} data-site={site}>
-      <Link className="logo" href="/">
+      <Link prefetch={false} className="logo" href="/">
         {SITES[site]?.name || SITES.main.name}
       </Link>
       <nav className="mnav" aria-label="Site">
         {links.map((l) => (
           <Link
             key={l.href}
+            prefetch={false}
             className={l.className}
             href={l.href}
             aria-current={isCurrentNav(l, pathname) ? "page" : undefined}

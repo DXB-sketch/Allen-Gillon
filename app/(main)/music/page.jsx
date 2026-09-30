@@ -107,7 +107,7 @@ export default function MusicPage() {
           </p>
           <p>
             Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or event,
-            see <Link href="/hire">Contact Allen</Link>.
+            see <Link prefetch={false} href="/hire">Contact Allen</Link>.
           </p>
         </div>
         <div className="instrument instrument--mic" data-motion="from-right">
