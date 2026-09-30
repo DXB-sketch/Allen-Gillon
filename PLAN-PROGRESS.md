@@ -11,24 +11,25 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [x] Textbook PDFs compressed and legibility-checked (scripts/incoming/processed: 13.3, 12.0, 13.5 MiB; text layers intact). No R2 needed.
 
 ## W1 Email fixes
-- [ ] a) Player status machine, words in bar, previews labelled and never auto-advance, mediaSession, aria-live
-- [ ] b) Allen's Stories paragraph beside the Chinese Chimes H2 (rendered HTML grep)
-- [ ] c) PageReader leaf-block reading, TreeWalker skip, dedupe + DOM test
-- [ ] d) `normaliseForSpeech()` + tests/speech.test.mjs
-- [ ] e) PageReader single "Listen to this page" control, voice prop from layout
-- [ ] Gate: W1 unit tests + Playwright now-playing tests pass
+- [x] a) Player status machine, words in bar, previews labelled and never auto-advance, mediaSession, aria-live
+- [x] b) Allen's Stories paragraph beside the Chinese Chimes H2 (rendered HTML grep)
+- [x] c) PageReader leaf-block reading, TreeWalker skip, dedupe + DOM test
+- [x] d) `normaliseForSpeech()` + tests/speech.test.mjs
+- [x] e) PageReader single "Listen to this page" control, voice prop from layout
+- [x] Gate: W1 unit tests + Playwright now-playing tests pass
 
 ## W2 Subdomain split
-- [ ] lib/sites.mjs (SITES, ROUTE_OWNER, siteForHost, resolveRequest, crossSiteUrl, SITE_DEV_PORT)
-- [ ] Route groups (main)/(other), lang en-AU, data-site, metadataBase per group
-- [ ] SiteMast / SiteFooter with cross-site absolute link, no hamburger
-- [ ] proxy.ts rules 1-6, /plays rule removed from next.config.mjs
-- [ ] tests/sites.test.mjs
-- [ ] Other home "The sideboard"
-- [ ] wrangler.jsonc other route, workers_dev false, preview_urls false; vercel.json noindex
-- [ ] /comments returnTo whitelist per host; host-aware not-found
-- [ ] CLOUDFLARE.md updated
-- [ ] Gate: sites tests + local curl Host-header checks pass
+- [x] lib/sites.mjs (SITES, ROUTE_OWNER, siteForHost, resolveRequest, crossSiteUrl, SITE_DEV_PORT)
+- [x] Route groups (main)/(other), lang en-AU, data-site, metadataBase per group
+- [x] SiteMast / SiteFooter with cross-site absolute link, no hamburger
+- [x] proxy.ts rules 1-6, /plays rule removed from next.config.mjs
+- [x] tests/sites.test.mjs
+- [x] Other home "The sideboard"
+- [x] wrangler.jsonc other route, workers_dev false, preview_urls false; vercel.json noindex
+- [x] /comments returnTo whitelist per host; host-aware not-found
+- [x] CLOUDFLARE.md updated
+- [x] Gate: sites tests + local curl Host-header checks pass (robots/sitemap check deferred to W6)
+- Notes: merged W1 (f83c1f9) and W2. Page reader voice per site via SiteChrome. Handed to W6: sideboard 1200x630 OG image, blue-led icon set, manifest (TODO(W6) in app/(other)/other-home/page.jsx). data-site on <html> via inline SITE_MARKER_SCRIPT. start:vinext now uses scripts/start-local.mjs (no routes, SITE_PREVIEW=1).
 
 ## W3 Design foundation
 - [ ] Tokens, named-line grid, full width mast/footer/bands
