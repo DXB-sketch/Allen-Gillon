@@ -54,7 +54,9 @@
 .corner-tr{top:-8px;right:-8px;transform:rotate(90deg);}
 .corner-br{bottom:-8px;right:-8px;transform:rotate(180deg);}
 .corner-bl{bottom:-8px;left:-8px;transform:rotate(270deg);}
-.photo-caption{display:block;padding:4px 0 6px;font-family:var(--script);font-size:2rem;line-height:1.1;color:var(--soft);text-align:right;}
+/* A pencilled note on the mount, in the body face (Dynalight is kept for
+   titles with the overprint). */
+.photo-caption{display:block;padding:6px 0 8px;font-style:italic;font-size:1.15rem;line-height:1.2;color:var(--soft);text-align:right;}
 
 /* The drawings under the objects. */
 .doorway-shelf{width:calc(100% + 32px);height:auto;margin:0 -16px;}
@@ -77,12 +79,15 @@
   .doorway-book .doorway-shelf{width:100%;margin:0;}
 }
 
-/* Wide: the three objects share one long sideboard. Labels line up across
-   the top; the objects stand on the sideboard's top edge. */
+/* Wide: the three objects share one long sideboard. Each doorway spans two
+   shared rows (subgrid): the labels sit on one row across the top, and the
+   objects stand on the sideboard's top edge below them. */
 @media (min-width:820px){
-  .doorways{grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1.1fr);align-items:stretch;
-    gap:clamp(32px,5vw,96px);}
-  .doorway-label{margin-top:auto;}
+  .doorways{grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1.1fr);grid-template-rows:auto auto;
+    column-gap:clamp(32px,5vw,96px);row-gap:clamp(20px,2.4vw,36px);}
+  .doorway{display:grid;grid-row:span 2;grid-template-rows:subgrid;}
+  .doorway-label{grid-row:1;align-self:end;margin-bottom:0;}
+  .doorway-object{grid-row:2;align-self:end;}
   .doorway-shelf{display:none;}
   .sideboard-drawing{display:block;width:100%;height:auto;margin-top:-0.34%;}
   .book-edges{height:clamp(16px,1.6vw,26px);}

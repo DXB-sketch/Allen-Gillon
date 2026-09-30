@@ -14,8 +14,20 @@ async function axe(page) {
 }
 
 test.describe("/reviews", () => {
-  test("reaches networkidle (the reviews request never stays open)", async ({ page }) => {
+  // Smoke check only. The "never reaches networkidle" hang noted in
+  // layout.spec.mjs could not be reproduced (the base code passes this too),
+  // so this does not guard a known regression.
+  test("smoke: loads to networkidle", async ({ page }) => {
     await page.goto(`${MAIN}/reviews`, { waitUntil: "networkidle", timeout: 30_000 });
+  });
+
+  test("the status live region stays in the accessibility tree while empty", async ({ page }) => {
+    await page.goto(`${MAIN}/reviews`);
+    const status = page.locator(".reviewStatus");
+    await expect(status).toHaveAttribute("role", "status");
+    await expect(status).toHaveText("");
+    expect(await status.evaluate((el) => getComputedStyle(el).display)).not.toBe("none");
+    expect(await status.evaluate((el) => getComputedStyle(el).visibility)).toBe("visible");
   });
 
   test("featured quote, table comments, approved reviews, then the form; no Back home", async ({ page }) => {
@@ -94,9 +106,21 @@ test.describe("other-site home: the sideboard", () => {
     await expect(doorways.nth(0).locator("img[src*='little-ray/p001']")).toHaveCount(1);
     await expect(doorways.nth(1).locator(".frame-drawing")).toHaveCount(1);
     await expect(doorways.nth(2).locator(".corner")).toHaveCount(4);
+    // Below-the-fold pictures load lazily; the painting uses a small derivative.
+    const painting = doorways.nth(1).locator("img");
+    await expect(painting).toHaveAttribute("loading", "lazy");
+    await expect(painting).toHaveAttribute("src", /ann-painting-480\.webp$/);
+    await expect(doorways.nth(2).locator("img")).toHaveAttribute("loading", "lazy");
     // Decorative svg stays under the 40KB budget (both ink copies included).
     const svgBytes = await page.$$eval("main svg", (els) => els.reduce((n, el) => n + el.outerHTML.length, 0));
     expect(svgBytes).toBeLessThan(40_000);
+  });
+
+  test("wide: the three labels share one row", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(`${OTHER}/`);
+    const tops = await page.$$eval(".doorway-label", (els) => els.map((el) => Math.round(el.getBoundingClientRect().bottom)));
+    expect(Math.max(...tops) - Math.min(...tops)).toBeLessThanOrEqual(2);
   });
 
   test("keeps its metadata and uses the W6 OG image", async ({ request }) => {

@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 // nothing until there is at least one, so the page never shows an empty
 // heading.
 //
-// The response body is always read, even on an error status: an unread body
-// keeps the request open in Chromium, and Playwright's networkidle then never
-// arrives (this was the /reviews hang). The timeout covers a stalled server.
+// The response body is always read, even on an error status, so the request
+// is closed cleanly, and a timeout covers a stalled server. (This is hygiene:
+// the networkidle hang noted in e2e/layout.spec.mjs was not reproduced.)
 export default function ApprovedReviews() {
   const [reviews, setReviews] = useState([]);
 

@@ -60,7 +60,7 @@ export default function OtherHome() {
           <span className="doorway-object" aria-hidden="true">
             <span className="book-pages">
               <img src="/books/little-ray/p001.webp" alt="" width="1000" height="1000" />
-              <img src="/books/little-ray/p002.webp" alt="" width="1003" height="1000" />
+              <img src="/books/little-ray/p002.webp" alt="" width="1003" height="1000" decoding="async" />
             </span>
             <SideboardBook className="book-edges" />
           </span>
@@ -73,7 +73,18 @@ export default function OtherHome() {
             <span className="doorway-sub">Ann&rsquo;s original paintings</span>
           </span>
           <span className="doorway-object" aria-hidden="true">
-            <img src="/images/art/gallery/426502619623139.webp" alt="" width="1397" height="1400" />
+            {/* A small derivative of gallery/426502619623139.webp (541KB), made for
+                this doorway. Swap to the Ann's art 480/960 variants once they exist. */}
+            <img
+              src="/images/sideboard/ann-painting-480.webp"
+              srcSet="/images/sideboard/ann-painting-480.webp 480w, /images/sideboard/ann-painting-960.webp 960w"
+              sizes="(min-width: 820px) 20vw, 50vw"
+              alt=""
+              width="480"
+              height="481"
+              loading="lazy"
+              decoding="async"
+            />
             <SideboardFrame className="frame-drawing" />
           </span>
           <SideboardShelf className="doorway-shelf" draw />
@@ -86,7 +97,14 @@ export default function OtherHome() {
           </span>
           <span className="doorway-object" aria-hidden="true">
             <span className="photo-print">
-              <img src="/images/personal/page-one-revue-1968-whiskey-a-go-go.jpg" alt="" width="678" height="506" />
+              <img
+                src="/images/personal/page-one-revue-1968-whiskey-a-go-go.jpg"
+                alt=""
+                width="678"
+                height="506"
+                loading="lazy"
+                decoding="async"
+              />
               <SideboardCorner className="corner corner-tl" />
               <SideboardCorner className="corner corner-tr" />
               <SideboardCorner className="corner corner-br" />
