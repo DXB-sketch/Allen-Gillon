@@ -12,3 +12,4 @@ art-review/
 worker-configuration.d.ts
 test-results/
 playwright-report/
+.claude/

@@ -1,0 +1,1 @@
+/reviews: networkidle timeout in Playwright (page returns 200 via curl); axe not captured.
