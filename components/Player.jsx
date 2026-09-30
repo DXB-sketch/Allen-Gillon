@@ -84,8 +84,30 @@ export function PlayerProvider({ children }) {
     }
   }, [setStatus]);
 
+  /* A start time waiting for the track's metadata (load at a time, or seek
+     before the track is ready). Only one can wait, and it belongs to the
+     track it was set for: a later load() or seek() drops it, so a book's
+     cue time can never land on the album track loaded after it. */
+  const pendingSeekRef = useRef(null);
+  const clearPendingSeek = useCallback(() => {
+    const pending = pendingSeekRef.current;
+    if (pending) audioRef.current?.removeEventListener("loadedmetadata", pending);
+    pendingSeekRef.current = null;
+  }, []);
+  const whenMetadata = useCallback((apply) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const forTrack = trackRef.current;
+    const handler = () => {
+      if (pendingSeekRef.current === handler) pendingSeekRef.current = null;
+      if (trackRef.current === forTrack) apply();
+    };
+    pendingSeekRef.current = handler;
+    audio.addEventListener("loadedmetadata", handler, { once: true });
+  }, []);
+
   const load = useCallback(
-    (nextTrack, playlist) => {
+    (nextTrack, playlist, { startAt = 0 } = {}) => {
       const audio = audioRef.current;
       if (!audio) return;
       playlistRef.current = playlist && playlist.length ? playlist : [nextTrack];
@@ -93,10 +115,49 @@ export function PlayerProvider({ children }) {
       setTrack(nextTrack);
       setCurrent(null);
       setStatus("loading");
-      audio.src = nextTrack.src;
+      /* A start time (the book reader's Listen on a later page) rides on a
+         media fragment, and is applied again once metadata is known in case
+         the browser ignored the fragment. */
+      const start = Number.isFinite(startAt) && startAt > 0 ? startAt : 0;
+      clearPendingSeek();
+      audio.src = start ? `${nextTrack.src}#t=${start.toFixed(2)}` : nextTrack.src;
+      if (start) {
+        whenMetadata(() => {
+          if (Math.abs(audio.currentTime - start) > 0.3) audio.currentTime = start;
+        });
+      }
       play();
     },
-    [play, setStatus]
+    [play, setStatus, clearPendingSeek, whenMetadata]
+  );
+
+  /* Book reader: move within the loaded track, and play it if it was paused. */
+  const seek = useCallback(
+    (time, { andPlay = true } = {}) => {
+      const audio = audioRef.current;
+      if (!audio || !trackRef.current || !Number.isFinite(time)) return;
+      setAnnouncement("");
+      clearPendingSeek();
+      if (audio.readyState >= 1) audio.currentTime = Math.max(0, time);
+      else whenMetadata(() => (audio.currentTime = Math.max(0, time)));
+      if (andPlay && statusRef.current !== "playing") {
+        if (statusRef.current === "error") audio.load();
+        play();
+      }
+    },
+    [play, clearPendingSeek, whenMetadata]
+  );
+
+  /* Book reader: play `nextTrack` from `time`. Seeks only when that track is
+     already the loaded source; anything else (an album track) is replaced by
+     loading this track, never seeked. */
+  const playAt = useCallback(
+    (nextTrack, time = 0) => {
+      setAnnouncement("");
+      if (trackRef.current && trackRef.current.src === nextTrack.src) seek(time);
+      else load(nextTrack, [nextTrack], { startAt: time });
+    },
+    [load, seek]
   );
 
   const togglePause = useCallback(() => {
@@ -129,6 +190,7 @@ export function PlayerProvider({ children }) {
     const audio = audioRef.current;
     requestRef.current += 1;
     pendingRef.current = false;
+    clearPendingSeek();
     if (audio) {
       audio.pause();
       audio.removeAttribute("src");
@@ -140,7 +202,7 @@ export function PlayerProvider({ children }) {
     setCurrent(null);
     setAnnouncement("");
     setStatus("idle");
-  }, [setStatus]);
+  }, [setStatus, clearPendingSeek]);
 
   /* Audio element events drive the status. */
   useEffect(() => {
@@ -192,7 +254,7 @@ export function PlayerProvider({ children }) {
   const playing = status === "playing";
 
   return (
-    <PlayerContext.Provider value={{ track, current, status, playing, announcement, toggle, togglePause, close, audioRef }}>
+    <PlayerContext.Provider value={{ track, current, status, playing, announcement, toggle, togglePause, close, audioRef, seek, playAt }}>
       {children}
       <audio ref={audioRef} preload="none" hidden data-shared-player="" />
     </PlayerContext.Provider>
@@ -249,7 +311,9 @@ export function NowBar() {
           <span className="nowname" id="nowname">
             {on ? nowBarLabel(status, track) : ""}
           </span>
-          {on && isPreviewTrack(track) ? <span className="nowpreview">{PREVIEW_LABEL}</span> : null}
+          {on && (track.previewLabel || isPreviewTrack(track)) ? (
+            <span className="nowpreview">{track.previewLabel || PREVIEW_LABEL}</span>
+          ) : null}
           <input
             type="range"
             id="nowseek"

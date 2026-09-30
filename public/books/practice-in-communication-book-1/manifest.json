@@ -1,0 +1,27 @@
+{
+  "slug": "practice-in-communication-book-1",
+  "title": "Practice in Communication, Book 1",
+  "author": "A. R. Gillon",
+  "section": "teaching",
+  "status": "free",
+  "blurb": "Classroom communication activities.",
+  "download": "public",
+  "pdf": "/books/practice-in-communication-book-1/practice-in-communication-book-1.pdf",
+  "pdfBytes": 13922916,
+  "price": 0,
+  "pageCount": 98,
+  "shownPages": 98,
+  "previewPages": null,
+  "contentStartPage": 6,
+  "firstPageNumber": 6,
+  "layout": "auto",
+  "aspect": [
+    1080,
+    1526
+  ],
+  "cover": "/books/practice-in-communication-book-1/p001.webp",
+  "audio": null,
+  "video": null,
+  "readRoute": "/read/practice-in-communication-book-1",
+  "textRoute": "/read/practice-in-communication-book-1/text"
+}

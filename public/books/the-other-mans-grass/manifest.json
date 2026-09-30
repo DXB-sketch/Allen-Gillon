@@ -3,13 +3,25 @@
   "title": "The Other Man's Grass",
   "author": "Allen Gillon",
   "section": "plays",
-  "status": "free",
+  "status": "preview",
   "blurb": "An emotional play on intolerance, disability and bullying.",
+  "download": "paid",
+  "pdf": null,
+  "pdfBytes": null,
+  "price": 100,
   "pageCount": 27,
+  "shownPages": 6,
+  "previewPages": 6,
   "contentStartPage": 6,
+  "firstPageNumber": 1,
+  "layout": "auto",
   "aspect": [
     1080,
     1526
   ],
-  "hasDownload": true
+  "cover": "/books/the-other-mans-grass/p001.webp",
+  "audio": null,
+  "video": null,
+  "readRoute": "/read/the-other-mans-grass",
+  "textRoute": null
 }

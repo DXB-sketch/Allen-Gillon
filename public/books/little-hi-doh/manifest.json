@@ -5,12 +5,27 @@
   "section": "childrens",
   "status": "free",
   "blurb": "A Chinese Chimes story about learning to listen to others.",
+  "download": "public",
+  "pdf": "/books/little-hi-doh/little-hi-doh.pdf",
+  "pdfBytes": 5788669,
+  "price": 0,
   "pageCount": 25,
-  "largePages": true,
-  "sharedCover": "/images/chinese-chimes-together.webp",
+  "shownPages": 25,
+  "previewPages": null,
+  "contentStartPage": 2,
+  "firstPageNumber": 1,
+  "layout": "single",
   "aspect": [
     998,
     1000
   ],
-  "hasDownload": true
+  "cover": "/books/little-hi-doh/p001.webp",
+  "audio": {
+    "src": "/audio/chinese-chimes-audiobooks/hi-doh.mp3",
+    "kind": "audiobook",
+    "label": "Listen to the audiobook"
+  },
+  "video": "Ynu-5Rt7Vyw",
+  "readRoute": "/read/little-hi-doh",
+  "textRoute": "/read/little-hi-doh/text"
 }

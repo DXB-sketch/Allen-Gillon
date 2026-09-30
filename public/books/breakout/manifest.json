@@ -3,13 +3,29 @@
   "title": "Breakout",
   "author": "Allen Gillon",
   "section": "plays",
-  "status": "free",
+  "status": "preview",
   "blurb": "A caper play for young performers.",
+  "download": "paid",
+  "pdf": null,
+  "pdfBytes": null,
+  "price": 100,
   "pageCount": 26,
+  "shownPages": 6,
+  "previewPages": 6,
   "contentStartPage": 6,
+  "firstPageNumber": 1,
+  "layout": "auto",
   "aspect": [
     1080,
     1526
   ],
-  "hasDownload": true
+  "cover": "/books/breakout/p001.webp",
+  "audio": {
+    "src": "/audio/school-play-previews/breakout.mp3",
+    "kind": "preview",
+    "label": "Listen to a preview"
+  },
+  "video": null,
+  "readRoute": "/read/breakout",
+  "textRoute": null
 }
