@@ -25,7 +25,9 @@ export default function RootLayout({ children }) {
       <body>
         <PlayerProvider>
           <Mast />
-          <PageReader />
+          {/* voice: "male" suits the main site. W2 moves PageReader into each
+              site layout: main passes voice="male", other passes voice="female". */}
+          <PageReader voice="male" />
           {children}
           <NowBar />
           <Footer />
