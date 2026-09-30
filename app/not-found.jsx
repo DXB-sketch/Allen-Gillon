@@ -1,8 +1,8 @@
 import NotFoundContent from "../components/NotFoundContent";
 
+// No robots entry: vinext already adds <meta name="robots" content="noindex"> to 404s.
 export const metadata = {
   title: "Page not found",
-  robots: { index: false },
 };
 
 // notFound() thrown inside a (main) or (other) page renders here, inside that

@@ -1,9 +1,13 @@
 import "./site.css";
 import { PlayerProvider, NowBar } from "../components/Player";
 import PageReader from "../components/PageReader";
+import { SITE_MARKER_SCRIPT } from "../lib/sites.mjs";
 
-// Shared by both hosts. The (main) and (other) group layouts add each site's
-// mast, footer, metadataBase and title template, and set data-site.
+// Shared by both hosts. <html data-site> comes from SITE_MARKER_SCRIPT (host
+// based, before first paint) so this layout never reads the request and pages
+// stay static. The (main) and (other) group layouts add each site's mast,
+// footer, metadataBase and title template, and also set data-site on their
+// wrapper.
 export const metadata = {
   title: "Allen Gillon",
   description:
@@ -12,8 +16,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en-AU">
+    // data-site is set by the inline script, so React is told not to expect it.
+    <html lang="en-AU" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: SITE_MARKER_SCRIPT }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
