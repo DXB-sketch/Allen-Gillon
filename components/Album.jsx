@@ -80,7 +80,10 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
                   {isCurrentAndPlaying ? "❚❚" : "▶"}
                 </button>
                 <span className="tname">{track.name}</span>
-                <span className="ttime">{track.time}</span>
+                <span className="ttime">
+                  {isPreviewTrack(track) ? <span className="tpreview">{PREVIEW_LABEL}</span> : null}
+                  {track.time}
+                </span>
                 <details className="more-menu track-more">
                   <summary aria-label={`More options for ${track.name}`}><span aria-hidden="true">⋯</span></summary>
                   <div className="more-popover">

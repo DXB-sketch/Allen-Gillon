@@ -60,7 +60,7 @@ img.gx-hero{width:100%;object-fit:cover;display:block;}
 .mnav a[aria-current="page"]{color:var(--red);border-bottom:3px solid var(--red);}
 .mnav a.nav-booking{color:var(--red-deep);font-weight:700;}
 .page-reader{max-width:var(--maxw);margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:1rem;}
-.page-reader button,.page-reader select{font:inherit;color:var(--ink);background:transparent;border:1px solid oklch(0.22 0.02 300 / .45);border-radius:0;min-height:44px;padding:6px 14px;cursor:pointer;}
+.page-reader button,.page-reader select{font:inherit;color:var(--ink);background:transparent;border:1px solid oklch(0.22 0.02 300 / .45);border-radius:0;min-height:48px;padding:6px 14px;cursor:pointer;}
 .page-reader .page-reader-listen{background:var(--blue);border-color:var(--blue);color:var(--on);}
 .page-reader label{display:flex;align-items:center;gap:6px;}
 .page-reader select{max-width:180px;}
@@ -164,6 +164,7 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .tplay.playing{background:var(--red);border-color:var(--red);color:var(--on);}
 .tname{flex:1;font-size:1.02rem;}
 .ttime{font-size:.95rem;color:var(--soft);font-variant-numeric:tabular-nums;}
+.ttime .tpreview{margin-right:.6em;white-space:nowrap;}
 .more-menu{position:relative;flex:none;}
 .more-menu summary{list-style:none;width:44px;height:44px;display:grid;place-items:center;border-radius:50%;cursor:pointer;
   color:var(--ink);font-size:1.5rem;font-weight:700;line-height:1;user-select:none;}
@@ -182,7 +183,7 @@ footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:c
 .nowbar input[type=range]{flex:2;min-width:120px;accent-color:var(--red);height:44px;}
 .nowbar .nowtime{font-variant-numeric:tabular-nums;font-size:.95rem;}
 .nowbar .nowpreview{font-size:1rem;white-space:nowrap;}
-.nowbar .nowclose{width:44px;height:44px;font-size:.9rem;border-width:1px;opacity:.85;}
+.nowbar .nowclose{width:48px;height:48px;font-size:.9rem;border-width:1px;opacity:.85;}
 .nowbar .nowclose:hover{background:var(--red);border-color:var(--red);opacity:1;}
 
 /* Video embeds */

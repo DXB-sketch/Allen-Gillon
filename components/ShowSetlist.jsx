@@ -27,7 +27,7 @@ export default function ShowSetlist({ tracks }) {
             </button>
             <span className="tname">{track.name}</span>
             <span className="ttime">
-              {preview ? <span className="visually-hidden">{PREVIEW_LABEL}, </span> : null}
+              {preview ? <span className="tpreview">{PREVIEW_LABEL}</span> : null}
               {track.time}
             </span>
           </li>
