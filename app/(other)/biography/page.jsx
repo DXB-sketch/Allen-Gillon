@@ -77,16 +77,16 @@ export default function BiographyPage() {
               alt="A faded colour photo of six young musicians posing outdoors with the sea behind them. Ann stands in the middle in a long white dress; the five men wear matching white lace shirts, one holding a saxophone and one a red electric guitar."
               caption="Page One Revue, 1968."
             />
+            <Snap
+              className="snap--inset scene-inset"
+              corners="all"
+              src="/images/personal/ann-singing-page-one-revue.jpg"
+              width={506}
+              height={678}
+              alt="A black and white print of a young Ann with long dark hair, singing into a microphone on a stand in a patterned halter-neck dress, with a curtain behind her."
+              caption="Ann singing."
+            />
           </div>
-          <Snap
-            className="snap--inset scene-inset"
-            corners="all"
-            src="/images/personal/ann-singing-page-one-revue.jpg"
-            width={506}
-            height={678}
-            alt="A black and white print of a young Ann with long dark hair, singing into a microphone on a stand in a patterned halter-neck dress, with a curtain behind her."
-            caption="Ann singing."
-          />
         </section>
 
         <section className="scene band scene--r" aria-labelledby="era-ray">
@@ -123,7 +123,7 @@ export default function BiographyPage() {
           </figure>
         </section>
 
-        <section className="scene band scene--l scene--today" id="timeless" aria-labelledby="era-timeless">
+        <section className="scene band scene--r scene--today" id="timeless" aria-labelledby="era-timeless">
           <div className="prose">
             <p className="scene-year">Today</p>
             <div className="scene-text">
@@ -137,7 +137,7 @@ export default function BiographyPage() {
                   poster="/videos/allen-steakout-poster.jpg"
                   width={1024}
                   height={576}
-                  aria-label="Timeless at Steakout Restaurant: the camera pans across diners to Ann singing and Allen playing guitar. Video, 11 seconds."
+                  aria-label="Timeless at Steakout Restaurant: the camera pans across diners to Ann singing and Allen playing guitar. On screen: “Timeless” appearing Sundays, 5:30 to 8:30. Video, 11 seconds, captioned."
                 >
                   <source src="/videos/allen-steakout.mp4" type="video/mp4" />
                   <track kind="captions" src="/videos/allen-steakout.en.vtt" srcLang="en" label="English" default />
@@ -150,23 +150,23 @@ export default function BiographyPage() {
           <div className="scene-media">
             <Snap
               className="snap--bleed"
-              corners="right"
+              corners="left"
               src="/images/personal/performance-ann-and-allen-onstage.jpg"
               width={505}
               height={505}
               alt="Ann, with blonde hair and a black jacket, smiles beside a microphone while Allen, in a black hat and glasses, plays a red semi-hollow electric guitar under blue and pink stage light."
               caption="Ann and Allen on stage."
             />
+            <Snap
+              className="snap--inset scene-inset"
+              corners="all"
+              src="/images/personal/current-portrait-allen-2026.jpg"
+              width={1213}
+              height={1599}
+              alt="A close-up of Allen smiling, white-haired, in gold-rimmed glasses and a striped shirt."
+              caption="Allen today, Bribie Island."
+            />
           </div>
-          <Snap
-            className="snap--inset scene-inset"
-            corners="all"
-            src="/images/personal/current-portrait-allen-2026.jpg"
-            width={1213}
-            height={1599}
-            alt="A close-up of Allen smiling, white-haired, in gold-rimmed glasses and a striped shirt."
-            caption="Allen today, Bribie Island."
-          />
         </section>
       </div>
     </main>

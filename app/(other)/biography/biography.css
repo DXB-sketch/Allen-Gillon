@@ -25,21 +25,17 @@
 .curtain-drape--l{left:0;transform-origin:0 0;}
 .curtain-drape--r{right:0;transform-origin:100% 0;}
 
-/* It parts once (the motion system's classes: .is-static when on screen at
-   load, .is-in when scrolled to). The parted state is the default render;
-   the closed start state exists only inside the animation, under
-   html.motion-ok, so without JS or under reduced motion nothing moves. */
-html.motion-ok .curtain:is(.is-static,.is-in) .curtain-drape{
-  animation:curtain-part 1.9s var(--ease-out) .2s backwards;
-}
-@keyframes curtain-part{
-  from{opacity:0;transform:scaleX(2.7);}
-  20%{opacity:1;}
-  to{opacity:1;transform:none;}
-}
-/* illustrations.css hides a not-yet-seen [data-motion] element; the curtain
-   has its own effect, so keep it visible. */
+/* It parts once, through the motion system. The parted drawing is the
+   default render and what shows at load: the curtain is on screen at mount,
+   so it gets .is-static and does not move (no flash, no replay). Only when
+   the page opens scrolled past it (a link to #timeless) do the drapes start
+   drawn in towards the centre, then slide apart once when the curtain is
+   scrolled to (.is-in). A translate only, so the line weights never
+   distort. Without JS or under reduced motion nothing moves. */
 html.motion-ok .curtain[data-motion]:not(.is-in):not(.is-static){opacity:1;}
+html.motion-ok .curtain[data-motion]:not(.is-in):not(.is-static) .curtain-drape--l{transform:translateX(55%);}
+html.motion-ok .curtain[data-motion]:not(.is-in):not(.is-static) .curtain-drape--r{transform:translateX(-55%);}
+html.motion-ok .curtain.is-in .curtain-drape{transition:transform 1.6s var(--ease-out) .15s;}
 
 /* ---------- Scenes ---------- */
 .bio{margin-top:clamp(28px,5vw,80px);}
@@ -68,9 +64,20 @@ figcaption{font-size:1rem;color:var(--soft);margin-top:8px;}
 .snap-corner--br{bottom:-5px;right:-5px;transform:rotate(180deg);}
 .snap-corner--bl{bottom:-5px;left:-5px;transform:rotate(270deg);}
 
-/* A smaller print tucked in beside the text, slightly askew. */
-.snap--inset{transform:rotate(-1.6deg);}
-.scene--today .snap--inset{transform:rotate(1.4deg);}
+/* A smaller print tucked over the inner corner of the bleeding photo,
+   slightly askew: the two prints share one cell, so neither is orphaned. */
+.scene-media{display:flex;flex-direction:column;}
+.snap--inset{position:relative;z-index:1;width:44%;margin-top:-12%;transform:rotate(-1.6deg);}
+.snap--inset figcaption{background:var(--paper);padding:2px 6px 0;}
+.scene--l .snap--inset{align-self:flex-end;margin-right:clamp(8px,1.4vw,20px);}
+.scene--r .snap--inset{align-self:flex-start;margin-left:clamp(8px,1.4vw,20px);transform:rotate(1.4deg);}
+/* A bleeding print never grows past its native size: it keeps touching its
+   edge and gives up width on the inner side, where the inset rides. */
+.scene--l .scene-media{justify-self:start;width:100%;max-width:678px;}
+.scene--r .scene-media:not(.scene-media--art){justify-self:end;width:100%;max-width:505px;}
+/* The bleeding print's caption sits on the side away from the inset. */
+.scene--l .snap--bleed figcaption{padding-left:var(--gutter);width:46%;}
+.scene--r .snap--bleed figcaption{padding-right:var(--gutter);text-align:right;margin-left:auto;width:46%;}
 
 /* Drawings sit in their own cell, never under text. */
 .scene-art{width:100%;height:auto;}
@@ -101,20 +108,23 @@ figcaption{font-size:1rem;color:var(--soft);margin-top:8px;}
   .scene--l .scene-year{grid-column:6 / span 2;grid-row:1;justify-self:end;}
   .scene-year{padding-top:4px;}
 
-  .scene--l .scene-inset{grid-column:8 / span 3;grid-row:2;margin-top:clamp(8px,2vw,32px);}
-  .scene-inset{max-width:340px;}
-  /* A bleeding print stays near its native size on very wide screens: it
-     keeps touching its edge and gives up width on the inner side. */
-  .scene--l .snap--bleed{max-width:680px;}
-  .scene--today .snap--bleed{max-width:560px;}
 
   /* Drawings hang close to the text rather than floating at the far edge. */
-  .scene-media--art{display:flex;justify-content:flex-start;padding:clamp(16px,3vw,48px) 0 0 clamp(0px,2vw,48px);}
+  .scene-media--art{display:flex;flex-direction:row;justify-content:flex-start;padding:clamp(16px,3vw,48px) 0 0 clamp(0px,2vw,48px);}
   .scene--r .scene-media--art{grid-column:10 / wide-end;}
-
-  /* Captions under a bleeding photo stay inside the gutter. */
-  .scene--r .snap--bleed figcaption{padding-right:var(--gutter);}
-  .scene--l .snap--bleed figcaption{padding-left:var(--gutter);text-align:right;}
+}
+/* Very wide: the text column narrows to the measure's own width, the year
+   moves in with it, and a left-bleeding photo's cell shrinks to the photo,
+   so the scene stays one composition instead of three islands. (Numeric
+   lines count from full-start: column N starts at line N+1.) */
+@media (min-width:1500px){
+  .scene--r .scene-year{grid-column:1 / span 3;}
+  .scene--r .scene-text{grid-column:4 / span 5;}
+  .scene--r .scene-media--art{padding-left:0;}
+  .scene--l .scene-media{grid-column:full-start / 6;}
+  .scene--l .prose{grid-column:6 / wide-end;}
+  .scene--l .scene-text{grid-column:1 / span 4;}
+  .scene--l .scene-year{grid-column:5 / span 3;justify-self:start;padding-left:clamp(16px,1.5vw,32px);}
 }
 
 /* ---------- Narrow: one column, photos still bleed ---------- */
@@ -127,16 +137,10 @@ figcaption{font-size:1rem;color:var(--soft);margin-top:8px;}
   .scene-art--mics{max-width:130px;}
   .scene--r .scene-media:not(.scene-media--art){grid-column:3 / full-end;}
   .scene--l .scene-media{grid-column:full-start / 11;}
-  .scene-inset{grid-column:4 / span 7;}
-  .scene--today .scene-inset{grid-column:2 / span 7;}
-  .scene--r .snap--bleed figcaption{padding-right:var(--gutter);}
-  .scene--l .snap--bleed figcaption{padding-left:var(--gutter);text-align:right;}
   .scene--quiet .scene-text,.scene--quiet .quiet-photo{grid-column:wide;grid-row:auto;}
   .scene--quiet .quiet-photo{max-width:440px;}
 }
 @media (min-width:640px) and (max-width:1023.98px){
-  .scene-inset{grid-column:5 / span 5;}
-  .scene--today .scene-inset{grid-column:3 / span 5;}
   .scene--r .scene-media:not(.scene-media--art){grid-column:5 / full-end;}
   .scene--l .scene-media{grid-column:full-start / 9;}
 }

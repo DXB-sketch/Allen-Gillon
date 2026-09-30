@@ -90,7 +90,40 @@ test("decorative SVG stays under 40KB", async ({ page }) => {
   expect(bytes).toBeLessThan(40 * 1024);
 });
 
-for (const width of [375, 1280]) {
+for (const width of [375, 1280, 1920]) {
+  test(`bleeding photos alternate sides and never overlap the text (${width}px)`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(URL, { waitUntil: "load" });
+    const r = await page.$$eval(".snap--bleed", (els) =>
+      els.map((f) => {
+        const img = f.querySelector("img").getBoundingClientRect();
+        const text = f.closest(".scene").querySelector(".scene-text").getBoundingClientRect();
+        const overlap = !(img.right <= text.left || img.left >= text.right || img.bottom <= text.top || img.top >= text.bottom);
+        return { left: Math.round(img.left), right: Math.round(img.right), vw: document.documentElement.clientWidth, overlap, natural: Number(f.querySelector("img").getAttribute("width")), w: img.width };
+      }),
+    );
+    expect(r.length).toBe(2);
+    expect(r[0].left).toBe(0); // Page One Revue: off the left edge
+    expect(r[1].right).toBe(r[1].vw); // Ann and Allen on stage: off the right edge
+    for (const b of r) {
+      expect(b.overlap).toBe(false);
+      expect(b.w).toBeLessThanOrEqual(b.natural + 0.5); // never upscaled past native size
+    }
+  });
+}
+
+test("the curtain does not flicker at load: parted and still once motion starts", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(URL, { waitUntil: "load" });
+  await page.waitForFunction(() => document.documentElement.classList.contains("motion-ok"));
+  for (let i = 0; i < 6; i++) {
+    const s = await page.$$eval(".curtain-drape", (els) => els.map((e) => `${getComputedStyle(e).opacity} ${getComputedStyle(e).transform}`));
+    expect(s).toEqual(["1 none", "1 none"]);
+    await page.waitForTimeout(150);
+  }
+});
+
+for (const width of [375, 1280, 1920]) {
   test(`axe: no WCAG 2.2 AA violations (${width}px)`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(URL, { waitUntil: "load" });
