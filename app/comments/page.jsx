@@ -34,6 +34,11 @@ export default async function CommentsPage({ searchParams }) {
     <SiteChrome site={site}>
       <main>
         <header className="pagehead band">
+          {/* The way back is a text link, never a second button: the page's
+              one primary action is "Send as a text to Allen". */}
+          <p className="cback">
+            <Link className="back-link" href={returnTo}>Back to {returnLabel}</Link>
+          </p>
           <h1 className="script">Write a comment</h1>
           <p className="plain">
             Tell Allen what you thought of a story, play, song, album or show.
@@ -43,8 +48,7 @@ export default async function CommentsPage({ searchParams }) {
 
         <section className="cwrap band" aria-label="Write a comment">
           <div className="measure">
-            <Link className="back-link" href={returnTo}>Back to {returnLabel}</Link>
-            {subject ? <p>Commenting on: <strong>{subject}</strong></p> : null}
+            {subject ? <p className="csubject">Commenting on: <strong>{subject}</strong></p> : null}
             <CommentForm subject={subject} />
           </div>
         </section>

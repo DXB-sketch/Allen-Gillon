@@ -1,14 +1,23 @@
-/* Write a comment (/comments, both hosts). */
+/* Write a comment (/comments, both hosts). One primary action, the SMS
+   button. The way back and Facebook are text links. */
 
-.cwrap{margin-top:clamp(20px,3vw,40px);}
-.cform{display:flex;flex-direction:column;gap:18px;margin-top:8px;}
-.cform label{display:flex;flex-direction:column;gap:6px;font-size:1em;font-weight:700;}
-.cform input,.cform textarea{font:inherit;font-size:1em;font-weight:400;
-  padding:12px;border:2px solid var(--ink);border-radius:0;background:var(--paper-2);color:var(--ink);}
+.cback{margin:0 0 clamp(8px,1.5vw,20px);}
+.cback .back-link{font-weight:400;font-size:1.05rem;}
+.cwrap{margin-top:clamp(28px,4vw,56px);}
+@media (min-width:1024px){
+  /* The form lines up with the lede, two columns in from the title. */
+  .cwrap > .measure{grid-column:3 / span 7;}
+}
+.csubject{margin:0 0 8px;font-size:1.1em;}
+.cform{display:flex;flex-direction:column;gap:22px;margin-top:8px;}
+.cform label{display:flex;flex-direction:column;gap:8px;font-size:1em;font-weight:700;}
+/* Same field style as the /reviews form: a 2px ink border on paper. */
+.cform input,.cform textarea{min-height:52px;font:inherit;font-size:1em;font-weight:400;
+  padding:10px 14px;border:2px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);}
+.cform input:focus-visible,.cform textarea:focus-visible{outline:3px solid var(--blue);outline-offset:3px;}
 .cform textarea{resize:vertical;}
-.cbtns{display:flex;gap:14px;flex-wrap:wrap;}
+.cbtns{display:flex;gap:12px 28px;flex-wrap:wrap;align-items:center;}
+/* Facebook is the secondary way to comment: a quiet text link. */
+.cfb{display:inline-flex;align-items:center;min-height:44px;color:var(--ink);font-weight:400;text-underline-offset:4px;}
+.cfb:hover{color:var(--blue);}
 .cnote{color:var(--soft);font-size:1em;margin:0;}
-.cbtns{align-items:center;}
-/* Facebook is the secondary way to comment: a text link, not a second button. */
-.cfb{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
-.cfb:hover{color:var(--red-deep);}
