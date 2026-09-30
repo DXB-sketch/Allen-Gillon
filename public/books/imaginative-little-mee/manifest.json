@@ -5,12 +5,27 @@
   "section": "childrens",
   "status": "free",
   "blurb": "A Chinese Chimes story about imagination and listening.",
+  "download": "public",
+  "pdf": "/books/imaginative-little-mee/imaginative-little-mee.pdf",
+  "pdfBytes": 6327910,
+  "price": 0,
   "pageCount": 29,
-  "largePages": true,
-  "sharedCover": "/images/chinese-chimes-together.webp",
+  "shownPages": 29,
+  "previewPages": null,
+  "contentStartPage": 1,
+  "firstPageNumber": 1,
+  "layout": "single",
   "aspect": [
     1080,
     607
   ],
-  "hasDownload": true
+  "cover": "/books/imaginative-little-mee/p001.webp",
+  "audio": {
+    "src": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
+    "kind": "audiobook",
+    "label": "Listen to the audiobook"
+  },
+  "video": "ZwzVEIQp3Cw",
+  "readRoute": "/read/imaginative-little-mee",
+  "textRoute": "/read/imaginative-little-mee/text"
 }

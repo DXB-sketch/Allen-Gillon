@@ -85,7 +85,7 @@ export function PlayerProvider({ children }) {
   }, [setStatus]);
 
   const load = useCallback(
-    (nextTrack, playlist) => {
+    (nextTrack, playlist, { startAt = 0 } = {}) => {
       const audio = audioRef.current;
       if (!audio) return;
       playlistRef.current = playlist && playlist.length ? playlist : [nextTrack];
@@ -93,10 +93,48 @@ export function PlayerProvider({ children }) {
       setTrack(nextTrack);
       setCurrent(null);
       setStatus("loading");
-      audio.src = nextTrack.src;
+      /* A start time (the book reader's Listen on a later page) rides on a
+         media fragment, and is applied again once metadata is known in case
+         the browser ignored the fragment. */
+      const start = Number.isFinite(startAt) && startAt > 0 ? startAt : 0;
+      audio.src = start ? `${nextTrack.src}#t=${start.toFixed(2)}` : nextTrack.src;
+      if (start) {
+        const applyStart = () => {
+          if (Math.abs(audio.currentTime - start) > 0.3) audio.currentTime = start;
+        };
+        audio.addEventListener("loadedmetadata", applyStart, { once: true });
+      }
       play();
     },
     [play, setStatus]
+  );
+
+  /* Book reader: move within the loaded track, and play it if it was paused. */
+  const seek = useCallback(
+    (time, { andPlay = true } = {}) => {
+      const audio = audioRef.current;
+      if (!audio || !trackRef.current || !Number.isFinite(time)) return;
+      setAnnouncement("");
+      if (audio.readyState >= 1) audio.currentTime = Math.max(0, time);
+      else audio.addEventListener("loadedmetadata", () => (audio.currentTime = Math.max(0, time)), { once: true });
+      if (andPlay && statusRef.current !== "playing") {
+        if (statusRef.current === "error") audio.load();
+        play();
+      }
+    },
+    [play]
+  );
+
+  /* Book reader: play `nextTrack` from `time`. Seeks only when that track is
+     already the loaded source; anything else (an album track) is replaced by
+     loading this track, never seeked. */
+  const playAt = useCallback(
+    (nextTrack, time = 0) => {
+      setAnnouncement("");
+      if (trackRef.current && trackRef.current.src === nextTrack.src) seek(time);
+      else load(nextTrack, [nextTrack], { startAt: time });
+    },
+    [load, seek]
   );
 
   const togglePause = useCallback(() => {
@@ -192,7 +230,7 @@ export function PlayerProvider({ children }) {
   const playing = status === "playing";
 
   return (
-    <PlayerContext.Provider value={{ track, current, status, playing, announcement, toggle, togglePause, close, audioRef }}>
+    <PlayerContext.Provider value={{ track, current, status, playing, announcement, toggle, togglePause, close, audioRef, seek, playAt }}>
       {children}
       <audio ref={audioRef} preload="none" hidden data-shared-player="" />
     </PlayerContext.Provider>
@@ -249,7 +287,9 @@ export function NowBar() {
           <span className="nowname" id="nowname">
             {on ? nowBarLabel(status, track) : ""}
           </span>
-          {on && isPreviewTrack(track) ? <span className="nowpreview">{PREVIEW_LABEL}</span> : null}
+          {on && (track.previewLabel || isPreviewTrack(track)) ? (
+            <span className="nowpreview">{track.previewLabel || PREVIEW_LABEL}</span>
+          ) : null}
           <input
             type="range"
             id="nowseek"

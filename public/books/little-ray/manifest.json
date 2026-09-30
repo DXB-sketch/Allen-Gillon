@@ -5,12 +5,27 @@
   "section": "childrens",
   "status": "free",
   "blurb": "A Chinese Chimes story about anger, friendship and making amends.",
+  "download": "public",
+  "pdf": "/books/little-ray/little-ray.pdf",
+  "pdfBytes": 5010824,
+  "price": 0,
   "pageCount": 19,
-  "largePages": true,
-  "sharedCover": "/images/chinese-chimes-together.webp",
+  "shownPages": 19,
+  "previewPages": null,
+  "contentStartPage": 1,
+  "firstPageNumber": 1,
+  "layout": "single",
   "aspect": [
     1000,
     1000
   ],
-  "hasDownload": true
+  "cover": "/books/little-ray/p001.webp",
+  "audio": {
+    "src": "/audio/chinese-chimes-audiobooks/little-ray.mp3",
+    "kind": "audiobook",
+    "label": "Listen to the audiobook"
+  },
+  "video": "cEuPWVPPN0o",
+  "readRoute": "/read/little-ray",
+  "textRoute": "/read/little-ray/text"
 }

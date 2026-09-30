@@ -1,68 +1,124 @@
 // build-books.mjs
-// Turns the source PDFs in scripts/incoming/ into the static reader assets in
-// public/books/<slug>/ (WebP pages, thumbnails, manifest, copied PDF) for every
-// book in content/books.config.json whose status is "free".
-// Restricted books are skipped entirely: no page images, no copied PDF.
+// Turns the source PDFs into the static reader assets in public/books/<slug>/
+// (WebP pages, manifest.json, and the PDF only when download is "public") for
+// every title in content/books.config.json, then writes public/books/index.json.
+//
+// Paid content never reaches public/:
+// - Plays (section "plays") emit page images for pages 1 to previewPages only.
+//   The full renders are not kept at all.
+// - The PDF is copied to public/ only when download === "public". Play PDFs
+//   stay in private/plays/.
+// - Anything else found in public/books/<slug>/ (stale page images, old PDFs,
+//   thumbs, text.txt) is deleted, so a rebuild also cleans up older builds.
+//
+// Sources are looked up in this order: scripts/incoming/processed/,
+// scripts/incoming/, private/plays/, private/books/, and finally the PDF that
+// is already published in public/books/<slug>/ (stories and textbooks).
+// When no source exists the title keeps its existing page images, and its
+// manifest is still rewritten from the config and pruned.
+//
 // Usage: npm run build:books [-- --force]
+//   --force  re-render every page image even when a manifest already exists.
 
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { mkdir, rm, readFile, writeFile, copyFile, readdir, access, mkdtemp } from "node:fs/promises";
+import { mkdir, rm, readFile, writeFile, copyFile, readdir, access, mkdtemp, stat } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import process from "node:process";
 import sharp from "sharp";
+import { playPrice } from "../lib/storefront.mjs";
+import { normaliseBook, pageFile, keepFile } from "../lib/books.mjs";
 
 const execFileP = promisify(execFile);
 const require = createRequire(import.meta.url);
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..");
-const INCOMING = path.join(ROOT, "scripts", "incoming");
 const OUT_ROOT = path.join(ROOT, "public", "books");
 const CONFIG = path.join(ROOT, "content", "books.config.json");
-const TEXT_DIR = path.join(ROOT, "content", "book-text");
+const SOURCE_DIRS = [
+  path.join(ROOT, "scripts", "incoming", "processed"),
+  path.join(ROOT, "scripts", "incoming"),
+  path.join(ROOT, "private", "plays"),
+  path.join(ROOT, "private", "books"),
+];
 
 const FORCE = process.argv.includes("--force");
 const SCREEN_WIDTH = 1080;
 const SCREEN_QUALITY = 72;
-const THUMB_WIDTH = 240;
-const THUMB_QUALITY = 58;
 const DPI = 150;
 
 const exists = (p) => access(p).then(() => true, () => false);
-const pad3 = (n) => String(n).padStart(3, "0");
 
-async function hasPdftoppm() {
+async function findSource(book) {
+  for (const dir of SOURCE_DIRS) {
+    for (const name of [book.file, `${book.slug}.pdf`]) {
+      const candidate = path.join(dir, name);
+      if (await exists(candidate)) return candidate;
+    }
+  }
+  const published = path.join(OUT_ROOT, book.slug, `${book.slug}.pdf`);
+  if (await exists(published)) return published;
+  return null;
+}
+
+async function which(cmd, args) {
   try {
-    await execFileP("pdftoppm", ["-v"]);
+    await execFileP(cmd, args);
     return true;
   } catch (err) {
     // pdftoppm -v prints to stderr and may exit non-zero on some builds
-    if (err && typeof err.stderr === "string" && /pdftoppm/i.test(err.stderr)) return true;
+    if (err && typeof err.stderr === "string" && err.stderr.length && err.code !== "ENOENT") return true;
     return false;
   }
 }
 
-// Rasterise with poppler: writes p-001.png ... into tmpDir, returns sorted PNG paths.
-async function rasteriseWithPoppler(pdfPath, tmpDir) {
-  await execFileP("pdftoppm", ["-png", "-r", String(DPI), pdfPath, path.join(tmpDir, "p")], {
-    maxBuffer: 64 * 1024 * 1024,
-  });
-  const files = (await readdir(tmpDir)).filter((f) => f.endsWith(".png")).sort();
-  return files.map((f) => path.join(tmpDir, f));
+async function findRasteriser() {
+  if (await which("pdftoppm", ["-v"])) return { kind: "poppler" };
+  const gsCandidates = [process.env.GS, "gswin64c", "gs", "C:\\Program Files\\gs\\gs10.05.1\\bin\\gswin64c.exe"].filter(Boolean);
+  for (const gs of gsCandidates) {
+    if (await which(gs, ["--version"])) return { kind: "ghostscript", bin: gs };
+  }
+  return { kind: "pdfjs" };
 }
 
-// Pure-Node fallback: pdfjs-dist renders each page onto an @napi-rs/canvas.
-async function rasteriseWithPdfjs(pdfPath, tmpDir) {
+async function pdfPageCount(pdfPath) {
+  const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  const data = new Uint8Array(await readFile(pdfPath));
+  const doc = await getDocument({ data, disableWorker: true, verbosity: 0 }).promise;
+  const n = doc.numPages;
+  await doc.destroy();
+  return n;
+}
+
+const listPngs = async (dir) =>
+  (await readdir(dir)).filter((f) => f.endsWith(".png")).sort().map((f) => path.join(dir, f));
+
+// Each rasteriser renders pages 1..lastPage into tmpDir and returns sorted PNG paths.
+async function rasterise(tool, pdfPath, lastPage, tmpDir) {
+  if (tool.kind === "poppler") {
+    await execFileP("pdftoppm", ["-png", "-r", String(DPI), "-f", "1", "-l", String(lastPage), pdfPath, path.join(tmpDir, "p")], {
+      maxBuffer: 64 * 1024 * 1024,
+    });
+    return listPngs(tmpDir);
+  }
+  if (tool.kind === "ghostscript") {
+    await execFileP(tool.bin, [
+      "-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sDEVICE=png16m", `-r${DPI}`,
+      "-dTextAlphaBits=4", "-dGraphicsAlphaBits=4", "-dFirstPage=1", `-dLastPage=${lastPage}`,
+      `-sOutputFile=${path.join(tmpDir, "p-%03d.png")}`, pdfPath,
+    ], { maxBuffer: 64 * 1024 * 1024 });
+    return listPngs(tmpDir);
+  }
+  // Pure-Node fallback: pdfjs-dist renders each page onto an @napi-rs/canvas.
   const { getDocument } = await import("pdfjs-dist/legacy/build/pdf.mjs");
   const { createCanvas } = await import("@napi-rs/canvas");
   const standardFontDataUrl = path.join(path.dirname(require.resolve("pdfjs-dist/package.json")), "standard_fonts/");
   const data = new Uint8Array(await readFile(pdfPath));
-  const doc = await getDocument({ data, standardFontDataUrl, disableWorker: true }).promise;
+  const doc = await getDocument({ data, standardFontDataUrl, disableWorker: true, verbosity: 0 }).promise;
   const scale = DPI / 72;
-  const out = [];
-  for (let i = 1; i <= doc.numPages; i++) {
+  for (let i = 1; i <= Math.min(lastPage, doc.numPages); i++) {
     const page = await doc.getPage(i);
     const viewport = page.getViewport({ scale });
     const canvas = createCanvas(Math.round(viewport.width), Math.round(viewport.height));
@@ -70,119 +126,107 @@ async function rasteriseWithPdfjs(pdfPath, tmpDir) {
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     await page.render({ canvasContext: ctx, viewport }).promise;
-    const file = path.join(tmpDir, `p-${pad3(i)}.png`);
-    await writeFile(file, canvas.toBuffer("image/png"));
-    out.push(file);
+    await writeFile(path.join(tmpDir, `p-${String(i).padStart(3, "0")}.png`), canvas.toBuffer("image/png"));
     page.cleanup();
   }
   await doc.destroy();
-  return out;
+  return listPngs(tmpDir);
 }
 
-async function buildBook(book, usePoppler) {
-  const src = path.join(INCOMING, book.file);
-  const outDir = path.join(OUT_ROOT, book.slug);
+// Deletes every file in outDir that the manifest does not allow. This is what
+// removes non-preview play pages, play PDFs, thumbs and old text.txt copies.
+async function prune(outDir, manifest) {
+  if (!(await exists(outDir))) return [];
+  const removed = [];
+  for (const entry of await readdir(outDir, { withFileTypes: true })) {
+    if (keepFile(manifest, entry.name) && entry.isFile()) continue;
+    await rm(path.join(outDir, entry.name), { recursive: true, force: true });
+    removed.push(entry.name);
+  }
+  return removed;
+}
+
+async function buildBook(raw, tool) {
+  const outDir = path.join(OUT_ROOT, raw.slug);
   const manifestPath = path.join(outDir, "manifest.json");
+  const old = (await exists(manifestPath)) ? JSON.parse(await readFile(manifestPath, "utf8")) : null;
+  const src = await findSource(raw);
 
-  if (!FORCE && (await exists(manifestPath))) {
-    const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
-    console.log(`  ${book.slug}: already built (${manifest.pageCount} pages), skipping. Use --force to rebuild.`);
-    return manifest;
+  if (!src && !old) {
+    console.log(`  ${raw.slug}: no source PDF and no earlier build, listed only.`);
+    return normaliseBook(raw, { pageCount: 0, aspect: null, price: playPrice });
   }
 
-  console.log(`  ${book.slug}: rasterising ${book.file} ...`);
-  const tmpDir = await mkdtemp(path.join(tmpdir(), `book-${book.slug}-`));
-  let manifest;
-  try {
-    const pngs = usePoppler
-      ? await rasteriseWithPoppler(src, tmpDir)
-      : await rasteriseWithPdfjs(src, tmpDir);
-    if (pngs.length === 0) throw new Error(`no pages rendered from ${book.file}`);
+  const pageCount = src ? await pdfPageCount(src) : old.pageCount;
+  const probe = normaliseBook(raw, { pageCount, aspect: old?.aspect ?? null, price: playPrice });
+  const haveAll = old && (await Promise.all(
+    Array.from({ length: probe.shownPages }, (_, i) => exists(path.join(outDir, pageFile(i + 1))))
+  )).every(Boolean);
 
-    await rm(outDir, { recursive: true, force: true });
-    await mkdir(path.join(outDir, "thumbs"), { recursive: true });
-
-    let aspect = null;
-    for (let i = 0; i < pngs.length; i++) {
-      const n = pad3(i + 1);
-      const img = sharp(pngs[i]);
-      if (i === 0) {
-        const meta = await img.metadata();
-        const w = Math.min(meta.width, SCREEN_WIDTH);
-        const h = Math.round((meta.height / meta.width) * w);
-        aspect = [w, h];
+  let aspect = old?.aspect ?? null;
+  if (src && (FORCE || !haveAll)) {
+    console.log(`  ${raw.slug}: rendering pages 1-${probe.shownPages} of ${pageCount} (${tool.kind}) ...`);
+    const tmpDir = await mkdtemp(path.join(tmpdir(), `book-${raw.slug}-`));
+    try {
+      const pngs = await rasterise(tool, src, probe.shownPages, tmpDir);
+      if (pngs.length !== probe.shownPages) throw new Error(`${raw.slug}: rendered ${pngs.length} pages, expected ${probe.shownPages}`);
+      await mkdir(outDir, { recursive: true });
+      for (let i = 0; i < pngs.length; i++) {
+        const img = sharp(pngs[i]);
+        if (i === 0) {
+          const meta = await img.metadata();
+          const w = Math.min(meta.width, SCREEN_WIDTH);
+          aspect = [w, Math.round((meta.height / meta.width) * w)];
+        }
+        await img
+          .resize({ width: SCREEN_WIDTH, withoutEnlargement: true })
+          .webp({ quality: SCREEN_QUALITY })
+          .toFile(path.join(outDir, pageFile(i + 1)));
       }
-      await img
-        .clone()
-        .resize({ width: SCREEN_WIDTH, withoutEnlargement: true })
-        .webp({ quality: SCREEN_QUALITY })
-        .toFile(path.join(outDir, `p${n}.webp`));
-      await img
-        .clone()
-        .resize({ width: THUMB_WIDTH })
-        .webp({ quality: THUMB_QUALITY })
-        .toFile(path.join(outDir, "thumbs", `p${n}.webp`));
+    } finally {
+      await rm(tmpDir, { recursive: true, force: true });
     }
-
-    await copyFile(src, path.join(outDir, `${book.slug}.pdf`));
-
-    const textSrc = path.join(TEXT_DIR, `${book.slug}.txt`);
-    if (await exists(textSrc)) {
-      await copyFile(textSrc, path.join(outDir, "text.txt"));
-      console.log(`  ${book.slug}: OCR text copied.`);
-    }
-
-    manifest = {
-      slug: book.slug,
-      title: book.title,
-      author: book.author,
-      section: book.section,
-      status: book.status,
-      blurb: book.blurb,
-      pageCount: pngs.length,
-      aspect,
-      hasDownload: true,
-    };
-    await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
-    console.log(`  ${book.slug}: ${pngs.length} pages -> public/books/${book.slug}/`);
-  } finally {
-    await rm(tmpDir, { recursive: true, force: true });
+  } else if (!src) {
+    console.log(`  ${raw.slug}: source PDF not found, keeping the existing page images.`);
+  } else {
+    console.log(`  ${raw.slug}: already built (${pageCount} pages), manifest refreshed. Use --force to re-render.`);
   }
+
+  let manifest = normaliseBook(raw, { pageCount, aspect, price: playPrice });
+  await mkdir(outDir, { recursive: true });
+
+  if (manifest.download === "public") {
+    const dest = path.join(outDir, `${manifest.slug}.pdf`);
+    if (!src) {
+      if (!(await exists(dest))) throw new Error(`${raw.slug}: download is public but no PDF exists`);
+    } else if (path.resolve(src) !== path.resolve(dest)) {
+      await copyFile(src, dest);
+    }
+    manifest = normaliseBook(raw, { pageCount, aspect, price: playPrice, pdfBytes: (await stat(dest)).size });
+  }
+
+  await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+  const removed = await prune(outDir, manifest);
+  if (removed.length) console.log(`  ${raw.slug}: removed ${removed.length} file(s) not allowed in public (${removed.slice(0, 4).join(", ")}${removed.length > 4 ? ", ..." : ""}).`);
   return manifest;
 }
 
 async function main() {
   const config = JSON.parse(await readFile(CONFIG, "utf8"));
-  const usePoppler = await hasPdftoppm();
-  if (usePoppler) {
-    console.log("Rasteriser: poppler pdftoppm");
-  } else {
-    console.log("Rasteriser: pdfjs-dist + @napi-rs/canvas (pure Node fallback)");
-    console.log("  For faster builds install poppler: macOS `brew install poppler`, Debian/Ubuntu `apt-get install poppler-utils`.");
-  }
+  const tool = await findRasteriser();
+  console.log(`Rasteriser: ${tool.kind}`);
 
   const index = [];
-  for (const book of config) {
-    if (book.status === "restricted") {
-      console.log(`  ${book.slug}: restricted, listed only. No pages or PDF generated.`);
-      index.push({ slug: book.slug, title: book.title, section: book.section, status: book.status, pageCount: 0, blurb: book.blurb });
-      continue;
-    }
-    const src = path.join(INCOMING, book.file);
-    if (!(await exists(src))) {
-      console.log(`  ${book.slug}: source ${book.file} not found in scripts/incoming/, skipping.`);
-      const oldManifest = path.join(OUT_ROOT, book.slug, "manifest.json");
-      if (await exists(oldManifest)) {
-        const m = JSON.parse(await readFile(oldManifest, "utf8"));
-        index.push({ slug: m.slug, title: m.title, section: m.section, status: m.status, pageCount: m.pageCount, blurb: m.blurb });
-      }
-      continue;
-    }
-    const m = await buildBook(book, usePoppler);
-    index.push({ slug: m.slug, title: m.title, section: m.section, status: m.status, pageCount: m.pageCount, blurb: m.blurb });
-  }
+  for (const book of config) index.push(await buildBook(book, tool));
 
   await mkdir(OUT_ROOT, { recursive: true });
+  // Folders in public/books/ that no longer match a configured title go too.
+  for (const entry of await readdir(OUT_ROOT, { withFileTypes: true })) {
+    if (entry.isDirectory() && !config.some((b) => b.slug === entry.name)) {
+      await rm(path.join(OUT_ROOT, entry.name), { recursive: true, force: true });
+      console.log(`  removed unconfigured public/books/${entry.name}/`);
+    }
+  }
   await writeFile(path.join(OUT_ROOT, "index.json"), JSON.stringify(index, null, 2) + "\n");
   console.log(`Wrote public/books/index.json (${index.length} books).`);
 }

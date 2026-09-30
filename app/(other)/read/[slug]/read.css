@@ -1,48 +1,141 @@
-/* Reader pages (/read/[slug]) and the book reader (components/BookReader.jsx).
-   Scoped under .bkr, palette tokens only. W4 replaces the reader. */
+/* Reader pages (/read/[slug] and /read/[slug]/text) and the book reader
+   (components/reader/BookReader.jsx, scoped under .bkr). Palette tokens only. */
 
-.read-buy{margin:20px 0 0;}
-.read-body{margin-top:clamp(12px,2vw,28px);}
-.read-reader{min-width:0;}
-.read-tertiary{margin:20px 0 0;font-size:1rem;}
-.read-tertiary a{color:var(--blue);display:inline-flex;align-items:center;min-height:44px;text-underline-offset:4px;}
-.read-back{margin:28px 0 0;}
-
-.bkr{margin:20px 0 8px;}
-.bkr-stage{display:flex;justify-content:center;padding:8px 0 20px;}
-.bkr-book{margin:0 auto;}
-/* Every page, real or placeholder, sits on paper with a faint 1px edge. No
-   shadow: the edge is enough to separate the page from the paper behind it. */
-.bkr-page{background:var(--paper-2);border:1px solid oklch(0.85 0.02 92);overflow:hidden;}
-.bkr-page img{display:block;width:100%;height:100%;object-fit:contain;background:var(--on);}
-.bkr-cover-wait{width:min(100%,460px);border:1px solid oklch(0.85 0.02 92);}
-.bkr-cover-wait img{display:block;width:100%;height:auto;}
-.bkr-shared-cover{width:min(100%,440px);margin:0 auto 20px;text-align:center;}
-.bkr-shared-cover img{display:block;width:100%;height:auto;object-fit:contain;}
-.bkr-shared-cover figcaption{margin-top:6px;color:var(--blue);font-weight:700;font-size:1rem;}
-.bkr-single-page{width:min(100%,1040px);margin:0 auto;background:var(--on);border:1px solid oklch(0.85 0.02 92);}
-.bkr-single-page img{display:block;width:100%;height:100%;object-fit:contain;background:var(--on);}
-.bkr-large-pages .bkr-stage{padding-top:0;}
-.bkr-controls{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding-top:18px;}
-.bkr-btn{font-family:var(--serif);font-size:1.45rem;font-weight:700;line-height:1;
-  width:48px;height:48px;padding:0;border-radius:50%;
-  border:2px solid var(--ink);background:var(--paper);color:var(--ink);cursor:pointer;
-  transition:background-color .2s var(--ease-out),color .2s var(--ease-out);}
-.bkr-btn:hover{background:var(--ink);color:var(--on);}
-.bkr-counter{font-variant-numeric:tabular-nums;font-size:1.1rem;min-width:9.5ch;text-align:center;}
-.bkr-jump{display:flex;align-items:stretch;height:52px;border:2px solid var(--ink);overflow:hidden;background:var(--paper);}
-.bkr-jump:focus-within{outline:3px solid var(--blue);outline-offset:3px;}
-.bkr-jump input{width:8ch;padding:6px 4px 6px 10px;font:inherit;font-size:1rem;
-  border:0;outline:0;background:transparent;color:var(--ink);text-align:center;}
-.bkr-jump input::placeholder{color:var(--soft);opacity:1;}
-.bkr-jump button{width:48px;padding:0;border:0;background:transparent;color:var(--ink);font:700 1.25rem/1 var(--serif);cursor:pointer;}
-.bkr-jump button:hover{background:var(--ink);color:var(--on);}
-.bkr-introduction{min-height:48px;padding:5px 8px;border:0;background:transparent;color:var(--blue);font:700 1rem/1.2 var(--serif);cursor:pointer;}
-.bkr-introduction:hover{text-decoration:underline;text-underline-offset:4px;}
-.bkr-download{margin-left:6px;}
-.reading-audio{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin:16px 0 4px;}
-.reading-audio-note{margin:0;color:var(--soft);font-size:1rem;}
-@media (max-width:480px){
-  .bkr-controls{gap:10px;}
-  .bkr-download{margin-left:0;}
+/* ---------- Page opening ---------- */
+.read-head{row-gap:0;}
+.read-head .read-art{display:none;}
+@media (min-width:1024px){
+  /* The title keeps the full width; the drawing takes its own cells beside
+     the lede, never under any text. */
+  .read-head > h1{grid-row:1;}
+  .read-head > .plain{grid-row:2;grid-column:3 / span 7;}
+  .read-head .read-art{display:block;grid-column:10 / wide-end;grid-row:2;align-self:start;
+    justify-self:end;width:min(100%,260px);height:auto;margin-top:4px;}
 }
+
+.read-body{margin-top:clamp(20px,3vw,40px);}
+.read-reader{min-width:0;}
+
+.read-foot{margin-top:clamp(28px,4vw,56px);}
+.read-links{display:flex;flex-wrap:wrap;align-items:center;gap:4px 36px;}
+.read-links p{margin:0;}
+.read-textlink{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
+.read-textlink:hover{color:var(--red-deep);}
+
+/* ---------- The reader ---------- */
+.bkr{--turn:56px;}
+.bkr-region{outline:none;}
+
+/* One small toolbar above the book. */
+.bkr-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 32px;margin:0 0 6px;}
+.bkr-listen{display:inline-flex;align-items:center;gap:12px;min-height:48px;padding:4px 0;border:0;background:transparent;
+  color:var(--blue);font:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;
+  transition:color .2s var(--ease-out);}
+.bkr-listen:hover,.bkr-listen.is-playing{color:var(--red-deep);}
+.bkr-listen-icon{display:grid;place-items:center;width:40px;height:40px;border:2px solid currentColor;border-radius:50%;font-size:1rem;line-height:1;}
+.bkr-download:not(.btn){display:inline-flex;align-items:center;min-height:48px;color:var(--blue);font-weight:700;font-size:1.05rem;text-underline-offset:4px;}
+.bkr-download:not(.btn):hover{color:var(--red-deep);}
+.bkr-size{font-weight:400;color:var(--soft);margin-left:.35em;}
+.btn .bkr-size{color:inherit;}
+
+/* Follow the narration */
+.bkr-follow{margin:-2px 0 6px;}
+.bkr-follow p{margin:0;}
+.bkr-follow-live:empty{display:none;}
+.bkr-check{display:inline-flex;align-items:center;gap:12px;min-height:44px;font-size:1.05rem;cursor:pointer;}
+.bkr-check input{width:24px;height:24px;margin:0;accent-color:var(--blue);cursor:pointer;}
+.bkr-check input:disabled{cursor:not-allowed;}
+.bkr-check:has(input:disabled){cursor:default;}
+.bkr-follow-note{font-size:1rem;color:var(--soft);max-width:var(--measure);}
+.bkr-follow-actions{display:flex;flex-wrap:wrap;align-items:center;gap:0 24px;font-size:1rem;}
+
+/* Stage: 56px turn buttons on the book's edges. */
+/* The buttons hug the book, whatever its size. The stage clips the page-curl
+   animation to its own box (a band may clip its own decoration). */
+.bkr-stage{--stage-gap:clamp(8px,1.5vw,24px);display:flex;justify-content:center;align-items:center;gap:var(--stage-gap);
+  margin-top:10px;overflow:clip;overflow-clip-margin:10px;}
+.bkr-turn{flex:none;}
+.bkr-book-cell{flex:0 1 auto;min-width:0;display:flex;justify-content:center;}
+.bkr-book{position:relative;max-width:100%;transition:transform .6s var(--ease-out);}
+/* A closed book (the cover alone in a spread) is centred, not pushed right. */
+.bkr[data-mode="spread"] .bkr-book[data-closed="front"]{transform:translateX(-25%);}
+.bkr[data-mode="spread"] .bkr-book[data-closed="back"]{transform:translateX(25%);}
+.bkr-reduced .bkr-book{transition:none;}
+
+.bkr-turn{width:var(--turn);height:var(--turn);padding:0;border:0;border-radius:50%;background:transparent;color:var(--ink);
+  display:grid;place-items:center;cursor:pointer;transition:background-color .2s var(--ease-out);}
+.bkr-turn:hover{background:var(--paper-2);}
+/* aria-disabled, not disabled: a disabled button would drop keyboard focus out of the reader. */
+.bkr-turn[aria-disabled="true"]{cursor:default;opacity:.35;}
+.bkr-turn[aria-disabled="true"]:hover{background:transparent;}
+.bkr-turn .bkr-arrow{width:38px;height:38px;}
+
+/* Pages sit on paper with a faint edge. */
+.bkr-page,.bkr-plain{background:var(--paper-2);overflow:hidden;outline:1px solid oklch(0.85 0.02 92);outline-offset:-1px;}
+.bkr-page img,.bkr-plain img{display:block;width:100%;height:100%;object-fit:contain;background:var(--on);user-select:none;}
+.bkr-plain{max-width:100%;}
+.bkr-plain .bkr-page{width:100%;height:100%;}
+/* The book-spine inset shade on the inner edge of a spread (allowed by the plan). */
+.bkr[data-mode="spread"] .bkr-page.--left{box-shadow:inset -16px 0 20px -18px oklch(0.22 0.02 300 / .35);}
+.bkr[data-mode="spread"] .bkr-page.--right{box-shadow:inset 16px 0 20px -18px oklch(0.22 0.02 300 / .35);}
+
+/* The end of a play preview. */
+/* page-flip positions the page element itself, so the content is centred inside it. */
+.bkr-end{background:var(--paper);container-type:size;}
+.bkr-end-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  gap:14px;padding:clamp(16px,8cqi,56px);text-align:center;}
+.bkr-end-art{width:min(60%,220px);height:auto;margin-bottom:6px;}
+.bkr-end-inner p{margin:0;max-width:30ch;}
+.bkr-end-title{font-size:clamp(2.2rem,14cqi,3.6rem);}
+.bkr-end-lead{font-size:clamp(1.15rem,6cqi,1.6rem);font-weight:700;}
+.bkr-end-note{font-size:1rem;color:var(--soft);}
+
+/* Counter, Go to page, Introduction and the words toggle. */
+.bkr-controls{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 28px;margin-top:14px;}
+.bkr-counter{margin:0;font-size:1.05rem;font-variant-numeric:tabular-nums;text-align:center;max-width:none;}
+.bkr-textbtn{min-height:44px;padding:0 2px;border:0;background:transparent;color:var(--blue);font:inherit;font-size:1.05rem;font-weight:700;
+  cursor:pointer;text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;}
+.bkr-textbtn:hover{color:var(--red-deep);}
+.bkr-go{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;}
+.bkr-go-form{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;}
+.bkr-go-form[hidden]{display:none;}
+.bkr-go-form label{font-size:1rem;}
+.bkr-go-range{color:var(--soft);}
+.bkr-go-form input{width:6.5ch;min-height:48px;padding:6px 8px;font:inherit;font-size:1.05rem;text-align:center;
+  color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;}
+.bkr-go-submit{min-width:56px;min-height:48px;padding:0 16px;border:2px solid var(--ink);background:var(--paper);color:var(--ink);
+  font:inherit;font-weight:700;cursor:pointer;transition:background-color .2s var(--ease-out),color .2s var(--ease-out);}
+.bkr-go-submit:hover{background:var(--ink);color:var(--on);}
+
+/* Show the words on this page */
+.bkr-words{max-width:var(--measure);margin:22px auto 0;}
+.bkr-words[hidden]{display:none;}
+.bkr-words-page + .bkr-words-page{margin-top:26px;}
+.bkr-words-head{font-size:1.2rem;line-height:1.3;margin:0 0 6px;color:var(--blue);}
+.bkr-words p{margin:0 0 12px;}
+.bkr-words-empty{color:var(--soft);}
+
+.bkr-tertiary{margin:18px 0 0;font-size:1rem;text-align:center;max-width:none;}
+.bkr-tertiary a{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);text-underline-offset:4px;}
+.bkr-tertiary a:hover{color:var(--red-deep);}
+
+/* Phones: the book takes the full width, the turn buttons sit under it. */
+@media (max-width:599px){
+  .bkr-stage{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"book book" "prev next";row-gap:6px;column-gap:0;}
+  .bkr-book-cell{grid-area:book;}
+  .bkr-prev{grid-area:prev;justify-self:start;}
+  .bkr-next{grid-area:next;justify-self:end;}
+  .bkr-controls{margin-top:4px;}
+}
+
+/* ---------- /read/[slug]/text ---------- */
+.read-text-body{margin-top:clamp(16px,3vw,36px);}
+.read-text-top{margin:0 0 18px;}
+.read-text-pages{list-style:none;margin:0;padding:0;max-width:var(--measure);}
+@media (min-width:1024px){
+  .read-text-pages{grid-column:3 / wide-end;}
+  .read-text-body > .read-text-top,.read-text-body > .read-text-comment{grid-column:3 / wide-end;}
+}
+.read-text-page{margin:0 0 40px;}
+.read-text-page h2{font-size:1.35rem;line-height:1.3;margin:0 0 8px;color:var(--blue);}
+.read-text-page p{margin:0 0 14px;}

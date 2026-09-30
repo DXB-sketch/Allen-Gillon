@@ -2,97 +2,349 @@
   {
     "slug": "tribute-to-calamity-jane",
     "title": "Tribute to Calamity Jane",
+    "author": "Allen Gillon",
     "section": "plays",
-    "status": "free",
+    "status": "preview",
+    "blurb": "A humorous wild-west school play.",
+    "download": "paid",
+    "pdf": null,
+    "pdfBytes": null,
+    "price": 100,
     "pageCount": 21,
-    "blurb": "A humorous wild-west school play."
+    "shownPages": 6,
+    "previewPages": 6,
+    "contentStartPage": 5,
+    "firstPageNumber": 1,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/tribute-to-calamity-jane/p001.webp",
+    "audio": null,
+    "video": null,
+    "readRoute": "/read/tribute-to-calamity-jane",
+    "textRoute": null
   },
   {
     "slug": "melting-pot",
     "title": "Melting Pot",
+    "author": "Allen Gillon",
     "section": "plays",
-    "status": "free",
+    "status": "preview",
+    "blurb": "A play about inter-racial acceptance.",
+    "download": "paid",
+    "pdf": null,
+    "pdfBytes": null,
+    "price": 100,
     "pageCount": 47,
-    "blurb": "A play about inter-racial acceptance."
+    "shownPages": 6,
+    "previewPages": 6,
+    "contentStartPage": 6,
+    "firstPageNumber": 1,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/melting-pot/p001.webp",
+    "audio": {
+      "src": "/audio/school-play-previews/melting-pot.mp3",
+      "kind": "preview",
+      "label": "Listen to a preview"
+    },
+    "video": null,
+    "readRoute": "/read/melting-pot",
+    "textRoute": null
   },
   {
     "slug": "the-other-mans-grass",
     "title": "The Other Man's Grass",
+    "author": "Allen Gillon",
     "section": "plays",
-    "status": "free",
+    "status": "preview",
+    "blurb": "An emotional play on intolerance, disability and bullying.",
+    "download": "paid",
+    "pdf": null,
+    "pdfBytes": null,
+    "price": 100,
     "pageCount": 27,
-    "blurb": "An emotional play on intolerance, disability and bullying."
+    "shownPages": 6,
+    "previewPages": 6,
+    "contentStartPage": 6,
+    "firstPageNumber": 1,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/the-other-mans-grass/p001.webp",
+    "audio": null,
+    "video": null,
+    "readRoute": "/read/the-other-mans-grass",
+    "textRoute": null
   },
   {
     "slug": "three-heroes-of-sherwood",
     "title": "Three Heroes of Sherwood",
+    "author": "Allen Gillon",
     "section": "plays",
-    "status": "free",
+    "status": "preview",
+    "blurb": "A Robin Hood adventure for the stage.",
+    "download": "paid",
+    "pdf": null,
+    "pdfBytes": null,
+    "price": 100,
     "pageCount": 26,
-    "blurb": "A Robin Hood adventure for the stage."
+    "shownPages": 6,
+    "previewPages": 6,
+    "contentStartPage": 6,
+    "firstPageNumber": 1,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/three-heroes-of-sherwood/p001.webp",
+    "audio": null,
+    "video": null,
+    "readRoute": "/read/three-heroes-of-sherwood",
+    "textRoute": null
   },
   {
     "slug": "breakout",
     "title": "Breakout",
+    "author": "Allen Gillon",
     "section": "plays",
-    "status": "free",
+    "status": "preview",
+    "blurb": "A caper play for young performers.",
+    "download": "paid",
+    "pdf": null,
+    "pdfBytes": null,
+    "price": 100,
     "pageCount": 26,
-    "blurb": "A caper play for young performers."
+    "shownPages": 6,
+    "previewPages": 6,
+    "contentStartPage": 6,
+    "firstPageNumber": 1,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/breakout/p001.webp",
+    "audio": {
+      "src": "/audio/school-play-previews/breakout.mp3",
+      "kind": "preview",
+      "label": "Listen to a preview"
+    },
+    "video": null,
+    "readRoute": "/read/breakout",
+    "textRoute": null
   },
   {
     "slug": "funny-fah-learns-when-to-stop",
     "title": "Funny Fah Learns When to Stop",
+    "author": "Allen Gillon",
     "section": "childrens",
     "status": "free",
+    "blurb": "A Chinese Chimes story about knowing when to stop.",
+    "download": "public",
+    "pdf": "/books/funny-fah-learns-when-to-stop/funny-fah-learns-when-to-stop.pdf",
+    "pdfBytes": 7824080,
+    "price": 0,
     "pageCount": 34,
-    "blurb": "A Chinese Chimes story about knowing when to stop."
+    "shownPages": 34,
+    "previewPages": null,
+    "contentStartPage": 1,
+    "firstPageNumber": 1,
+    "layout": "single",
+    "aspect": [
+      1080,
+      607
+    ],
+    "cover": "/books/funny-fah-learns-when-to-stop/p001.webp",
+    "audio": {
+      "src": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop.mp3",
+      "kind": "audiobook",
+      "label": "Listen to the audiobook"
+    },
+    "video": "OAu1PmILqeA",
+    "readRoute": "/read/funny-fah-learns-when-to-stop",
+    "textRoute": "/read/funny-fah-learns-when-to-stop/text"
   },
   {
     "slug": "imaginative-little-mee",
     "title": "Imaginative Little Mee",
+    "author": "Allen Gillon",
     "section": "childrens",
     "status": "free",
+    "blurb": "A Chinese Chimes story about imagination and listening.",
+    "download": "public",
+    "pdf": "/books/imaginative-little-mee/imaginative-little-mee.pdf",
+    "pdfBytes": 6327910,
+    "price": 0,
     "pageCount": 29,
-    "blurb": "A Chinese Chimes story about imagination and listening."
+    "shownPages": 29,
+    "previewPages": null,
+    "contentStartPage": 1,
+    "firstPageNumber": 1,
+    "layout": "single",
+    "aspect": [
+      1080,
+      607
+    ],
+    "cover": "/books/imaginative-little-mee/p001.webp",
+    "audio": {
+      "src": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
+      "kind": "audiobook",
+      "label": "Listen to the audiobook"
+    },
+    "video": "ZwzVEIQp3Cw",
+    "readRoute": "/read/imaginative-little-mee",
+    "textRoute": "/read/imaginative-little-mee/text"
   },
   {
     "slug": "little-hi-doh",
     "title": "Hi-Doh",
+    "author": "Allen Gillon",
     "section": "childrens",
     "status": "free",
+    "blurb": "A Chinese Chimes story about learning to listen to others.",
+    "download": "public",
+    "pdf": "/books/little-hi-doh/little-hi-doh.pdf",
+    "pdfBytes": 5788669,
+    "price": 0,
     "pageCount": 25,
-    "blurb": "A Chinese Chimes story about learning to listen to others."
+    "shownPages": 25,
+    "previewPages": null,
+    "contentStartPage": 1,
+    "firstPageNumber": 1,
+    "layout": "single",
+    "aspect": [
+      998,
+      1000
+    ],
+    "cover": "/books/little-hi-doh/p001.webp",
+    "audio": {
+      "src": "/audio/chinese-chimes-audiobooks/hi-doh.mp3",
+      "kind": "audiobook",
+      "label": "Listen to the audiobook"
+    },
+    "video": "Ynu-5Rt7Vyw",
+    "readRoute": "/read/little-hi-doh",
+    "textRoute": "/read/little-hi-doh/text"
   },
   {
     "slug": "little-ray",
     "title": "Little Ray",
+    "author": "Allen Gillon",
     "section": "childrens",
     "status": "free",
+    "blurb": "A Chinese Chimes story about anger, friendship and making amends.",
+    "download": "public",
+    "pdf": "/books/little-ray/little-ray.pdf",
+    "pdfBytes": 5010824,
+    "price": 0,
     "pageCount": 19,
-    "blurb": "A Chinese Chimes story about anger, friendship and making amends."
+    "shownPages": 19,
+    "previewPages": null,
+    "contentStartPage": 1,
+    "firstPageNumber": 1,
+    "layout": "single",
+    "aspect": [
+      1000,
+      1000
+    ],
+    "cover": "/books/little-ray/p001.webp",
+    "audio": {
+      "src": "/audio/chinese-chimes-audiobooks/little-ray.mp3",
+      "kind": "audiobook",
+      "label": "Listen to the audiobook"
+    },
+    "video": "cEuPWVPPN0o",
+    "readRoute": "/read/little-ray",
+    "textRoute": "/read/little-ray/text"
   },
   {
     "slug": "practice-in-communication-book-1",
     "title": "Practice in Communication, Book 1",
+    "author": "A. R. Gillon",
     "section": "teaching",
-    "status": "restricted",
-    "pageCount": 0,
-    "blurb": "Classroom communication activities."
+    "status": "free",
+    "blurb": "Classroom communication activities.",
+    "download": "public",
+    "pdf": "/books/practice-in-communication-book-1/practice-in-communication-book-1.pdf",
+    "pdfBytes": 13922916,
+    "price": 0,
+    "pageCount": 98,
+    "shownPages": 98,
+    "previewPages": null,
+    "contentStartPage": 6,
+    "firstPageNumber": 6,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/practice-in-communication-book-1/p001.webp",
+    "audio": null,
+    "video": null,
+    "readRoute": "/read/practice-in-communication-book-1",
+    "textRoute": "/read/practice-in-communication-book-1/text"
   },
   {
     "slug": "practice-in-communication-book-2",
     "title": "Practice in Communication, Book 2",
+    "author": "A. R. Gillon",
     "section": "teaching",
-    "status": "restricted",
-    "pageCount": 0,
-    "blurb": "Classroom communication activities."
+    "status": "free",
+    "blurb": "Classroom communication activities.",
+    "download": "public",
+    "pdf": "/books/practice-in-communication-book-2/practice-in-communication-book-2.pdf",
+    "pdfBytes": 12614828,
+    "price": 0,
+    "pageCount": 99,
+    "shownPages": 99,
+    "previewPages": null,
+    "contentStartPage": 7,
+    "firstPageNumber": 6,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/practice-in-communication-book-2/p001.webp",
+    "audio": null,
+    "video": null,
+    "readRoute": "/read/practice-in-communication-book-2",
+    "textRoute": "/read/practice-in-communication-book-2/text"
   },
   {
     "slug": "riddled-with-language",
     "title": "Riddled with Language",
+    "author": "A. R. Gillon",
     "section": "teaching",
-    "status": "restricted",
-    "pageCount": 0,
-    "blurb": "Practical exercises in language skills."
+    "status": "free",
+    "blurb": "Practical exercises in language skills.",
+    "download": "public",
+    "pdf": "/books/riddled-with-language/riddled-with-language.pdf",
+    "pdfBytes": 14170354,
+    "price": 0,
+    "pageCount": 48,
+    "shownPages": 48,
+    "previewPages": null,
+    "contentStartPage": 4,
+    "firstPageNumber": 2,
+    "layout": "auto",
+    "aspect": [
+      1080,
+      1526
+    ],
+    "cover": "/books/riddled-with-language/p001.webp",
+    "audio": null,
+    "video": null,
+    "readRoute": "/read/riddled-with-language",
+    "textRoute": "/read/riddled-with-language/text"
   }
 ]

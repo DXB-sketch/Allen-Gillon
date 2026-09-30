@@ -1,0 +1,27 @@
+{
+  "slug": "riddled-with-language",
+  "title": "Riddled with Language",
+  "author": "A. R. Gillon",
+  "section": "teaching",
+  "status": "free",
+  "blurb": "Practical exercises in language skills.",
+  "download": "public",
+  "pdf": "/books/riddled-with-language/riddled-with-language.pdf",
+  "pdfBytes": 14170354,
+  "price": 0,
+  "pageCount": 48,
+  "shownPages": 48,
+  "previewPages": null,
+  "contentStartPage": 4,
+  "firstPageNumber": 2,
+  "layout": "auto",
+  "aspect": [
+    1080,
+    1526
+  ],
+  "cover": "/books/riddled-with-language/p001.webp",
+  "audio": null,
+  "video": null,
+  "readRoute": "/read/riddled-with-language",
+  "textRoute": "/read/riddled-with-language/text"
+}
