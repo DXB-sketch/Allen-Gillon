@@ -8,7 +8,12 @@ const MAIN = `http://localhost:${port}`;
 
 test.describe("other.localhost", () => {
   test("Home keeps aria-current after client-side navigation despite the /other-home rewrite", async ({ page }) => {
+    // Warm up both routes first: on a cold dev server Vite may optimise new
+    // dependencies during the first navigation and force a full reload.
+    await page.goto(`${OTHER}/books`);
+    await page.waitForLoadState("networkidle");
     await page.goto(`${OTHER}/`);
+    await page.waitForLoadState("networkidle");
     await expect(page).toHaveTitle(/More on Allen/);
     const nav = page.getByRole("navigation", { name: "Site" });
     const home = nav.getByRole("link", { name: "Home", exact: true });
