@@ -2,12 +2,14 @@ import FriendlyReviewForm from "../../../components/FriendlyReviewForm";
 import ReviewsCup from "../../../components/illustrations/ReviewsCup";
 import ReviewsGlass from "../../../components/illustrations/ReviewsGlass";
 import ApprovedReviews from "./ApprovedReviews";
+import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "./reviews.css";
 
-export const metadata = {
-  title: "Friendly reviews",
-  description: "Comments from people who have heard Allen Gillon play around Bribie Island.",
-};
+export const metadata = pageMetadata("main", "/reviews");
+
+// Breadcrumbs only: never a Review or AggregateRating for Allen's own reviews.
+const JSON_LD = breadcrumbs([{ name: "Home", url: "/" }, { name: "Reviews" }], "main");
 
 const tableComments = [
   "Beautiful.",
@@ -21,6 +23,7 @@ const tableComments = [
 export default function ReviewsPage() {
   return (
     <div>
+      <script {...jsonLdProps(JSON_LD)} />
       <header className="reviewsHead pagehead band">
         <h1 className="script">Friendly reviews</h1>
         <p className="intro">Comments from people who have heard Allen play around Bribie Island.</p>

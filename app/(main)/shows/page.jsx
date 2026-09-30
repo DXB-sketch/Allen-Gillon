@@ -1,13 +1,13 @@
 import SectionComment from "../../../components/SectionComment";
 import CrossSiteLink from "../../../components/CrossSiteLink";
 import ShowSetlist from "../../../components/ShowSetlist";
+import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "./shows.css";
 
-export const metadata = {
-  title: "The Matthew Allen 5",
-  description:
-    "The Matthew Allen 5 at Chandler Theatre, 1998: hear the show's setlist in 30-second previews.",
-};
+export const metadata = pageMetadata("main", "/shows");
+
+const JSON_LD = breadcrumbs([{ name: "Home", url: "/" }, { name: "Shows" }], "main");
 
 /* Not a promoted page: it is deliberately kept out of the site navigation and
    is reached through the "Learn more" link on the biography page. */
@@ -28,6 +28,7 @@ const tracks = [
 export default function ShowsPage() {
   return (
     <div>
+      <script {...jsonLdProps(JSON_LD)} />
       <header className="pagehead band">
         <h1 className="script">The Matthew Allen 5</h1>
         <p className="plain">At Chandler Theatre, 1998. Press play on any song to hear a 30-second preview of the show.</p>
@@ -48,7 +49,10 @@ export default function ShowsPage() {
             className="gx-hero"
             src="/images/personal/matthew-allen-5-band-photo.jpg"
             alt="The Matthew Allen 5 on stage"
+            width="1080"
+            height="1080"
             loading="lazy"
+            decoding="async"
           />
           <figcaption>MA5 Show.</figcaption>
         </figure>

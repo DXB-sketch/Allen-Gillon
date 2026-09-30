@@ -6,7 +6,9 @@ import ShelfChimes from "../../../components/illustrations/ShelfChimes";
 import ShelfCurtain from "../../../components/illustrations/ShelfCurtain";
 import ShelfInkwell from "../../../components/illustrations/ShelfInkwell";
 import { stripePaymentLink } from "../../../lib/storefront.mjs";
-import { buildShelves, priceLabel } from "./shelf-data.mjs";
+import { buildShelves, priceLabel, textbookPdf } from "./shelf-data.mjs";
+import { pageMetadata } from "../../../lib/seo.mjs";
+import { book as bookSchema, collectionPage, jsonLdProps } from "../../../lib/schema.mjs";
 // Workers have no runtime filesystem: the book list and manifests are
 // imported so they are bundled at build time.
 import bookIndex from "../../../public/books/index.json";
@@ -21,10 +23,38 @@ import sherwoodManifest from "../../../public/books/three-heroes-of-sherwood/man
 import calamityJaneManifest from "../../../public/books/tribute-to-calamity-jane/manifest.json";
 import "./books.css";
 
-export const metadata = {
-  title: "Stories, Plays and Textbooks",
-  description: "Read Allen Gillon's Chinese Chimes stories, school plays and published classroom textbooks.",
-};
+export const metadata = pageMetadata("other", "/books");
+
+/* A book that cannot be read on this site yet (the textbooks whose old
+   manifests are not "free", until W4's manifests land) gets no Book node,
+   because book() says free and in stock. The new shape has no status field. */
+const readable = (b) => b.status === undefined || b.status === "free";
+
+/* The shelves as one collection, then a Book for each readable title. Audio
+   stays on each /read page, which owns the audiobooks and the play previews.
+   Images are b.cover: p001.webp once a book has page images, the scan until
+   then. */
+function booksJsonLd({ stories, plays, textbooks }) {
+  const all = [...stories, ...plays, ...textbooks];
+  return [
+    collectionPage(
+      all.map((b) => ({ url: `/read/${b.slug}`, name: b.title, image: b.cover })),
+      { url: "/books", name: "Stories, plays and textbooks", site: "other" },
+    ),
+    ...all.filter(readable).map((b) =>
+      bookSchema({
+        slug: b.slug,
+        title: b.title,
+        section: b.section,
+        blurb: b.blurb,
+        cover: b.cover,
+        pageCount: b.section === "plays" ? b.fullPages : b.pageCount || undefined,
+        // Stories and textbooks only, by the same rule as the shelf's PDF link.
+        downloadUrl: b.section === "plays" ? undefined : textbookPdf(b) || undefined,
+      }),
+    ),
+  ];
+}
 
 /* One book standing on the shelf. The cover is a second, mouse-only way into
    the same place as the book's action link, so it is hidden from the keyboard
@@ -56,11 +86,13 @@ const manifests = {
 };
 
 export default function BooksPage() {
-  const { stories, plays, textbooks } = buildShelves(bookIndex, manifests);
+  const shelves = buildShelves(bookIndex, manifests);
+  const { stories, plays, textbooks } = shelves;
   const checkoutOpen = plays.some((book) => stripePaymentLink(`play-${book.slug}`));
 
   return (
     <div className="writing-page">
+      <script {...jsonLdProps(booksJsonLd(shelves))} />
       <header className="writing-head band">
         <h1 className="script">Stories, plays and textbooks</h1>
         <p className="writing-intro">Allen wrote for children, school stages and classrooms. His work is gathered here in one place.</p>

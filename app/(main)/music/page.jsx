@@ -8,13 +8,21 @@ import MusicFlute from "../../../components/illustrations/MusicFlute";
 import MusicKeys from "../../../components/illustrations/MusicKeys";
 import LiteYouTube from "./LiteYouTube";
 import { albums, originals } from "./albums.mjs";
+import { pageMetadata } from "../../../lib/seo.mjs";
+import { collectionPage, jsonLdProps, musicAlbum } from "../../../lib/schema.mjs";
 import "./music.css";
 
-export const metadata = {
-  title: "Al's music style",
-  description:
-    "Listen to Allen Gillon's albums and download the tracks free.",
-};
+export const metadata = pageMetadata("main", "/music");
+
+/* The albums as a collection, then one MusicAlbum each (free, so the Offer
+   price is 0). No VideoObject: the Timeless videos' upload dates are unknown. */
+const JSON_LD = [
+  collectionPage(
+    albums.map((a) => ({ url: `/music#${a.id}`, name: a.title, image: a.cover })),
+    { url: "/music", name: "Albums", site: "main" },
+  ),
+  ...albums.map(musicAlbum),
+];
 
 /* Albums (/music), W5.
    One primary thing: the shelf of four albums. Each sleeve is the only
@@ -31,6 +39,9 @@ const shelf = albums.map((album) => ({ ...album, shelfCover: `/images/albums/she
 export default function MusicPage() {
   return (
     <div className="music-page">
+      <script {...jsonLdProps(JSON_LD)} />
+      {/* The first sleeve is the LCP image. React hoists this into <head>. */}
+      <link rel="preload" as="image" href={shelf[0].shelfCover} fetchPriority="high" />
       <header className="pagehead band music-head">
         <h1 className="script">Albums</h1>
         <p className="plain">

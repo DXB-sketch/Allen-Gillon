@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
+import legalConfig from "../content/legal.config.json" with { type: "json" };
 import {
   EMAIL,
   FORBIDDEN_TYPES,
@@ -228,7 +229,8 @@ test("artwork: VisualArtwork + Product sold by Ann, free AU shipping, no change-
   assert.equal(ret.returnPolicyCategory, "https://schema.org/MerchantReturnNotPermitted");
   assert.equal(ret.applicableCountry, "AU");
   assert.equal(ret.returnPolicyCountry, "AU");
-  assert.equal(ret.merchantReturnLink, `${MAIN}/terms`);
+  // The terms link waits for the legal pages (content/legal.config.json).
+  assert.equal(ret.merchantReturnLink, legalConfig.published ? `${MAIN}/terms` : undefined);
 
   for (const art of artworks.filter((x) => x.availability === "available")) {
     const node = artwork(art);

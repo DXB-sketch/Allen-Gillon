@@ -3,20 +3,17 @@ import { headers } from "next/headers";
 import CommentForm from "../../components/CommentForm";
 import SiteChrome from "../../components/SiteChrome";
 import "./comments.css";
-import { SITES, defaultReturnTo, safeReturnTo, siteForHost } from "../../lib/sites.mjs";
+import { defaultReturnTo, safeReturnTo, siteForHost } from "../../lib/sites.mjs";
+import { hostViewport, pageMetadata } from "../../lib/seo.mjs";
 
 // Served on both hosts. The host decides the mast, footer, title and which
-// pages "Back to" may return to.
+// pages "Back to" may return to. lib/seo.mjs marks /comments noindex, follow.
 export async function generateMetadata() {
-  const site = siteForHost((await headers()).get("host"));
-  return {
-    metadataBase: new URL(SITES[site].origin),
-    title: `Write a comment · ${SITES[site].name}`,
-    description:
-      "Write a comment about Allen Gillon's work. The message goes straight to Allen by text.",
-    robots: { index: false },
-  };
+  return pageMetadata(siteForHost((await headers()).get("host")), "/comments");
 }
+
+// /comments sits outside both group layouts, so it sets its own theme colour.
+export const viewport = hostViewport();
 
 export default async function CommentsPage({ searchParams }) {
   const query = await searchParams;

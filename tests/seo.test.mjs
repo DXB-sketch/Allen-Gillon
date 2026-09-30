@@ -28,7 +28,8 @@ import {
   sitemapXml,
 } from "../lib/seo.mjs";
 import { LEGAL_PATHS, SITES, faviconPath, resolveRequest } from "../lib/sites.mjs";
-import { artworks } from "../content/artworks.mjs";
+// The de-duplicated catalogue, the same list lib/seo.mjs and the painting pages use.
+import { artworks } from "../lib/art-catalog.mjs";
 import { playLinksCurrent } from "../lib/storefront.mjs";
 
 const SITE_KEYS = ["main", "other"];

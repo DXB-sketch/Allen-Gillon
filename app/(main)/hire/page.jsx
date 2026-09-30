@@ -1,12 +1,13 @@
 import Link from "next/link";
 import HireSpotlight from "../../../components/illustrations/HireSpotlight";
+import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "./hire.css";
 
-export const metadata = {
-  title: "Bookings",
-  description:
-    "Book Allen Gillon to play guitar at your venue around Bribie Island and South East Queensland.",
-};
+export const metadata = pageMetadata("main", "/hire");
+
+// bookingService() is already in the layout's site graph.
+const JSON_LD = breadcrumbs([{ name: "Home", url: "/" }, { name: "Bookings" }], "main");
 
 const FACEBOOK = "https://www.facebook.com/people/Allen-Gillon/100011388424486/";
 
@@ -15,6 +16,7 @@ const DINERS = ["Beautiful.", "Unforgettable.", "I love Al’s light jazz.", "Po
 export default function HirePage() {
   return (
     <div className="hire">
+      <script {...jsonLdProps(JSON_LD)} />
       <header className="pagehead band">
         <h1 className="script">Bookings</h1>
         <p className="plain">Light jazz guitar for restaurants where people are eating, drinking and enjoying themselves. Allen has been doing exactly this for many years, and he still loves a full diary.</p>

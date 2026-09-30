@@ -6,38 +6,20 @@ import SideboardBook from "../../../components/illustrations/SideboardBook";
 import SideboardCorner from "../../../components/illustrations/SideboardCorner";
 import SideboardFrame from "../../../components/illustrations/SideboardFrame";
 import SideboardShelf from "../../../components/illustrations/SideboardShelf";
-import { ogImages } from "../../../lib/og.mjs";
+import { pageMetadata } from "../../../lib/seo.mjs";
 import "./other-home.css";
 
 // "The sideboard": the home page of other.allengillon.com. It is served at "/"
 // through the proxy rewrite; /other-home itself returns 301 to "/".
 //
-// metadataBase is cleared here on purpose: with a metadataBase, vinext (like
-// Next) prints a root canonical as the bare origin "https://other.allengillon.com",
-// dropping the trailing slash. Without one, absolute URLs are printed exactly
-// as written, so every URL in this metadata must stay absolute (ogImages
-// returns absolute URLs).
-const CANONICAL = "https://other.allengillon.com/";
-const OG = ogImages("other", "/");
+// pageMetadata clears metadataBase for "/", so the canonical keeps its
+// trailing slash (https://other.allengillon.com/). No page JSON-LD: the
+// layout's site graph covers the home page.
+export const metadata = pageMetadata("other", "/");
 
-export const metadata = {
-  metadataBase: null,
-  title: { absolute: "More on Allen: stories, Timeless and Ann's art" },
-  description:
-    "Allen Gillon's personal side: stories and school plays for young readers, the Timeless story of Allen and Ann, and Ann Gillon's original paintings.",
-  alternates: { canonical: CANONICAL },
-  openGraph: {
-    title: "More on Allen",
-    description:
-      "Stories and school plays for young readers, the Timeless story of Allen and Ann, and Ann Gillon's original paintings.",
-    url: CANONICAL,
-    siteName: "More on Allen",
-    locale: "en_AU",
-    type: "website",
-    images: OG,
-  },
-  twitter: { card: "summary_large_image", images: OG },
-};
+// The open book's first page is the page's LCP image: preloaded at high
+// priority. Everything else on the sideboard loads lazily.
+const LCP = "/books/little-ray/p001.webp";
 
 // Three objects standing on one drawn sideboard, each a single link: an open
 // Chime Time Stories book, a framed painting of Ann's, and a 1968 photo held
@@ -46,6 +28,8 @@ export const metadata = {
 export default function OtherHome() {
   return (
     <div className="sideboard band">
+      {/* React hoists this into <head>. */}
+      <link rel="preload" as="image" href={LCP} fetchPriority="high" />
       <header className="sideboard-head">
         <h1 className="script">More on Allen</h1>
         <p>Allen&rsquo;s personal side: family, writing, Timeless and Ann&rsquo;s art.</p>
@@ -59,8 +43,8 @@ export default function OtherHome() {
           </span>
           <span className="doorway-object" aria-hidden="true">
             <span className="book-pages">
-              <img src="/books/little-ray/p001.webp" alt="" width="1000" height="1000" />
-              <img src="/books/little-ray/p002.webp" alt="" width="1003" height="1000" decoding="async" />
+              <img src={LCP} alt="" width="1000" height="1000" fetchPriority="high" />
+              <img src="/books/little-ray/p002.webp" alt="" width="1003" height="1000" loading="lazy" decoding="async" />
             </span>
             <SideboardBook className="book-edges" />
           </span>
