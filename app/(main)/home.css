@@ -1,5 +1,5 @@
 /* Home (allengillon.com/). W5 art direction.
-   Order: hero (name + full-bleed photo), two typographic doorways, the venue
+   Order: hero (name + photo), two typographic doorways, the venue
    handbill, one pull-quote, a line to the other site. Every band is the
    12-column .band grid; grid lines: 1 full-start, 2 wide-start (column 1),
    14 wide-end, 15 full-end. */
@@ -7,40 +7,51 @@
 /* ---------- Hero ----------
    Phone: name, then the photo edge to edge, then the intro.
    From 900px: the name and intro hang from the left of the wide area and the
-   photo bleeds off the right edge of the page. */
-.home-hero{padding-block:clamp(8px,2vw,24px) 0;row-gap:clamp(20px,2.4vw,36px);}
-.home-hero > h1{grid-row:1;}
+   photo bleeds off the right edge of the page. The only copy of the photo is
+   600px square, so this is a split rather than a full-width band: the photo
+   is held to 720px (1.2x) and the home name is set larger than other pages'
+   L1 (13rem cap, not 10rem) so the left of the hero is filled, not empty. */
+.home-hero{padding-block:clamp(8px,2vw,24px) 0;row-gap:clamp(16px,2.4vw,36px);}
+.home-hero > h1{grid-row:1;font-size:clamp(4rem,11vw,13rem);}
 .home-name{white-space:nowrap;}
 .home-hero > .home-photo{grid-column:full;grid-row:2;min-width:0;}
-.home-photo img{display:block;width:100%;height:auto;aspect-ratio:10/9;object-fit:cover;
+.home-photo img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;
   /* Keep his face and the headstock; the crop drops the watermark at the
      bottom of the frame. */
   object-position:50% 0;}
-.home-intro{grid-row:3;font-size:clamp(1.1em,1.25vw,1.3em);margin:0;}
+.home-intro{grid-row:3;font-size:clamp(1.1em,1.25vw,1.3em);line-height:1.45;margin:0;}
+@media (min-width:600px){
+  .home-photo img{aspect-ratio:10/9;}
+}
 
 @media (min-width:900px){
   .home-hero{grid-template-rows:1fr auto auto 1.4fr;row-gap:0;padding-top:clamp(8px,1.4vw,24px);}
   .home-hero > h1{grid-row:2;align-self:end;}
   .home-name{display:block;width:fit-content;}
   .home-name + .home-name{margin-left:.62em;}
-  .home-hero > .home-photo{grid-column:8 / full-end;grid-row:1 / -1;}
+  .home-hero > .home-photo{grid-column:8 / full-end;grid-row:1 / -1;justify-self:end;width:100%;max-width:720px;}
   .home-hero > .home-intro{grid-column:wide-start / 7;grid-row:3;margin-top:clamp(20px,2.4vw,40px);}
 }
 
 /* ---------- Doorways ----------
-   Two single links, each a drawing and one huge word. */
-.home-doorways{margin-top:var(--band-space);}
+   Two single links, each a drawing and one huge word. The word carries a
+   thick red underline at rest, so it reads as a link without hovering; it
+   stays well below the name so the L1 keeps the lead. */
+.home-doorways{margin-top:clamp(32px,7vw,112px);}
 .home-doors{display:grid;row-gap:clamp(28px,4vw,48px);column-gap:var(--col-gap);}
 .door{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;
   column-gap:clamp(16px,2vw,36px);align-items:end;min-width:0;
   color:var(--ink);text-decoration:none;
   transition:color .2s var(--ease-out);}
 .door-art{grid-row:1 / span 2;align-self:end;height:auto;}
-.door-art--headstock{width:clamp(64px,8vw,150px);}
-.door-art--record{width:clamp(96px,12vw,220px);}
-.door-word{font-size:clamp(3rem,6.6vw,7.25rem);line-height:.95;letter-spacing:-.01em;}
+.door-art--headstock{width:clamp(56px,7vw,130px);}
+.door-art--record{width:clamp(84px,10.5vw,196px);}
+.door-word{font-size:clamp(2.75rem,5.4vw,5.75rem);line-height:1.1;letter-spacing:-.01em;
+  text-decoration:underline;text-decoration-color:var(--red);
+  text-decoration-thickness:.06em;text-underline-offset:.14em;}
 .door-line{font-size:clamp(1em,1.1vw,1.15em);line-height:1.4;color:var(--soft);margin-top:12px;max-width:26ch;}
 .door:hover{color:var(--red-deep);}
+.door:hover .door-word{text-decoration-color:var(--red-deep);}
 .door:hover .door-line{color:var(--red-deep);}
 @media (min-width:820px){
   /* Two equal tracks with the band's column gap: the same 6 + 6 split. */
@@ -48,12 +59,11 @@
 }
 
 /* ---------- Venue handbill ----------
-   A letterpress bill in the two inks. The frame is two passes of the press:
-   a red rule and a blue one that did not quite line up. */
+   A letterpress bill in the two inks, hung from the left of the wide area.
+   No frame: space sets it apart; the two inks, the three sizes and the
+   printer's stars do the printing. */
 .home-bill{margin-top:var(--band-space);align-items:center;}
-.bill{position:relative;text-align:center;padding:clamp(28px,4.4vw,72px) clamp(18px,4vw,64px);}
-.bill::before,.bill::after{content:"";position:absolute;inset:0;border:2.75px solid var(--red);pointer-events:none;}
-.bill::after{border-color:var(--blue);opacity:.3;transform:translate(3px,3px);}
+.bill{min-width:0;}
 .bill-title{font-size:clamp(1.35rem,2vw,1.7rem);font-weight:400;font-style:italic;line-height:1.3;margin:0 0 clamp(16px,2vw,28px);}
 /* Phone: one venue per line, like a narrow bill. From 700px: three set
    lines (.bill-nl starts one) with a printer's star between names. */
@@ -76,8 +86,8 @@
 }
 .bill-umbrella{display:none;}
 @media (min-width:1024px){
-  .bill{grid-column:3 / 12;}
-  .bill-umbrella{display:block;grid-column:12 / wide-end;width:100%;max-width:220px;justify-self:center;}
+  .bill{grid-column:wide-start / 11;}
+  .bill-umbrella{display:block;grid-column:11 / wide-end;width:100%;max-width:240px;justify-self:end;}
 }
 
 /* ---------- Pull-quote ---------- */
@@ -85,8 +95,10 @@
 .home-quote figure{position:relative;margin:0;}
 .home-quote blockquote{margin:0;}
 .home-quote blockquote p{margin:0;font-size:clamp(1.15em,1.6vw,1.35em);line-height:1.5;}
-.home-quote blockquote::before{content:"\201C";position:absolute;left:-.08em;top:-.32em;
-  font-size:clamp(5rem,9vw,8.5rem);line-height:1;color:var(--red);}
+/* The big opening mark is an aria-hidden span, not generated content, so
+   screen readers do not announce it before the quote. */
+.home-quote-mark{position:absolute;left:-.08em;top:-.32em;
+  font-size:clamp(5rem,9vw,8.5rem);line-height:1;color:var(--red);pointer-events:none;}
 .home-quote blockquote{padding-left:clamp(44px,5vw,80px);}
 .home-quote figcaption{padding-left:clamp(44px,5vw,80px);margin-top:14px;}
 .home-quote cite{font-family:var(--script);font-style:normal;font-size:2.4rem;line-height:1.1;

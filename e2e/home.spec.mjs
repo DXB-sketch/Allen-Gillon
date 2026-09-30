@@ -45,6 +45,50 @@ test.describe("main home", () => {
     }
   });
 
+  test("the 600px photo is never upscaled past 1.2x, and the name leads the doorways", async ({ page }) => {
+    for (const width of [1280, 1920, 2560]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(HOME, { waitUntil: "load" });
+      await page.evaluate(() => document.fonts.ready);
+      const r = await page.evaluate(() => ({
+        photo: document.querySelector(".home-photo img").getBoundingClientRect().width,
+        h1: parseFloat(getComputedStyle(document.querySelector(".home-hero > h1")).fontSize),
+        door: parseFloat(getComputedStyle(document.querySelector(".door-word")).fontSize),
+      }));
+      expect(r.photo, `photo width at ${width}`).toBeLessThanOrEqual(721);
+      expect(r.h1 / r.door, `name to door-word ratio at ${width}`).toBeGreaterThanOrEqual(1.8);
+    }
+  });
+
+  test("the first doorway is on the first phone screen", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto(HOME, { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
+    const bottom = await page.evaluate(() => document.querySelector(".door .door-word").getBoundingClientRect().bottom);
+    expect(bottom).toBeLessThanOrEqual(812);
+  });
+
+  test("doorways read as links at rest; handbill has no frame; quote mark is silent", async ({ page }) => {
+    await page.goto(HOME, { waitUntil: "load" });
+    const r = await page.evaluate(() => {
+      const bill = document.querySelector(".bill");
+      const pseudo = (p) => getComputedStyle(bill, p).content;
+      return {
+        underline: [...document.querySelectorAll(".door-word")].map((w) => getComputedStyle(w).textDecorationLine),
+        frame: [pseudo("::before"), pseudo("::after")],
+        border: getComputedStyle(bill).borderTopStyle,
+        align: getComputedStyle(bill).textAlign,
+      };
+    });
+    for (const u of r.underline) expect(u).toContain("underline");
+    expect(r.frame).toEqual(["none", "none"]);
+    expect(r.border).toBe("none");
+    expect(r.align).not.toBe("center");
+    const snap = await page.locator("main blockquote").ariaSnapshot();
+    expect(snap).not.toContain("“");
+    await expect(page.locator(".home-quote-mark")).toHaveAttribute("aria-hidden", "true");
+  });
+
   test("two doorways, each one link with a drawing", async ({ page }) => {
     await page.goto(HOME, { waitUntil: "load" });
     const doors = page.locator(".home-doors a.door");

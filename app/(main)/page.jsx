@@ -94,6 +94,7 @@ export default function Page() {
 
       <section className="home-quote band" aria-label="From the audience">
         <figure>
+          <span className="home-quote-mark" aria-hidden="true">&ldquo;</span>
           <blockquote>
             <p>Popped into the Banksia Beach Art Centre Cafe last Tuesday for their delicious coffee and cakes. Not only did I get that, but was also entertained by solo guitarist Allen Gillon, playing some terrific instrumental music, oldies but goodies. Thoroughly enjoyed it all.</p>
           </blockquote>
