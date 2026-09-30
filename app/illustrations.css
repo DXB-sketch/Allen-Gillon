@@ -1,0 +1,53 @@
+/* Two-ink line art and entrance motion (DESIGN.md, Illustration and Motion).
+   Used by components/illustrations/TwoInk.jsx and MotionObserver.jsx. */
+
+/* Inks per site: main is red-led, other is blue-led. The wrapper .site also
+   carries data-site, so this works before the html marker script runs. */
+:root,[data-site="main"]{--art-lead:var(--red);--art-second:var(--blue);}
+[data-site="other"]{--art-lead:var(--blue);--art-second:var(--red);}
+
+.two-ink{
+  display:block;overflow:visible;pointer-events:none;
+  fill:none;stroke-width:2.75px;stroke-linecap:round;stroke-linejoin:round;
+}
+.two-ink--red{--art-lead:var(--red);--art-second:var(--blue);}
+.two-ink--blue{--art-lead:var(--blue);--art-second:var(--red);}
+.two-ink--on-ink{--art-lead:var(--on);--art-second:var(--red);}
+.two-ink--on-ink .two-ink__second{opacity:.55;} /* 30% red vanishes on ink */
+.two-ink :is(path,line,polyline,polygon,circle,ellipse,rect){vector-effect:non-scaling-stroke;}
+.two-ink__lead{stroke:var(--art-lead);}
+.two-ink__second{
+  stroke:var(--art-second);opacity:.3;
+  transform:translate(var(--ink-offset,3px),var(--ink-offset,3px));
+}
+
+/* Entrance motion. Final states are the default; start states apply only
+   under html.motion-ok (set by MotionObserver, never under reduced motion).
+   .is-static = was on screen at load, so it never animates. */
+html.motion-ok [data-motion]:not(.is-in):not(.is-static){opacity:0;}
+html.motion-ok [data-motion="rise"]:not(.is-in):not(.is-static){transform:translateY(24px);}
+html.motion-ok [data-motion].is-in{
+  transition:opacity .7s var(--ease-out),transform .7s var(--ease-out);
+  transition-delay:var(--motion-delay,0ms);
+}
+
+/* Draw-on: fades in while the lead ink draws, then the second ink follows a
+   beat later. MotionObserver sets --len (on-screen stroke length) on each
+   stroke as it enters. The animation fills backwards only, so once it ends
+   the strokes return to plain solid lines. The dasharray is constant; only
+   stroke-dashoffset moves. */
+html.motion-ok [data-motion="draw"].is-in :is(path,line,polyline,polygon,circle,ellipse,rect){
+  animation:ink-draw 1.6s var(--ease-out) var(--motion-delay,0ms) backwards;
+}
+html.motion-ok [data-motion="draw"].is-in .two-ink__second :is(path,line,polyline,polygon,circle,ellipse,rect){
+  animation-delay:calc(var(--motion-delay,0ms) + 200ms);
+}
+@keyframes ink-draw{
+  from{stroke-dasharray:var(--len) var(--len);stroke-dashoffset:var(--len);}
+  to{stroke-dasharray:var(--len) var(--len);stroke-dashoffset:0;}
+}
+
+@media print{
+  html.motion-ok [data-motion]{opacity:1!important;transform:none!important;}
+  html.motion-ok [data-motion] *{animation:none!important;}
+}

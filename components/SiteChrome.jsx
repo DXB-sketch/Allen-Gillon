@@ -1,6 +1,7 @@
 import SiteMast from "./SiteMast";
 import SiteFooter from "./SiteFooter";
 import PageReader from "./PageReader";
+import MotionObserver from "./illustrations/MotionObserver";
 
 // The page reader's narrator per site: Allen's music site uses a male voice,
 // the family and stories site a female one.
@@ -18,6 +19,7 @@ export default function SiteChrome({ site, children }) {
         {children}
       </div>
       <SiteFooter site={site} />
+      <MotionObserver />
     </div>
   );
 }

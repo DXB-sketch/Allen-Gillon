@@ -1,4 +1,5 @@
 import "./site.css";
+import "./illustrations.css";
 import { PlayerProvider, NowBar } from "../components/Player";
 import { SITE_MARKER_SCRIPT } from "../lib/sites.mjs";
 
