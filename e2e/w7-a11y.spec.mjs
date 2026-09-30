@@ -39,6 +39,12 @@ for (const [site, base] of Object.entries(HOSTS)) {
         expect(names.filter((n) => VAGUE.test(n))).toEqual([]);
         expect(names.filter((n) => n === "")).toEqual([]);
 
+        // While unpublished the legal pages 404, so nothing may link to them.
+        if (!legal.published) {
+          const hrefs = await page.locator("a[href]").evaluateAll((links) => links.map((a) => a.getAttribute("href")));
+          expect(hrefs.filter((href) => LEGAL_PATHS.some((legalPath) => new URL(href, "http://x").pathname === legalPath))).toEqual([]);
+        }
+
         const { violations } = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
         expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
       });
@@ -75,6 +81,29 @@ for (const [site, base] of Object.entries(HOSTS)) {
         }
       }
     });
+
+    // 404 pages: notFound() from a page (the gated legal routes, a bad
+    // /anns-art id) and an unmatched URL. Each keeps the site chrome, so the
+    // skip link still lands on the one main#main.
+    const missing = [...(legal.published ? [] : LEGAL_PATHS), "/no-such-page", ...(site === "other" ? ["/anns-art/bogus"] : [])];
+    for (const path of missing) {
+      test(`404 ${path}: site chrome, one main#main, working skip link, axe clean`, async ({ page }) => {
+        const res = await page.goto(`${base}${path}`);
+        expect(res.status()).toBe(404);
+        await expect(page.locator("main")).toHaveCount(1);
+        await expect(page.locator("main#main[tabindex='-1']")).toHaveCount(1);
+        await expect(page.locator("h1")).toHaveCount(1);
+        await expect(page.locator("body header.mast nav")).toHaveCount(1);
+        await expect(page.locator("body footer")).toHaveCount(1);
+        await expect(page).toHaveTitle(/^Page not found · /);
+        await page.keyboard.press("Tab");
+        await expect(page.locator(".skip-link")).toBeFocused();
+        await page.keyboard.press("Enter");
+        await expect(page.locator("main#main")).toBeFocused();
+        const { violations } = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
+        expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`)).toEqual([]);
+      });
+    }
 
     if (!legal.published) {
       test("the legal routes 404 while unpublished", async ({ request }) => {

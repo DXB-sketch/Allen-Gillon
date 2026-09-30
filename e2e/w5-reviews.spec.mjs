@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
@@ -56,7 +57,7 @@ test.describe("/reviews", () => {
     await expect(page.locator(".approvedReviews")).toHaveCount(0);
   });
 
-  test("every field has the same 2px border and the form links /privacy on the main host", async ({ page }) => {
+  test("every field has the same 2px border and the form links /privacy on the main host once published", async ({ page }) => {
     await page.goto(`${MAIN}/reviews`);
     const borders = await page.$$eval(".friendlyReviewForm input:not([name=website]), .friendlyReviewForm textarea", (els) =>
       els.map((el) => {
@@ -68,7 +69,10 @@ test.describe("/reviews", () => {
     expect(new Set(borders).size).toBe(1);
     expect(borders[0]).toMatch(/^2px 2px 2px 2px solid/);
     const privacy = page.locator(".reviewPrivacy a");
-    await expect(privacy).toHaveAttribute("href", `${MAIN}/privacy`);
+    // /privacy 404s until content/legal.config.json is published (W7), so the link is hidden until then.
+    const { published } = JSON.parse(readFileSync(new URL("../content/legal.config.json", import.meta.url), "utf8"));
+    if (published) await expect(privacy).toHaveAttribute("href", `${MAIN}/privacy`);
+    else await expect(privacy).toHaveCount(0);
   });
 
   test("axe: 0 violations", async ({ page }) => {

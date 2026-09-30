@@ -36,7 +36,7 @@ export default function AccessibilityPage() {
             <li>Large type: body text is 20 pixels, and nothing you need to read is smaller than 16 pixels.</li>
             <li>Strong contrast: body text is at least 7 to 1 against the paper colour.</li>
             <li>Every page works with a keyboard, with a clear blue outline showing where you are, and a &ldquo;Skip to content&rdquo; link.</li>
-            <li>Buttons and links are at least 44 pixels high, so they are easy to tap.</li>
+            <li>Buttons and menu links are at least 44 pixels high, so they are easy to tap.</li>
             <li>Nothing important appears only when you hover with a mouse.</li>
             <li>If your device asks for reduced motion, the drawings and pages stay still.</li>
             <li>Pages still work when zoomed to 200 per cent.</li>

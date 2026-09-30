@@ -65,7 +65,7 @@ export default function MusicPage() {
             aria-label="Ann and Allen performing This Masquerade"
           >
             <source src="/videos/timeless-masquerade.mp4" type="video/mp4" />
-            <track kind="captions" src="/videos/timeless-masquerade.en.vtt" srcLang="en" label="English" default />
+            <track kind="captions" src="/videos/timeless-masquerade.v1.en.vtt" srcLang="en" label="English" default />
             Your browser does not support video playback.
           </video>
         </div>
@@ -80,7 +80,7 @@ export default function MusicPage() {
             aria-label="Ann and Allen performing Unforgettable"
           >
             <source src="/videos/timeless-unforgettable.mp4" type="video/mp4" />
-            <track kind="captions" src="/videos/timeless-unforgettable.en.vtt" srcLang="en" label="English" default />
+            <track kind="captions" src="/videos/timeless-unforgettable.v1.en.vtt" srcLang="en" label="English" default />
             Your browser does not support video playback.
           </video>
         </div>

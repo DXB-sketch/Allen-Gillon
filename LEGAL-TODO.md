@@ -89,6 +89,10 @@ relevant regulator's guidance should settle anything marked "legal check".
 - [ ] Allen's words, music, recordings, stories and plays are (c) Allen Gillon;
       Ann's paintings and photos of them are (c) Ann Gillon. The footer says
       "© {year} Allen Gillon · Paintings © Ann Gillon".
+- [ ] The footer year is set when a page is rendered. Static pages render at
+      build time, so the year only moves on a rebuild, while /comments renders
+      per request. Redeploy early each January so every page shows the same
+      year.
 - [ ] The cover recordings on the albums need APRA AMCOS clearance (human TODO
       from the plan). The terms say the free albums are "for your own
       listening"; confirm once licensing is sorted.
@@ -101,9 +105,12 @@ relevant regulator's guidance should settle anything marked "legal check".
 - [ ] Claims to aim for WCAG 2.2 AA. The known-limits list names: YouTube
       captions on the original songs, the Timeless video captions (sung words
       not confirmed), low-resolution photos and scans. Keep it current.
-- [ ] The Timeless video captions (public/videos/timeless-*.en.vtt) describe
+- [ ] The Timeless video captions (public/videos/timeless-*.v1.en.vtt) describe
       the music; faster-whisper found no intelligible words. Allen or Ann should
       confirm the song names and whether any words should be captioned.
+      /videos/* is cached for a year as immutable, so when a caption file is
+      corrected, save it under the next version (v2) and update the <track>
+      src in app/(main)/music/page.jsx; never edit a published file in place.
 
 ## Contact details
 

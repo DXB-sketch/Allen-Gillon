@@ -2,6 +2,10 @@
 
 import { useRef, useState } from "react";
 import CrossSiteLink from "./CrossSiteLink";
+import legal from "../content/legal.config.json";
+import { isLegalPublished } from "../lib/legal.mjs";
+
+const privacyPublished = isLegalPublished(legal);
 
 export default function FriendlyReviewForm() {
   const [name, setName] = useState("");
@@ -80,14 +84,20 @@ export default function FriendlyReviewForm() {
           </button>
           <p className="reviewStatus" role="status">{status}</p>
         </div>
-        {/* /privacy is served on the main host only. The legal pages are not
-            published yet (W7); this link will resolve once they are. It is an
-            absolute main-host URL so it stays right wherever the form is used. */}
+        {/* /privacy is served on the main host only, and only once
+            content/legal.config.json is published; until then it 404s, so the
+            link is left out. It is an absolute main-host URL so it stays right
+            wherever the form is used. */}
         <p className="reviewPrivacy">
           Once Allen approves it, your review appears here with your name and
-          where you heard him. The{" "}
-          <CrossSiteLink site="main" path="/privacy">privacy page</CrossSiteLink>{" "}
-          explains how your details are handled.
+          where you heard him.
+          {privacyPublished ? (
+            <>
+              {" "}The{" "}
+              <CrossSiteLink site="main" path="/privacy">privacy page</CrossSiteLink>{" "}
+              explains how your details are handled.
+            </>
+          ) : null}
         </p>
       </form>
     </section>
