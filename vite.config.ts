@@ -4,6 +4,13 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 import { cdnAdapter } from "@vinext/cloudflare/cache/cdn-adapter";
 
 export default defineConfig(({ command }) => ({
+  // In dev, hand SITE_DEV_PORT (set by scripts/dev-local.mjs, default 3001) to
+  // the app so server-rendered cross-site links use the local port. The build
+  // leaves it alone; the local Worker gets it from wrangler vars instead.
+  define:
+    command === "serve"
+      ? { "process.env.SITE_DEV_PORT": JSON.stringify(String(Number(process.env.SITE_DEV_PORT) || 3001)) }
+      : {},
   server: {
     // Both hosts work locally: localhost (main) and other.localhost (other).
     // The production host names are allowed so Host-header checks reach proxy.ts.
