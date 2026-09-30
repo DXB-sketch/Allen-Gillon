@@ -4,13 +4,15 @@ import TimelessCurtain from "../../../components/illustrations/TimelessCurtain";
 import TimelessGibson from "../../../components/illustrations/TimelessGibson";
 import TimelessMics from "../../../components/illustrations/TimelessMics";
 import TimelessCorner from "../../../components/illustrations/TimelessCorner";
+import { pageMetadata } from "../../../lib/seo.mjs";
+import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "./biography.css";
 
-export const metadata = {
-  title: "Timeless",
-  description:
-    "Allen and Ann Gillon have made music together for many years. This is their story.",
-};
+export const metadata = pageMetadata("other", "/biography");
+
+// timelessGroup() is already in the layout's site graph. No VideoObject: the
+// Steakout video's upload date is unknown.
+const JSON_LD = breadcrumbs([{ name: "Home", url: "/" }, { name: "Timeless" }], "other");
 
 // Timeless (/biography) on other.allengillon.com. The eras are laid out as
 // scenes: a large Dynalight year in the outer margin, the text at the
@@ -36,6 +38,7 @@ function Snap({ src, alt, width, height, caption, corners, className = "", eager
 export default function BiographyPage() {
   return (
     <main className="timeless">
+      <script {...jsonLdProps(JSON_LD)} />
       <header className="pagehead band timeless-head">
         <TimelessCurtain className="bleed" />
         <h1 className="script">Timeless</h1>

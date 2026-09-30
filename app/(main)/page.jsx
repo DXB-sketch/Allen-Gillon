@@ -6,13 +6,12 @@ import OpenBook from "../../components/illustrations/OpenBook";
 import HomeUmbrella from "../../components/illustrations/HomeUmbrella";
 import HomeStar from "../../components/illustrations/HomeStar";
 import { CROSS_LINK } from "../../lib/sites.mjs";
+import { pageMetadata } from "../../lib/seo.mjs";
 import "./home.css";
 
-export const metadata = {
-  title: { absolute: "Allen Gillon" },
-  description:
-    "Allen Gillon is a guitarist from Bribie Island, Queensland. Listen to his albums or book him for a venue.",
-};
+// Title, description, canonical, Open Graph and twitter card: lib/seo.mjs.
+// No page JSON-LD: the layout's site graph covers the home page.
+export const metadata = pageMetadata("main", "/");
 
 // The hero photo is the page's LCP image: preloaded at high priority, with its
 // intrinsic size set so nothing shifts while it loads.

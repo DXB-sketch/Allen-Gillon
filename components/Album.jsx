@@ -142,7 +142,17 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
         onClick={onToggle}
       >
         <span className="disc" aria-hidden="true"></span>
-        <img src={shelfCover || cover} alt="" width="720" height="720" decoding="async" />
+        {/* The first sleeve is the page's LCP image (preloaded by the page);
+            the other sleeves load lazily. */}
+        <img
+          src={shelfCover || cover}
+          alt=""
+          width="720"
+          height="720"
+          decoding="async"
+          loading={index === 0 ? undefined : "lazy"}
+          fetchPriority={index === 0 ? "high" : undefined}
+        />
         <span className="visually-hidden">Show tracks for {title}</span>
       </button>
       <section className="trkpanel" id={`trk-${id}`} hidden={!open} aria-labelledby={`title-${id}`}>

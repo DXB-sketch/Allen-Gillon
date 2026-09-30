@@ -32,6 +32,15 @@ the orchestrator makes the changes below. Each one is small.
   /audio an immutable one-year cache. `/books/*` gets
   `max-age=86400, must-revalidate`.
 
+## Wiring status (seo-wiring branch)
+
+Wired: every page.jsx on both hosts except `/read/**` (W4), `/delivery` and
+the legal pages (W7). `/anns-art/[id]` now uses `generateArtworkMetadata`,
+and `lib/seo.mjs` reads the paintings from `lib/art-catalog.mjs` (repeated
+photos removed), so the painting page, its description and the image
+sitemap all count the same views. `e2e/seo.spec.mjs` fetches every wired
+route on both hosts and checks the head tags and JSON-LD.
+
 ## Do not deploy before W4 and W5
 
 The other host's sitemap is generated from the content data, so it already lists
