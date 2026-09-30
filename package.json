@@ -36,5 +36,9 @@
     "vite": "^8.3.1",
     "wrangler": "^4.139.0"
   },
-  "type": "module"
+  "type": "module",
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260923.1": true
+  }
 }

@@ -1,10 +1,11 @@
 import CommentLink from "../../components/CommentLink";
 import Audiobook from "../../components/Audiobook";
 import PurchaseLink from "../../components/PurchaseLink";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import Link from "next/link";
 import { formatAud, playPrice, stripePaymentLink } from "../../lib/storefront.mjs";
+// Workers have no runtime filesystem. Importing the index lets both Next.js
+// and Cloudflare bundle the book list at build time.
+import bookIndex from "../../public/books/index.json";
 
 export const metadata = {
   title: "Stories, Plays and Textbooks · Allen Gillon",
@@ -33,16 +34,8 @@ const teachingCovers = {
   "riddled-with-language": "/images/books/riddled-with-language.webp",
 };
 
-async function readIndex() {
-  try {
-    return JSON.parse(await readFile(path.join(process.cwd(), "public", "books", "index.json"), "utf8"));
-  } catch {
-    return [];
-  }
-}
-
-export default async function BooksPage() {
-  const index = await readIndex();
+export default function BooksPage() {
+  const index = bookIndex;
   const bySlug = Object.fromEntries(index.map((book) => [book.slug, book]));
   const plays = playOrder.map((slug) => bySlug[slug]).filter(Boolean);
   const teaching = index.filter((book) => book.section === "teaching");
