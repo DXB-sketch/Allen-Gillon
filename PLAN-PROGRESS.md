@@ -51,14 +51,14 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [ ] Gate: story-cues, leak, reader DOM tests pass
 
 ## W5 Declutter and art direction
-- [ ] Illustration system + motion observer
-- [ ] Home, Bookings, Albums, Timeless, Stories, Ann's art, Reviews, Comments, Other home
+- [x] Illustration system + motion observer (components/illustrations/TwoInk, MotionObserver, app/illustrations.css)
+- [x] Home, Bookings, Albums, Timeless, Stories, Ann's art, Reviews, Comments, Other home (merged; each implemented, 2-lens reviewed, fixed)
 - [ ] Counted checks (anns-art index 0 Buy / 0 View 1; each detail exactly 1 Buy/Enquire; unit test)
 - [ ] Gate: counted checks, screenshots, grep checks
 
 ## W6 SEO
-- [ ] Metadata per page, templates, canonicals
-- [ ] Host-aware robots + sitemap
+- [~] Metadata per page, templates, canonicals (lib/seo.mjs ROUTE_META done; per-page wiring per docs/SEO-WIRING.md pending)
+- [x] Host-aware robots + sitemap (lib/seo.mjs, tests/seo.test.mjs)
 - [~] Icons + manifest per host (public/icons/{main,other} built; wiring pending)
 - [~] OG images (65 built via scripts/build-og.mjs + content/og-images.json; wiring pending)
 - [~] JSON-LD lib/schema.mjs + test (library + 19 tests merged; wiring into pages pending)
@@ -93,6 +93,8 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [ ] Accessibility
 - [ ] Legal
 - [ ] Progress
+
+- Open questions from agents: docs/open-questions-raw.md
 
 ## Blocked on the human (TODO, not blocking other work)
 - [B] Create A$1 play Payment Links, then set `playLinksCurrent: true`
