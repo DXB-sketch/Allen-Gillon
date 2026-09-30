@@ -58,9 +58,9 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 ## W6 SEO
 - [ ] Metadata per page, templates, canonicals
 - [ ] Host-aware robots + sitemap
-- [ ] Icons + manifest per host
-- [ ] OG images
-- [ ] JSON-LD lib/schema.mjs + test
+- [~] Icons + manifest per host (public/icons/{main,other} built; wiring pending)
+- [~] OG images (65 built via scripts/build-og.mjs + content/og-images.json; wiring pending)
+- [~] JSON-LD lib/schema.mjs + test (library + 19 tests merged; wiring into pages pending)
 - [ ] Performance: Dynalight self-hosted, _headers, LCP preload
 
 ## W7 Accessibility and legal
