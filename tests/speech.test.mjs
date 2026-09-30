@@ -48,6 +48,17 @@ test("real site strings", () => {
   assert.equal(normaliseForSpeech("Text Allen on 0438 747 882"), "Text Allen on 0438 747 882");
 });
 
+test("a comma after a price stays a pause, and other currencies are left alone", () => {
+  assert.equal(
+    normaliseForSpeech("Tickets $50, $60 at the door"),
+    "Tickets 50 Australian dollars, 60 Australian dollars at the door"
+  );
+  assert.equal(normaliseForSpeech("A$1,250.50"), "1250 Australian dollars and 50 cents");
+  assert.equal(normaliseForSpeech("$1,000-2,000"), "1000 to 2000 Australian dollars");
+  assert.equal(normaliseForSpeech("US$20"), "US$20");
+  assert.equal(normaliseForSpeech("NZ$20"), "NZ$20");
+});
+
 test("empty input", () => {
   assert.equal(normaliseForSpeech(""), "");
   assert.equal(normaliseForSpeech(undefined), "");
