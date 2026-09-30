@@ -1,9 +1,9 @@
 import CommentLink from "../../../components/CommentLink";
-import Link from "next/link";
+import CrossSiteLink from "../../../components/CrossSiteLink";
 import ShowSetlist from "../../../components/ShowSetlist";
 
 export const metadata = {
-  title: "The Matthew Allen 5 · Allen Gillon",
+  title: "The Matthew Allen 5",
   description:
     "The Matthew Allen 5 at Chandler Theatre, 1998: hear the show's setlist in 30-second previews.",
 };
@@ -60,7 +60,7 @@ export default function ShowsPage() {
                 Like what you hear? <CommentLink subject="The Matthew Allen 5" returnTo="/shows" returnLabel="MA5">Write a comment</CommentLink>
               </p>
               <p className="likeit">
-                <Link href="/biography">&larr; Back to the story</Link>
+                <CrossSiteLink site="other" path="/biography">&larr; Back to the story</CrossSiteLink>
               </p>
             </div>
             <figure style={{ margin: 0 }}>

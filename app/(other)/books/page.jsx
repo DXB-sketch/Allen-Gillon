@@ -8,7 +8,7 @@ import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront
 import bookIndex from "../../../public/books/index.json";
 
 export const metadata = {
-  title: "Stories, Plays and Textbooks · Allen Gillon",
+  title: "Stories, Plays and Textbooks",
   description: "Read Allen Gillon's Chinese Chimes stories, school plays and published classroom textbooks.",
 };
 

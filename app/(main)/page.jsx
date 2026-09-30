@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Allen Gillon",
+  title: { absolute: "Allen Gillon" },
   description:
     "Allen Gillon is a guitarist from Bribie Island, Queensland. Listen to his albums or book him for a venue.",
 };

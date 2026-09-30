@@ -2,7 +2,7 @@ import Link from "next/link";
 import FriendlyReviewForm from "../../../components/FriendlyReviewForm";
 
 export const metadata = {
-  title: "Friendly reviews · Allen Gillon",
+  title: "Friendly reviews",
   description: "Comments from people who have heard Allen Gillon play around Bribie Island.",
 };
 

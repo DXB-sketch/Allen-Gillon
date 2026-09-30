@@ -1,7 +1,8 @@
 import Link from "next/link";
+import CrossSiteLink from "../../../components/CrossSiteLink";
 
 export const metadata = {
-  title: "Timeless · Allen Gillon",
+  title: "Timeless",
   description:
     "Allen and Ann Gillon have made music together for many years. This is their story.",
 };
@@ -79,7 +80,7 @@ export default function BiographyPage() {
                 <img className="gx-hero" src="/images/personal/matthew-allen-5-band-photo.jpg" alt="The Matthew Allen 5 band" loading="lazy" />
                 <figcaption>The Matthew Allen 5.</figcaption>
               </figure>
-              <p>The family moved to the Gold Coast in 1990 when their son Matthew became sick. Matthew, their beautiful fifteen-year-old, died of cancer in February 1991. In his honour the family formed a band called The Matthew Allen 5, later known as the MA 5. Through the nineties this first-class band worked the corporate venues and clubs of the Gold Coast, Brisbane and the Sunshine Coast. <Link href="/shows">Learn more about the Matthew Allen 5</Link>.</p>
+              <p>The family moved to the Gold Coast in 1990 when their son Matthew became sick. Matthew, their beautiful fifteen-year-old, died of cancer in February 1991. In his honour the family formed a band called The Matthew Allen 5, later known as the MA 5. Through the nineties this first-class band worked the corporate venues and clubs of the Gold Coast, Brisbane and the Sunshine Coast. <CrossSiteLink site="main" path="/shows">Learn more about the Matthew Allen 5</CrossSiteLink>.</p>
 
               <h2 className="era">Timeless</h2>
               <figure className="inline">
@@ -89,7 +90,7 @@ export default function BiographyPage() {
                 </video>
                 <figcaption>Allen performing at Steakout Restaurant.</figcaption>
               </figure>
-              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless, they enjoy playing for diners around Bribie Island. You can <Link href="/hire">book them here</Link>.</p>
+              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless, they enjoy playing for diners around Bribie Island. You can <CrossSiteLink site="main" path="/hire">book them here</CrossSiteLink>.</p>
             </div>
 
             <aside aria-label="Photographs">

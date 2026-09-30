@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Bookings · Allen Gillon",
+  title: "Bookings",
   description:
     "Book Allen Gillon to play guitar at your venue around Bribie Island and South East Queensland.",
 };

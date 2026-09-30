@@ -2,7 +2,7 @@ import Link from "next/link";
 import ArtGallery from "../../../components/ArtGallery";
 import { artworks } from "../../../lib/art-catalog.mjs";
 import { stripePaymentLink } from "../../../lib/storefront.mjs";
-export const metadata = {title:"Ann Gillon's Art · Allen Gillon",description:"See original paintings by Ann Gillon. Prices range from AUD $100 to $250, with free delivery in Australia."};
+export const metadata = {title:"Ann Gillon's Art",description:"See original paintings by Ann Gillon. Prices range from AUD $100 to $250, with free delivery in Australia."};
 export default function AnnsArtPage() {
   const checkoutLinks = Object.fromEntries(artworks.map((art) => [art.id, stripePaymentLink(`art-${art.id}`)]));
   const checkoutEnabled = Object.values(checkoutLinks).some(Boolean);

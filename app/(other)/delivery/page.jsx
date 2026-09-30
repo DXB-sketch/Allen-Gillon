@@ -1,5 +1,5 @@
 import Link from "next/link";
-export const metadata = {title:"Delivery and payment · Ann Gillon"};
+export const metadata = {title:"Delivery and payment"};
 export default function DeliveryPage() {
   return <main className="wrap checkout-wrap"><h1 className="script">Delivery & payment</h1><div className="prose">
     <h2>Original paintings</h2><p>Each painting is a one-off original by Ann Gillon. All prices are in Australian dollars. Extra photographs show another view of the same work, not another copy.</p>

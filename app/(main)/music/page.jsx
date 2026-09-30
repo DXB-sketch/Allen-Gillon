@@ -1,9 +1,10 @@
 import CommentLink from "../../../components/CommentLink";
 import Link from "next/link";
+import CrossSiteLink from "../../../components/CrossSiteLink";
 import Album from "../../../components/Album";
 
 export const metadata = {
-  title: "Al's music style · Allen Gillon",
+  title: "Al's music style",
   description:
     "Listen to Allen Gillon's albums and download the tracks free.",
 };
@@ -185,10 +186,10 @@ export default function MusicPage() {
             <div>
               <h2 className="script">Timeless, with Ann</h2>
               <p>
-                Allen and Ann have played together for many years. Their duet, Timeless, has taken them from Sydney clubs to a convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
+                Allen and Ann have played together for many years. Their duet, <CrossSiteLink site="other" path="/biography">Timeless</CrossSiteLink>, has taken them from Sydney clubs to a convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
               </p>
               <p>
-                Ann also paints. You can see her work on <Link href="/anns-art">Ann&rsquo;s art page</Link>.
+                Ann also paints. You can see her work on <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s art page</CrossSiteLink>.
               </p>
               <p>
                 Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or

@@ -1,20 +1,36 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import CommentForm from "../../components/CommentForm";
+import SiteChrome from "../../components/SiteChrome";
+import { SITES, defaultReturnTo, safeReturnTo, siteForHost } from "../../lib/sites.mjs";
 
-export const metadata = {
-  title: "Write a comment · Allen Gillon",
-  description:
-    "Write a comment about Allen Gillon's work. The message goes straight to Allen by text.",
-};
+// Served on both hosts. The host decides the mast, footer, title and which
+// pages "Back to" may return to.
+export async function generateMetadata() {
+  const site = siteForHost((await headers()).get("host"));
+  return {
+    metadataBase: new URL(SITES[site].origin),
+    title: `Write a comment · ${SITES[site].name}`,
+    description:
+      "Write a comment about Allen Gillon's work. The message goes straight to Allen by text.",
+    robots: { index: false },
+  };
+}
 
 export default async function CommentsPage({ searchParams }) {
   const query = await searchParams;
+  const site = siteForHost((await headers()).get("host"));
   const subject = typeof query.subject === "string" ? query.subject.slice(0, 300) : "";
-  const requestedReturn = typeof query.returnTo === "string" ? query.returnTo : "";
-  const returnTo = /^\/(?:music(?:#[a-z0-9-]+)?|books(?:#[a-z0-9-]+)?|plays|shows|read\/[a-z0-9-]+)$/.test(requestedReturn) ? requestedReturn : "/shows";
-  const returnLabel = returnTo === "/shows" ? "MA5" : typeof query.returnLabel === "string" ? query.returnLabel.slice(0, 300) : "the page";
+  const returnTo = safeReturnTo(site, query.returnTo);
+  const fellBack = returnTo === defaultReturnTo(site) && query.returnTo !== returnTo;
+  const fallbackLabel = site === "other" ? "Stories" : "MA5";
+  const returnLabel = fellBack
+    ? fallbackLabel
+    : typeof query.returnLabel === "string"
+      ? query.returnLabel.slice(0, 300)
+      : "the page";
   return (
-    <>
+    <SiteChrome site={site}>
       <style>{`
   .cwrap{max-width:640px;padding-bottom:48px;}
   .cform{display:flex;flex-direction:column;gap:18px;margin-top:8px;}
@@ -46,6 +62,6 @@ export default async function CommentsPage({ searchParams }) {
           </div>
         </section>
       </main>
-    </>
+    </SiteChrome>
   );
 }

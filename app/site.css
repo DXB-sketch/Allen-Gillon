@@ -59,6 +59,15 @@ img.gx-hero{width:100%;object-fit:cover;display:block;}
 .mnav a:hover{color:var(--red);}
 .mnav a[aria-current="page"]{color:var(--red);border-bottom:3px solid var(--red);}
 .mnav a.nav-booking{color:var(--red-deep);font-weight:700;}
+/* Cross-site link: a plain absolute <a> to the other host (full page load). */
+.mnav a.nav-cross{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;}
+.site[data-site="main"] .mnav a.nav-cross{color:var(--blue);}
+.site[data-site="other"] .mnav a[aria-current="page"]{color:var(--blue);border-bottom-color:var(--blue);}
+.site[data-site="other"] .mnav a.nav-cross{color:var(--red-deep);}
+#main:focus{outline:none;}
+.skip-link{position:absolute;left:12px;top:-100px;z-index:100;padding:12px 16px;min-height:44px;
+  background:var(--ink);color:var(--on);text-decoration:none;}
+.skip-link:focus{top:12px;outline:3px solid var(--paper);outline-offset:3px;}
 .page-reader{max-width:var(--maxw);margin:0 auto;padding:10px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:0.9rem;}
 .page-reader button,.page-reader select{font:inherit;color:var(--ink);background:transparent;border:1px solid oklch(0.22 0.02 300 / .45);border-radius:0;min-height:38px;padding:5px 11px;cursor:pointer;}
 .page-reader button:first-child{background:var(--blue);border-color:var(--blue);color:var(--on);}

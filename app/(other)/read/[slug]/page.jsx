@@ -1,5 +1,6 @@
 import CommentLink from "../../../../components/CommentLink";
 import Link from "next/link";
+import CrossSiteLink from "../../../../components/CrossSiteLink";
 import { notFound } from "next/navigation";
 import BookReader from "../../../../components/BookReader";
 import SyncedStoryReader from "../../../../components/SyncedStoryReader";
@@ -93,7 +94,7 @@ export async function generateMetadata({ params }) {
   const entry = bookIndex.find((b) => b.slug === slug);
   if (entry && entry.status === "free") {
     return {
-      title: `${entry.title} · Allen Gillon`,
+      title: entry.title,
       description: entry.blurb,
       openGraph: {
         title: entry.title,
@@ -104,13 +105,13 @@ export async function generateMetadata({ params }) {
   }
   if (entry) {
     return {
-      title: `${entry.title} · Allen Gillon`,
+      title: entry.title,
       description: `${entry.title}, a published classroom title by Allen Gillon.`,
     };
   }
   if (placeholders[slug]) {
     return {
-      title: `${placeholders[slug]} · Allen Gillon`,
+      title: placeholders[slug],
       description: `${placeholders[slug]} by Allen Gillon, being digitised for reading on this site.`,
     };
   }
@@ -141,7 +142,7 @@ export default async function ReadPage({ params }) {
           <div className="wrap">
             <div className="note">
               <p>
-                If you would like a copy in the meantime, <Link href="/hire">contact Allen</Link>.
+                If you would like a copy in the meantime, <CrossSiteLink site="main" path="/hire">contact Allen</CrossSiteLink>.
               </p>
             </div>
             <p style={{ marginTop: "24px" }}>
@@ -169,7 +170,7 @@ export default async function ReadPage({ params }) {
             <div className="note">
               <p>
                 {entry.title} is a published title available to schools through its publisher. It is not available to
-                read or download on this site. For help finding a copy, <Link href="/hire">get in touch</Link>.
+                read or download on this site. For help finding a copy, <CrossSiteLink site="main" path="/hire">get in touch</CrossSiteLink>.
               </p>
             </div>
             <p style={{ marginTop: "24px" }}>
