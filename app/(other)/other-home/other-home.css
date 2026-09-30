@@ -1,53 +1,89 @@
-/* "The sideboard": three objects on a shelf, each a single link.
-   First version for W2; W5 art-directs it. No shadows except the book-spine
-   inset, no cards, no rounded corners. */
+/* "The sideboard" (other.allengillon.com/). Three objects stand on one
+   drawn sideboard, each a single link: an open book, a framed painting and a
+   1968 photo in photo corners. On narrow screens each object stands on its
+   own small drawn shelf instead. No cards, no shadows except the book-spine
+   inset. Drawings: components/illustrations/Sideboard*.jsx. */
 
-.sideboard{padding:clamp(20px,3vw,48px) var(--gutter) 0;}
-.sideboard-head{margin:0 0 40px;}
-.sideboard-head p{max-width:var(--measure);}
+.sideboard{padding-top:clamp(20px,3vw,48px);}
 .sideboard-head h1.script{color:var(--blue);text-shadow:var(--overprint-red);}
-.sideboard-head p{margin:12px 0 0;font-size:1.2em;}
-
-.doorways{
-  display:grid;
-  grid-template-columns:minmax(0,1.35fr) minmax(0,0.9fr) minmax(0,1fr);
-  align-items:end;
-  gap:clamp(24px,4vw,64px);
-  padding-bottom:0;
-  border-bottom:6px solid var(--ink); /* the sideboard's top edge: structure, not a divider */
+.sideboard-head p{margin:14px 0 0;font-size:1.1em;color:var(--soft);}
+@media (min-width:1024px){
+  /* The lede steps in two columns from the title, as on other pages. */
+  .sideboard-head{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--col-gap);}
+  .sideboard-head > *{grid-column:1 / -1;}
+  .sideboard-head > p{grid-column:3 / -1;}
 }
 
-/* Labels sit above their objects so every object stands on the sideboard edge. */
-.doorway{display:flex;flex-direction:column-reverse;justify-content:flex-start;gap:14px;text-decoration:none;color:var(--ink);min-height:44px;}
-.doorway-object{display:block;}
-.doorway-object img{display:block;width:100%;height:auto;}
-.doorway-label{font-size:1.2em;line-height:1.3;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;}
-.doorway:hover .doorway-label,.doorway:focus-visible .doorway-label{color:var(--blue);text-decoration-thickness:3px;}
+/* ---------- The doorways ---------- */
+.doorways{display:grid;gap:clamp(56px,9vw,96px);margin-top:clamp(40px,6vw,88px);}
+.doorway{display:flex;flex-direction:column;min-width:0;color:var(--ink);text-decoration:none;}
+.doorway-label{display:flex;flex-direction:column;gap:2px;margin-bottom:clamp(14px,2vw,24px);}
+.doorway-title{font-family:var(--script);font-size:clamp(2.6rem,4.4vw,4rem);line-height:1.05;
+  color:var(--blue);text-shadow:var(--overprint-red);transition:color .2s var(--ease-out);}
+.doorway-sub{font-size:1.1em;line-height:1.35;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px;}
+.doorway:hover .doorway-title,.doorway:focus-visible .doorway-title{color:var(--red-deep);}
+.doorway:hover .doorway-sub,.doorway:focus-visible .doorway-sub{text-decoration-thickness:3px;}
+.doorway:focus-visible{outline-offset:8px;}
+.doorway-object{display:block;position:relative;}
+.doorway-object img{display:block;}
 
-/* An open book: a Chime Time Stories cover and its first page, with a centre spine. */
-.doorway-book .doorway-object{position:relative;display:flex;border:3px solid var(--ink);padding:6px;background:var(--paper-2);}
-.doorway-book .doorway-object img{width:50%;min-width:0;}
-.doorway-book .doorway-object::after{content:"";position:absolute;top:6px;bottom:6px;left:50%;width:14px;margin-left:-7px;
-  box-shadow:inset 5px 0 6px -4px oklch(0.22 0.02 300 / 0.45),inset -5px 0 6px -4px oklch(0.22 0.02 300 / 0.45);}
+/* An open book: the Little Ray cover and its first page, the pages tipped
+   up from the spine, over a drawn page block and boards. */
+.book-pages{position:relative;display:flex;perspective:1400px;}
+.book-pages img{width:50%;min-width:0;height:auto;}
+.book-pages img:first-child{transform:rotateY(9deg);transform-origin:right center;}
+.book-pages img:last-child{transform:rotateY(-9deg);transform-origin:left center;}
+.book-pages::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:18px;margin-left:-9px;
+  box-shadow:inset 6px 0 7px -5px oklch(0.22 0.02 300 / 0.5),inset -6px 0 7px -5px oklch(0.22 0.02 300 / 0.5);}
+.book-edges{width:100%;height:clamp(14px,1.8vw,24px);margin-top:-2px;}
 
-/* A framed painting: a heavy frame and a paper mat. */
-.doorway-frame .doorway-object{border:10px solid var(--ink);padding:14px;background:var(--paper);outline:1px solid var(--ink);outline-offset:-24px;}
+/* A framed painting: the drawn frame stretches over the box; the painting
+   sits inside the mat line, 13% in on every side. The photograph includes
+   a fence behind the canvas, so it is cropped to the canvas. */
+.doorway-frame .doorway-object{aspect-ratio:0.8;}
+.doorway-frame .doorway-object img{position:absolute;inset:14%;width:72%;height:72%;object-fit:cover;object-position:50% 50%;}
+.frame-drawing{position:absolute;inset:0;width:100%;height:100%;}
 
-/* A 1968 photo with photo corners. */
-.doorway-photo .doorway-object{position:relative;padding:10px 10px 28px;background:var(--paper-2);border:1px solid var(--ink);transform:rotate(-1.5deg);}
-.doorway-photo .doorway-object::before,.doorway-photo .doorway-object::after{content:"";position:absolute;width:26px;height:26px;border:3px solid var(--blue);}
-.doorway-photo .doorway-object::before{top:2px;left:2px;border-right:0;border-bottom:0;}
-.doorway-photo .doorway-object::after{bottom:20px;right:2px;border-left:0;border-top:0;}
+/* A 1968 photo in an album mount, held by four photo corners. */
+.doorway-photo .doorway-object{padding:clamp(14px,2vw,26px) clamp(14px,2vw,26px) 0;border:2px solid var(--ink);
+  transform:rotate(-1.5deg);transform-origin:left bottom;}
+.photo-print{position:relative;display:block;}
+.photo-print img{width:100%;height:auto;}
+.corner{position:absolute;width:clamp(26px,2.6vw,38px);height:auto;}
+.corner-tl{top:-8px;left:-8px;}
+.corner-tr{top:-8px;right:-8px;transform:rotate(90deg);}
+.corner-br{bottom:-8px;right:-8px;transform:rotate(180deg);}
+.corner-bl{bottom:-8px;left:-8px;transform:rotate(270deg);}
+.photo-caption{display:block;padding:4px 0 6px;font-family:var(--script);font-size:2rem;line-height:1.1;color:var(--soft);text-align:right;}
 
-.sideboard-back{margin:40px 0 0;font-size:1.1rem;}
-.sideboard-back a{color:var(--red-deep);display:inline-flex;align-items:center;min-height:44px;}
+/* The drawings under the objects. */
+.doorway-shelf{width:calc(100% + 32px);height:auto;margin:0 -16px;}
+.sideboard-drawing{display:none;}
 
-@media (max-width:820px){
-  .doorways{grid-template-columns:minmax(0,1fr);align-items:start;border-bottom:0;padding-bottom:0;}
-  .doorway{flex-direction:column;}
-  .doorway-frame{max-width:420px;}
-  .doorway-photo{max-width:460px;}
+/* ---------- Back to the main site ---------- */
+.sideboard-back{display:flex;align-items:flex-end;gap:14px;margin:clamp(56px,7vw,112px) 0 0;font-size:1.1em;}
+.sideboard-back a{display:inline-flex;align-items:center;min-height:44px;color:var(--red-deep);text-underline-offset:4px;}
+.sideboard-back a:hover{color:var(--ink);}
+.back-headstock{flex:none;width:36px;height:auto;}
+
+/* Narrow: one object per shelf, stepping left and right. */
+@media (max-width:819px){
+  .doorway-object,.doorway-shelf{align-self:flex-start;}
+  .doorway-book .doorway-object{width:100%;}
+  .doorway-frame .doorway-object{width:62%;margin-left:12%;}
+  .doorway-frame .doorway-shelf{width:74%;margin:0 0 0 6%;}
+  .doorway-photo .doorway-object{width:84%;margin-left:4%;}
+  .doorway-photo .doorway-shelf{width:92%;margin:0;}
+  .doorway-book .doorway-shelf{width:100%;margin:0;}
 }
-@media (prefers-reduced-motion:reduce){
-  .doorway-label{transition:none;}
+
+/* Wide: the three objects share one long sideboard. Labels line up across
+   the top; the objects stand on the sideboard's top edge. */
+@media (min-width:820px){
+  .doorways{grid-template-columns:minmax(0,1.5fr) minmax(0,.8fr) minmax(0,1.1fr);align-items:stretch;
+    gap:clamp(32px,5vw,96px);}
+  .doorway-label{margin-top:auto;}
+  .doorway-shelf{display:none;}
+  .sideboard-drawing{display:block;width:100%;height:auto;margin-top:-0.34%;}
+  .book-edges{height:clamp(16px,1.6vw,26px);}
 }

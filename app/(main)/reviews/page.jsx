@@ -1,5 +1,7 @@
-import Link from "next/link";
 import FriendlyReviewForm from "../../../components/FriendlyReviewForm";
+import ReviewsCup from "../../../components/illustrations/ReviewsCup";
+import ReviewsGlass from "../../../components/illustrations/ReviewsGlass";
+import ApprovedReviews from "./ApprovedReviews";
 import "./reviews.css";
 
 export const metadata = {
@@ -14,6 +16,8 @@ const tableComments = [
   "Pour me another glass.",
 ];
 
+// Order (W5): one large featured quote, the table comments as an unruled
+// cluster, the approved reviews, then the form. Space separates the parts.
 export default function ReviewsPage() {
   return (
     <main>
@@ -22,17 +26,21 @@ export default function ReviewsPage() {
         <p className="intro">Comments from people who have heard Allen play around Bribie Island.</p>
       </header>
 
-      <section className="reviewsBody band" aria-label="Friendly reviews">
-        <article className="featuredReview">
-          <p className="reviewPlace">Banksia Beach Art Centre Cafe</p>
+      <div className="reviewsBody band">
+        <figure className="featuredReview">
           <blockquote>
             <p>Popped into the Banksia Beach Art Centre Cafe last Tuesday for their delicious coffee and cakes. Not only did I get that, but was also entertained by solo guitarist Allen Gillon, playing some terrific instrumental music, oldies but goodies. Thoroughly enjoyed it all.</p>
-            <cite>Jan Hanson</cite>
           </blockquote>
-        </article>
+          <figcaption>
+            <cite>Jan Hanson</cite>
+            <span className="reviewPlace">Banksia Beach Art Centre Cafe</span>
+          </figcaption>
+          <ReviewsCup className="reviewsCup" draw />
+        </figure>
 
         <section className="tableComments" aria-labelledby="table-comments-title">
           <h2 id="table-comments-title">Heard between courses</h2>
+          <ReviewsGlass className="reviewsGlass" draw delay={200} />
           <ul>
             {tableComments.map((comment) => (
               <li key={comment}>&ldquo;{comment}&rdquo;</li>
@@ -40,12 +48,10 @@ export default function ReviewsPage() {
           </ul>
         </section>
 
-        <FriendlyReviewForm />
+        <ApprovedReviews />
 
-        <Link className="reviewsBack" href="/">
-          <span aria-hidden="true">&#8592;</span> Back home
-        </Link>
-      </section>
+        <FriendlyReviewForm />
+      </div>
     </main>
   );
 }

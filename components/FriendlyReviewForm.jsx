@@ -1,28 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import CrossSiteLink from "./CrossSiteLink";
 
 export default function FriendlyReviewForm() {
-  const [reviews, setReviews] = useState([]);
   const [name, setName] = useState("");
   const [place, setPlace] = useState("");
   const [review, setReview] = useState("");
   const [status, setStatus] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const startedAt = useRef(Date.now());
-
-  useEffect(() => {
-    let active = true;
-    fetch("/api/reviews", { cache: "no-store" })
-      .then((response) => (response.ok ? response.json() : Promise.reject(new Error("unavailable"))))
-      .then((data) => {
-        if (active && Array.isArray(data.reviews)) setReviews(data.reviews);
-      })
-      .catch(() => {});
-    return () => {
-      active = false;
-    };
-  }, []);
 
   async function submit(event) {
     event.preventDefault();
@@ -74,34 +61,35 @@ export default function FriendlyReviewForm() {
           <input name="website" tabIndex="-1" autoComplete="off" />
         </label>
         <label>
-          Your name
+          <span className="fieldName">Your name</span>
           <input required maxLength={80} autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} />
         </label>
         <label>
-          Where you heard Allen <span>(optional)</span>
+          <span className="fieldName">
+            Where you heard Allen <span className="fieldHint">(optional)</span>
+          </span>
           <input maxLength={120} value={place} onChange={(event) => setPlace(event.target.value)} />
         </label>
         <label className="reviewField">
-          Your review
-          <textarea required minLength={10} maxLength={1200} rows={5} value={review} onChange={(event) => setReview(event.target.value)} />
+          <span className="fieldName">Your review</span>
+          <textarea required minLength={10} maxLength={1200} rows={6} value={review} onChange={(event) => setReview(event.target.value)} />
         </label>
-        <button className="btn" type="submit" disabled={submitting}>
-          {submitting ? "Sending…" : "Send review"}
-        </button>
-        {status ? <p className="reviewStatus" role="status">{status}</p> : null}
-      </form>
-
-      {reviews.length ? (
-        <div className="savedReviews">
-          <h3>More friendly reviews</h3>
-          {reviews.map((entry) => (
-            <article key={entry.id}>
-              <blockquote>&ldquo;{entry.body}&rdquo;</blockquote>
-              <p>{entry.name}{entry.place ? ` · ${entry.place}` : ""}</p>
-            </article>
-          ))}
+        <div className="reviewSend">
+          <button className="btn" type="submit" disabled={submitting}>
+            {submitting ? "Sending…" : "Send review"}
+          </button>
+          <p className="reviewStatus" role="status">{status}</p>
         </div>
-      ) : null}
+        {/* /privacy is served on the main host only. The legal pages are not
+            published yet (W7); this link will resolve once they are. It is an
+            absolute main-host URL so it stays right wherever the form is used. */}
+        <p className="reviewPrivacy">
+          Once Allen approves it, your review appears here with your name and
+          where you heard him. The{" "}
+          <CrossSiteLink site="main" path="/privacy">privacy page</CrossSiteLink>{" "}
+          explains how your details are handled.
+        </p>
+      </form>
     </section>
   );
 }
