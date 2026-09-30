@@ -55,7 +55,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [x] Home, Bookings, Albums, Timeless, Stories, Ann's art, Reviews, Comments, Other home (merged; each implemented, 2-lens reviewed, fixed)
 - [x] Counted checks (anns-art index 0 Buy / 0 View 1; each detail exactly 1 Buy/Enquire; unit test) (curl on the built Worker: index 0 and 0, 36 of 36 details exactly 1; tests/artwork-purchase.test.mjs)
 - [x] Gate: counted checks, screenshots, grep checks (docs/screenshots/after re-captured with the scroll and decode pass; no offset shadows, ⋯, "no refunds" or em dashes in app/components/content)
-- Notes (fixer round 1): DESIGN.md Layout records the accepted amendments: the home hero is a split, not a full-bleed band, because the only photo is 600px [B: larger original]; the albums stand on one drawn shelf board with clamp() sleeves; one action per book on /books (text-only and PDF in the reader); More on Allen page titles take the blue lead.
+- Notes (fixer round 1): DESIGN.md Layout records the accepted amendments: the home hero is a split, not a full-bleed band, because the only photo is 600px [B: larger original]; the albums stand on one drawn shelf board with clamp() sleeves; one action per book on /books (text-only in the reader), except textbooks, which show "Read online" and "Download PDF" as W4 requires (restored in 8a5964d); More on Allen page titles take the blue lead.
 
 ## W6 SEO
 - [x] Metadata per page, templates, canonicals (every page wired, /read and /read/*/text included; docs/SEO-WIRING.md)
