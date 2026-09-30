@@ -133,8 +133,6 @@
 .book-action{display:inline-flex;align-items:center;min-height:48px;color:var(--blue);font-weight:700;font-size:1.1rem;
   text-underline-offset:5px;transition:color .2s var(--ease-out);}
 .book-action:hover{color:var(--red-deep);}
-.book-text-link{display:inline-flex;align-items:center;min-height:44px;color:var(--soft);font-size:1.05rem;text-underline-offset:4px;}
-.book-text-link:hover{color:var(--red-deep);}
 .book .purchase-pending{min-height:auto;padding-block:4px;}
 .texts-section .book-action{color:var(--on);}
 .texts-section .book-action:hover{color:oklch(0.80 0.13 33);}

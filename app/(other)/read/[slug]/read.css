@@ -15,8 +15,6 @@
 .read-foot{margin-top:clamp(28px,4vw,56px);}
 .read-links{display:flex;flex-wrap:wrap;align-items:center;gap:4px 36px;}
 .read-links p{margin:0;}
-.read-textlink{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
-.read-textlink:hover{color:var(--red-deep);}
 
 /* ---------- The reader ---------- */
 .bkr{--turn:56px;}
@@ -32,8 +30,8 @@
 .bkr-listen:hover,.bkr-listen.is-playing{color:var(--red-deep);}
 .bkr-listen-icon{display:grid;place-items:center;width:40px;height:40px;border:2px solid currentColor;border-radius:50%;}
 .bkr-listen-glyph{width:22px;height:22px;}
-.bkr-download:not(.btn){display:inline-flex;align-items:center;min-height:48px;color:var(--blue);font-weight:700;font-size:1.05rem;text-underline-offset:4px;}
-.bkr-download:not(.btn):hover{color:var(--red-deep);}
+.bkr-download:not(.btn),.bkr-textroute{display:inline-flex;align-items:center;min-height:48px;color:var(--blue);font-weight:700;font-size:1.05rem;text-underline-offset:4px;}
+.bkr-download:not(.btn):hover,.bkr-textroute:hover{color:var(--red-deep);}
 .bkr-size{font-weight:400;color:var(--soft);margin-left:.35em;}
 .btn .bkr-size{color:inherit;}
 
@@ -78,6 +76,27 @@
 .bkr-page img,.bkr-plain img{display:block;width:100%;height:100%;object-fit:contain;background:var(--on);user-select:none;}
 .bkr-plain{max-width:100%;}
 .bkr-plain .bkr-page{width:100%;height:100%;}
+/* The server-rendered page, before the reader has measured: the same rule as
+   fitBook() in lib/reader-pages.mjs, so nothing moves when the measured size
+   and then the flip book arrive. The width is the stage less the two turn
+   buttons, but never so wide that the page is taller than the window less
+   the toolbar (about 58px) and the counter row (76px; 136px on phones, where
+   the turn buttons sit under the book). A portrait book shows as a spread
+   when the stage is wide enough: the box is then the whole closed spread,
+   two pages wide, with the cover centred in it, which is where the flip book
+   shows the closed cover (see .bkr-book[data-closed="front"]). */
+.bkr-stage{container-type:inline-size;}
+.bkr-plain--auto{--turns:calc(2 * (var(--turn) + var(--stage-gap)));--below:76px;
+  --avail-h:max(260px, 50vh, calc(100vh - 58px - var(--below) - 16px));
+  width:min(calc(100cqw - var(--turns)), calc(var(--avail-h) * var(--ar)));aspect-ratio:var(--ar);}
+@container (min-width:860px){
+  .bkr-plain--spreadable{width:min(calc(100cqw - var(--turns)), calc(2 * var(--avail-h) * var(--ar)));aspect-ratio:var(--ar2);}
+  .bkr-plain--spreadable{background:transparent;outline:none;}
+  .bkr-plain--spreadable > img{width:50%;margin-inline:auto;outline:1px solid oklch(0.85 0.02 92);outline-offset:-1px;}
+}
+/* Measured, in a spread: the same closed-spread box, the cover centred. */
+.bkr-plain--spread{background:transparent;outline:none;}
+.bkr-plain--spread > img,.bkr-plain--spread > .bkr-page{width:50%;margin-inline:auto;outline:1px solid oklch(0.85 0.02 92);outline-offset:-1px;}
 /* The book-spine inset shade on the inner edge of a spread (allowed by the plan). */
 .bkr[data-mode="spread"] .bkr-page.--left{box-shadow:inset -16px 0 20px -18px oklch(0.22 0.02 300 / .35);}
 .bkr[data-mode="spread"] .bkr-page.--right{box-shadow:inset 16px 0 20px -18px oklch(0.22 0.02 300 / .35);}
@@ -129,6 +148,7 @@
   .bkr-prev{grid-area:prev;justify-self:start;}
   .bkr-next{grid-area:next;justify-self:end;}
   .bkr-controls{margin-top:4px;}
+  .bkr-plain--auto{--turns:0px;--below:136px;}
 }
 
 /* ---------- /read/[slug]/text ---------- */

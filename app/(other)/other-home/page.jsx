@@ -17,9 +17,12 @@ import "./other-home.css";
 // layout's site graph covers the home page.
 export const metadata = pageMetadata("other", "/");
 
-// The open book's first page is the page's LCP image: preloaded at high
-// priority. Everything else on the sideboard loads lazily.
-const LCP = "/books/little-ray/p001.webp";
+// The open book's two pages paint side by side at the same size. p002 is
+// 1003x1000, a touch larger than p001, so it is the LCP element: it gets the
+// one preload. Both pages load eagerly at high priority; everything else on
+// the sideboard loads lazily.
+const LCP = "/books/little-ray/p002.webp";
+const FACING = "/books/little-ray/p001.webp";
 
 // Three objects standing on one drawn sideboard, each a single link: an open
 // Chime Time Stories book, a framed painting of Ann's, and a 1968 photo held
@@ -43,8 +46,8 @@ export default function OtherHome() {
           </span>
           <span className="doorway-object" aria-hidden="true">
             <span className="book-pages">
-              <img src={LCP} alt="" width="1000" height="1000" fetchPriority="high" />
-              <img src="/books/little-ray/p002.webp" alt="" width="1003" height="1000" loading="lazy" decoding="async" />
+              <img src={FACING} alt="" width="1000" height="1000" fetchPriority="high" />
+              <img src={LCP} alt="" width="1003" height="1000" fetchPriority="high" />
             </span>
             <SideboardBook className="book-edges" />
           </span>

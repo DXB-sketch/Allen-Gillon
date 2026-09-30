@@ -33,7 +33,10 @@ function chromePath() {
 // One painting page stands for all 36 (they share one template).
 const SAMPLE_PAINTING = "ann-426502619623139";
 
-const mainRoutes = ["/", "/hire", "/music", "/reviews", "/shows", "/comments"];
+// Each host's not-found page stands for every 404 (one template per host).
+const NOT_FOUND = "/no-such-page";
+
+const mainRoutes = ["/", "/hire", "/music", "/reviews", "/shows", "/comments", NOT_FOUND];
 if (legal.published === true) mainRoutes.push("/privacy", "/terms", "/accessibility");
 
 const otherRoutes = [
@@ -45,6 +48,9 @@ const otherRoutes = [
   "/delivery",
   "/comments",
   ...books.map((b) => `/read/${b.slug}`),
+  // The plain-text routes of the stories and textbooks (plays are preview only).
+  ...books.filter((b) => b.status === "free").map((b) => `/read/${b.slug}/text`),
+  NOT_FOUND,
 ];
 
 module.exports = {

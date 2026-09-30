@@ -76,13 +76,6 @@ export default async function ReadPage({ params }) {
 
       <section className="read-foot band" aria-label="More about this book">
         <div className="read-links">
-          {m.textRoute ? (
-            <p>
-              <Link prefetch={false} className="read-textlink" href={m.textRoute}>
-                Read every page as plain text
-              </Link>
-            </p>
-          ) : null}
           <p>
             <Link prefetch={false} className="back-link" href={back.href}>{back.label}</Link>
           </p>

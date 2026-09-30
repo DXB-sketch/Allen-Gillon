@@ -76,8 +76,12 @@ test("the page: no numerals, menus, restricted branch or section-heading", () =>
   for (const banned of ["section-heading", "Contact Allen", "restricted", "more-menu", "⋯", "audiobook-number", "pno"]) {
     assert.ok(!page.includes(banned), banned);
   }
-  for (const action of ["Read and listen", "Read a preview", "Read online", "Download PDF", "/text`"]) {
+  for (const action of ["Read and listen", "Read a preview", "Read online"]) {
     assert.ok(page.includes(action), action);
+  }
+  /* One action per book: text-only and the PDF download are in the reader. */
+  for (const second of ["Text only", "Download PDF", "/text`"]) {
+    assert.ok(!page.includes(second), second);
   }
   /* Every Buy goes through PurchaseLink with a link from the storefront. */
   assert.match(page, /const buyHref = stripePaymentLink\(`play-\$\{book\.slug\}`\);/);

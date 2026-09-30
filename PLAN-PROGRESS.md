@@ -53,8 +53,9 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 ## W5 Declutter and art direction
 - [x] Illustration system + motion observer (components/illustrations/TwoInk, MotionObserver, app/illustrations.css)
 - [x] Home, Bookings, Albums, Timeless, Stories, Ann's art, Reviews, Comments, Other home (merged; each implemented, 2-lens reviewed, fixed)
-- [ ] Counted checks (anns-art index 0 Buy / 0 View 1; each detail exactly 1 Buy/Enquire; unit test)
-- [ ] Gate: counted checks, screenshots, grep checks
+- [x] Counted checks (anns-art index 0 Buy / 0 View 1; each detail exactly 1 Buy/Enquire; unit test) (curl on the built Worker: index 0 and 0, 36 of 36 details exactly 1; tests/artwork-purchase.test.mjs)
+- [x] Gate: counted checks, screenshots, grep checks (docs/screenshots/after re-captured with the scroll and decode pass; no offset shadows, ⋯, "no refunds" or em dashes in app/components/content)
+- Notes (fixer round 1): DESIGN.md Layout records the accepted amendments: the home hero is a split, not a full-bleed band, because the only photo is 600px [B: larger original]; the albums stand on one drawn shelf board with clamp() sleeves; one action per book on /books (text-only and PDF in the reader); More on Allen page titles take the blue lead.
 
 ## W6 SEO
 - [x] Metadata per page, templates, canonicals (every page wired, /read and /read/*/text included; docs/SEO-WIRING.md)
@@ -62,38 +63,42 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [x] Icons + manifest per host (group layouts and pageMetadata)
 - [x] OG images (65 built via scripts/build-og.mjs; served through pageMetadata)
 - [x] JSON-LD wired into every page (/books: all 12 Book nodes; /read: Book + breadcrumbs; /delivery and legal: breadcrumbs)
-- [~] JS budget 150 KB gzip: 10 of 16 measured routes pass; /music, /reviews, /anns-art, painting pages and /read are over (vinext floor 138.3 KB; docs/PERFORMANCE.md)
-- [ ] Performance: Dynalight self-hosted, _headers, LCP preload
+- [B] JS budget 150 KB gzip: 10 of 16 measured routes pass; /music, /reviews, /anns-art, painting pages and /read are over (vinext floor 138.3 KB; docs/PERFORMANCE.md). Human decision, see bottom.
+- [x] Performance: Dynalight self-hosted (plus a size-adjusted Times fallback), _headers (/_next/static immutable, /icons daily revalidate), LCP preload with fetchpriority (other home now preloads its real LCP page), responsive shelf covers on /music
+- [x] Lighthouse mobile recorded in docs/PERFORMANCE.md: CLS 0.000 to 0.008, Accessibility, Best Practices and SEO 100 on the measured routes; simulated LCP about 3 s is [B] with the JS budget and a post-deploy re-run. /comments SEO 66 is the spec-mandated noindex exception.
 
 ## W7 Accessibility and legal
-- [ ] Landmarks, captions, transcripts, scroll padding, contrast fixes
-- [ ] /privacy, /terms, /accessibility, /delivery; legal.config.json gate
-- [ ] Footers contact + legal links + copyright
-- [ ] LEGAL-TODO.md
+- [x] Landmarks, captions, transcripts, scroll padding, contrast fixes (e2e/w7-a11y.spec.mjs, tests/contrast.test.mjs)
+- [x] /privacy, /terms, /accessibility, /delivery; legal.config.json gate (legal pages 404 on both hosts while unpublished; tests/legal.test.mjs)
+- [x] Footers contact + legal links + copyright
+- [x] LEGAL-TODO.md
+- [x] Keyboard: Go to page and Close player keep focus (Go to page button; the control that started the track, else #main)
+- [x] Coverage: pa11y includes the 7 /read/<slug>/text routes and one 404 per host; e2e/layout.spec.mjs has a 200% zoom pass; e2e/reader-audio.spec.mjs covers VERIFICATION > Audio
 
 ## DEFINITION OF DONE
-- [ ] Now-playing bar
-- [ ] Stories paragraph
-- [ ] Chimes auto-turn
-- [ ] Cue reports
-- [ ] One reader
-- [ ] Play previews
-- [ ] Textbooks
-- [ ] No paid-content leak
-- [ ] Albums free
-- [ ] Font and names
-- [ ] Speech
-- [ ] other.allengillon.com
-- [ ] Host routing
-- [ ] Unique metadata
-- [ ] Declutter
-- [ ] Ann's art
-- [ ] Art direction
-- [ ] Full width
-- [ ] SEO
-- [ ] Accessibility
-- [ ] Legal
-- [ ] Progress
+- [x] Now-playing bar (e2e/now-playing.spec.mjs)
+- [x] Stories paragraph (rendered HTML grep, e2e/books.spec.mjs)
+- [x] Chimes auto-turn: no story's cues are signed off, so all 4 ship with follow off; the follow rules are unit tested and e2e/reader-audio.spec.mjs checks them in a browser with the flag flipped in memory (turns land within 0.5 s using a 0.45 s look-ahead). Per-title sign-off is [B].
+- [x] Cue reports: all 4 in docs/cue-review; every title has follow off until signed off
+- [x] One reader
+- [x] Play previews (no $50 link rendered; "A- [ ] Progress
+ download. Online checkout coming soon" in the readers and on /books)
+- [x] Textbooks
+- [x] No paid-content leak in public/ and dist/client (tests/books-leak.test.mjs). private/ is no longer tracked in git; [B] the public repo history still holds the files (see bottom).
+- [x] Albums free
+- [x] Font and names
+- [x] Speech
+- [x] other.allengillon.com (locally, on the built Worker; [B] custom domain and DNS)
+- [x] Host routing (tests/sites.test.mjs; www robots.txt, sitemap.xml and favicon now 301 to the apex too)
+- [x] Unique metadata (tests/seo.test.mjs; every other-host title now carries "· More on Allen")
+- [x] Declutter
+- [x] Ann's art
+- [x] Art direction
+- [x] Full width (e2e/layout.spec.mjs)
+- [B] SEO: every W6 item is present; the Rich Results Test and Schema validator need the deployed URLs
+- [B] Accessibility: axe and pa11y pass; Lighthouse Accessibility 100 on the measured routes; the Lighthouse Performance and LCP thresholds wait on the JS budget decision and a post-deploy run (docs/PERFORMANCE.md)
+- [x] Legal (pages exist, gated on sign-off by content/legal.config.json)
+- [x] Progress
 
 - Open questions from agents: docs/open-questions-raw.md
 
@@ -107,3 +112,8 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] JS budget: accept the overage on interactive routes, raise the budget to 160 KB, or choose one of the options in docs/PERFORMANCE.md
 - [B] Confirm "Albums" as the /music H1 wording
 - [B] Confirm /music lede edit: "Individual song downloads are available in each track list." (was "...under the three-dot menus")
+- [B] The GitHub repo is public and its history (including origin/master) holds the full play PDFs, the full play recordings and play page images past the preview. private/ is now untracked and ignored; make the repo private or purge the history (git filter-repo) and force-push, which only the human can approve.
+- [B] Home hero: supply a larger original of allen-playing-red-gibson-waterfront.jpg (at least 2400px wide) if the hero should become a full-bleed band (DESIGN.md Layout, amendments)
+- [B] After deploy: check `curl -I -H "Range: bytes=0-1" https://other.allengillon.com/audio/chinese-chimes-audiobooks/little-ray.mp3` returns 206 (the local wrangler dev preview answers 200, so seeking fails there; vinext dev returns 206)
+- [B] After deploy: Lighthouse mobile on both hosts, the Rich Results Test and the Schema validator
+- [B] Desktop only: opening a play preview's cover in a two-page spread shifts layout by about 0.10 once (react-pageflip's hard cover). Accept, use a soft cover, or stop the automatic opening (docs/PERFORMANCE.md)

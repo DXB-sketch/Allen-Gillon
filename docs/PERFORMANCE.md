@@ -92,3 +92,67 @@ The next steps would each change behaviour, so they are left for a decision:
 - Drop `next/link` for plain `<a>` links (saves 4.6 KB). Every navigation
   would then be a full page load, which stops the now-playing bar.
 - Ask for a 160 KB budget, since the vinext floor alone is 138.3 KB.
+
+# Lighthouse (mobile)
+
+Lighthouse 12.8 (`npx lighthouse@12`, mobile preset, Playwright's Chromium)
+against the built Worker (`SITE_DEV_PORT=4610 npm run start:vinext`), after
+the fixer round of 2026-10-01. Local runs only indicate: re-run against the
+deployed hosts after deploy. Scores are Performance / Accessibility / Best
+Practices / SEO.
+
+Simulated throttling (the default):
+
+| Route | Scores | LCP | CLS |
+|---|---|---:|---:|
+| other `/anns-art/ann-426502619623139` | 94/100/100/100 | 3.03 s | 0.000 |
+| other `/` | 93/100/100/100 | 3.11 s | 0.000 |
+| main `/music` | 91/100/100/100 | 3.40 s | 0.000 |
+| other `/read/breakout` | 93/100/100/100 | 3.03 s | 0.000 |
+| other `/read/little-ray` | 93/100/100/100 | 3.02 s | 0.000 |
+| other `/anns-art` | 85/100/100/100 | 4.23 s | 0.008 |
+
+Devtools throttling (`--throttling-method=devtools`, performance only):
+
+| Route | Performance | LCP | CLS |
+|---|---:|---:|---:|
+| main `/music` | 98 | 1.90 s | 0.000 |
+| other `/` | 97 | 2.48 s | 0.000 |
+| other `/anns-art` | 99 | 1.60 s | 0.008 |
+| other `/anns-art/ann-426502619623139` | 95 | 2.77 s | 0.000 |
+| other `/read/breakout` | 98 | 2.39 s | 0.000 |
+
+Before this round the verifier measured CLS 0.20 to 0.26 on painting pages
+(the frame had no size until the photo decoded), 0.108 to 0.157 on some
+/read runs (the server-rendered page was a different size from the measured
+book), Performance 84 on painting pages and 87 on /music (720px sleeves shown
+at about 235px). Fixed by: a frame sized from the view's aspect ratio
+(`app/(other)/anns-art/anns-art.css`), a server-rendered reader page sized
+with the same rule as `fitBook()` and the measured height held while the flip
+book mounts (`read.css`, `BookReader.jsx`), 240/480/720 shelf covers with
+`srcset` and `sizes` (`lib/album-shelf.mjs`), the other-site home's LCP page
+loaded eagerly with the one preload, and a size-adjusted Times fallback for
+Dynalight so titles wrap the same before and after the font swap.
+
+What is left:
+
+- **Simulated LCP is about 3 s on most routes** although the observed LCP
+  breakdowns are under 0.5 s (TTFB about 70 ms, render delay 170 to 380 ms).
+  Lantern charges each route for its render-blocking CSS and for the 149 KB
+  JavaScript floor above; the devtools-throttled runs land under 2.5 s except
+  the painting page (2.77 s, a 960px AVIF at high priority). This goes with
+  the JavaScript budget decision (human TODO), and should be re-measured on
+  the deployed hosts, where Cloudflare serves Brotli and HTTP/2.
+- **`/anns-art` Performance 85 (simulated).** The LCP element is the lede
+  text; its simulated LCP waits on the ArtWall script (the heaviest route in
+  the table above, 155.8 KB).
+- **Desktop only, plays only:** opening the cover of a play preview in a
+  two-page spread moves react-pageflip's hard cover page by changing its
+  left and width (about 0.10 CLS at 1280x800, once, about 0.6 s after load).
+  Stories and textbooks do not shift, and Lighthouse mobile shows 0.000.
+  A fix would change the look (a soft cover) or the behaviour (no automatic
+  opening), so it is left for a decision.
+- **`/comments` scores SEO 66 by design.** It carries
+  `robots: noindex, follow` (plan W6: "Keep /comments crawlable, with
+  robots:{index:false}"), which Lighthouse's is-crawlable audit counts as a
+  failure. It is the one spec-mandated exception to "SEO 100 on every route".

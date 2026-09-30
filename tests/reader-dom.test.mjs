@@ -25,6 +25,7 @@ import {
   listenAction,
   pageForTime,
   turnTarget,
+  TURN_LEAD,
 } from "../lib/reader-follow.mjs";
 import { counterText, fitBook, numbering, openIndex, pageHeading, visiblePages } from "../lib/reader-pages.mjs";
 
@@ -70,6 +71,14 @@ describe("follow the narration: pure rules", () => {
   test("turns to the narrated page while this book plays", () => {
     assert.equal(turnTarget(on, { isThisBook: true, status: "playing", time: 35, cues: CUES, visible: [0] }), 3);
     assert.equal(turnTarget(on, { isThisBook: true, status: "playing", time: 35, cues: CUES, visible: [3, 4] }), null, "already showing");
+  });
+
+  test("an animated turn looks ahead by TURN_LEAD so the page lands on its cue", () => {
+    const at = (time, lead) => turnTarget(on, { isThisBook: true, status: "playing", time, cues: CUES, visible: [0], lead });
+    assert.equal(TURN_LEAD > 0 && TURN_LEAD + 0.05 <= 0.5 + 1e-9, true, "with the 0.05 s cue slack the turn never starts more than 0.5 s early");
+    assert.equal(at(CUES[1] - TURN_LEAD - 0.1, TURN_LEAD), null, "too early: stays on page 0");
+    assert.equal(at(CUES[1] - TURN_LEAD + 0.01, TURN_LEAD), 1, "starts the turn just ahead of the cue");
+    assert.equal(at(CUES[1] - TURN_LEAD + 0.01, 0), null, "no lead for instant (reduced-motion) turns");
   });
 
   test("never on mount: opening while this book plays starts suspended", () => {
@@ -249,7 +258,14 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
             /* React stays outside the bundle as Node's own CommonJS modules. */
             build.onResolve({ filter: /^(react|react-dom)(\/.*)?$/ }, (args) => ({ path: nodeRequire.resolve(args.path), external: true }));
             build.onResolve({ filter: /^react-pageflip$/ }, () => ({ path: "pageflip-stub", namespace: "stub" }));
-            build.onLoad({ filter: /.*/, namespace: "stub" }, () => ({ contents: flipSource, loader: "js", resolveDir: root }));
+            /* next/link needs the Next router; a plain anchor stands in for it. */
+            build.onResolve({ filter: /^next\/link$/ }, () => ({ path: "link-stub", namespace: "stub" }));
+            build.onLoad({ filter: /^link-stub$/, namespace: "stub" }, () => ({
+              contents: "import { createElement } from \"react\"; export default function Link({ prefetch, ...props }) { return createElement(\"a\", props); }",
+              loader: "js",
+              resolveDir: root,
+            }));
+            build.onLoad({ filter: /^pageflip-stub$/, namespace: "stub" }, () => ({ contents: flipSource, loader: "js", resolveDir: root }));
           },
         },
       ],
@@ -314,6 +330,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     assert.equal(r.qa('[role="region"]').length, 1);
     assert.ok(r.button("Listen to the audiobook"));
     assert.equal(r.q("a.bkr-download").getAttribute("href"), story.pdf);
+    assert.equal(r.q(".bkr-toolbar a.bkr-textroute").getAttribute("href"), story.textRoute, "the words sit beside Listen");
     assert.ok(r.q('button[aria-label="Previous page"]') && r.q('button[aria-label="Next page"]'));
     assert.equal(r.q(".bkr-counter").getAttribute("aria-live"), "polite");
     assert.equal(r.counter(), "Page 1 of 6");

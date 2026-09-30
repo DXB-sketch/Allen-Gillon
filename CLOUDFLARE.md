@@ -78,7 +78,7 @@ curl -sI -H "Host: 192.168.1.5:8787" http://localhost:8787/books          # 200,
 curl -s  -H "Host: other.allengillon.com" http://localhost:8787/ | grep -o '<link rel="canonical"[^>]*>'   # https://other.allengillon.com/
 ```
 
-`npm run start:vinext` runs `scripts/start-local.mjs`. Plain `wrangler dev` infers an origin from the first route in `wrangler.json` and rewrites every request's Host header to `allengillon.com`, which hides the host `proxy.ts` routes on. The script writes `dist/server/wrangler.local.json` without `routes` and runs `wrangler dev` on that, so Host headers reach the Worker unchanged. It also adds the vars `SITE_PREVIEW=1` and `SITE_DEV_PORT`, which reach `process.env` in the Worker through `nodejs_compat`. Deploys still use `dist/server/wrangler.json`, which has neither.
+`npm run start:vinext` runs `scripts/start-local.mjs`. Plain `wrangler dev` infers an origin from the first route in `wrangler.json` and rewrites every request's Host header to `allengillon.com`, which hides the host `proxy.ts` routes on. The script writes `dist/server/wrangler.local.<port>.json` (one per `SITE_DEV_PORT`, so side-by-side previews never overwrite each other) without `routes` and runs `wrangler dev` on that, so Host headers reach the Worker unchanged. It also adds the vars `SITE_PREVIEW=1` and `SITE_DEV_PORT`, which reach `process.env` in the Worker through `nodejs_compat`. Deploys still use `dist/server/wrangler.json`, which has neither.
 
 ## Review moderation
 

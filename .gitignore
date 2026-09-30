@@ -15,3 +15,7 @@ playwright-report/
 .claude/
 test-results/
 playwright-report/
+
+# Paid content: full play PDFs and full play recordings. Kept on disk for the
+# build scripts, never committed (the repo is public). See PLAN-PROGRESS.md.
+/private/

@@ -115,9 +115,10 @@ export default function BooksPage() {
           {stories.map((book, index) => (
             <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`}>
               <p className="book-blurb">{book.blurb}</p>
+              {/* One action per book. The plain-text version is linked from the
+                  reader, beside the audiobook. */}
               <div className="book-actions">
                 <Link prefetch={false} className="book-action" href={`/read/${book.slug}`} aria-label={`Read and listen to ${book.title}`}>Read and listen</Link>
-                <Link prefetch={false} className="book-text-link" href={`/read/${book.slug}/text`} aria-label={`Text only version of ${book.title}`}>Text only</Link>
               </div>
             </Book>
           ))}
@@ -152,7 +153,7 @@ export default function BooksPage() {
           Read the first pages of any play online before buying it.
           {checkoutOpen
             ? " After checkout, Allen will email the PDF to the address used for payment."
-            : " Online checkout is coming soon. After it opens, Allen will email the PDF to the address used for payment."}
+            : ` Every play is an ${priceLabel(plays[0]?.price ?? 100)} download. Online checkout coming soon. After it opens, Allen will email the PDF to the address used for payment.`}
         </p>
       </section>
 
@@ -166,9 +167,9 @@ export default function BooksPage() {
           {textbooks.map((book, index) => (
             <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`} ground="ink">
               <p className="book-blurb">{book.blurb}</p>
+              {/* One action per book: the PDF download is in the reader's toolbar. */}
               <div className="book-actions">
                 <Link prefetch={false} className="book-action" href={`/read/${book.slug}`} aria-label={`Read online: ${book.title}`}>Read online</Link>
-                {book.pdf ? <a className="book-action" href={book.pdf} download aria-label={`Download PDF of ${book.title}`}>Download PDF</a> : null}
               </div>
             </Book>
           ))}

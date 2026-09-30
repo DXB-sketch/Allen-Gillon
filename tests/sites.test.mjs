@@ -25,6 +25,9 @@ const is3xx = (result) => result.action === "redirect" && result.status >= 300 &
 const table = [
   // www to apex
   ["www root goes to apex", "www.allengillon.com", "/", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/" }],
+  ["www robots.txt goes to apex", "www.allengillon.com", "/robots.txt", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/robots.txt" }],
+  ["www sitemap.xml goes to apex", "www.allengillon.com", "/sitemap.xml", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/sitemap.xml" }],
+  ["www favicon goes to apex", "www.allengillon.com", "/favicon.ico", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/favicon.ico" }],
   ["www keeps path and query", "www.allengillon.com", "/music?x=1", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/music?x=1" }],
 
   // owned paths across hosts

@@ -22,12 +22,13 @@
    - Auto-turn with the narration follows lib/reader-follow.mjs exactly. */
 
 import { useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
+import Link from "next/link";
 import { usePlayer } from "../Player";
 import PurchaseLink from "../PurchaseLink";
 import TwoInk from "../illustrations/TwoInk";
 import StageCurtain from "./StageCurtain";
 import { audiobookTrack } from "../Audiobook";
-import { fitBook, visiblePages, numbering, counterText, openIndex, pageHeading } from "../../lib/reader-pages.mjs";
+import { fitBook, visiblePages, numbering, counterText, openIndex, pageHeading, PORTRAIT_RATIO } from "../../lib/reader-pages.mjs";
 import {
   followAvailable,
   followPrompt,
@@ -37,6 +38,7 @@ import {
   listenAction,
   pageForTime,
   turnTarget,
+  TURN_LEAD,
 } from "../../lib/reader-follow.mjs";
 import { paragraphs } from "../../lib/book-text.mjs";
 
@@ -119,6 +121,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   const stageRef = useRef(null);
   const flipRef = useRef(null);
   const bookElRef = useRef(null);
+  const goToggleRef = useRef(null);
   const indexRef = useRef(0);
   const visibleRef = useRef(visible);
   /* Pages the reader itself is turning to (the cover opening, following the
@@ -301,6 +304,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
         time: audio.currentTime,
         cues,
         visible: visibleRef.current,
+        lead: reducedRef.current ? 0 : TURN_LEAD,
       });
       if (target === null || (programmaticRef.current.get(target) || 0) > Date.now()) return;
       goTo(target, { programmatic: true });
@@ -364,6 +368,9 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     goTo(isPlay ? n - 1 : num.indexOf(n));
     setGoValue("");
     setGoOpen(false);
+    /* The form (and the input that had focus) is now hidden: put focus back on
+       the "Go to page" button so the next Tab carries on inside the reader. */
+    goToggleRef.current?.focus();
   };
 
   useEffect(() => {
@@ -407,10 +414,25 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     ? index === 0 ? "front" : "back"
     : "";
 
-  /* Plain image reader: before page-flip loads, without JS, or if it fails. */
+  /* Plain image reader: before page-flip loads, without JS, or if it fails.
+     Before the reader has measured (the server HTML), read.css sizes it with
+     the same rule as fitBook, so the page does not shift when the measured
+     size and then the flip book arrive. */
+  const spreadable = book.layout !== "single" && h / w >= PORTRAIT_RATIO;
   const plainIndex = Math.min(index, total - 1);
   const plain = (
-    <div className="bkr-plain" style={size ? { width: size.pageWidth, height: size.pageHeight } : { aspectRatio: `${w} / ${h}` }}>
+    <div
+      className={
+        size
+          ? "bkr-plain" + (size.mode === "spread" ? " bkr-plain--spread" : "")
+          : "bkr-plain bkr-plain--auto" + (spreadable ? " bkr-plain--spreadable" : "")
+      }
+      style={
+        size
+          ? { width: size.pageWidth * (size.mode === "spread" ? 2 : 1), height: size.pageHeight }
+          : { "--ar": (w / h).toFixed(5), "--ar2": ((2 * w) / h).toFixed(5) }
+      }
+    >
       {plainIndex >= shownPages ? (
         pages[pages.length - 1]
       ) : (
@@ -446,10 +468,18 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
                 <span>{listenLabel}</span>
               </button>
             ) : null}
+            {/* The words beside the audiobook (W7): the plain-text version of
+                a story or textbook, as a quiet link next to Listen. A client
+                link, so a playing audiobook keeps playing. */}
+            {book.textRoute ? (
+              <Link prefetch={false} className="bkr-textroute" href={book.textRoute}>
+                Read it as plain text
+              </Link>
+            ) : null}
             {isPlay ? (
               <PurchaseLink href={buyHref} pendingLabel={pendingLabel}>{`Buy the full script (${price})`}</PurchaseLink>
             ) : book.download === "public" && book.pdf ? (
-              <a className={book.audio ? "bkr-download" : "btn b bkr-download"} href={book.pdf} download>
+              <a className="bkr-download" href={book.pdf} download>
                 Download the PDF{book.pdfBytes ? <span className="bkr-size">({megabytes(book.pdfBytes)})</span> : null}
               </a>
             ) : null}
@@ -482,7 +512,9 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
             <Arrow dir={-1} />
           </button>
           <div className="bkr-book-cell">
-            <div className="bkr-book" ref={bookElRef} data-closed={closed || undefined}>
+            {/* The measured height is held while the plain page gives way to the
+                flip book, so nothing below the book moves. */}
+            <div className="bkr-book" ref={bookElRef} data-closed={closed || undefined} style={size ? { minHeight: size.pageHeight } : undefined}>
               {FlipBook && size ? (
                 <FlipBook
                   key={bookKey}
@@ -526,7 +558,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
         <div className="bkr-controls">
           <p className="bkr-counter" aria-live="polite" aria-atomic="true">{counter}</p>
           <div className="bkr-go">
-            <button type="button" className="bkr-textbtn" aria-expanded={goOpen} aria-controls={goId} onClick={() => setGoOpen((o) => !o)}>
+            <button type="button" ref={goToggleRef} className="bkr-textbtn" aria-expanded={goOpen} aria-controls={goId} onClick={() => setGoOpen((o) => !o)}>
               Go to page
             </button>
             <form id={goId} className="bkr-go-form" onSubmit={onGo} hidden={!goOpen}>

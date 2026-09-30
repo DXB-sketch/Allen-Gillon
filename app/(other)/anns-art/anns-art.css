@@ -124,10 +124,14 @@ html.art-hall .hall-controls{display:flex;align-items:center;gap:clamp(16px,2vw,
    photograph takes only its own height. */
 .views-stage{position:relative;display:flex;align-items:center;justify-content:center;touch-action:pan-y;}
 .views--multi .views-stage{width:100%;aspect-ratio:var(--stage-ar);max-height:var(--stage-h);}
-.views-frame{max-width:100%;max-height:100%;}
+/* The frame gets its size before the photograph loads (no layout shift):
+   as wide as the column allows, but no wider than the picture at its
+   tallest (--stage-h less the mat and the border), from the view's --ar.
+   The picture then fills the frame's width at its own aspect ratio. */
+.views-frame{--mat:clamp(5px,.6vw,10px);max-width:100%;max-height:100%;
+  width:min(100%, calc((var(--stage-h) - 2 * var(--mat) - 3px) * var(--ar) + 2 * var(--mat) + 3px));}
 .views-frame picture{display:contents;}
-.views-frame img{display:block;width:auto;height:auto;max-width:100%;
-  max-height:calc(var(--stage-h) - 2 * clamp(5px,.6vw,10px) - 3px);}
+.views-frame img{display:block;width:100%;height:auto;aspect-ratio:var(--ar);}
 .view-arrow{position:absolute;top:50%;margin-top:-32px;width:64px;height:64px;display:grid;place-items:center;padding:0;
   border:2px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);cursor:pointer;
   transition:opacity .25s var(--ease-out),background-color .2s var(--ease-out);}

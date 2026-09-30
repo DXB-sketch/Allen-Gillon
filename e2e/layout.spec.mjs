@@ -97,3 +97,32 @@ for (const [site, routes] of Object.entries(ROUTES)) {
     }
   });
 }
+
+// 200% zoom (WCAG 1.4.4 and 1.4.10): a 1280x800 window zoomed to 200% lays
+// out as a 640x400 CSS-pixel viewport at device scale 2. Every route must
+// still fit the width with no horizontal scroll, and its H1 must sit inside
+// the viewport's width.
+test.describe("200% zoom", () => {
+  test.use({ viewport: { width: 640, height: 400 }, deviceScaleFactor: 2 });
+  for (const [site, routes] of Object.entries(ROUTES)) {
+    for (const path of Object.keys(routes)) {
+      test(`${site} ${path}: no horizontal scroll and the title fits at 200%`, async ({ page }) => {
+        await page.goto(`${HOSTS[site]}${path}`, { waitUntil: "load" });
+        await page.evaluate(() => document.fonts.ready);
+        const result = await page.evaluate(() => {
+          const h1 = document.querySelector("main h1");
+          const r = h1 ? h1.getBoundingClientRect() : null;
+          return {
+            scrollWidth: document.documentElement.scrollWidth,
+            clientWidth: document.documentElement.clientWidth,
+            h1: r ? { left: r.left, right: r.right, width: r.width } : null,
+          };
+        });
+        expect(result.scrollWidth, `${site} ${path} at 200%: scrollWidth ${result.scrollWidth} > ${result.clientWidth}`).toBeLessThanOrEqual(result.clientWidth);
+        expect(result.h1, `${site} ${path}: no H1 in main`).not.toBeNull();
+        expect(result.h1.left).toBeGreaterThanOrEqual(-1);
+        expect(result.h1.right).toBeLessThanOrEqual(result.clientWidth + 1);
+      });
+    }
+  }
+});

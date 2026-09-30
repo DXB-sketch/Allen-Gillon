@@ -3,7 +3,7 @@
 // `wrangler dev` infers an origin from the first route in wrangler.json
 // (allengillon.com) and rewrites every request's Host header to it, which
 // hides the host that proxy.ts routes on. This script writes a copy of the
-// built config without `routes` (dist/server/wrangler.local.json) so the Host
+// built config without `routes` (dist/server/wrangler.local.<port>.json) so the Host
 // header reaches the Worker unchanged, adds the local preview vars, then runs
 // `wrangler dev` on it.
 //
@@ -13,8 +13,11 @@ import { spawn } from "node:child_process";
 import path from "node:path";
 
 const built = path.resolve("dist/server/wrangler.json");
-const local = path.resolve("dist/server/wrangler.local.json");
 const port = String(Number(process.env.SITE_DEV_PORT) || 8787);
+// One config per port, so previews running side by side never hot-reload each
+// other's SITE_DEV_PORT. To give a second preview its own .wrangler state, pass
+// `-- --persist-to <dir>` (the default state holds the locally migrated D1).
+const local = path.resolve(`dist/server/wrangler.local.${port}.json`);
 
 const config = JSON.parse(readFileSync(built, "utf8"));
 delete config.routes;

@@ -28,9 +28,15 @@ the orchestrator makes the changes below. Each one is small.
   `robotsTxt()` and `sitemapXml()` in `lib/seo.mjs`, and both are dynamic.
 - **Root favicon.** `/favicon.ico` is rewritten to `/icons/<site>/favicon.ico`
   in `lib/sites.mjs` `resolveRequest()`. `proxy.ts` now matches that path explicitly.
-- **Caching.** `public/_headers` gives /images, /videos, /fonts, /icons, /og and
-  /audio an immutable one-year cache. `/books/*` gets
-  `max-age=86400, must-revalidate`.
+- **www.** `proxy.ts` also matches `/robots.txt` and `/sitemap.xml` (its
+  matcher otherwise skips paths with a file extension), so on
+  `www.allengillon.com` they, and `/favicon.ico`, 301 to the apex like every
+  other path. Other static files on www are served by the assets layer before
+  the Worker runs, so they are not redirected; nothing links to them on www.
+- **Caching.** `public/_headers` gives `/_next/static` (content-hashed build
+  chunks), /images, /videos, /fonts, /og and /audio an immutable one-year
+  cache. `/books/*` (regenerated in place) and `/icons/*` (the unversioned
+  per-host favicon, icons and web manifest) get `max-age=86400, must-revalidate`.
 
 ## Wiring status (overhaul, integration pass 2026-10-01)
 

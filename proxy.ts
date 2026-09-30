@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { resolveRequest, runtimeEnv } from "./lib/sites.mjs";
+import { isLocalHost, resolveRequest, runtimeEnv } from "./lib/sites.mjs";
 import legal from "./content/legal.config.json";
 
 // Host routing for allengillon.com and other.allengillon.com.
@@ -10,6 +10,16 @@ import legal from "./content/legal.config.json";
 export function proxy(request: NextRequest) {
   const host = request.headers.get("host") || request.nextUrl.host;
   const { pathname, search } = request.nextUrl;
+
+  // Local previews only: drop a trailing slash on the same Host. The built
+  // Worker under wrangler dev sees request.url as 127.0.0.1, so its own
+  // trailing-slash redirect would send other.localhost visitors to main.
+  // Production hosts are left to the framework (request.url matches Host there).
+  if (pathname.length > 1 && pathname.endsWith("/") && host && isLocalHost(host)) {
+    const target = `http://${host}${pathname.replace(/\/+$/, "")}${search}`;
+    return NextResponse.redirect(target, 308);
+  }
+
   const result = resolveRequest(host, `${pathname}${search}`, {
     // NODE_ENV, SITE_PREVIEW (set by start:vinext) and VERCEL decide whether
     // unknown hosts are sent to production; see isPreviewEnv().
@@ -30,6 +40,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   // Skip build assets and any path with a file extension (images, audio, books, icons),
-  // except /favicon.ico, which is rewritten to the host's own icon (lib/sites.mjs).
-  matcher: ["/((?!_next/|assets/|.*\\.[A-Za-z0-9]+$).*)", "/favicon.ico"],
+  // except /favicon.ico (rewritten to the host's own icon) and /robots.txt and
+  // /sitemap.xml, so the www rule in lib/sites.mjs sends them to the apex too.
+  matcher: ["/((?!_next/|assets/|.*\\.[A-Za-z0-9]+$).*)", "/favicon.ico", "/robots.txt", "/sitemap.xml"],
 };

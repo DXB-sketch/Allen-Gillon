@@ -20,7 +20,7 @@ test.describe("/books shelves", () => {
     await expect(paragraph).toContainText("The characters in these stories are named after the musical scale");
   });
 
-  test("one action per book: stories read and listen (with a text link), plays a preview and a price, textbooks read and download", async ({ page }) => {
+  test("one action per book: stories read and listen, plays a preview and a price, textbooks read online", async ({ page }) => {
     await page.goto(BOOKS);
     const stories = page.locator(".stories-shelf > li");
     await expect(stories).toHaveCount(4);
@@ -28,7 +28,8 @@ test.describe("/books shelves", () => {
       await expect(book.locator(".book-action")).toHaveCount(1);
       await expect(book.locator(".book-action")).toHaveText("Read and listen");
       const slug = (await book.locator(".book-action").getAttribute("href")).split("/").pop();
-      await expect(book.locator(".book-text-link")).toHaveAttribute("href", `/read/${slug}/text`);
+      // The text-only version and any PDF live in the reader, not on the shelf.
+      await expect(book.locator("a")).toHaveCount(2); // the cover (mouse only) and the action
       await expect(book.locator("img")).toHaveAttribute("src", `/books/${slug}/p001.webp`);
     }
 
@@ -42,7 +43,7 @@ test.describe("/books shelves", () => {
       await expect(book.locator(".purchase-pending")).toHaveCount(0);
       await expect(book.locator("a.btn")).toHaveCount(0);
     }
-    await expect(page.locator("#school-plays")).toContainText("Online checkout is coming soon.");
+    await expect(page.locator("#school-plays")).toContainText("A$1 download. Online checkout coming soon.");
     expect(await page.locator("main").innerText()).not.toMatch(/coming soon[\s\S]*coming soon/i);
     // The price is on each play, not repeated in the lede.
     await expect(page.locator(".plays-lede")).not.toContainText("A$");
@@ -50,10 +51,8 @@ test.describe("/books shelves", () => {
     const textbooks = page.locator(".texts-shelf > li");
     await expect(textbooks).toHaveCount(3);
     for (const book of await textbooks.all()) {
-      const actions = await book.locator(".book-action").allInnerTexts();
-      expect(actions[0]).toBe("Read online");
-      // Download PDF appears only when the manifest says the PDF is public.
-      expect(actions.slice(1).every((a) => a === "Download PDF")).toBe(true);
+      await expect(book.locator(".book-action")).toHaveText(["Read online"]);
+      await expect(book.locator("a[download]")).toHaveCount(0);
     }
     await expect(page.locator("main")).not.toContainText("Contact Allen");
   });

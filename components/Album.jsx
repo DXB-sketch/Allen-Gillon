@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { usePlayer } from "./Player";
 import { PREVIEW_LABEL, isPreviewTrack } from "../lib/player-state.mjs";
+import { SHELF_SIZES, shelfSrcSet } from "../lib/album-shelf.mjs";
 
 /* The albums shelf on /music (W5).
 
@@ -146,6 +147,8 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
             the other sleeves load lazily. */}
         <img
           src={shelfCover || cover}
+          srcSet={shelfCover ? shelfSrcSet(shelfCover) : undefined}
+          sizes={shelfCover ? SHELF_SIZES : undefined}
           alt=""
           width="720"
           height="720"
@@ -208,7 +211,7 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
   );
 }
 
-export default function AlbumShelf({ albums }) {
+export default function AlbumShelf({ albums, shelf = null }) {
   const [openId, setOpenId] = useState(null);
   // A link to /music#<album> (the Timeless "Misty" link, schema and share
   // URLs) opens that album as well as scrolling to its sleeve.
@@ -232,6 +235,8 @@ export default function AlbumShelf({ albums }) {
           onToggle={() => setOpenId((prev) => (prev === album.id ? null : album.id))}
         />
       ))}
+      {/* The drawn shelf board the sleeves stand on (server-rendered, laptops and up). */}
+      {shelf}
     </div>
   );
 }

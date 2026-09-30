@@ -51,6 +51,9 @@ export function PlayerProvider({ children }) {
   const requestRef = useRef(0); /* bumps on every new play request */
   const pendingRef = useRef(false); /* true while a play() promise is unsettled */
   const statusRef = useRef("idle");
+  /* The control that started the current track, so closing the bar can hand
+     keyboard focus back to it instead of dropping it to <body>. */
+  const originRef = useRef(null);
   const [track, setTrack] = useState(null);
   const [current, setCurrent] = useState(null);
   const [status, setStatusState] = useState("idle");
@@ -110,6 +113,8 @@ export function PlayerProvider({ children }) {
     (nextTrack, playlist, { startAt = 0 } = {}) => {
       const audio = audioRef.current;
       if (!audio) return;
+      const active = typeof document === "undefined" ? null : document.activeElement;
+      originRef.current = active && active !== document.body ? active : null;
       playlistRef.current = playlist && playlist.length ? playlist : [nextTrack];
       trackRef.current = nextTrack;
       setTrack(nextTrack);
@@ -254,7 +259,7 @@ export function PlayerProvider({ children }) {
   const playing = status === "playing";
 
   return (
-    <PlayerContext.Provider value={{ track, current, status, playing, announcement, toggle, togglePause, close, audioRef, seek, playAt }}>
+    <PlayerContext.Provider value={{ track, current, status, playing, announcement, toggle, togglePause, close, audioRef, seek, playAt, originRef }}>
       {children}
       <audio ref={audioRef} preload="none" hidden data-shared-player="" />
     </PlayerContext.Provider>
@@ -266,7 +271,7 @@ export function usePlayer() {
 }
 
 export function NowBar() {
-  const { track, status, announcement, togglePause, close, audioRef } = usePlayer();
+  const { track, status, announcement, togglePause, close, audioRef, originRef } = usePlayer();
   const [pos, setPos] = useState(0);
   const [time, setTime] = useState(timeText(0, NaN));
   const src = track?.src;
@@ -292,6 +297,16 @@ export function NowBar() {
     setPos(value);
     const audio = audioRef.current;
     if (audio && audio.duration) audio.currentTime = (value / 1000) * audio.duration;
+  }
+
+/* Closing hides the bar, and the Close button with it: move focus to the
+     control that started the track if it is still on the page and visible,
+     otherwise to <main>. */
+  function onClose() {
+    const origin = originRef?.current;
+    close();
+    const back = origin && origin.isConnected && !origin.closest("#nowbar") && origin.getClientRects().length ? origin : document.getElementById("main");
+    back?.focus();
   }
 
   const on = Boolean(track) && status !== "idle";
@@ -331,7 +346,7 @@ export function NowBar() {
             className="nowclose"
             aria-label="Close player"
             title="Close player"
-            onClick={close}
+            onClick={onClose}
           >
             ✕
           </button>

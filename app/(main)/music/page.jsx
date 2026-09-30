@@ -6,7 +6,9 @@ import MusicGibson from "../../../components/illustrations/MusicGibson";
 import MusicMic from "../../../components/illustrations/MusicMic";
 import MusicFlute from "../../../components/illustrations/MusicFlute";
 import MusicKeys from "../../../components/illustrations/MusicKeys";
+import ShelfPlank from "../../../components/illustrations/ShelfPlank";
 import LiteYouTube from "./LiteYouTube";
+import { SHELF_SIZES, shelfSrcSet } from "../../../lib/album-shelf.mjs";
 import { albums, originals } from "./albums.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
 import { collectionPage, jsonLdProps, musicAlbum } from "../../../lib/schema.mjs";
@@ -41,7 +43,14 @@ export default function MusicPage() {
     <div className="music-page">
       <script {...jsonLdProps(JSON_LD)} />
       {/* The first sleeve is the LCP image. React hoists this into <head>. */}
-      <link rel="preload" as="image" href={shelf[0].shelfCover} fetchPriority="high" />
+      <link
+        rel="preload"
+        as="image"
+        href={shelf[0].shelfCover}
+        imageSrcSet={shelfSrcSet(shelf[0].shelfCover)}
+        imageSizes={SHELF_SIZES}
+        fetchPriority="high"
+      />
       <header className="pagehead band music-head">
         <h1 className="script">Albums</h1>
         <p className="plain">
@@ -54,7 +63,7 @@ export default function MusicPage() {
       </header>
 
       <section className="albums-band band" aria-label="Albums">
-        <AlbumShelf albums={shelf} />
+        <AlbumShelf albums={shelf} shelf={<ShelfPlank className="album-shelf" draw />} />
         <SectionComment subject="Allen's albums" returnTo="/music" returnLabel="the albums" />
         <div className="instrument instrument--flute" data-motion="from-right">
           <MusicFlute />

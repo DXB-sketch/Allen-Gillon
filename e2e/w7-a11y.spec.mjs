@@ -131,13 +131,15 @@ test.describe("media and the now-playing bar", () => {
     }
   });
 
-  test("every story audiobook on /books has a text version beside it", async ({ page }) => {
+  test("every story audiobook has a text version beside it, in the reader next to Listen", async ({ page }) => {
     await page.goto(`${HOSTS.other}/books`);
-    const stories = page.locator("#stories li.book");
-    const count = await stories.count();
-    expect(count).toBeGreaterThan(0);
-    for (const story of await stories.all()) {
-      await expect(story.locator('a[href$="/text"]')).toHaveCount(1);
+    const hrefs = await page.locator("#stories li.book .book-action").evaluateAll((els) => els.map((a) => a.getAttribute("href")));
+    expect(hrefs.length).toBeGreaterThan(0);
+    for (const href of hrefs) {
+      await page.goto(`${HOSTS.other}${href}`);
+      const toolbar = page.locator(".bkr-toolbar");
+      await expect(toolbar.locator(".bkr-listen")).toHaveCount(1);
+      await expect(toolbar.locator(`a[href="${href}/text"]`)).toHaveCount(1);
     }
   });
 

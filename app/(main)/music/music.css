@@ -98,6 +98,7 @@ html.motion-ok .instrument[data-motion].is-in{
 .meta-part{white-space:nowrap;}
 .meta-free{color:var(--ink);font-weight:700;}
 .album-download-button[aria-disabled="true"]{cursor:progress;}
+.album-shelf{display:none;}
 
 /* The open panel: one primary action, then the tracks. */
 .trkpanel{margin-top:20px;}
@@ -157,6 +158,12 @@ html.motion-ok .instrument[data-motion].is-in{
   .trkpanel-lead{grid-column:1;}
   .trklist{grid-column:2 / -1;margin:0;}
   .trkpanel-name{display:block;font-size:clamp(2.4rem,3vw,3rem);margin:0 0 6px;}
+  /* The drawn shelf board: one plank under the whole row, its top edge just
+     under the sleeves, so the four albums stand on it like the books on
+     /books. It sits behind the sleeves (they are positioned, it is not). */
+  .album-shelf{display:block;grid-column:1 / -1;grid-row:1;align-self:end;
+    width:calc(100% + var(--shelf-gap));height:24px;margin:0 calc(var(--shelf-gap) / -2) -18px;pointer-events:none;}
+  .album > .album-title{margin-top:30px;}
 }
 @media (min-width:1280px){
   .trklist{columns:2;column-gap:clamp(32px,4vw,72px);}

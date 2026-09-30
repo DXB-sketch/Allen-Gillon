@@ -77,6 +77,23 @@ selects one. Until then that block stays empty on purpose.
   discrete object). No nested cards. No identical icon-heading-text grids.
 - Generous, varied spacing for rhythm. Do not wrap everything in a container.
 - Tap targets ≥ 44px. Everything important reachable without hover.
+- Amendments to the plan's page layouts (W5), recorded so they are not silent:
+  - **Home hero: a split, not a full-bleed band.** The only copy of
+    allen-playing-red-gibson-waterfront.jpg is 600px square, so a full-bleed
+    band at 1280 to 2560px would show it at two to four times its size. From
+    900px the photo bleeds off the right edge beside the L1 name (held to
+    720px); on phones it runs edge to edge. Pending the human: supply a larger
+    original (at least 2400px wide) to make it a full-bleed band.
+  - **Albums shelf.** The four sleeves stand on one drawn two-ink shelf board
+    (ShelfPlank, as on /books) across the full row from 1024px. Each sleeve is
+    clamp(160px, 80%, 420px) of its column: the 20% left beside it is where
+    the record slides out, so the sleeves are not made wider.
+  - **One action per book on /books.** Each book has one link (Read and
+    listen, Read a preview or Read online). The plain-text version and the PDF
+    download are in the reader, beside Listen and in its toolbar.
+  - **Title colour by site.** On More on Allen every page title (`h1.script`)
+    takes the blue lead with the red overprint (blue means the written work);
+    main keeps the red lead.
 
 ## Illustration
 - Hand-authored inline SVG components in components/illustrations/.

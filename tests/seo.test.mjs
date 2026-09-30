@@ -339,8 +339,12 @@ test("public/_headers caches static assets and revalidates books", () => {
     const m = headers.match(new RegExp(`^${path.replace(/[*/]/g, "\\$&")}\\n\\s+Cache-Control: (.+)$`, "m"));
     return m && m[1];
   };
-  for (const path of ["/audio/*", "/fonts/*", "/images/*", "/videos/*", "/icons/*", "/og/*"]) {
+  // Content-hashed build chunks are immutable too.
+  for (const path of ["/_next/static/*", "/audio/*", "/fonts/*", "/images/*", "/videos/*", "/og/*"]) {
     assert.equal(rule(path), "public, max-age=31536000, immutable", path);
   }
+  // Pages and manifests regenerated in place, and the unversioned per-host
+  // icons and web manifest (favicon.ico is rewritten to /icons/<site>/), revalidate daily.
   assert.equal(rule("/books/*"), "public, max-age=86400, must-revalidate");
+  assert.equal(rule("/icons/*"), "public, max-age=86400, must-revalidate");
 });
