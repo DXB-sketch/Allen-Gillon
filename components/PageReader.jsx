@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { pageText } from "../lib/page-text.mjs";
 import { friendlyVoiceLabel, normaliseForSpeech } from "../lib/speech.mjs";
+import { useReaderVoiceOverride } from "./ReaderVoice";
 
 const maleNames = /\b(james|david|mark|george|guy|ryan|william|daniel|thomas|liam|michael|alex|duncan|male)\b/i;
 const femaleNames = /\b(catherine|zira|susan|hazel|samantha|karen|natasha|jenny|aria|sara|michelle|sonia|libby|female)\b/i;
@@ -28,8 +29,11 @@ function preferredVoice(voices, gender) {
             the site the page belongs to. Each site's layout sets it: the
             music and bookings site (allengillon.com) passes "male", the
             stories, Timeless and Ann's art site passes "female". The listener
-            can still pick another voice once playback starts. */
-export default function PageReader({ voice: preferredGender = "female" }) {
+            can still pick another voice once playback starts. Until W2 adds
+            per-site layouts, a nested layout can override it with
+            <ReaderVoice voice="..."> (components/ReaderVoice.jsx). */
+export default function PageReader({ voice = "female" }) {
+  const preferredGender = useReaderVoiceOverride() || voice;
   const pathname = usePathname();
   const [supported, setSupported] = useState(true);
   const [status, setStatus] = useState("idle");

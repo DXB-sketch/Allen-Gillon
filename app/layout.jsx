@@ -3,6 +3,7 @@ import Mast from "../components/Mast";
 import Footer from "../components/Footer";
 import { PlayerProvider, NowBar } from "../components/Player";
 import PageReader from "../components/PageReader";
+import { ReaderVoiceProvider } from "../components/ReaderVoice";
 
 export const metadata = {
   metadataBase: new URL("https://allengillon.com"),
@@ -24,13 +25,17 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <PlayerProvider>
-          <Mast />
-          {/* voice: "male" suits the main site. W2 moves PageReader into each
-              site layout: main passes voice="male", other passes voice="female". */}
-          <PageReader voice="male" />
-          {children}
-          <NowBar />
-          <Footer />
+          <ReaderVoiceProvider>
+            <Mast />
+            {/* voice: "male" suits the main site. The other site's sections
+                (books, read, anns-art, delivery) switch it to "female" from
+                their own layout.jsx with <ReaderVoice>. W2 moves PageReader into
+                each site layout: main passes voice="male", other voice="female". */}
+            <PageReader voice="male" />
+            {children}
+            <NowBar />
+            <Footer />
+          </ReaderVoiceProvider>
         </PlayerProvider>
       </body>
     </html>
