@@ -42,13 +42,16 @@ test("/books reads each title and heading exactly once", async () => {
   const doc = await fixture("books");
   const chunks = pageText(main(doc));
   assertEachHeadingOnce(doc, chunks);
-  for (const title of ["Funny Fah Learns When to Stop", "Imaginative Little Mee", "Hi Doh", "Little Ray", "Melting Pot", "Breakout", "Riddled with Language"]) {
+  for (const title of ["Funny Fah Learns When to Stop", "Imaginative Little Mee", "Little Ray", "Melting Pot", "Breakout", "Riddled with Language"]) {
     assert.equal(chunks.filter((chunk) => chunk.includes(title)).length, 1, title);
   }
+  /* "Hi-Doh" is also named in Allen's paragraph, so count the title itself. */
+  assert.equal(chunks.filter((chunk) => chunk === "Hi-Doh").length, 1, "Hi-Doh");
   /* Allen's paragraph beside the Chinese Chimes heading is read, once. */
   assert.equal(chunks.filter((chunk) => chunk.startsWith("The characters in these stories are named after the musical scale")).length, 1);
-  /* Closed "more" menus, buttons and aria-hidden numerals are not read. */
-  assert.ok(!chunks.some((chunk) => /Download PDF|Original YouTube narration|More options|Listen to audiobook|⋯/.test(chunk)));
+  /* No "more" menus, buttons or aria-hidden numerals are read. (The
+     textbooks' "Download PDF" is now a visible link, not a menu item.) */
+  assert.ok(!chunks.some((chunk) => /Original YouTube narration|More options|Listen to audiobook|⋯/.test(chunk)));
   assert.ok(!chunks.some((chunk) => /^\d+$/.test(chunk)));
 });
 
