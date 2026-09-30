@@ -84,6 +84,28 @@ export function PlayerProvider({ children }) {
     }
   }, [setStatus]);
 
+  /* A start time waiting for the track's metadata (load at a time, or seek
+     before the track is ready). Only one can wait, and it belongs to the
+     track it was set for: a later load() or seek() drops it, so a book's
+     cue time can never land on the album track loaded after it. */
+  const pendingSeekRef = useRef(null);
+  const clearPendingSeek = useCallback(() => {
+    const pending = pendingSeekRef.current;
+    if (pending) audioRef.current?.removeEventListener("loadedmetadata", pending);
+    pendingSeekRef.current = null;
+  }, []);
+  const whenMetadata = useCallback((apply) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const forTrack = trackRef.current;
+    const handler = () => {
+      if (pendingSeekRef.current === handler) pendingSeekRef.current = null;
+      if (trackRef.current === forTrack) apply();
+    };
+    pendingSeekRef.current = handler;
+    audio.addEventListener("loadedmetadata", handler, { once: true });
+  }, []);
+
   const load = useCallback(
     (nextTrack, playlist, { startAt = 0 } = {}) => {
       const audio = audioRef.current;
@@ -97,16 +119,16 @@ export function PlayerProvider({ children }) {
          media fragment, and is applied again once metadata is known in case
          the browser ignored the fragment. */
       const start = Number.isFinite(startAt) && startAt > 0 ? startAt : 0;
+      clearPendingSeek();
       audio.src = start ? `${nextTrack.src}#t=${start.toFixed(2)}` : nextTrack.src;
       if (start) {
-        const applyStart = () => {
+        whenMetadata(() => {
           if (Math.abs(audio.currentTime - start) > 0.3) audio.currentTime = start;
-        };
-        audio.addEventListener("loadedmetadata", applyStart, { once: true });
+        });
       }
       play();
     },
-    [play, setStatus]
+    [play, setStatus, clearPendingSeek, whenMetadata]
   );
 
   /* Book reader: move within the loaded track, and play it if it was paused. */
@@ -115,14 +137,15 @@ export function PlayerProvider({ children }) {
       const audio = audioRef.current;
       if (!audio || !trackRef.current || !Number.isFinite(time)) return;
       setAnnouncement("");
+      clearPendingSeek();
       if (audio.readyState >= 1) audio.currentTime = Math.max(0, time);
-      else audio.addEventListener("loadedmetadata", () => (audio.currentTime = Math.max(0, time)), { once: true });
+      else whenMetadata(() => (audio.currentTime = Math.max(0, time)));
       if (andPlay && statusRef.current !== "playing") {
         if (statusRef.current === "error") audio.load();
         play();
       }
     },
-    [play]
+    [play, clearPendingSeek, whenMetadata]
   );
 
   /* Book reader: play `nextTrack` from `time`. Seeks only when that track is
@@ -167,6 +190,7 @@ export function PlayerProvider({ children }) {
     const audio = audioRef.current;
     requestRef.current += 1;
     pendingRef.current = false;
+    clearPendingSeek();
     if (audio) {
       audio.pause();
       audio.removeAttribute("src");
@@ -178,7 +202,7 @@ export function PlayerProvider({ children }) {
     setCurrent(null);
     setAnnouncement("");
     setStatus("idle");
-  }, [setStatus]);
+  }, [setStatus, clearPendingSeek]);
 
   /* Audio element events drive the status. */
   useEffect(() => {

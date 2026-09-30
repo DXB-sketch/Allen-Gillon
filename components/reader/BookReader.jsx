@@ -9,22 +9,25 @@
      pages (layout "single"), and every title on narrow screens, turn one page
      at a time.
    - The cover opens once, to the first content page, when the book first
-     comes into view. Under reduced motion every turn is instant.
+     comes into view (a play preview opens on page 2 when its script starts
+     too near the end of the preview: see openIndex). Under reduced motion
+     every turn is instant.
    - Keyboard shortcuts (arrows, Home, End, Page Up, Page Down) work only while
      focus is inside the reader's region.
    - Without JavaScript, or before the page-flip code loads, the reader shows
      the current page as a plain image and the buttons still turn pages.
    - Plays show pages 1 to previewPages, then an "end of the preview" page
-     with the Buy link.
+     with the Buy link and a stage-curtain drawing.
+   - The toolbar is as wide as the book (--book-w), so it sits over it.
    - Auto-turn with the narration follows lib/reader-follow.mjs exactly. */
 
 import { useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
 import { usePlayer } from "../Player";
 import PurchaseLink from "../PurchaseLink";
 import TwoInk from "../illustrations/TwoInk";
-import OpenBook from "../illustrations/OpenBook";
+import StageCurtain from "./StageCurtain";
 import { audiobookTrack } from "../Audiobook";
-import { fitBook, visiblePages, numbering, counterText } from "../../lib/reader-pages.mjs";
+import { fitBook, visiblePages, numbering, counterText, openIndex, pageHeading } from "../../lib/reader-pages.mjs";
 import {
   followAvailable,
   followPrompt,
@@ -62,11 +65,24 @@ function Arrow({ dir }) {
   );
 }
 
+/* Play and pause, drawn (a text glyph would turn into a colour emoji on some phones). */
+function ListenIcon({ playing }) {
+  return (
+    <TwoInk viewBox="0 0 24 24" className="bkr-listen-glyph" offset={1}>
+      {playing ? (
+        <path d="M8.5 6.5V17.5M15.5 6.5V17.5" />
+      ) : (
+        <path d="M9 6.2C12.6 8.1 15.4 10 18 12C15.4 14 12.6 15.9 9 17.8C8.8 13.9 8.8 10.1 9 6.2Z" />
+      )}
+    </TwoInk>
+  );
+}
+
 export default function BookReader({ book, pagesText = [], cues = null, verified = false, buyHref = "" }) {
   const { slug, title, section, shownPages, aspect, pageCount } = book;
   const isPlay = section === "plays";
   const total = shownPages + (isPlay ? 1 : 0); /* plays get an end-of-preview page */
-  const startIndex = Math.min(Math.max(0, (book.contentStartPage || 1) - 1), Math.max(0, shownPages - 1));
+  const startIndex = openIndex(book);
   const num = useMemo(() => numbering(book), [book]);
   const [w, h] = aspect || [3, 4];
 
@@ -105,7 +121,12 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   const bookElRef = useRef(null);
   const indexRef = useRef(0);
   const visibleRef = useRef(visible);
-  const programmaticRef = useRef(null);
+  /* Pages the reader itself is turning to (the cover opening, following the
+     narration, Back to the narration), each with an expiry time. More than
+     one can be pending: page-flip finishes a turn still in progress when a
+     new one starts, and that older turn's onFlip must not read as the
+     visitor's own turn (which would suspend following). */
+  const programmaticRef = useRef(new Map());
   const reducedRef = useRef(false);
   const openedRef = useRef(startIndex === 0);
   const liveRef = useRef({ isThisBook, status });
@@ -203,15 +224,14 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
       const t = Math.min(Math.max(0, target), total - 1);
       if (visiblePages(indexRef.current, total, size?.mode).includes(t) && api()) return;
       const flip = api();
-      if (programmatic) programmaticRef.current = t;
       if (!flip) {
         /* Plain image reader: no animation, same rules. */
         indexRef.current = t;
         setIndex(t);
         if (!programmatic) dispatch({ type: "manualFlip", ...liveRef.current });
-        else programmaticRef.current = null;
         return;
       }
+      if (programmatic) programmaticRef.current.set(t, Date.now() + 3 * TURN_MS + 500);
       if (reducedRef.current) flip.turnToPage(t);
       else flip.flip(t);
     },
@@ -226,10 +246,14 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     const i = Number(e.data) || 0;
     indexRef.current = i;
     setIndex(i);
-    const target = programmaticRef.current;
-    if (target !== null) {
-      programmaticRef.current = null;
-      if (visiblePages(i, total, modeRef.current).includes(target)) return;
+    const pending = programmaticRef.current;
+    const now = Date.now();
+    for (const [t, expires] of pending) if (expires < now) pending.delete(t);
+    const shown = visiblePages(i, total, modeRef.current);
+    const mine = [...pending.keys()].filter((t) => shown.includes(t));
+    if (mine.length) {
+      mine.forEach((t) => pending.delete(t));
+      return;
     }
     dispatch({ type: "manualFlip", ...liveRef.current });
   }, [total]);
@@ -257,7 +281,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
         };
         timer = window.setTimeout(open, reducedRef.current ? 0 : 450);
       },
-      { threshold: 0.35 }
+      { threshold: 0.2 }
     );
     io.observe(el);
     return () => {
@@ -278,7 +302,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
         cues,
         visible: visibleRef.current,
       });
-      if (target === null || programmaticRef.current === target) return;
+      if (target === null || (programmaticRef.current.get(target) || 0) > Date.now()) return;
       goTo(target, { programmatic: true });
     };
     sync();
@@ -354,7 +378,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     for (let i = 0; i < shownPages; i += 1) {
       out.push(
         <div className="bkr-page" key={i} data-density={i === 0 ? "hard" : "soft"}>
-          <img data-page={i} data-src={pageSrc(slug, i)} alt={`Page ${i + 1} of ${title}`} width={w} height={h} decoding="async" draggable="false" />
+          <img data-page={i} data-src={pageSrc(slug, i)} alt={`${pageHeading(book, i)} of ${title}`} width={w} height={h} decoding="async" draggable="false" />
         </div>
       );
     }
@@ -362,7 +386,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
       out.push(
         <div className="bkr-page bkr-end" key="end" data-density="hard">
           <div className="bkr-end-inner">
-            <OpenBook className="bkr-end-art" />
+            <StageCurtain className="bkr-end-art" />
             <p className="bkr-end-title script">That&rsquo;s the preview.</p>
             <p className="bkr-end-lead">Buy the full script ({price})</p>
             <p className="bkr-end-note">The full script has {pageCount} pages. After checkout, Allen will email the PDF to the address used for payment.</p>
@@ -372,7 +396,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
       );
     }
     return out;
-  }, [shownPages, slug, title, w, h, isPlay, price, pageCount, buyHref, pendingLabel]);
+  }, [book, shownPages, slug, title, w, h, isPlay, price, pageCount, buyHref, pendingLabel]);
 
   const bookKey = size ? `${size.mode}:${size.pageWidth}x${size.pageHeight}` : "none";
   const bookStyle = useMemo(
@@ -390,7 +414,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
       {plainIndex >= shownPages ? (
         pages[pages.length - 1]
       ) : (
-        <img src={pageSrc(slug, plainIndex)} alt={`Page ${plainIndex + 1} of ${title}`} width={w} height={h} decoding="async" />
+        <img src={pageSrc(slug, plainIndex)} alt={`${pageHeading(book, plainIndex)} of ${title}`} width={w} height={h} decoding="async" />
       )}
     </div>
   );
@@ -406,60 +430,52 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   const hasFollow = Boolean(book.audio && Array.isArray(cues) && !isPlay);
 
   return (
-    <div className={"bkr" + (reduced ? " bkr-reduced" : "")} data-mode={mode} data-ready={FlipBook && size ? "" : undefined}>
+    <div
+      className={"bkr" + (reduced ? " bkr-reduced" : "")}
+      data-mode={mode}
+      data-ready={FlipBook && size ? "" : undefined}
+      style={bookStyle ? { "--book-w": `${bookStyle.width}px` } : undefined}
+    >
       <div role="region" id={regionId} aria-label={`${title}, the book`} className="bkr-region" onKeyDown={onKeyDown}>
-        <div className="bkr-toolbar">
-          {book.audio ? (
-            <button type="button" className={"bkr-listen" + (listenBusy ? " is-playing" : "")} onClick={onListen}>
-              <span className="bkr-listen-icon" aria-hidden="true">{listenBusy ? "❚❚" : "▶"}</span>
-              <span>{listenLabel}</span>
-            </button>
-          ) : null}
-          {isPlay ? (
-            <PurchaseLink href={buyHref} pendingLabel={pendingLabel}>{`Buy the full script (${price})`}</PurchaseLink>
-          ) : book.download === "public" && book.pdf ? (
-            <a className={book.audio ? "bkr-download" : "btn b bkr-download"} href={book.pdf} download>
-              Download the PDF{book.pdfBytes ? <span className="bkr-size">({megabytes(book.pdfBytes)})</span> : null}
-            </a>
-          ) : null}
+        {/* The toolbar sits over the book, lined up with its left edge. */}
+        <div className="bkr-top">
+          <div className="bkr-toolbar">
+            {book.audio ? (
+              <button type="button" className={"bkr-listen" + (listenBusy ? " is-playing" : "")} onClick={onListen}>
+                <span className="bkr-listen-icon" aria-hidden="true"><ListenIcon playing={listenBusy} /></span>
+                <span>{listenLabel}</span>
+              </button>
+            ) : null}
+            {isPlay ? (
+              <PurchaseLink href={buyHref} pendingLabel={pendingLabel}>{`Buy the full script (${price})`}</PurchaseLink>
+            ) : book.download === "public" && book.pdf ? (
+              <a className={book.audio ? "bkr-download" : "btn b bkr-download"} href={book.pdf} download>
+                Download the PDF{book.pdfBytes ? <span className="bkr-size">({megabytes(book.pdfBytes)})</span> : null}
+              </a>
+            ) : null}
+          </div>
+
+          {/* What following the narration is doing right now, next to Listen. */}
           {hasFollow ? (
-            <label className="bkr-check">
-              <input
-                type="checkbox"
-                checked={available && follow.enabled}
-                disabled={!available}
-                aria-describedby={available ? undefined : followNoteId}
-                onChange={(e) => dispatch({ type: "toggle", on: e.target.checked })}
-              />
-              <span>Turn pages with the narration</span>
-            </label>
+            <div className="bkr-follow">
+              <div className="bkr-follow-live" aria-live="polite">
+                {prompt?.kind === "following" ? <p className="bkr-follow-note">Following the narration.</p> : null}
+                {prompt?.kind === "mount" ? (
+                  <p className="bkr-follow-actions">
+                    <span>The narration is playing on another page.</span>
+                    <button type="button" className="bkr-textbtn" onClick={backToNarration}>Follow the narration</button>
+                  </p>
+                ) : null}
+                {prompt?.kind === "flip" ? (
+                  <p className="bkr-follow-actions">
+                    <button type="button" className="bkr-textbtn" onClick={playFromHere}>Play from this page</button>
+                    <button type="button" className="bkr-textbtn" onClick={backToNarration}>Back to the narration</button>
+                  </p>
+                ) : null}
+              </div>
+            </div>
           ) : null}
         </div>
-
-        {hasFollow ? (
-          <div className="bkr-follow">
-            {!available ? (
-              <p className="bkr-follow-note" id={followNoteId}>
-                Page turning starts once the narration timings have been checked by ear. Until then, turn the pages yourself.
-              </p>
-            ) : null}
-            <div className="bkr-follow-live" aria-live="polite">
-              {prompt?.kind === "following" ? <p className="bkr-follow-note">Following the narration.</p> : null}
-              {prompt?.kind === "mount" ? (
-                <p className="bkr-follow-actions">
-                  <span>The narration is playing on another page.</span>
-                  <button type="button" className="bkr-textbtn" onClick={backToNarration}>Follow the narration</button>
-                </p>
-              ) : null}
-              {prompt?.kind === "flip" ? (
-                <p className="bkr-follow-actions">
-                  <button type="button" className="bkr-textbtn" onClick={playFromHere}>Play from this page</button>
-                  <button type="button" className="bkr-textbtn" onClick={backToNarration}>Back to the narration</button>
-                </p>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
 
         <div className="bkr-stage" ref={stageRef}>
           <button type="button" className="bkr-turn bkr-prev" onClick={prev} aria-disabled={visible[0] <= 0 ? "true" : undefined} aria-label="Previous page">
@@ -529,7 +545,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
               <button type="submit" className="bkr-go-submit">Go</button>
             </form>
           </div>
-          {startIndex > 0 ? (
+          {!isPlay && num.introPages > 1 ? (
             <button type="button" className="bkr-textbtn" onClick={() => goTo(0)}>Introduction</button>
           ) : null}
           <button type="button" className="bkr-textbtn" aria-expanded={showWords} aria-controls={wordsId} onClick={() => setShowWords((s) => !s)}>
@@ -537,12 +553,33 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
           </button>
         </div>
 
+        {/* The setting sits under the book with the other controls, so the
+            first screen is the toolbar and the book. */}
+        {hasFollow ? (
+          <div className="bkr-follow-setting">
+            <label className="bkr-check">
+              <input
+                type="checkbox"
+                checked={available && follow.enabled}
+                disabled={!available}
+                aria-describedby={available ? undefined : followNoteId}
+                onChange={(e) => dispatch({ type: "toggle", on: e.target.checked })}
+              />
+              <span>Turn pages with the narration</span>
+            </label>
+            {!available ? (
+              <p className="bkr-follow-note" id={followNoteId}>
+                Page turning starts once the narration timings have been checked by ear. Until then, turn the pages yourself.
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
         <div id={wordsId} className="bkr-words" hidden={!showWords}>
           {showWords
             ? wordsFor.length
               ? wordsFor.map((p) => {
-                  const lab = num.label(p);
-                  const heading = isPlay ? `Page ${p + 1}` : lab.kind === "intro" ? `Introduction, page ${lab.n}` : `Page ${lab.n}`;
+                  const heading = pageHeading(book, p);
                   const paras = paragraphs(pagesText[p]);
                   return (
                     <section key={p} className="bkr-words-page" aria-label={heading}>
@@ -554,15 +591,15 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
               : <p className="bkr-words-empty">That&rsquo;s the end of the preview. The rest of the script comes with the full PDF.</p>
             : null}
         </div>
-      </div>
 
-      {book.video ? (
-        <p className="bkr-tertiary">
-          <a href={`https://www.youtube.com/watch?v=${book.video}`} target="_blank" rel="noreferrer">
-            Watch the original narration on YouTube<span className="visually-hidden"> (opens in a new tab)</span>
-          </a>
-        </p>
-      ) : null}
+        {book.video ? (
+          <p className="bkr-tertiary">
+            <a href={`https://www.youtube.com/watch?v=${book.video}`} target="_blank" rel="noreferrer">
+              Watch the original narration on YouTube<span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

@@ -2,18 +2,14 @@
    (components/reader/BookReader.jsx, scoped under .bkr). Palette tokens only. */
 
 /* ---------- Page opening ---------- */
-.read-head{row-gap:0;}
-.read-head .read-art{display:none;}
-@media (min-width:1024px){
-  /* The title keeps the full width; the drawing takes its own cells beside
-     the lede, never under any text. */
-  .read-head > h1{grid-row:1;}
-  .read-head > .plain{grid-row:2;grid-column:3 / span 7;}
-  .read-head .read-art{display:block;grid-column:10 / wide-end;grid-row:2;align-self:start;
-    justify-self:end;width:min(100%,260px);height:auto;margin-top:4px;}
-}
+/* The book is the page's one primary thing, so the opening is short: the L1
+   title at its DESIGN.md size, the lede, and no drawing, with tight spacing
+   so the toolbar and the top of the book are on a laptop's first screen. */
+.read-head{row-gap:0;padding-block:clamp(18px,2.4vw,36px) 0;}
+.read-head > h1.script{text-wrap:balance;}
+.read-head > .plain{margin-top:8px;}
 
-.read-body{margin-top:clamp(20px,3vw,40px);}
+.read-body{margin-top:clamp(18px,2.2vw,32px);}
 .read-reader{min-width:0;}
 
 .read-foot{margin-top:clamp(28px,4vw,56px);}
@@ -26,13 +22,16 @@
 .bkr{--turn:56px;}
 .bkr-region{outline:none;}
 
-/* One small toolbar above the book. */
+/* One small toolbar above the book, lined up with the book's left edge
+   (--book-w is the book's width, set by the reader once it has measured). */
+.bkr-top{max-width:var(--book-w,100%);margin-inline:auto;}
 .bkr-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 32px;margin:0 0 6px;}
 .bkr-listen{display:inline-flex;align-items:center;gap:12px;min-height:48px;padding:4px 0;border:0;background:transparent;
   color:var(--blue);font:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;
   transition:color .2s var(--ease-out);}
 .bkr-listen:hover,.bkr-listen.is-playing{color:var(--red-deep);}
-.bkr-listen-icon{display:grid;place-items:center;width:40px;height:40px;border:2px solid currentColor;border-radius:50%;font-size:1rem;line-height:1;}
+.bkr-listen-icon{display:grid;place-items:center;width:40px;height:40px;border:2px solid currentColor;border-radius:50%;}
+.bkr-listen-glyph{width:22px;height:22px;}
 .bkr-download:not(.btn){display:inline-flex;align-items:center;min-height:48px;color:var(--blue);font-weight:700;font-size:1.05rem;text-underline-offset:4px;}
 .bkr-download:not(.btn):hover{color:var(--red-deep);}
 .bkr-size{font-weight:400;color:var(--soft);margin-left:.35em;}
@@ -41,7 +40,11 @@
 /* Follow the narration */
 .bkr-follow{margin:-2px 0 6px;}
 .bkr-follow p{margin:0;}
-.bkr-follow-live:empty{display:none;}
+.bkr-follow-live:empty,.bkr-follow:has(.bkr-follow-live:empty){display:none;}
+/* The setting, under the counter row: centred on the book like the controls. */
+.bkr-follow-setting{display:flex;flex-direction:column;align-items:center;gap:0;text-align:center;
+  max-width:min(var(--measure),var(--book-w,var(--measure)));margin:6px auto 0;}
+.bkr-follow-setting p{margin:0;}
 .bkr-check{display:inline-flex;align-items:center;gap:12px;min-height:44px;font-size:1.05rem;cursor:pointer;}
 .bkr-check input{width:24px;height:24px;margin:0;accent-color:var(--blue);cursor:pointer;}
 .bkr-check input:disabled{cursor:not-allowed;}
@@ -108,7 +111,7 @@
 .bkr-go-submit:hover{background:var(--ink);color:var(--on);}
 
 /* Show the words on this page */
-.bkr-words{max-width:var(--measure);margin:22px auto 0;}
+.bkr-words{max-width:min(var(--measure),var(--book-w,var(--measure)));margin:22px auto 0;}
 .bkr-words[hidden]{display:none;}
 .bkr-words-page + .bkr-words-page{margin-top:26px;}
 .bkr-words-head{font-size:1.2rem;line-height:1.3;margin:0 0 6px;color:var(--blue);}
@@ -136,6 +139,6 @@
   .read-text-pages{grid-column:3 / wide-end;}
   .read-text-body > .read-text-top,.read-text-body > .read-text-comment{grid-column:3 / wide-end;}
 }
-.read-text-page{margin:0 0 40px;}
-.read-text-page h2{font-size:1.35rem;line-height:1.3;margin:0 0 8px;color:var(--blue);}
-.read-text-page p{margin:0 0 14px;}
+.read-text-entry{margin:0 0 40px;}
+.read-text-entry h2{font-size:1.35rem;line-height:1.3;margin:0 0 8px;color:var(--blue);}
+.read-text-entry p{margin:0 0 14px;}

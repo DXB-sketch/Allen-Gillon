@@ -2,8 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SectionComment from "../../../../components/SectionComment";
 import BookReader from "../../../../components/reader/BookReader";
-import OpenBook from "../../../../components/illustrations/OpenBook";
 import { stripePaymentLink } from "../../../../lib/storefront.mjs";
+import { numbering } from "../../../../lib/reader-pages.mjs";
 import { book as bookSchema, breadcrumbs, jsonLdProps } from "../../../../lib/schema.mjs";
 import { ogImages } from "../../../../lib/og.mjs";
 import { cueFiles, manifests, pageTexts, readableSlugs, SECTION_BACK } from "../books-data.mjs";
@@ -47,8 +47,10 @@ function lede(m) {
   if (m.section === "plays") {
     return `${m.blurb} Read the first ${m.shownPages} pages here. The full script is ${m.pageCount} pages, ${aud(m.price)} as a PDF.`;
   }
-  if (m.section === "childrens") return `${m.blurb} ${m.pageCount} pages, with the narrated audiobook.`;
-  return `${m.blurb} ${m.pageCount} pages, free to read here or to download.`;
+  /* The page count the reader's counter uses (the numbers printed on the pages). */
+  const pages = numbering(m).last;
+  if (m.section === "childrens") return `${m.blurb} ${pages} pages, with the narrated audiobook.`;
+  return `${m.blurb} ${pages} pages, free to read here or to download.`;
 }
 
 export default async function ReadPage({ params }) {
@@ -81,7 +83,6 @@ export default async function ReadPage({ params }) {
       <header className="pagehead band read-head">
         <h1 className="script">{m.title}</h1>
         <p className="plain">{lede(m)}</p>
-        <OpenBook className="read-art" draw />
       </header>
 
       <section className="read-body band" aria-label={`Read ${m.title}`}>

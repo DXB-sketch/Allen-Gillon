@@ -26,7 +26,7 @@ import {
   pageForTime,
   turnTarget,
 } from "../lib/reader-follow.mjs";
-import { counterText, fitBook, numbering, visiblePages } from "../lib/reader-pages.mjs";
+import { counterText, fitBook, numbering, openIndex, pageHeading, visiblePages } from "../lib/reader-pages.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const nodeRequire = createRequire(import.meta.url);
@@ -160,6 +160,31 @@ describe("reader pages", () => {
     assert.equal(counterText({ visible: [1, 2], book }), "Introduction 2 and 3 of 6");
     assert.equal(counterText({ visible: [0], book: { section: "childrens", shownPages: 19 } }), "Page 1 of 19");
   });
+
+  test("a story's cover is the introduction, so the counter matches the printed page numbers", () => {
+    const story = { section: "childrens", shownPages: 19, contentStartPage: 2, firstPageNumber: 1 };
+    assert.equal(counterText({ visible: [0], book: story }), "Cover");
+    assert.equal(counterText({ visible: [2], book: story }), "Page 2 of 18", "the image printed Page 2");
+    assert.equal(numbering(story).indexOf(4), 4);
+    assert.equal(pageHeading(story, 0), "Cover");
+    assert.equal(pageHeading(story, 2), "Page 2");
+  });
+
+  test("a play preview never opens on, or next to, the end of the preview", () => {
+    for (const contentStartPage of [1, 3, 5, 6, 9]) {
+      const play = { section: "plays", shownPages: 6, contentStartPage };
+      const at = openIndex(play);
+      const total = play.shownPages + 1; /* the end page */
+      for (const mode of ["single", "spread"]) {
+        const shown = visiblePages(at, total, mode);
+        assert.ok(shown.every((p) => p < play.shownPages - 1), `contentStartPage ${contentStartPage}, ${mode}: opens on ${shown}`);
+      }
+    }
+    assert.equal(openIndex({ section: "plays", shownPages: 6, contentStartPage: 6 }), 1, "script starts late: open on page 2");
+    assert.equal(openIndex({ section: "plays", shownPages: 10, contentStartPage: 5 }), 4, "a longer preview opens where the script starts");
+    assert.equal(openIndex({ section: "teaching", shownPages: 98, contentStartPage: 6 }), 5);
+    assert.equal(openIndex({ section: "childrens", shownPages: 19, contentStartPage: 2 }), 1);
+  });
 });
 
 /* ---------------------------------------------------------------------------
@@ -173,7 +198,7 @@ try {
 }
 
 describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not installed" }, () => {
-  let dom, React, createRoot, act, BookReader, player, outDir;
+  let dom, React, createRoot, act, BookReader, player, outDir, FlipReader, flipPlayer;
 
   before(async () => {
     dom = new JSDOM("<!doctype html><html><body></body></html>", { pretendToBeVisual: true, url: "http://other.localhost/read/x" });
@@ -189,8 +214,12 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
 
     outDir = await mkdtemp(path.join(tmpdir(), "reader-dom-"));
     const outfile = path.join(outDir, "bundle.cjs");
+    const flipOutfile = path.join(outDir, "bundle-flip.cjs");
     const mock = path.join(root, "tests", "fixtures", "reader", "mock-player.mjs");
-    await esbuild.build({
+    const fakeFlip = path.join(root, "tests", "fixtures", "reader", "fake-pageflip.mjs");
+    /* Two bundles: react-pageflip as null (the plain image reader) and as the
+       timed fake in fixtures/reader/fake-pageflip.mjs. */
+    const build = (file, flipSource) => esbuild.build({
       stdin: {
         contents: `
           export { default as BookReader } from "./components/reader/BookReader.jsx";
@@ -207,7 +236,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
          opening MessageChannels that keep the process alive. */
       format: "cjs",
       platform: "browser",
-      outfile,
+      outfile: file,
       jsx: "automatic",
       loader: { ".jsx": "jsx", ".js": "jsx" },
       define: { "process.env.NODE_ENV": '"development"' },
@@ -220,13 +249,16 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
             /* React stays outside the bundle as Node's own CommonJS modules. */
             build.onResolve({ filter: /^(react|react-dom)(\/.*)?$/ }, (args) => ({ path: nodeRequire.resolve(args.path), external: true }));
             build.onResolve({ filter: /^react-pageflip$/ }, () => ({ path: "pageflip-stub", namespace: "stub" }));
-            build.onLoad({ filter: /.*/, namespace: "stub" }, () => ({ contents: "export default null;", loader: "js" }));
+            build.onLoad({ filter: /.*/, namespace: "stub" }, () => ({ contents: flipSource, loader: "js", resolveDir: root }));
           },
         },
       ],
     });
+    await build(outfile, "export default null;");
+    await build(flipOutfile, `export { default } from ${JSON.stringify(fakeFlip.replace(/\\/g, "/"))};`);
     await esbuild.stop?.(); /* the esbuild service would keep the test process alive */
     ({ BookReader, player, React, createRoot, act } = nodeRequire(outfile));
+    ({ BookReader: FlipReader, player: flipPlayer } = nodeRequire(flipOutfile));
   });
 
   after(async () => {
@@ -254,11 +286,11 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
   };
   const words = ["Cover words", "Page two words", "Page three words", "", "Page five words", "Page six words"];
 
-  async function mount(props) {
+  async function mount(props, Reader = BookReader) {
     const host = document.createElement("div");
     document.body.appendChild(host);
     const r = createRoot(host);
-    await act(async () => r.render(React.createElement(React.Fragment, null, ...[].concat(props).map((p, i) => React.createElement(BookReader, { key: i, ...p })))));
+    await act(async () => r.render(React.createElement(React.Fragment, null, ...[].concat(props).map((p, i) => React.createElement(Reader, { key: i, ...p })))));
     await act(async () => new Promise((res) => setTimeout(res, 30)));
     return {
       host,
@@ -286,7 +318,9 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     assert.equal(r.q(".bkr-counter").getAttribute("aria-live"), "polite");
     assert.equal(r.counter(), "Page 1 of 6");
     assert.equal(r.button("Introduction"), undefined, "no Introduction when content starts on page 1");
-    assert.ok(r.q('a[href="https://www.youtube.com/watch?v=cEuPWVPPN0o"]'), "YouTube narration is a tertiary link in the reader");
+    assert.ok(r.q('[role="region"] a[href="https://www.youtube.com/watch?v=cEuPWVPPN0o"]'), "YouTube narration is a tertiary link inside the reader");
+    assert.ok(r.q(".bkr-listen svg"), "the play icon is drawn, not a text glyph");
+    assert.doesNotMatch(r.q(".bkr-listen").textContent, /[\u25B6\u275A]/, "no emoji-prone glyphs");
     await r.unmount();
   });
 
@@ -298,7 +332,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     assert.match(r.q(".bkr-toolbar").textContent, /A\$1 download\. Online checkout coming soon/);
     assert.ok(r.button("Listen to a preview"));
     assert.equal(r.counter(), "Preview: page 1 of 6 (full script 47 pages)");
-    assert.ok(r.button("Introduction"), "contentStartPage 6 gets an Introduction link");
+    assert.equal(r.button("Introduction"), undefined, "a play preview has no Introduction link: it opens on page 2");
     await key(r.q(".bkr-next"), "End");
     assert.equal(r.counter(), "End of the preview (full script 47 pages)");
     assert.match(r.q(".bkr-end").textContent, /That’s the preview\.Buy the full script \(A\$1\)/);
@@ -309,6 +343,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
   test("a textbook has a Download PDF link and printed page numbers", async () => {
     player.reset();
     const r = await mount({ book: textbook, pagesText: [] });
+    assert.ok(r.button("Introduction"), "front matter before the content gets an Introduction link");
     const dl = r.q("a.bkr-download");
     assert.equal(dl.getAttribute("href"), textbook.pdf);
     assert.ok(dl.hasAttribute("download"));
@@ -463,6 +498,24 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     await time(40);
     assert.equal(r.counter(), "Preview: page 1 of 6 (full script 47 pages)");
     assert.equal(r.q(".bkr-check"), null, "no follow toggle for a preview clip");
+    await r.unmount();
+  });
+
+  test("with an animated page turn, a follow turn that interrupts another is not a manual flip", async () => {
+    flipPlayer.reset();
+    const r = await mount({ book: story, pagesText: words, cues: CUES, verified: true }, FlipReader);
+    await act(async () => new Promise((res) => setTimeout(res, 60)));
+    assert.ok(r.q("[data-fake-flip]"), "the animated flip book is in use");
+    await act(async () => flipPlayer.set({ track: { src: story.audio.src }, status: "playing" }));
+    /* Two narration turns inside one animation (a NowBar seek right after a turn). */
+    await act(async () => flipPlayer.timeTo(12));
+    await act(async () => flipPlayer.timeTo(22));
+    await act(async () => new Promise((res) => setTimeout(res, 120)));
+    assert.equal(r.counter(), "Page 3 of 6", "the book follows to the second target");
+    assert.equal(r.button("Play from this page"), undefined, "following was not suspended");
+    await act(async () => flipPlayer.timeTo(33));
+    await act(async () => new Promise((res) => setTimeout(res, 120)));
+    assert.equal(r.counter(), "Page 4 of 6", "and keeps following");
     await r.unmount();
   });
 });

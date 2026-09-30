@@ -4,7 +4,7 @@ import SectionComment from "../../../../../components/SectionComment";
 import { breadcrumbs, jsonLdProps } from "../../../../../lib/schema.mjs";
 import { ogImages } from "../../../../../lib/og.mjs";
 import { paragraphs } from "../../../../../lib/book-text.mjs";
-import { numbering } from "../../../../../lib/reader-pages.mjs";
+import { pageHeading } from "../../../../../lib/reader-pages.mjs";
 import { manifests, pageTexts, textSlugs } from "../../books-data.mjs";
 import "../read.css";
 
@@ -46,7 +46,6 @@ export default async function BookTextPage({ params }) {
   const m = manifests[slug];
   if (!m || !textSlugs.includes(slug)) notFound();
   const pages = pageTexts[slug]?.pages || [];
-  const num = numbering(m);
   const crumbs = breadcrumbs(
     [
       { name: "Stories, plays and textbooks", url: "/books" },
@@ -57,13 +56,14 @@ export default async function BookTextPage({ params }) {
   );
 
   return (
-    <main className="read-page read-text-page">
+    <main className="read-page read-text-route">
       <script {...jsonLdProps(crumbs)} />
       <header className="pagehead band read-head">
         <h1 className="script">{m.title}</h1>
         <p className="plain">
-          The words of every page, for reading aloud, large print or a screen reader. They were read from the printed
-          pages by computer, so the odd word may be wrong.
+          {m.section === "childrens"
+            ? "The words of every page, for reading aloud, large print or a screen reader. Words in speech bubbles are in quotes."
+            : "The words of every page, for reading aloud, large print or a screen reader. They were read from the printed pages by computer, so the odd word may be wrong, and the puzzles and word searches are left out."}
         </p>
       </header>
 
@@ -75,10 +75,9 @@ export default async function BookTextPage({ params }) {
           {pages.map((text, i) => {
             const paras = paragraphs(text);
             if (!paras.length) return null;
-            const lab = num.label(i);
-            const heading = lab.kind === "intro" ? `Introduction, page ${lab.n}` : `Page ${lab.n}`;
+            const heading = pageHeading(m, i);
             return (
-              <li key={i} className="read-text-page" id={`page-${i + 1}`}>
+              <li key={i} className="read-text-entry" id={`page-${i + 1}`}>
                 <h2>{heading}</h2>
                 {paras.map((p, k) => (
                   <p key={k}>{p}</p>

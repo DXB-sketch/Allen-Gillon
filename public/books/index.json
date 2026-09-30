@@ -156,8 +156,8 @@
     "pageCount": 34,
     "shownPages": 34,
     "previewPages": null,
-    "contentStartPage": 1,
-    "firstPageNumber": 1,
+    "contentStartPage": 2,
+    "firstPageNumber": 4,
     "layout": "single",
     "aspect": [
       1080,
@@ -187,7 +187,7 @@
     "pageCount": 29,
     "shownPages": 29,
     "previewPages": null,
-    "contentStartPage": 1,
+    "contentStartPage": 2,
     "firstPageNumber": 1,
     "layout": "single",
     "aspect": [
@@ -218,7 +218,7 @@
     "pageCount": 25,
     "shownPages": 25,
     "previewPages": null,
-    "contentStartPage": 1,
+    "contentStartPage": 2,
     "firstPageNumber": 1,
     "layout": "single",
     "aspect": [
@@ -249,7 +249,7 @@
     "pageCount": 19,
     "shownPages": 19,
     "previewPages": null,
-    "contentStartPage": 1,
+    "contentStartPage": 2,
     "firstPageNumber": 1,
     "layout": "single",
     "aspect": [
