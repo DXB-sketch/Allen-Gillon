@@ -74,8 +74,8 @@ test("/anns-art reads its headings once and leaves the painting grid to its own 
   /* The grid is marked data-reader-skip: no "View 1" buttons, no per-card text. */
   assert.ok(!chunks.some((chunk) => /View 1|Buy this painting|Blue Macaws/.test(chunk)));
   /* Its price line is spoken in words. */
-  const priceLine = chunks.find((chunk) => chunk.startsWith("Original paintings"));
-  assert.equal(normaliseForSpeech(priceLine), "Original paintings, 100 to 250 Australian dollars, Free delivery in Australia");
+  const priceLine = chunks.find((chunk) => chunk.startsWith("Originals"));
+  assert.equal(normaliseForSpeech(priceLine), "Originals, 100 to 250 Australian dollars, free delivery in Australia");
 });
 
 test("only leaf blocks are read, and hidden or collapsed content is skipped", () => {

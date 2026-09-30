@@ -1,39 +1,216 @@
-/* Ann Gillon's paintings (/anns-art). W3 foundation; W5 builds the hallway,
-   the salon index and the painting dialog. */
+/* Ann Gillon's paintings: /anns-art (the wall) and /anns-art/[id] (one painting).
+   Markup: components/art/ArtWall.jsx, PaintingDetail.jsx, PaintingViews.jsx.
 
-.art-delivery{font-weight:700;margin:24px 0 10px;}
-.art-intro-note{font-size:1em;color:var(--soft);}
+   The wall has two layouts of ONE list (no duplicate DOM):
+   - the salon index (default; no JS; prefers-reduced-motion): every painting
+     at its true aspect ratio in justified rows, each with its label;
+   - the hallway (html.art-hall, set before first paint when JS runs and
+     motion is allowed): the same list as a full-bleed horizontal scroll-snap
+     track under a drawn picture rail, above a drawn skirting board.
+   Frames are thin two-ink lines: the lead ink, and the second ink offset 3px
+   at 30%, like the line art. No shadows. Nothing here animates except the
+   arrow fade and colour changes, all on --ease-out. */
+
+/* ---------- Page opening ---------- */
+.art-head{row-gap:0;}
+.art-terms{font-size:1.1em;font-weight:700;margin:14px 0 0;color:var(--ink);}
+.art-easel{display:none;}
 @media (min-width:1024px){
-  .pagehead > .art-delivery,.pagehead > .art-intro-note{grid-column:3 / wide-end;}
+  /* The title keeps the full wide span (the layout check measures it); the
+     easel stands in the margin beside the lede. */
+  .art-head > h1{grid-row:1;}
+  .art-head > .plain,.art-head > .art-terms{grid-column:3 / span 7;}
+  .art-easel{display:block;grid-column:10 / wide-end;grid-row:2 / span 2;align-self:start;
+    width:min(100%,180px);justify-self:end;}
 }
 
-.gallery-band{margin-top:clamp(24px,3vw,44px);}
-.gallery-tools{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-.gallery-categories{display:flex;flex-wrap:wrap;gap:8px;}
-.gallery-categories button,.painting-views button{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;min-height:48px;padding:8px 12px;cursor:pointer;}
-.gallery-categories button[aria-pressed="true"],.painting-views button[aria-pressed="true"]{background:var(--ink);color:var(--on);}
-.gallery-search{display:flex;flex-direction:column;gap:4px;font-size:1rem;}
-.gallery-search input{font:inherit;font-size:1rem;color:var(--ink);background:var(--paper);padding:10px;border:2px solid var(--ink);border-radius:0;min-height:44px;max-width:100%;}
-.gallery-count{font-size:1rem;color:var(--soft);margin:16px 0 24px;}
+/* ---------- Tools: rooms and the view toggle ---------- */
+.wall{margin-top:clamp(20px,3vw,40px);}
+.wall-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 32px;
+  margin-bottom:clamp(20px,2.5vw,36px);}
+.rooms{display:flex;flex-wrap:wrap;gap:0 clamp(4px,1.4vw,20px);margin-left:-10px;}
+.room,.wall-toggle{font:inherit;font-size:1.05rem;color:var(--ink);background:transparent;border:0;border-radius:0;
+  min-height:48px;padding:8px 10px;cursor:pointer;transition:color .2s var(--ease-out);}
+.room{border-bottom:3px solid transparent;}
+.room:hover{color:var(--blue);}
+.room[aria-pressed="true"]{color:var(--blue);border-bottom-color:var(--blue);font-weight:700;}
+.wall-toggle{color:var(--blue);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px;padding-inline:0;}
+.wall-toggle:hover{color:var(--red-deep);}
 
-.artgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:48px clamp(20px,2.5vw,40px);padding-bottom:40px;}
-.painting{min-width:0;scroll-margin-top:24px;}
-/* The gallery keeps its frames: a painting hangs in one. */
-.painting-photo{display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;background:var(--paper-2);border:2px solid var(--ink);}
-.painting-photo img{display:block;width:100%;height:100%;object-fit:contain;}
-.painting-views{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
-.painting-caption{margin-top:14px;}
-.painting-caption h2{font-size:1.4rem;line-height:1.25;margin:0 0 6px;}
-.painting-meta,.painting-note,.painting-status{font-size:1rem;color:var(--soft);margin:6px 0;}
-/* A painting's note is running text: body size. */
-.painting-note{font-size:1em;}
-.painting-price{font-size:1.3rem;font-weight:700;margin:10px 0;color:var(--ink);}
-.painting-status{font-weight:700;}
-.painting-enquire{display:inline-flex;align-items:center;min-height:44px;color:var(--red-deep);}
-.painting .btn{margin-top:8px;}
+/* ---------- The salon index (default) ---------- */
+.hall{min-width:0;}
+.hall-rail,.hall-skirting,.hall-controls,.work-wire{display:none;}
+.artgrid{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:flex-start;
+  gap:clamp(32px,3.4vw,60px) clamp(20px,2.6vw,48px);
+  --row-h:clamp(170px,21vw,330px);}
+/* The last row keeps its pictures at row height instead of stretching. */
+.artgrid::after{content:"";flex:1000 1 0;}
+.work{flex:var(--ar) 1 calc(var(--ar) * var(--row-h));min-width:0;}
+.work-link{display:block;color:var(--ink);text-decoration:none;}
+.work-frame,.views-frame{position:relative;display:block;background:var(--paper);
+  border:1.5px solid var(--art-lead);padding:clamp(5px,.6vw,10px);}
+/* The second ink of the frame: offset 3px, 30%, drawn behind the lead line. */
+.work-frame::before,.views-frame::before{content:"";position:absolute;inset:-1.5px;
+  border:1.5px solid var(--art-second);opacity:.3;transform:translate(3px,3px);pointer-events:none;}
+.work-frame img{display:block;width:100%;height:auto;}
+.work-label{display:flex;flex-direction:column;gap:2px;margin-top:12px;line-height:1.3;}
+.work-title{font-size:1.1rem;font-weight:700;}
+.work-medium{font-size:1rem;color:var(--soft);font-style:italic;}
+.work-price{font-size:1rem;}
+.work-price--sold,.work-price--not-for-sale{color:var(--red-deep);}
+.work-link:hover .work-title{color:var(--blue);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;}
+.work-link:focus-visible{outline-offset:6px;}
+
+/* ---------- The hallway (html.art-hall) ---------- */
+html.art-hall .hall{grid-column:full;position:relative;container-type:inline-size;
+  --hall-h:min(50svh,520px);padding-top:4px;}
+html.art-hall .hall-rail{display:block;position:absolute;top:0;left:0;width:100%;height:20px;}
+html.art-hall .artgrid{flex-wrap:nowrap;align-items:flex-start;gap:clamp(48px,4.6cqi,96px);
+  overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scrollbar-width:none;
+  padding:9px var(--gutter) 8px;cursor:grab;touch-action:pan-x pan-y;}
+html.art-hall .artgrid::-webkit-scrollbar{display:none;}
+/* The wall starts at the left gutter and ends at the right one: the first and
+   last paintings stand at the ends of the hall, the others snap to the middle. */
+html.art-hall .artgrid::after{content:none;}
+html.art-hall .artgrid.is-dragging{scroll-snap-type:none;cursor:grabbing;user-select:none;}
+html.art-hall .artgrid.is-dragging .work-link{pointer-events:none;}
+html.art-hall .work{flex:none;scroll-snap-align:center;}
+/* The link is as wide as its frame: the label wraps under the picture. */
+html.art-hall .work-link{display:flex;flex-direction:column;width:min-content;}
+html.art-hall .work-wire{display:block;width:100%;height:clamp(30px,5svh,56px);}
+html.art-hall .work-frame img{max-width:none;width:auto;
+  height:min(calc(var(--hall-h) * var(--hf)),calc(76cqi / var(--ar)));}
+/* The museum wall label. */
+html.art-hall .work-label{margin-top:18px;min-width:12ch;}
+html.art-hall .hall-skirting{display:block;width:100%;height:40px;margin-top:clamp(20px,3svh,40px);}
+html.art-hall .hall-controls{display:flex;align-items:center;gap:clamp(16px,2vw,28px);
+  padding:clamp(16px,2vw,24px) var(--gutter) 0;}
+.hall-arrow{display:grid;place-items:center;width:64px;height:64px;padding:0;border:2px solid var(--ink);border-radius:0;
+  background:var(--paper);color:var(--ink);cursor:pointer;transition:background-color .2s var(--ease-out);}
+.hall-arrow:hover{background:var(--ink);}
+.hall-arrow:hover .two-ink{--art-lead:var(--on);}
+.hall-arrow[aria-disabled="true"]{border-color:oklch(0.22 0.02 300 / .35);cursor:default;}
+.hall-arrow[aria-disabled="true"] .two-ink{opacity:.35;}
+.hall-arrow[aria-disabled="true"]:hover{background:var(--paper);}
+.hall-arrow[aria-disabled="true"]:hover .two-ink{--art-lead:var(--blue);}
+.hall-count{margin:0;min-width:6.5ch;text-align:center;font-size:1.15rem;font-variant-numeric:tabular-nums;}
+@media (min-width:1024px){
+  /* Wide screens: the arrows stand at either end of the wall, level with the
+     paintings, and the counter sits centred under the skirting. The wall is
+     inset a little more than the gutter so the arrows never cover the first
+     or last painting. (DOM order is unchanged: Tab still goes painting,
+     previous, next.) */
+  html.art-hall .work:first-child{margin-left:max(0px,calc(88px - var(--gutter)));}
+  html.art-hall .work:last-child{margin-right:max(0px,calc(88px - var(--gutter)));}
+  html.art-hall .hall-controls{justify-content:center;padding-top:clamp(10px,1.4vw,18px);}
+  html.art-hall .hall-arrow{position:absolute;z-index:1;
+    top:calc(13px + clamp(30px,5svh,56px) + var(--hall-h) * .42 - 32px);}
+  html.art-hall .hall-arrow:first-child{left:12px;}
+  html.art-hall .hall-arrow:last-child{right:12px;}
+}
+.arrow-glyph{width:34px;height:auto;}
+.arrow-back{transform:scaleX(-1);}
+
+/* ---------- One painting: the dialog and /anns-art/[id] ---------- */
+.painting{display:grid;gap:clamp(20px,3vw,48px);align-items:start;--stage-h:min(64svh,760px);}
+@media (min-width:1024px){
+  .painting{grid-template-columns:minmax(0,1fr) clamp(300px,27vw,440px);}
+}
+.views{min-width:0;}
+/* A painting with several views keeps a steady stage, so the page does not
+   jump as the views change: as tall as its tallest view needs at full width
+   (--stage-ar, set by PaintingViews), never taller than --stage-h. A single
+   photograph takes only its own height. */
+.views-stage{position:relative;display:flex;align-items:center;justify-content:center;touch-action:pan-y;}
+.views--multi .views-stage{width:100%;aspect-ratio:var(--stage-ar);max-height:var(--stage-h);}
+.views-frame{max-width:100%;max-height:100%;}
+.views-frame picture{display:contents;}
+.views-frame img{display:block;width:auto;height:auto;max-width:100%;
+  max-height:calc(var(--stage-h) - 2 * clamp(5px,.6vw,10px) - 3px);}
+.view-arrow{position:absolute;top:50%;margin-top:-32px;width:64px;height:64px;display:grid;place-items:center;padding:0;
+  border:2px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);cursor:pointer;
+  transition:opacity .25s var(--ease-out),background-color .2s var(--ease-out);}
+/* Inside the frame: on the picture's own left and right edges. */
+.view-prev{left:clamp(8px,1vw,16px);}
+.view-next{right:clamp(8px,1vw,16px);}
+.view-arrow:hover{background:var(--ink);}
+.view-arrow:hover .two-ink{--art-lead:var(--on);}
+/* Mouse and trackpad: the arrows fade in over the picture. Touch: always shown.
+   Keyboard: shown whenever one of them has focus. */
+@media (hover:hover) and (pointer:fine){
+  .view-arrow{opacity:0;}
+  .views-stage:hover .view-arrow,.views-stage:focus-within .view-arrow{opacity:1;}
+}
+.views-nav{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 16px;margin-top:10px;}
+.views-count{margin:0;font-size:1rem;font-variant-numeric:tabular-nums;}
+.views-dots{display:flex;}
+.views-dot{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:transparent;cursor:pointer;}
+.views-dot span{width:14px;height:14px;border:2px solid var(--ink);border-radius:50%;}
+.views-dot[aria-current="true"] span{background:var(--ink);}
+.views-dot:hover span{border-color:var(--blue);}
+
+.painting-text{min-width:0;}
+.painting-title{font-size:clamp(2.4rem,4vw,3.8rem);line-height:1.08;margin:0 0 14px;overflow-wrap:break-word;}
+.painting-details{margin:0 0 6px;font-style:italic;color:var(--soft);}
+.painting-price{margin:0;font-size:1.6rem;font-weight:700;}
+.painting--sold .painting-price,.painting--not-for-sale .painting-price{color:var(--red-deep);}
+.painting-note{margin:8px 0 0;color:var(--soft);}
+.painting-action{margin:22px 0 0;}
+.painting-action .purchase-pending{font-size:1.05rem;}
+.painting-sms{margin:8px 0 0;font-size:1rem;color:var(--soft);}
+.painting-delivery{margin:22px 0 0;font-size:1.05rem;}
+.painting-delivery a{color:var(--blue);text-underline-offset:4px;display:inline-flex;align-items:center;min-height:44px;}
+.painting-delivery a:hover{color:var(--red-deep);}
+
+/* The route page. The painting's name is the page's L1 lockup, sized to its
+   column beside the picture rather than the full clamp(4rem,11vw,10rem). */
+.painting-page{padding-top:clamp(16px,2.5vw,36px);}
+.painting-back{margin:0 0 clamp(12px,2vw,24px);}
+.painting-page .painting{--stage-h:min(74svh,860px);}
+.painting-page h1.painting-title{font-size:clamp(3rem,4.6vw,4.6rem);}
+
+/* The dialog over the wall. The backdrop is flat ink, no blur. */
+.painting-dialog{padding:0;border:0;border-radius:0;margin:auto;color:var(--ink);background-color:var(--paper);
+  width:100%;height:100%;max-width:100%;max-height:100%;overscroll-behavior:contain;}
+.painting-dialog::backdrop{background:oklch(0.22 0.02 300 / .82);}
+@media (min-width:821px){
+  .painting-dialog{width:calc(100% - 2 * var(--gutter));height:calc(100% - 2 * var(--gutter));}
+}
+.painting-dialog-inner{height:100%;overflow:auto;padding:12px clamp(16px,2.6vw,44px) clamp(20px,3vw,44px);}
+.painting-dialog-close{display:flex;justify-content:flex-end;margin:0 0 8px;}
+.dialog-close{font:inherit;font-size:1.05rem;font-weight:700;min-height:48px;padding:8px 18px;cursor:pointer;
+  color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;
+  transition:background-color .2s var(--ease-out),color .2s var(--ease-out);}
+.dialog-close:hover{background:var(--ink);color:var(--on);}
+.painting-dialog .painting{--stage-h:min(calc(100svh - 2 * var(--gutter) - 150px),900px);}
+@media (max-width:1023px){
+  .painting-dialog .painting{--stage-h:min(62svh,640px);}
+}
 
 @media (max-width:640px){
-  .gallery-tools{align-items:stretch;}
-  .gallery-search{width:100%;}
-  .artgrid{gap:36px;}
+  /* Phones: narrower pictures and a shorter gap, so the next painting peeks
+     in from the right and says "swipe". */
+  html.art-hall .hall{--hall-h:min(46svh,96cqi);}
+  html.art-hall .artgrid{gap:28px;}
+  html.art-hall .work-frame img{height:min(calc(var(--hall-h) * var(--hf)),calc(70cqi / var(--ar)));}
+  .artgrid{--row-h:150px;gap:28px 16px;}
+  .work-title{font-size:1.05rem;}
+  .rooms{margin-left:-10px;}
+  /* One painting on a phone: the name and the price come first, then the
+     picture, then the one action straight under it, so the price and the
+     button are reached without a long scroll. The stage takes only the
+     current view's own height (no band kept for a taller view). */
+  .painting{gap:0;--stage-h:64svh;}
+  .painting-page .painting{--stage-h:64svh;}
+  .painting-text{display:contents;}
+  .painting-title{order:1;margin-bottom:6px;}
+  .painting-details{order:2;}
+  .painting-price{order:3;font-size:1.4rem;}
+  .views{order:4;margin-top:16px;}
+  .painting-note,.painting-action,.painting-sms,.painting-delivery{order:5;}
+  .painting-action{margin-top:16px;}
+  .painting-delivery{margin-top:10px;}
+  .views--multi .views-stage{aspect-ratio:auto;max-height:none;}
+  .views-nav{margin-top:4px;}
 }
