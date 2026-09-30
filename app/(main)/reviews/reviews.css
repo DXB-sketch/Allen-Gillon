@@ -1,6 +1,6 @@
 /* Friendly reviews (/reviews). Space separates the parts, not rules. */
 
-.reviewsHead .intro{margin:16px 0 0;font-size:1.15rem;color:var(--soft);}
+.reviewsHead .intro{margin:16px 0 0;font-size:1.1em;color:var(--soft);}
 @media (min-width:1024px){
   .reviewsHead > .intro{grid-column:3 / wide-end;}
 }
@@ -20,11 +20,13 @@
 
 .reviewFormIntro h2{margin:0 0 12px;font-size:clamp(1.65rem,3vw,2.25rem);line-height:1.2;}
 .reviewFormIntro p{margin:0;color:var(--soft);}
-.friendlyReviewForm{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;max-width:900px;}
-.friendlyReviewForm label{display:flex;flex-direction:column;gap:7px;font-weight:700;font-size:1rem;}
+/* Fields in a row share a bottom edge, even when one label wraps. */
+.friendlyReviewForm{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;max-width:900px;align-items:end;}
+.friendlyReviewForm label{display:flex;flex-direction:column;gap:7px;font-weight:700;font-size:1em;}
 .friendlyReviewForm label span{color:var(--soft);font-weight:400;}
-.friendlyReviewForm input,.friendlyReviewForm textarea{width:100%;padding:10px 2px;font:inherit;font-size:1.05rem;color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--ink);border-radius:0;}
-.friendlyReviewForm textarea{padding:10px;border:1px solid oklch(.22 .02 300 / .5);resize:vertical;}
+/* One field style: every input and the textarea get the same 2px box. */
+.friendlyReviewForm input,.friendlyReviewForm textarea{width:100%;min-height:48px;padding:10px 12px;font:inherit;font-size:1em;font-weight:400;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;}
+.friendlyReviewForm textarea{resize:vertical;}
 .friendlyReviewForm input:focus-visible,.friendlyReviewForm textarea:focus-visible{outline:3px solid var(--blue);outline-offset:3px;}
 .friendlyReviewForm .reviewField{grid-column:1/-1;}
 .friendlyReviewForm .btn{grid-column:1/-1;justify-self:start;}

@@ -21,7 +21,7 @@ const SPAN_WIDTHS = [1440, 1920];
 const ROUTES = {
   main: {
     "/": [".home-hero > h1", ".home-photos, .home-doors"],
-    "/hire": [".pagehead > h1", ".book-band > h2", ".offer, .hire-offers .gx-hero"],
+    "/hire": [".pagehead > h1", ".book-band > h2, .book-band .phones", ".offer, .hire-offers .gx-hero"],
     "/music": [".pagehead > h1", ".albums"],
     "/reviews": [".reviewsHead > h1", ".featuredReview"],
     "/shows": [".pagehead > h1", ".show-list, .show-photo"],
@@ -29,7 +29,7 @@ const ROUTES = {
   other: {
     "/": [".sideboard-head", ".doorways"],
     "/biography": [".pagehead > h1", ".bio .prose, .bio aside"],
-    "/books": [".writing-nav", ".audiobook-list"],
+    "/books": [".writing-head > h1", ".audiobook-list"],
     "/read/little-ray": [".pagehead > h1", ".read-reader"],
     "/read/melting-pot": [".pagehead > h1", ".read-reader"],
     "/anns-art": [".pagehead > h1", ".artgrid"],

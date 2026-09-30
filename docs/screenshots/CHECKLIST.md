@@ -4,8 +4,10 @@ Before: `docs/screenshots/before/` (phase 0 baseline, taken before the subdomain
 After: `docs/screenshots/after-w3/`, captured with `SITE_DEV_PORT=<port> node scripts/capture-screenshots.mjs docs/screenshots/after-w3`
 (full page, downscaled to 960px wide, JPEG quality 60).
 
-Review each pair against the anti-pattern list in Allen-Gillon-redesign-plan-and-prompt.md. "none" means no baseline shot exists
-(/reviews timed out on networkidle in phase 0; /anns-art has no 1280 or 1920 baseline; the other-site home is new in W2).
+Review each pair against the anti-pattern list in Allen-Gillon-redesign-plan-and-prompt.md. The phase 0 baseline had no
+/reviews shots (networkidle timed out), no /anns-art at 1280 or 1920, and no other-site home (new in W2). Those ten
+before shots were captured afterwards from the W3 base commit b061d17 (overhaul with W1 and W2, before any W3 change),
+exported with `git archive`, served by `vinext dev`, and shot the same way with `waitUntil: "load"`.
 
 - [ ] **allengillon.com/**
   - 375: before/home-375.jpg / after-w3/home-375.jpg
@@ -23,10 +25,10 @@ Review each pair against the anti-pattern list in Allen-Gillon-redesign-plan-and
   - 1280: before/music-1280.jpg / after-w3/music-1280.jpg
   - 1920: before/music-1920.jpg / after-w3/music-1920.jpg
 - [ ] **allengillon.com/reviews**
-  - 375: none / after-w3/reviews-375.jpg
-  - 768: none / after-w3/reviews-768.jpg
-  - 1280: none / after-w3/reviews-1280.jpg
-  - 1920: none / after-w3/reviews-1920.jpg
+  - 375: before/reviews-375.jpg / after-w3/reviews-375.jpg
+  - 768: before/reviews-768.jpg / after-w3/reviews-768.jpg
+  - 1280: before/reviews-1280.jpg / after-w3/reviews-1280.jpg
+  - 1920: before/reviews-1920.jpg / after-w3/reviews-1920.jpg
 - [ ] **allengillon.com/shows**
   - 375: before/shows-375.jpg / after-w3/shows-375.jpg
   - 768: before/shows-768.jpg / after-w3/shows-768.jpg
@@ -38,10 +40,10 @@ Review each pair against the anti-pattern list in Allen-Gillon-redesign-plan-and
   - 1280: before/comments-1280.jpg / after-w3/comments-1280.jpg
   - 1920: before/comments-1920.jpg / after-w3/comments-1920.jpg
 - [ ] **other.allengillon.com/**
-  - 375: none / after-w3/other-home-375.jpg
-  - 768: none / after-w3/other-home-768.jpg
-  - 1280: none / after-w3/other-home-1280.jpg
-  - 1920: none / after-w3/other-home-1920.jpg
+  - 375: before/other-home-375.jpg / after-w3/other-home-375.jpg
+  - 768: before/other-home-768.jpg / after-w3/other-home-768.jpg
+  - 1280: before/other-home-1280.jpg / after-w3/other-home-1280.jpg
+  - 1920: before/other-home-1920.jpg / after-w3/other-home-1920.jpg
 - [ ] **other.allengillon.com/biography**
   - 375: before/biography-375.jpg / after-w3/biography-375.jpg
   - 768: before/biography-768.jpg / after-w3/biography-768.jpg
@@ -65,8 +67,8 @@ Review each pair against the anti-pattern list in Allen-Gillon-redesign-plan-and
 - [ ] **other.allengillon.com/anns-art**
   - 375: before/anns-art-375.jpg / after-w3/anns-art-375.jpg
   - 768: before/anns-art-768.jpg / after-w3/anns-art-768.jpg
-  - 1280: none / after-w3/anns-art-1280.jpg
-  - 1920: none / after-w3/anns-art-1920.jpg
+  - 1280: before/anns-art-1280.jpg / after-w3/anns-art-1280.jpg
+  - 1920: before/anns-art-1920.jpg / after-w3/anns-art-1920.jpg
 - [ ] **other.allengillon.com/delivery**
   - 375: before/delivery-375.jpg / after-w3/delivery-375.jpg
   - 768: before/delivery-768.jpg / after-w3/delivery-768.jpg

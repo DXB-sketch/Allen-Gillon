@@ -38,9 +38,17 @@ selects one. Until then that block stays empty on purpose.
   Children default to `wide`; images and colour bands may take `full` (`.bleed`).
   The gutter tracks are shortened by the column gap, so `wide` is exactly the
   viewport minus two gutters. e2e/layout.spec.mjs checks this at 1440 and 1920.
-- Text sits at `--measure: 66ch`, hung from the left of the wide area or stepped in
+- Text sits at `--measure: 56ch`, hung from the left of the wide area or stepped in
   a column or two (the lede under a title starts at grid line 3 from 1024px up),
-  never in a centred column.
+  never in a centred column. The plan's first value, 66ch, set 68 to 75 characters
+  per line in Times (its "0", which `ch` measures, is wider than its average
+  letter), which breaks the 60 to 72 rule under Typography. 56ch (560px at 20px)
+  measures on /biography at 60 to 71 characters per full line, median 64
+  (10th to 90th percentile 60 to 68), and ledes at 1.1em keep the same count.
+- Running copy (paragraphs, ledes, offer and play descriptions) is sized in em
+  from the body: 1em for body copy, 1.1em for ledes, never a rem size that would
+  render below the 20px body. 1rem to 1.05rem is only for metadata, captions,
+  navigation and the footer.
 - Two-column bands place their parts on the 12 columns (for example text on
   `wide-start / span 7`, a photo on `span 4 / wide-end`) or use fr and clamp()
   tracks. No fixed pixel columns.
@@ -51,9 +59,11 @@ selects one. Until then that block stays empty on purpose.
 - Space separates content, not lines, boxes or cards. No decorative rules, no
   note boxes, no side stripes. Photos have no frame by default; frames only where
   they mean something (the gallery, record sleeves, books).
-- Hierarchy on every page: L1 a Dynalight lockup at clamp(4rem,11vw,10rem), L2
-  section titles, L3 body. One visible primary action per object. Comments get
-  one quiet link per section or page, never one per item.
+- Hierarchy on every page: L1 a visible Dynalight `h1.script` lockup at
+  clamp(4rem,11vw,10rem), L2 section titles, L3 body. No visually hidden h1.
+  One visible primary action per object, and one filled button per view:
+  "Back to ..." links and secondary options (such as Facebook on /comments) are
+  text links. Comments get one quiet link per section or page, never one per item.
 - Page-specific CSS lives in a file next to the page (for example
   app/(main)/hire/hire.css imported by the page), never in `<style>` blocks.
 - Vary how sections open. No repeated eyebrow / heading / aside module.
@@ -83,6 +93,12 @@ selects one. Until then that block stays empty on purpose.
   scrolling.
 - Hover changes colour only: no lift, no translate, no sliding arrows, no
   underline wipes.
+- One exception, a state indicator rather than an entrance effect: on /music the
+  record of an open album slides out and keeps turning on a linear infinite
+  rotation (`discspin` in app/(main)/music/music.css), because a record turns at
+  a constant speed. It stops when the album closes and never runs under reduced
+  motion (the global reduced-motion rule sets `animation:none`). W5 narrows it so
+  the disc spins only while that album's audio status is `playing`.
 
 ## Shared components (styled per direction)
 - **Work item** (play, book, or album): title, one plain-language line, and the metadata the
@@ -103,10 +119,13 @@ selects one. Until then that block stays empty on purpose.
   **Times New Roman** for all body and utility text (Allen's request), as the system stack
   `"Times New Roman", Times, "Liberation Serif", serif` (never embedded; Lora is removed).
   Dynalight is self-hosted (public/fonts/dynalight-latin.woff2, OFL, font-display:swap,
-  preloaded). It is a script, so it appears only at 2rem or larger and always with the
-  blue overprint text-shadow; everything that must be read fast is Times.
-  Body is 20px (19px at 820px and below), line-height 1.6. At 20px Times, 66ch is 660px;
-  measured on /biography that sets about 68 to 75 characters per line.
+  preloaded). It is a script, so it appears only at 2rem or larger and always with an
+  overprint text-shadow in the other ink: a red title takes the blue overprint
+  (`--overprint`), and a blue title takes the red misregistration (`--overprint-red`),
+  because a blue shadow under blue ink would not show. Everything that must be read
+  fast is Times.
+  Body is 20px (19px at 820px and below), line-height 1.6. Line length: see Layout
+  (`--measure: 56ch`, measured at 60 to 71 characters per full line on /biography).
 - Elevation, texture, borders: flat, faint SVG noise on the paper. No rules between rows,
   no photo borders except gallery frames, sleeves and books. No shadows (except the book-
   spine inset, react-pageflip's page curl and the Dynalight overprint), no glass, no

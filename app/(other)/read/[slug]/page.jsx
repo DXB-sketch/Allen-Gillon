@@ -149,7 +149,7 @@ export default async function ReadPage({ params }) {
             If you would like a copy in the meantime, <CrossSiteLink site="main" path="/hire">contact Allen</CrossSiteLink>.
           </p>
           <p className="read-back">
-            <Link className="btn b" href="/books#stories">Back to Stories</Link>
+            <Link className="back-link" href="/books#stories">Back to Stories</Link>
           </p>
           <SectionComment subject={title} returnTo={`/read/${slug}`} returnLabel={title} />
         </section>
@@ -171,7 +171,7 @@ export default async function ReadPage({ params }) {
             read or download on this site. For help finding a copy, <CrossSiteLink site="main" path="/hire">get in touch</CrossSiteLink>.
           </p>
           <p className="read-back">
-            <Link className="btn b" href="/books#classroom-texts">Back to Classroom Texts</Link>
+            <Link className="back-link" href="/books#classroom-texts">Back to Classroom Texts</Link>
           </p>
           <SectionComment subject={entry.title} returnTo={`/read/${slug}`} returnLabel={entry.title} />
         </section>
@@ -209,7 +209,7 @@ export default async function ReadPage({ params }) {
         </p>
         {isPlay ? (
           <p className="read-buy">
-            <PurchaseLink href={stripePaymentLink(`play-${slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
+            <PurchaseLink href={stripePaymentLink(`play-${slug}`)} pendingLabel={`${formatAud(playPrice)} download. Online checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
           </p>
         ) : null}
       </header>
@@ -231,7 +231,7 @@ export default async function ReadPage({ params }) {
           </p>
         ) : null}
         <p className="read-back">
-          <Link className="btn b" href={backHref}>{backLabel}</Link>
+          <Link className="back-link" href={backHref}>{backLabel}</Link>
         </p>
         <SectionComment subject={manifest.title} returnTo={`/read/${slug}`} returnLabel={manifest.title} />
       </section>

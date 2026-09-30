@@ -18,6 +18,10 @@
   .show-photo{max-width:min(420px,100%);margin-top:32px;}
 }
 @media (max-width:640px){
-  .setlist li{gap:10px;}
-  .setlist .tname{font-size:1.05rem;}
+  /* Phones: the preview note and time sit under the title, so the title gets
+     the whole row instead of wrapping beside them. */
+  .setlist li{display:grid;grid-template-columns:auto 48px minmax(0,1fr);column-gap:10px;row-gap:0;align-items:center;}
+  .setlist .no,.setlist .tplay{grid-row:1 / span 2;}
+  .setlist .tname{grid-column:3;align-self:end;font-size:1.05rem;line-height:1.3;}
+  .setlist .ttime{grid-column:3;align-self:start;}
 }

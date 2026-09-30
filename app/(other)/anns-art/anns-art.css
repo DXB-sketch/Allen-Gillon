@@ -2,7 +2,7 @@
    the salon index and the painting dialog. */
 
 .art-delivery{font-weight:700;margin:24px 0 10px;}
-.art-intro-note{font-size:1.05rem;color:var(--soft);}
+.art-intro-note{font-size:1em;color:var(--soft);}
 @media (min-width:1024px){
   .pagehead > .art-delivery,.pagehead > .art-intro-note{grid-column:3 / wide-end;}
 }
@@ -10,7 +10,7 @@
 .gallery-band{margin-top:clamp(24px,3vw,44px);}
 .gallery-tools{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;}
 .gallery-categories{display:flex;flex-wrap:wrap;gap:8px;}
-.gallery-categories button,.painting-views button{font:inherit;font-size:1rem;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;min-height:44px;padding:8px 12px;cursor:pointer;}
+.gallery-categories button,.painting-views button{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;min-height:48px;padding:8px 12px;cursor:pointer;}
 .gallery-categories button[aria-pressed="true"],.painting-views button[aria-pressed="true"]{background:var(--ink);color:var(--on);}
 .gallery-search{display:flex;flex-direction:column;gap:4px;font-size:1rem;}
 .gallery-search input{font:inherit;font-size:1rem;color:var(--ink);background:var(--paper);padding:10px;border:2px solid var(--ink);border-radius:0;min-height:44px;max-width:100%;}
@@ -25,6 +25,8 @@
 .painting-caption{margin-top:14px;}
 .painting-caption h2{font-size:1.4rem;line-height:1.25;margin:0 0 6px;}
 .painting-meta,.painting-note,.painting-status{font-size:1rem;color:var(--soft);margin:6px 0;}
+/* A painting's note is running text: body size. */
+.painting-note{font-size:1em;}
 .painting-price{font-size:1.3rem;font-weight:700;margin:10px 0;color:var(--ink);}
 .painting-status{font-weight:700;}
 .painting-enquire{display:inline-flex;align-items:center;min-height:44px;color:var(--red-deep);}

@@ -43,7 +43,7 @@ export default async function CommentsPage({ searchParams }) {
 
         <section className="cwrap band" aria-label="Write a comment">
           <div className="measure">
-            <Link className="btn b" href={returnTo}>Back to {returnLabel}</Link>
+            <Link className="back-link" href={returnTo}>Back to {returnLabel}</Link>
             {subject ? <p>Commenting on: <strong>{subject}</strong></p> : null}
             <CommentForm subject={subject} />
           </div>

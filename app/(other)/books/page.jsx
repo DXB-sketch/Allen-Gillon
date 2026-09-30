@@ -44,7 +44,7 @@ export default function BooksPage() {
   return (
     <main className="writing-page">
       <header className="writing-head band">
-        <h1 className="visually-hidden">Allen Gillon&rsquo;s stories, plays and textbooks</h1>
+        <h1 className="script">Stories, plays and textbooks</h1>
         <nav className="writing-nav" aria-label="Writing sections">
           <Link className="script" href="#stories">Stories</Link>
           <Link className="script" href="#school-plays">Plays</Link>
@@ -96,7 +96,7 @@ export default function BooksPage() {
                 {playAudio[play.slug] ? <Audiobook title={play.title} src={playAudio[play.slug]} kind="play recording" /> : null}
                 <div className="item-actions">
                   <Link className="item-primary-link" href={`/read/${play.slug}`}>Read online</Link>
-                  <PurchaseLink href={stripePaymentLink(`play-${play.slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
+                  <PurchaseLink href={stripePaymentLink(`play-${play.slug}`)} pendingLabel={`${formatAud(playPrice)} download. Online checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
                 </div>
               </div>
             </li>

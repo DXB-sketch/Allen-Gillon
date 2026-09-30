@@ -144,7 +144,7 @@ export default function MusicPage() {
         <p className="plain">
           Listen to Allen&rsquo;s four studio albums here. He arranged many of the backing tracks himself, including
           &ldquo;Desafinado&rdquo; and &ldquo;Girl from Ipanema&rdquo;. Click a cover to open the track list, then choose a song.
-          Each complete album is free to download. Each song in a track list also has its own download button. If you would rather have Allen in the room,{" "}
+          Each complete album is free to download. Individual song downloads are available in each track list. If you would rather have Allen in the room,{" "}
           <Link href="/hire">he still takes bookings</Link>.
         </p>
       </header>

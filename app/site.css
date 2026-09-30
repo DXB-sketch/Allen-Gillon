@@ -1,7 +1,8 @@
 /* allengillon.com and other.allengillon.com: shared styles.
    Identity: Small Press two-ink overprint on paper.
    Titles: Dynalight (self-hosted, public/fonts), only at 2rem or larger, always
-   with the blue overprint text-shadow.
+   with an overprint text-shadow in the other ink: blue under a red title
+   (--overprint), red under a blue title (--overprint-red).
    Body and utility text: Times New Roman (system stack, never embedded).
    Layout: full width. Every band is a named-line 12-column grid
    (full / wide) inside a --gutter on each side. Text sits at --measure.
@@ -34,7 +35,7 @@
 
   /* Layout */
   --gutter:clamp(16px,4vw,72px);
-  --measure:66ch;
+  --measure:56ch;
   --col-gap:clamp(12px,2vw,32px);
   --band-space:clamp(48px,7vw,112px);
 
@@ -119,7 +120,7 @@ img.gx-hero{width:100%;height:auto;object-fit:cover;display:block;}
 
 /* ---------- Page opening ---------- */
 .pagehead{padding-block:clamp(28px,4vw,64px) 8px;}
-.pagehead .plain{font-size:1.15rem;color:var(--soft);margin:18px 0 0;}
+.pagehead .plain{font-size:1.1em;color:var(--soft);margin:18px 0 0;}
 @media (min-width:1024px){
   /* The lede steps in one column from the title: an asymmetric lockup. */
   .pagehead > .plain{grid-column:3 / wide-end;}
@@ -161,8 +162,12 @@ button:disabled{cursor:wait;opacity:.65;}
 .section-comment a{color:var(--blue);text-underline-offset:4px;display:inline-flex;align-items:center;min-height:44px;}
 .section-comment a:hover{color:var(--red-deep);}
 
+/* "Back to ..." is navigation, never a filled button: a page keeps one primary. */
+.back-link{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
+.back-link:hover{color:var(--red-deep);}
+
 /* ---------- Player: track rows, audiobook buttons, now-playing bar ---------- */
-.tplay{width:44px;height:44px;min-width:44px;border-radius:50%;border:2px solid var(--ink);
+.tplay{width:48px;height:48px;min-width:48px;border-radius:50%;border:2px solid var(--ink);
   background:var(--paper);cursor:pointer;font-size:1rem;line-height:1;color:var(--ink);
   transition:background-color .2s var(--ease-out),color .2s var(--ease-out);}
 .tplay:hover{background:var(--red-deep);border-color:var(--red-deep);color:var(--on);}
@@ -171,7 +176,7 @@ button:disabled{cursor:wait;opacity:.65;}
 .ttime{font-size:1rem;color:var(--soft);font-variant-numeric:tabular-nums;}
 .ttime .tpreview{margin-right:.6em;white-space:nowrap;}
 
-.audiobook-play{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:4px 0;border:0;background:transparent;
+.audiobook-play{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:4px 0;border:0;background:transparent;
   color:var(--blue);font:inherit;font-size:1rem;font-weight:700;cursor:pointer;}
 .audiobook-play:hover,.audiobook-play.playing{color:var(--red-deep);}
 .audiobook-play-icon{display:grid;place-items:center;width:36px;height:36px;border:2px solid currentColor;border-radius:50%;font-size:1rem;line-height:1;}

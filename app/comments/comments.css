@@ -2,9 +2,13 @@
 
 .cwrap{margin-top:clamp(20px,3vw,40px);}
 .cform{display:flex;flex-direction:column;gap:18px;margin-top:8px;}
-.cform label{display:flex;flex-direction:column;gap:6px;font-size:1.1rem;font-weight:700;}
-.cform input,.cform textarea{font:inherit;font-size:1.1rem;font-weight:400;
+.cform label{display:flex;flex-direction:column;gap:6px;font-size:1em;font-weight:700;}
+.cform input,.cform textarea{font:inherit;font-size:1em;font-weight:400;
   padding:12px;border:2px solid var(--ink);border-radius:0;background:var(--paper-2);color:var(--ink);}
 .cform textarea{resize:vertical;}
 .cbtns{display:flex;gap:14px;flex-wrap:wrap;}
-.cnote{color:var(--soft);font-size:1rem;margin:0;}
+.cnote{color:var(--soft);font-size:1em;margin:0;}
+.cbtns{align-items:center;}
+/* Facebook is the secondary way to comment: a text link, not a second button. */
+.cfb{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
+.cfb:hover{color:var(--red-deep);}

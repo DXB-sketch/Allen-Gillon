@@ -1,20 +1,27 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
-import { albumPrice, formatAud, playPrice, stripePaymentLink } from "../lib/storefront.mjs";
+import { albumPrice, formatAud, playLinksCurrent, playPrice, stripePaymentLink } from "../lib/storefront.mjs";
 import { artworks } from "../content/artworks.mjs";
 import { stripePaymentLinks } from "../content/stripe-payment-links.mjs";
 
 test("storefront prices match Allen's instructions", () => {
   assert.equal(albumPrice, 1000);
-  assert.equal(playPrice, 5000);
+  assert.equal(playPrice, 100);
   assert.equal(formatAud(albumPrice), "$10 AUD");
-  assert.equal(formatAud(playPrice), "$50 AUD");
+  assert.equal(formatAud(playPrice), "$1 AUD");
 });
 
 test("checkout accepts only configured Stripe Payment Links", () => {
   assert.match(stripePaymentLink("album-thats-the-time"), /^https:\/\/buy\.stripe\.com\//);
   assert.equal(stripePaymentLink("not-a-product"), "");
+});
+
+test("the old $50 play Payment Links stay off until playLinksCurrent is set", () => {
+  assert.equal(playLinksCurrent, false);
+  const playIds = Object.keys(stripePaymentLinks).filter((key) => key.startsWith("play-"));
+  assert.equal(playIds.length, 5);
+  for (const id of playIds) assert.equal(stripePaymentLink(id), "", id);
 });
 
 test("Stripe catalogue covers every item currently offered for sale", async () => {
