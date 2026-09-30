@@ -97,6 +97,41 @@ test("only leaf blocks are read, and hidden or collapsed content is skipped", ()
   assert.equal(BLOCK_SELECTOR, "h1,h2,h3,h4,h5,h6,p,li");
 });
 
+test("words in children that CSS shows on their own line do not run together", () => {
+  const { document } = new JSDOM(`<style>.what{display:block}</style><main>
+    <ul class="offer">
+      <li><span class="what">Restaurant guitarist</span><span class="how">Allen plays solo jazz guitar.</span></li>
+      <li><span class="what">Functions and events:</span><span class="how">Allen plays weddings.</span></li>
+      <li>Line one<br>Line two</li>
+    </ul>
+    <p>Inline <em>words</em> <a href="/">stay</a> joined.</p>
+  </main>`).window;
+  assert.deepEqual(pageText(document.querySelector("main")), [
+    "Restaurant guitarist. Allen plays solo jazz guitar.",
+    "Functions and events: Allen plays weddings.",
+    "Line one. Line two",
+    "Inline words stay joined.",
+  ]);
+});
+
+/* W1b: Allen's exact paragraph beside the Chinese Chimes heading. */
+const CHIMES_PARAGRAPH =
+  "The characters in these stories are named after the musical scale: Doh, Ray, Mee, Fah, Soh, Lah, Tee, Doh, with an added Hi-Doh and Low-Doh. Here are four of Allen's stories for young readers. Each story contains an important moral, and the name of the Little Chime sometimes highlights it. A teacher or parent can read the eBook online, or watch and listen to the audiobook.";
+
+test("/books renders Allen's Chinese Chimes paragraph exactly, once", async () => {
+  const doc = await fixture("books");
+  const text = clean(main(doc).textContent);
+  assert.equal(text.split(CHIMES_PARAGRAPH).length - 1, 1);
+  const heading = doc.getElementById("stories-title");
+  assert.equal(clean(heading.textContent), "Chinese Chimes stories");
+  const paragraph = [...heading.parentElement.querySelectorAll("p")].find((p) => clean(p.textContent) === CHIMES_PARAGRAPH);
+  assert.ok(paragraph, "the paragraph sits beside the Chinese Chimes heading");
+  /* The page source too, so a change to the page fails here even before the
+     fixture is recaptured with scripts/capture-reader-fixtures.mjs. */
+  const source = await readFile(new URL("../app/books/page.jsx", import.meta.url), "utf8");
+  assert.equal(source.split(CHIMES_PARAGRAPH).length - 1, 1);
+});
+
 test("no main element gives nothing to read", () => {
   assert.deepEqual(pageText(null), []);
 });
