@@ -27,9 +27,11 @@ One Worker serves both sites:
 - `lib/sites.mjs` is the single source of truth: `SITES`, `ROUTE_OWNER`, `siteForHost`, `resolveRequest` and `crossSiteUrl`. `tests/sites.test.mjs` covers it.
 - `proxy.ts` (repo root) applies `resolveRequest` to every non-asset request. vinext 1.0.0-beta.12 supports the Next 16 `proxy.ts` convention directly (`node_modules/vinext/dist/server/middleware.js` looks for `proxy.*` first, then the deprecated `middleware.*`), in `vinext dev` and in the built Worker.
 - Rules: www goes to the apex; a path owned by one site returns 301 to the other host; on other, `/` is rewritten to `/other-home` and `/other-home` returns 301 to `/`; `/plays` returns 301 to `https://other.allengillon.com/books#school-plays`; `/api/*` is never redirected, so `POST /api/reviews` works on both hosts.
-- Loopback hosts (`localhost`, `127.0.0.1`, `::1`), `*.localhost` and `*.test` never redirect. Unknown hosts return 301 to the main site only in production; with `NODE_ENV` other than `production`, or `SITE_PREVIEW=1`, they are served as main (or as other when the name starts with `other.`).
+- Loopback hosts (`localhost`, `127.0.0.1`, `::1`), `*.localhost` and `*.test` never redirect. Unknown hosts (a LAN IP, a tunnel, `*.vercel.app`) return 301 to the main site only in production. They are served as main (or as other when the name starts with `other.`) when `NODE_ENV` is not `production`, when `SITE_PREVIEW=1` (`start:vinext` sets it for the local Worker), or on Vercel (`VERCEL=1`, set by Vercel on every deployment). Requests that name a production host (`allengillon.com`, `other.allengillon.com`, `www`) still follow the production rules with the preview flag set, so the curl Host-header checks below behave like production.
 - The legal pages are gated by `content/legal.config.json` (`{"published": false}`). While unpublished they 404 on both hosts and the footer hides their links. Once published they are main-only and other returns 301 to main.
-- Cross-site links are plain `<a>` elements with absolute URLs (`components/CrossSiteLink.jsx`), so moving between sites is a full page load and stops NowBar audio. On `localhost` or `other.localhost` the links point at the local counterpart on the same port.
+- Cross-site links are plain `<a>` elements with absolute URLs (`components/CrossSiteLink.jsx`), so moving between sites is a full page load and stops NowBar audio. In `vinext dev` and the local Worker preview the server-rendered links already use `http://localhost` / `http://other.localhost` on `SITE_DEV_PORT`, so local HTML never links to production; after hydration a page opened on `localhost`, `other.localhost` or `127.0.0.1` points at the local counterpart on the port in use. Vercel and production use the production URLs.
+- `<html data-site="main|other">` is set by a tiny inline script in `app/layout.jsx` (`SITE_MARKER_SCRIPT` in `lib/sites.mjs`, same rule as `siteForHost`), so the root layout never reads the request and pages stay static. `app/global-not-found.jsx` sets it on the server. The group layouts also put `data-site` on their `div.site` wrapper.
+- The other-site home clears `metadataBase` so its canonical and `og:url` print as `https://other.allengillon.com/` with the trailing slash (with a `metadataBase`, vinext prints a root URL as the bare origin). Its metadata URLs must therefore stay absolute.
 - Route misses render `app/global-not-found.jsx` (enabled with `experimental.globalNotFound` in `next.config.mjs`), which reads the Host header. Without it vinext wraps every miss in the `(main)` layout.
 
 ### Cloudflare setup
@@ -46,13 +48,14 @@ Before the first deploy with the new route, check in the Cloudflare dashboard th
 
 ### Testing both hosts locally
 
-`SITE_DEV_PORT` sets the local port (default 3001 for `vinext dev`, 8787 for `start:vinext`). Browsers and curl resolve `*.localhost` to loopback, so:
+`SITE_DEV_PORT` sets the local port: default 3001 for `npm run dev:vinext` (`scripts/dev-local.mjs`, which also hands the port to the app through `vite.config.ts`) and 8787 for `npm run start:vinext`. Neither script hard-codes the port. Browsers and curl resolve `*.localhost` to loopback, so:
 
 - main: `http://localhost:3001`
 - other: `http://other.localhost:3001`
 
 ```sh
 npm run dev:vinext                       # vinext dev on port 3001
+SITE_DEV_PORT=3201 npm run dev:vinext    # or any other port
 SITE_DEV_PORT=3201 npx playwright test e2e/sites.spec.mjs   # starts vinext dev on 3201 if needed
 ```
 
@@ -71,9 +74,11 @@ curl -sI -H "Host: www.allengillon.com" http://localhost:8787/             # 301
 curl -sI -H "Host: allengillon.com" http://localhost:8787/plays            # 301 to #school-plays
 curl -s -o /dev/null -w "%{http_code}\n" -X POST -H "Host: other.allengillon.com" -H "Content-Type: application/json" -d "{}" http://localhost:8787/api/reviews   # 400, not 3xx
 curl -sI http://localhost:8787/books                                       # 200, loopback never redirects
+curl -sI -H "Host: 192.168.1.5:8787" http://localhost:8787/books          # 200, SITE_PREVIEW: unknown hosts stay local
+curl -s  -H "Host: other.allengillon.com" http://localhost:8787/ | grep -o '<link rel="canonical"[^>]*>'   # https://other.allengillon.com/
 ```
 
-`npm run start:vinext` runs `scripts/start-local.mjs`. Plain `wrangler dev` infers an origin from the first route in `wrangler.json` and rewrites every request's Host header to `allengillon.com`, which hides the host `proxy.ts` routes on. The script writes `dist/server/wrangler.local.json` without `routes` and runs `wrangler dev` on that, so Host headers reach the Worker unchanged. Deploys still use `dist/server/wrangler.json`.
+`npm run start:vinext` runs `scripts/start-local.mjs`. Plain `wrangler dev` infers an origin from the first route in `wrangler.json` and rewrites every request's Host header to `allengillon.com`, which hides the host `proxy.ts` routes on. The script writes `dist/server/wrangler.local.json` without `routes` and runs `wrangler dev` on that, so Host headers reach the Worker unchanged. It also adds the vars `SITE_PREVIEW=1` and `SITE_DEV_PORT`, which reach `process.env` in the Worker through `nodejs_compat`. Deploys still use `dist/server/wrangler.json`, which has neither.
 
 ## Review moderation
 

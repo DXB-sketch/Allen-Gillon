@@ -44,7 +44,50 @@ test.describe("other.localhost", () => {
     await expect(doorways.nth(2)).toHaveAttribute("href", "/biography");
     // Cross-site links point at the local counterpart after hydration.
     await expect(page.locator(".sideboard-back a")).toHaveAttribute("href", `${MAIN}/`);
+    // The whole page is marked as the other site, not only the chrome wrapper.
+    await expect(page.locator("html")).toHaveAttribute("data-site", "other");
   });
+
+  test("the sideboard canonical keeps its trailing slash", async ({ request }) => {
+    const html = await (await request.get(`${OTHER}/`)).text();
+    expect(html).toContain('<link rel="canonical" href="https://other.allengillon.com/"/>');
+    expect(html).toContain('<meta property="og:url" content="https://other.allengillon.com/"/>');
+  });
+
+  test("server-rendered cross-site links never point at production locally", async ({ request }) => {
+    // Before hydration (or with JS off) the HTML must already use local origins.
+    const html = await (await request.get(`${OTHER}/books`)).text();
+    const crossLinks = [...html.matchAll(/<a [^>]*data-cross-site="[a-z]+"[^>]*>/g)].map((m) => m[0]);
+    expect(crossLinks.length).toBeGreaterThan(0);
+    for (const tag of crossLinks) expect(tag).not.toContain("https://allengillon.com");
+    expect(html).toContain(`href="${MAIN}/`);
+  });
+});
+
+test.describe("POST /api/reviews", () => {
+  // resolveRequest ignores the method, so this sends real POSTs through
+  // proxy.ts and the route handler with each production Host header.
+  test("the Host header reaches proxy.ts (control: GET /books on main is a 301)", async ({ request }) => {
+    const response = await request.get(`${MAIN}/books`, {
+      headers: { host: `allengillon.com:${port}` },
+      maxRedirects: 0,
+    });
+    expect(response.status()).toBe(301);
+    expect(response.headers()["location"]).toBe("https://other.allengillon.com/books");
+  });
+
+  for (const host of ["allengillon.com", "other.allengillon.com", "localhost", "other.localhost"]) {
+    test(`is not a redirect with Host: ${host}`, async ({ request }) => {
+      const response = await request.post(`${MAIN}/api/reviews`, {
+        headers: { host: `${host}:${port}` },
+        data: {},
+        maxRedirects: 0,
+      });
+      const status = response.status();
+      expect(status < 300 || status >= 400, `status ${status}`).toBe(true);
+      expect(response.headers()["location"]).toBeUndefined();
+    });
+  }
 });
 
 test.describe("localhost (main)", () => {
@@ -54,5 +97,6 @@ test.describe("localhost (main)", () => {
     await expect(nav.getByRole("link", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
     const cross = nav.getByRole("link", { name: "More on Allen: stories, Timeless and Ann's art" });
     await expect(cross).toHaveAttribute("href", `${OTHER}/`);
+    await expect(page.locator("html")).toHaveAttribute("data-site", "main");
   });
 });
