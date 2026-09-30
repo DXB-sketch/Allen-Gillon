@@ -10,3 +10,5 @@ art-review/
 .vinext/
 .wrangler/
 worker-configuration.d.ts
+test-results/
+playwright-report/
