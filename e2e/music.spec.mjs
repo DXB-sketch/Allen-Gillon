@@ -175,14 +175,51 @@ for (const width of [320, 375, 768, 1024, 1280, 1440, 1920, 2560]) {
 
 });
 
-test("instrument CSS never sizes from the viewport width", async ({ page }) => {
+test("instrument CSS never uses viewport units", async ({ page }) => {
   await page.goto("/music", { waitUntil: "load" });
-  const css = await page.evaluate(() =>
-    [...document.styleSheets].flatMap((s) => { try { return [...s.cssRules].map((r) => r.cssText); } catch { return []; } })
-      .filter((t) => /instrument/.test(t)).join("\n"));
-  // Sizes come from grid cells (%), px clamps or the title's own em size.
-  expect(css).not.toMatch(/(?:^|[;{\s])(?:width|height|max-width|min-width)\s*:[^;}]*vw/);
-  expect(css).not.toMatch(/100vw/);
+  // Every style rule that targets an instrument (inside media queries too):
+  // no vw/vh/vmin/vmax/dvw/svw/lvw in any declaration, font-size and insets
+  // included. Sizes come from grid cells (%) and px floors and caps.
+  const rules = await page.evaluate(() => {
+    const out = [];
+    const walk = (list) => {
+      for (const r of list) {
+        if (r.cssRules && !r.selectorText) walk(r.cssRules);
+        else if (r.selectorText && /instrument/.test(r.selectorText)) out.push(r.cssText);
+      }
+    };
+    for (const s of document.styleSheets) { try { walk(s.cssRules); } catch { /* cross-origin */ } }
+    return out;
+  });
+  expect(rules.length).toBeGreaterThan(8);
+  expect(rules.filter((t) => /\d(?:[sld]?v[wh]|vmin|vmax)\b/.test(t))).toEqual([]);
+});
+
+test("/music#misty scrolls to the Misty sleeve and opens it on the wide shelf", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/music#misty", { waitUntil: "networkidle" });
+  const sleeve = page.getByRole("button", { name: "Show tracks for Misty", exact: true });
+  await expect(sleeve).toHaveAttribute("aria-expanded", "true");
+  await expect(sleeve).toBeInViewport();
+  // The in-page link in the Timeless text goes back up to it too.
+  await page.getByRole("button", { name: "Show tracks for That's The Time", exact: true }).click();
+  await page.locator("#timeless a[href='#misty']").click();
+  await expect(sleeve).toBeInViewport();
+});
+
+test("the album download button keeps keyboard focus while it prepares", async ({ page }) => {
+  await page.route(/\.mp3(\?.*)?$/, async (route) => {
+    await new Promise((r) => setTimeout(r, 3000));
+    await route.abort();
+  });
+  await page.goto("/music", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Show tracks for Misty", exact: true }).click();
+  const button = page.getByRole("button", { name: "Download album free" });
+  await button.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#trk-misty .album-download-button")).toHaveAttribute("aria-disabled", "true");
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => document.activeElement?.className)).toMatch(/album-download-button/);
 });
 
 for (const [label, open] of [["closed", null], ["open", "Misty"]]) {

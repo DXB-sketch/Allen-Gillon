@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { usePlayer } from "./Player";
 import { PREVIEW_LABEL, isPreviewTrack } from "../lib/player-state.mjs";
 
@@ -16,8 +16,8 @@ import { PREVIEW_LABEL, isPreviewTrack } from "../lib/player-state.mjs";
      and turns only while that album's status is "playing" (paused keeps it
      still where it stopped).
 
-   Layout (app/(main)/music/music.css): from 1024px each album is
-   display:contents inside a grid, so its sleeve, title and meta sit in its
+   Layout (app/(main)/music/music.css): from 1024px each album wrapper is
+   display:contents inside a grid (so the fragment id lives on the sleeve), so its sleeve, title and meta sit in its
    own column (--col) and the open panel spans the whole shelf underneath.
    Below that, the panel follows its own album. */
 
@@ -48,6 +48,14 @@ function DownloadIcon() {
       <path d="M4.1 14.4C4.3 16.4 4.2 18.3 4.5 20.1C9.6 20.4 14.4 20.3 19.6 19.9C19.8 18.1 19.7 16.3 19.9 14.3" />
     </svg>
   );
+}
+
+function runningTime(tracks) {
+  const seconds = tracks.reduce((sum, t) => {
+    const [m, s] = String(t.time).split(":").map(Number);
+    return sum + (m || 0) * 60 + (s || 0);
+  }, 0);
+  return `${Math.round(seconds / 60)} min`;
 }
 
 function safeName(text) {
@@ -110,13 +118,24 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
           : "";
 
   return (
-    <div className={classes.join(" ")} id={id} style={{ "--col": index + 1 }}>
+    <div className={classes.join(" ")} style={{ "--col": index + 1 }}>
       <h2 className="album-title" id={`title-${id}`}>
         {title}
       </h2>
-      <p className="meta">{meta}</p>
+      <p className="meta">
+        {[...meta.split(" · "), runningTime(tracks)].map((part) => (
+          <Fragment key={part}>
+            <span className="meta-part">{part} ·</span>{" "}
+          </Fragment>
+        ))}
+        <span className="meta-part meta-free">Free</span>
+      </p>
+      {/* The fragment id (/music#misty) is on the sleeve, not the wrapper:
+          from 1024px the wrapper is display:contents and has no box to
+          scroll to. */}
       <button
         type="button"
+        id={id}
         className="sleeve"
         aria-expanded={open ? "true" : "false"}
         aria-controls={`trk-${id}`}
@@ -138,7 +157,7 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
             type="button"
             className="btn album-download-button"
             onClick={downloadAlbum}
-            disabled={downloadState === "preparing"}
+            aria-disabled={downloadState === "preparing" ? "true" : undefined}
           >
             {downloadLabel}
           </button>
@@ -181,6 +200,17 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
 
 export default function AlbumShelf({ albums }) {
   const [openId, setOpenId] = useState(null);
+  // A link to /music#<album> (the Timeless "Misty" link, schema and share
+  // URLs) opens that album as well as scrolling to its sleeve.
+  useEffect(() => {
+    const openFromHash = () => {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (albums.some((a) => a.id === id)) setOpenId(id);
+    };
+    openFromHash();
+    addEventListener("hashchange", openFromHash);
+    return () => removeEventListener("hashchange", openFromHash);
+  }, [albums]);
   return (
     <div className="albums" style={{ "--count": albums.length }}>
       {albums.map((album, index) => (

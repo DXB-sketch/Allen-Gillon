@@ -21,22 +21,19 @@ html.motion-ok .instrument[data-motion].is-in{
 
 /* ---------- Header: "Albums" and the Trini Lopez Gibson ---------- */
 .music-head{position:relative;overflow-x:clip;}
-/* The Gibson is on screen at load, so it slides in with a CSS animation
-   instead of the observer. The global reduced-motion rule removes it. */
-@keyframes gibson-in{from{opacity:0;transform:translateX(30%);}to{opacity:1;transform:none;}}
-.instrument--gibson{animation:gibson-in 1.3s var(--ease-out) .15s both;}
+/* The Gibson goes through MotionObserver like the other instruments: it is
+   usually on screen at load, so it renders in place (is-static) and only
+   slides in when the page opens scrolled past it. */
 
 /* Phones and tablets: the headstock peeks in from the right-hand edge,
-   beside the title. The box starts after the word "Albums" (measured in em
-   of the title's own size) and is one title line tall, so it can never
-   cover the title or the lede. */
+   beside the title. Its box is a share of the header's own width (px floor
+   and cap, never the viewport) and one title line tall at most, so it stays
+   clear of the word "Albums" and the lede. */
 @media (max-width:1023px){
-  .instrument--gibson{position:absolute;z-index:0;
-    font-size:clamp(4rem,11vw,10rem);
-    top:clamp(28px,4vw,64px);right:0;left:calc(var(--gutter) + 2.8em);height:1.05em;
-    overflow:clip;}
-  .instrument--gibson svg{position:absolute;width:5.2em;max-width:none;top:.05em;right:-3.2em;
-    transform:scaleX(-1) rotate(-14deg);transform-origin:50% 50%;}
+  .instrument--gibson{grid-column:full;position:absolute;z-index:0;top:28px;right:0;
+    width:clamp(104px,32%,300px);aspect-ratio:2/1;overflow:clip;}
+  .instrument--gibson svg{position:absolute;width:250%;max-width:none;top:-12%;left:8%;
+    transform:scaleX(-1) rotate(-10deg);transform-origin:50% 50%;}
 }
 /* Laptops and up: the whole guitar lies across the right of the header,
    its headstock running off the page edge. */
@@ -83,9 +80,13 @@ html.motion-ok .instrument[data-motion].is-in{
 .album.is-loaded .disc{animation:discspin 7s linear infinite paused;}
 .album.is-playing .disc{animation-play-state:running;}
 @keyframes discspin{from{transform:translateX(var(--out)) rotate(0deg);}to{transform:translateX(var(--out)) rotate(360deg);}}
+/* Hover changes colour only (DESIGN.md, Motion): the sleeve's frame turns
+   red. The record moves only when the album is open or loaded. */
+.sleeve img{transition:border-color .2s var(--ease-out);}
 @media (hover:hover){
-  .sleeve:hover .disc,.sleeve:focus-visible .disc{transform:translateX(var(--out)) rotate(80deg);}
+  .sleeve:hover img{border-color:var(--red-deep);}
 }
+.sleeve{scroll-margin-top:24px;}
 /* Touch: the record peeks at rest, so the sleeve reads as something to pull. */
 @media (hover:none){
   .disc{transform:translateX(8%);}
@@ -94,6 +95,9 @@ html.motion-ok .instrument[data-motion].is-in{
 .album-title{font-size:1.45rem;line-height:1.25;margin:14px 0 0;}
 .album.open .album-title{color:var(--red-deep);}
 .album .meta{color:var(--soft);font-size:1rem;margin:2px 0 0;}
+.meta-part{white-space:nowrap;}
+.meta-free{color:var(--ink);font-weight:700;}
+.album-download-button[aria-disabled="true"]{cursor:progress;}
 
 /* The open panel: one primary action, then the tracks. */
 .trkpanel{margin-top:20px;}
@@ -104,8 +108,13 @@ html.motion-ok .instrument[data-motion].is-in{
 .album-download-status:empty{display:none;}
 .album-note{margin:0;font-size:1rem;color:var(--soft);max-width:34ch;}
 .trklist{list-style:none;margin:18px 0 0;padding:0;}
+/* Rows are capped so the time and the download icon stay close to the song
+   title on wide screens; a quiet dotted rule leads the eye across. */
 .trklist li{display:grid;grid-template-columns:48px minmax(0,1fr) auto 44px;align-items:center;gap:4px 14px;
-  padding:4px 0;break-inside:avoid;}
+  padding:4px 0;break-inside:avoid;max-width:30rem;}
+.trklist .tname{display:flex;align-items:baseline;gap:10px;min-width:0;}
+.trklist .tname::after{content:"";flex:1 1 auto;min-width:12px;border-bottom:2px dotted oklch(0.40 0.03 300 / .35);
+  transform:translateY(-4px);}
 .trklist .tname{font-size:1.05rem;}
 .trklist li.is-current .tname{color:var(--red-deep);font-weight:700;}
 .tplay{display:inline-grid;place-items:center;padding:0;}
@@ -190,7 +199,9 @@ html.motion-ok .instrument[data-motion].is-in{
 .video .frame{position:relative;aspect-ratio:16/9;background:var(--ink);}
 .lite-yt,.lite-yt-frame{position:absolute;inset:0;display:block;width:100%;height:100%;border:0;}
 .lite-yt img{display:block;width:100%;height:100%;object-fit:cover;}
-.lite-yt-mark{position:absolute;left:50%;top:50%;width:clamp(56px,16%,88px);height:auto;transform:translate(-50%,-50%);}
+/* The play mark sits in the lower-left corner: these are lyric videos and
+   the words burned into their frames run across the middle. */
+.lite-yt-mark{position:absolute;left:clamp(10px,4%,24px);bottom:clamp(10px,6%,24px);width:clamp(52px,14%,80px);height:auto;}
 .lite-yt-mark circle{fill:oklch(0.22 0.02 300 / .82);stroke:var(--on);stroke-width:3;transition:fill .2s var(--ease-out);}
 .lite-yt-mark path{fill:var(--on);}
 .lite-yt:hover .lite-yt-mark circle,.lite-yt:focus-visible .lite-yt-mark circle{fill:var(--red-deep);}

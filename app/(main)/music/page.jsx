@@ -37,7 +37,7 @@ export default function MusicPage() {
           Listen to Allen&rsquo;s four studio albums here: click a cover to open the track list, then choose a song,
           or download the whole album free.
         </p>
-        <div className="instrument instrument--gibson">
+        <div className="instrument instrument--gibson" data-motion="from-right">
           <MusicGibson />
         </div>
       </header>
