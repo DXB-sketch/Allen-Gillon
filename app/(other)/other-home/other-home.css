@@ -2,9 +2,10 @@
    First version for W2; W5 art-directs it. No shadows except the book-spine
    inset, no cards, no rounded corners. */
 
-.sideboard{padding:24px clamp(16px,4vw,72px) 64px;}
-.sideboard-head{max-width:66ch;margin:0 0 40px;}
-.sideboard-head h1.script{color:var(--blue);text-shadow:0.045em 0.055em 0 oklch(0.615 0.195 33 / 0.28);}
+.sideboard{padding:clamp(20px,3vw,48px) var(--gutter) 0;}
+.sideboard-head{margin:0 0 40px;}
+.sideboard-head p{max-width:var(--measure);}
+.sideboard-head h1.script{color:var(--blue);text-shadow:var(--overprint-red);}
 .sideboard-head p{margin:12px 0 0;font-size:1.2rem;}
 
 .doorways{

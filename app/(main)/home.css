@@ -1,0 +1,51 @@
+/* Home (allengillon.com/). W3 foundation; W5 art-directs this page. */
+
+.home-hero{padding-block:clamp(20px,3vw,48px) 0;row-gap:clamp(24px,3vw,44px);}
+.home-hero > h1{color:var(--blue);text-shadow:var(--overprint-red);}
+.home-photos{grid-column:wide-start / span 7;}
+.home-doors{grid-column:span 5 / wide-end;align-self:start;}
+
+.photoCollage{position:relative;aspect-ratio:.88/1;max-width:880px;}
+.photoCollage .mainPhoto{width:78%;aspect-ratio:1/1;object-fit:cover;display:block;}
+/* A snapshot laid on the big photo: the paper margin is the print's own edge. */
+.photoCollage .photoThree{position:absolute;right:0;bottom:6%;width:47%;aspect-ratio:1/1;object-fit:cover;
+  padding:8px;background:var(--paper-2);transform:rotate(-5deg);}
+
+/* Venues, printed in the two inks. */
+.venues{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1.1rem;line-height:1.4;}
+.venues li:nth-child(odd){color:var(--red-deep);}
+.venues li:nth-child(even){color:var(--blue);font-style:italic;}
+
+ol.idx{list-style:none;margin:0;padding:0;}
+ol.idx li{display:flex;align-items:center;gap:18px;}
+ol.idx .no{font-family:var(--script);font-size:2.4rem;color:var(--red);text-shadow:var(--overprint);min-width:1.4ch;text-align:right;line-height:1;}
+ol.idx li:nth-child(even) .no{color:var(--blue);text-shadow:var(--overprint-red);}
+ol.idx a{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;
+  text-decoration:none;min-height:72px;padding:12px 0;font-size:1.4rem;line-height:1.25;}
+ol.idx a:hover{color:var(--red-deep);}
+ol.idx a small{font-size:1rem;color:var(--soft);}
+.idx-art{width:clamp(68px,7vw,108px);aspect-ratio:1/1;flex:0 0 auto;margin:8px 0;}
+.idx-art img{width:100%;height:100%;object-fit:cover;display:block;}
+.heroIntro{font-size:1.1rem;margin:24px 0 0;}
+
+.home-quote{margin-top:var(--band-space);}
+.home-quote blockquote{position:relative;margin:0;padding-left:42px;max-width:var(--measure);}
+@media (min-width:1024px){
+  .home-quote blockquote{grid-column:4 / wide-end;}
+}
+.home-quote blockquote::before{content:"\201C";position:absolute;left:0;top:-18px;color:var(--red);font-family:var(--serif);font-size:4.4rem;line-height:1;}
+.home-quote blockquote p{margin:0;font-size:1.2rem;line-height:1.6;}
+.home-quote cite{display:block;margin-top:12px;color:var(--soft);font-size:1rem;font-style:normal;font-weight:700;}
+.reviewsLink{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
+.reviewsLink:hover{color:var(--red-deep);}
+
+@media (max-width:860px){
+  .home-photos,.home-doors{grid-column:wide;}
+  ol.idx a{font-size:1.2rem;min-height:64px;}
+}
+@media (max-width:520px){
+  .photoCollage{aspect-ratio:.9/1;}
+  .photoCollage .mainPhoto{width:82%;}
+  .photoCollage .photoThree{width:53%;bottom:4%;padding:6px;}
+  .home-quote blockquote{padding-left:30px;}
+}

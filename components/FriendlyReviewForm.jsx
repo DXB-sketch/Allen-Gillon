@@ -64,7 +64,6 @@ export default function FriendlyReviewForm() {
   return (
     <section className="addReview" aria-labelledby="add-review-title">
       <div className="reviewFormIntro">
-        <p className="reviewKicker">Your turn</p>
         <h2 id="add-review-title">Add a friendly review</h2>
         <p>Share a memory of hearing Allen play. Reviews are checked before they appear here.</p>
       </div>

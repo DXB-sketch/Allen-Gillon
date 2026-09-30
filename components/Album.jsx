@@ -1,6 +1,5 @@
 "use client";
 
-import CommentLink from "./CommentLink";
 import { useState } from "react";
 import { usePlayer } from "./Player";
 import { PREVIEW_LABEL, isPreviewTrack } from "../lib/player-state.mjs";
@@ -84,13 +83,11 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
                   {isPreviewTrack(track) ? <span className="tpreview">{PREVIEW_LABEL}</span> : null}
                   {track.time}
                 </span>
-                <details className="more-menu track-more">
-                  <summary aria-label={`More options for ${track.name}`}><span aria-hidden="true">⋯</span></summary>
-                  <div className="more-popover">
-                    <a href={track.src} download>Download song</a>
-                    <CommentLink subject={`${track.name} (${title})`} returnTo={`/music#${id}`} returnLabel={title}>Comment</CommentLink>
-                  </div>
-                </details>
+                <a className="track-download" href={track.src} download aria-label={`Download ${track.name}`}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M12 3v12M6.5 10 12 15.5 17.5 10M4 20.5h16" />
+                  </svg>
+                </a>
               </li>
             );
           })}

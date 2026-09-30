@@ -1,0 +1,23 @@
+/* The Matthew Allen 5 (/shows). */
+
+.show-body{margin-top:clamp(20px,3vw,40px);align-items:start;}
+.show-list{grid-column:wide-start / span 7;}
+.show-photo{grid-column:span 4 / wide-end;margin:0;}
+.show-photo figcaption{font-size:1rem;color:var(--soft);margin-top:8px;}
+
+.setlist{list-style:none;margin:0;padding:0;}
+.setlist li{display:flex;align-items:center;gap:16px;padding:6px 0;}
+.setlist .no{font-family:var(--script);font-size:2rem;color:var(--red);text-shadow:var(--overprint);min-width:1.6ch;text-align:right;line-height:1;}
+.setlist li:nth-child(even) .no{color:var(--blue);text-shadow:var(--overprint-red);}
+.setlist .tname{font-size:1.2rem;}
+.show-back{margin-top:12px;font-size:1.1rem;}
+.show-back a{display:inline-flex;align-items:center;min-height:44px;}
+
+@media (max-width:860px){
+  .show-list,.show-photo{grid-column:wide;}
+  .show-photo{max-width:min(420px,100%);margin-top:32px;}
+}
+@media (max-width:640px){
+  .setlist li{gap:10px;}
+  .setlist .tname{font-size:1.05rem;}
+}

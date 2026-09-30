@@ -1,0 +1,65 @@
+/* Stories, plays and textbooks (/books). One page, three destinations.
+   W3 foundation; W5 puts the books on drawn shelves. */
+
+.writing-head{padding-block:clamp(32px,5vw,72px) 0;}
+.writing-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;gap:clamp(12px,5vw,64px);}
+.writing-nav a{font-size:clamp(2.4rem,7vw,6.4rem);line-height:1;color:var(--red);text-decoration:none;text-shadow:var(--overprint);
+  min-height:44px;padding-bottom:6px;transition:color .2s var(--ease-out);}
+.writing-nav a:nth-child(2){color:var(--blue);text-shadow:var(--overprint-red);}
+.writing-nav a:hover{color:var(--red-deep);}
+.writing-intro{font-size:1.15rem;color:var(--soft);margin:24px 0 0;}
+@media (min-width:1024px){
+  .writing-head > .writing-intro{grid-column:3 / wide-end;}
+}
+
+.writing-section{padding-top:var(--band-space);scroll-margin-top:20px;}
+.section-heading{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:end;margin-bottom:32px;}
+.section-heading h2{margin:0;}
+.section-heading p{margin:0;color:var(--soft);font-size:1.05rem;}
+
+.audiobook-list{list-style:none;margin:0;padding:0;}
+.audiobook-list > li{display:grid;grid-template-columns:48px clamp(120px,12vw,200px) minmax(0,1fr) auto;gap:18px 24px;align-items:center;padding:18px 0;}
+.audiobook-list > li > *{min-width:0;}
+.audiobook-number{font-family:var(--script);font-size:2.4rem;line-height:1;color:var(--red);text-shadow:var(--overprint);text-align:center;}
+.audiobook-list > li:nth-child(even) .audiobook-number{color:var(--blue);text-shadow:var(--overprint-red);}
+.audiobook-cover{display:block;width:100%;height:auto;object-fit:cover;}
+.audiobook-copy h3{font-size:1.35rem;}
+.audiobook-copy p{margin:2px 0 7px;color:var(--soft);font-size:1rem;}
+.audiobook-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px 18px;flex-wrap:wrap;}
+.story-read-link{display:inline-flex;align-items:center;min-height:44px;padding:4px 0;color:var(--red-deep);font-weight:700;text-underline-offset:4px;}
+
+.upcoming-books{margin-top:40px;}
+.upcoming-books h3,.upcoming-books p{margin:0;}
+.upcoming-books p{color:var(--soft);}
+
+.plays{list-style:none;margin:0;padding:0;}
+.plays li{display:flex;gap:22px;align-items:flex-start;padding:22px 0;}
+.plays li > div{min-width:0;}
+.plays .pno{font-family:var(--script);font-size:2.4rem;color:var(--red);text-shadow:var(--overprint);min-width:1.5ch;text-align:right;line-height:1;}
+.plays li:nth-child(even) .pno{color:var(--blue);text-shadow:var(--overprint-red);}
+.plays h3{font-size:1.4rem;}
+.plays p,.texts-list p{margin:6px 0 0;color:var(--soft);font-size:1.05rem;max-width:var(--measure);}
+.plays-note{margin:20px 0 0;font-size:1.05rem;}
+.item-actions{display:flex;align-items:center;gap:8px 20px;flex-wrap:wrap;margin-top:8px;}
+.item-primary-link{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
+
+.texts-list{list-style:none;margin:0;padding:0;}
+.texts-list li{display:grid;grid-template-columns:clamp(140px,14vw,240px) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start;padding:24px 0;}
+.texts-list li > *{min-width:0;}
+.cover-link{display:block;width:100%;}
+/* A book keeps a thin edge: it is an object. */
+.text-cover{display:block;width:100%;height:auto;border:1px solid oklch(0.22 0.02 300 / .35);}
+.texts-list h3{font-size:1.4rem;}
+
+@media (max-width:760px){
+  /* Three big words do not fit in three columns on a phone: let them wrap. */
+  .writing-nav{display:flex;flex-wrap:wrap;gap:0 24px;}
+  .section-heading{grid-template-columns:1fr;gap:8px;margin-bottom:22px;}
+  .texts-list li{grid-template-columns:1fr;gap:18px;}
+  .cover-link{width:min(220px,65%);}
+  .audiobook-list > li{grid-template-columns:38px minmax(0,1fr);gap:12px 14px;align-items:start;}
+  .audiobook-cover,.audiobook-copy,.audiobook-actions{grid-column:2;}
+  .audiobook-cover{width:min(100%,260px);}
+  .audiobook-actions{justify-content:flex-start;}
+  .audiobook-number{font-size:2rem;padding-top:4px;}
+}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CrossSiteLink from "../../../components/CrossSiteLink";
+import "./biography.css";
 
 export const metadata = {
   title: "Timeless",
@@ -9,42 +10,13 @@ export const metadata = {
 
 export default function BiographyPage() {
   return (
-    <>
-      <style>{String.raw`
-  .bio{display:grid;grid-template-columns:1fr 340px;gap:48px;align-items:start;padding:16px 0;}
-  .bio aside{display:flex;flex-direction:column;gap:20px;position:sticky;top:20px;}
-  .bio aside .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:4/3;}
-  .bio .gx-video{display:block;width:100%;height:auto;border:3px solid var(--ink);border-radius:3px;background:var(--ink);}
-  .bio aside figcaption{font-size:.98rem;color:var(--soft);margin-top:6px;}
-  .era{font-family:"Dynalight","Times New Roman",cursive;font-size:2.1rem;color:var(--blue);margin:38px 0 8px;line-height:1.1;}
-  .era:first-of-type{margin-top:6px;}
-  .era.red{color:var(--red);}
-  @media (max-width:900px){.bio{grid-template-columns:1fr;}.bio aside{position:static;flex-direction:row;flex-wrap:wrap;}.bio aside figure{flex:1 1 260px;margin:0;}}
-  .bio aside figure{margin:0;}
-  /* On phones the photo column disappears and each photo sits inline,
-     directly under the era title it belongs to. */
-  .bio figure.inline{display:none;}
-  @media (max-width:640px){
-    .pagehead .plain{padding-left:12px;padding-right:4px;}
-    .prose{padding-left:12px;padding-right:4px;}
-    .prose p{max-width:34ch;}
-    .bio aside{display:none;}
-    .bio figure.inline{display:block;margin:14px auto 6px;max-width:min(280px,78vw);}
-    .bio figure.inline .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:4/3;}
-    .bio figure.inline .gx-video{width:100%;}
-    .bio figure.inline figcaption{font-size:.95rem;color:var(--soft);margin-top:6px;text-align:center;}
-  }
-`}</style>
       <main>
-        <header className="pagehead">
-          <div className="wrap">
-            <h1 className="script">Timeless</h1>
-            <p className="plain">Allen met Ann in 1967 while his band, The New Breed, was playing in Parramatta. They have shared a life in music ever since.</p>
-          </div>
+        <header className="pagehead band">
+          <h1 className="script">Timeless</h1>
+          <p className="plain">Allen met Ann in 1967 while his band, The New Breed, was playing in Parramatta. They have shared a life in music ever since.</p>
         </header>
 
-        <section>
-          <div className="wrap bio">
+        <section className="bio band">
             <div className="prose">
               <h2 className="era">The New Breed</h2>
               <figure className="inline">
@@ -61,7 +33,7 @@ export default function BiographyPage() {
                 <figcaption>Page One Revue, 1968.</figcaption>
               </figure>
               <figure className="inline">
-                <img className="gx-hero" style={{ aspectRatio: "3/4" }} src="/images/personal/ann-singing-page-one-revue.jpg" alt="Ann singing at the microphone" loading="lazy" />
+                <img className="gx-hero tall" src="/images/personal/ann-singing-page-one-revue.jpg" alt="Ann singing at the microphone" loading="lazy" />
                 <figcaption>Ann singing.</figcaption>
               </figure>
               <p>A new band followed, Page One Revue. They played the Gold Coast, Melbourne hotels, nine months at the Whiskey Au-Go-Go and a run at The Lido in Melbourne. Then came an eighteen-month tour of Asia: six months at the Siam Intercontinental in Bangkok, then Singapore, Guam, Okinawa, South Korea, Saipan and three months playing private clubs in Japan.</p>
@@ -103,7 +75,7 @@ export default function BiographyPage() {
                 <figcaption>Page One Revue, 1968. Melbourne Whiskey Au-Go-Go.</figcaption>
               </figure>
               <figure>
-                <img className="gx-hero" style={{ aspectRatio: "3/4" }} src="/images/personal/ann-singing-page-one-revue.jpg" alt="Ann singing at the microphone" loading="lazy" />
+                <img className="gx-hero tall" src="/images/personal/ann-singing-page-one-revue.jpg" alt="Ann singing at the microphone" loading="lazy" />
                 <figcaption>Ann singing.</figcaption>
               </figure>
               <figure>
@@ -122,9 +94,7 @@ export default function BiographyPage() {
                 <figcaption>Allen performing at Steakout Restaurant.</figcaption>
               </figure>
             </aside>
-          </div>
         </section>
       </main>
-    </>
   );
 }

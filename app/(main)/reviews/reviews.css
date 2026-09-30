@@ -1,0 +1,47 @@
+/* Friendly reviews (/reviews). Space separates the parts, not rules. */
+
+.reviewsHead .intro{margin:16px 0 0;font-size:1.15rem;color:var(--soft);}
+@media (min-width:1024px){
+  .reviewsHead > .intro{grid-column:3 / wide-end;}
+}
+.reviewsBody{padding-top:clamp(32px,4vw,56px);row-gap:clamp(44px,6vw,88px);}
+
+.featuredReview,.tableComments,.addReview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:clamp(20px,5vw,76px);}
+.featuredReview > *,.tableComments > *,.addReview > *{min-width:0;}
+.reviewPlace{margin:6px 0 0;color:var(--blue);font-size:1rem;font-weight:700;line-height:1.45;}
+.featuredReview blockquote{position:relative;margin:0;padding-left:42px;max-width:var(--measure);}
+.featuredReview blockquote::before{content:"\201C";position:absolute;left:0;top:-22px;color:var(--red);font-family:var(--serif);font-size:5rem;line-height:1;}
+.featuredReview blockquote p{margin:0;font-size:clamp(1.2rem,2vw,1.5rem);line-height:1.6;}
+.featuredReview cite{display:block;margin-top:16px;color:var(--soft);font-size:1rem;font-style:normal;font-weight:700;}
+
+.tableComments h2{margin:0;color:var(--ink);font-size:1.2rem;line-height:1.4;}
+.tableComments ul{display:flex;flex-wrap:wrap;gap:8px clamp(24px,4vw,56px);list-style:none;margin:0;padding:0;}
+.tableComments li{font-size:1.2rem;font-style:italic;}
+
+.reviewFormIntro h2{margin:0 0 12px;font-size:clamp(1.65rem,3vw,2.25rem);line-height:1.2;}
+.reviewFormIntro p{margin:0;color:var(--soft);}
+.friendlyReviewForm{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px;max-width:900px;}
+.friendlyReviewForm label{display:flex;flex-direction:column;gap:7px;font-weight:700;font-size:1rem;}
+.friendlyReviewForm label span{color:var(--soft);font-weight:400;}
+.friendlyReviewForm input,.friendlyReviewForm textarea{width:100%;padding:10px 2px;font:inherit;font-size:1.05rem;color:var(--ink);background:transparent;border:0;border-bottom:2px solid var(--ink);border-radius:0;}
+.friendlyReviewForm textarea{padding:10px;border:1px solid oklch(.22 .02 300 / .5);resize:vertical;}
+.friendlyReviewForm input:focus-visible,.friendlyReviewForm textarea:focus-visible{outline:3px solid var(--blue);outline-offset:3px;}
+.friendlyReviewForm .reviewField{grid-column:1/-1;}
+.friendlyReviewForm .btn{grid-column:1/-1;justify-self:start;}
+.friendlyReviewForm .reviewTrap{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.reviewStatus{grid-column:1/-1;margin:0;color:var(--blue);font-weight:700;}
+.savedReviews{grid-column:2;margin-top:2px;}
+.savedReviews h3{margin:0 0 14px;font-size:1.15rem;color:var(--blue);}
+.savedReviews article{padding:14px 0;}
+.savedReviews blockquote{margin:0;font-size:1.1rem;line-height:1.6;}
+.savedReviews article p{margin:8px 0;color:var(--soft);font-weight:700;}
+
+.reviewsBack{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--blue);font-weight:700;text-decoration:none;justify-self:start;}
+.reviewsBack:hover{text-decoration:underline;text-underline-offset:4px;}
+
+@media (max-width:680px){
+  .featuredReview,.tableComments,.addReview{grid-template-columns:1fr;gap:16px;}
+  .featuredReview blockquote{padding-left:32px;}
+  .friendlyReviewForm{grid-template-columns:1fr;}
+  .friendlyReviewForm .reviewField,.friendlyReviewForm .btn,.savedReviews{grid-column:1;}
+}

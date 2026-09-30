@@ -20,12 +20,7 @@ export default async function GlobalNotFound() {
   return (
     <html lang="en-AU" data-site={site}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Dynalight&family=Lora:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        <link rel="preload" href="/fonts/dynalight-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body>
         <a className="skip-link" href="#main">
