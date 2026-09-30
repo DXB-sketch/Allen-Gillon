@@ -13,3 +13,5 @@ worker-configuration.d.ts
 test-results/
 playwright-report/
 .claude/
+test-results/
+playwright-report/

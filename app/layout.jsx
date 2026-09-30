@@ -1,6 +1,5 @@
 import "./site.css";
 import { PlayerProvider, NowBar } from "../components/Player";
-import PageReader from "../components/PageReader";
 import { SITE_MARKER_SCRIPT } from "../lib/sites.mjs";
 
 // Shared by both hosts. <html data-site> comes from SITE_MARKER_SCRIPT (host
@@ -32,7 +31,6 @@ export default function RootLayout({ children }) {
           Skip to content
         </a>
         <PlayerProvider>
-          <PageReader />
           {children}
           <NowBar />
         </PlayerProvider>

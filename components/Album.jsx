@@ -3,6 +3,7 @@
 import CommentLink from "./CommentLink";
 import { useState } from "react";
 import { usePlayer } from "./Player";
+import { PREVIEW_LABEL, isPreviewTrack } from "../lib/player-state.mjs";
 
 export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
   const [open, setOpen] = useState(false);
@@ -73,13 +74,16 @@ export default function Album({ id, title, meta, cover, coverAlt, tracks }) {
                 <button
                   type="button"
                   className={"tplay" + (isCurrentAndPlaying ? " playing" : "")}
-                  onClick={() => toggle(track, tracks)}
-                  aria-label={(isCurrentAndPlaying ? "Pause " : "Play ") + track.name}
+                  onClick={() => toggle({ album: title, artwork: cover, ...track }, tracks)}
+                  aria-label={(isCurrentAndPlaying ? "Pause " : "Play ") + track.name + (isPreviewTrack(track) ? `, ${PREVIEW_LABEL}` : "")}
                 >
                   {isCurrentAndPlaying ? "❚❚" : "▶"}
                 </button>
                 <span className="tname">{track.name}</span>
-                <span className="ttime">{track.time}</span>
+                <span className="ttime">
+                  {isPreviewTrack(track) ? <span className="tpreview">{PREVIEW_LABEL}</span> : null}
+                  {track.time}
+                </span>
                 <details className="more-menu track-more">
                   <summary aria-label={`More options for ${track.name}`}><span aria-hidden="true">⋯</span></summary>
                   <div className="more-popover">

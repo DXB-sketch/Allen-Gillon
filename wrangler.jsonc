@@ -25,6 +25,9 @@
   "assets": {
     "directory": "dist/client",
     "not_found_handling": "none",
+    // dist/client holds no HTML. "none" also stops vinext dev serving the
+    // legacy root *.html files (books.html, music.html...) over app routes.
+    "html_handling": "none",
     "binding": "ASSETS"
   },
   "cache": {

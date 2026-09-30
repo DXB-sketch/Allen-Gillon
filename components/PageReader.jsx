@@ -2,19 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { pageText } from "../lib/page-text.mjs";
+import { friendlyVoiceLabel, normaliseForSpeech } from "../lib/speech.mjs";
 
-function pageText() {
-  const main = document.querySelector("main");
-  if (!main) return [];
-  return [...main.querySelectorAll("h1,h2,h3,h4,p,li")]
-    .filter((node) => !node.closest("nav,button,form,[aria-hidden='true'],[data-reader-skip],.bkr,.trklist,.artgrid") &&
-      ![...node.children].some((child) => child.matches?.("h1,h2,h3,h4,p,li")))
-    .map((node) => node.innerText.trim())
-    .filter(Boolean);
-}
-
-const maleNames = /\b(james|david|mark|george|guy|ryan|william|daniel|thomas|liam|michael|alex)\b/i;
-const femaleNames = /\b(catherine|zira|susan|hazel|samantha|karen|natasha|jenny|aria|sara|michelle|sonia|libby)\b/i;
+const maleNames = /\b(james|david|mark|george|guy|ryan|william|daniel|thomas|liam|michael|alex|duncan|male)\b/i;
+const femaleNames = /\b(catherine|zira|susan|hazel|samantha|karen|natasha|jenny|aria|sara|michelle|sonia|libby|female)\b/i;
 const PLAYBACK_EVENT = "allen:playback-start";
 const READER_SOURCE = "page-reader";
 
@@ -26,18 +18,28 @@ function preferredVoice(voices, gender) {
     (/natural|neural|enhanced|premium|online/i.test(voice.name) ? 10 : 0) +
     (/en-AU/i.test(voice.lang) ? 3 : 0) +
     (/google|microsoft|apple/i.test(voice.name) ? 1 : 0);
-  return english.sort((a, b) => score(b) - score(a))[0] || voices[0];
+  return [...english].sort((a, b) => score(b) - score(a))[0] || voices[0];
 }
 
-export default function PageReader() {
+/* "Listen to this page": reads the page aloud with the browser's own voices.
+
+   Props:
+     voice  "male" | "female" (default "female"). The preferred narrator for
+            the site the page belongs to. Each site's layout sets it: the
+            music and bookings site (allengillon.com) passes "male", the
+            stories, Timeless and Ann's art site passes "female". The listener
+            can still pick another voice once playback starts. Each site's chrome (components/SiteChrome.jsx) passes it: main "male", other "female". */
+export default function PageReader({ voice = "female" }) {
+  const preferredGender = voice;
   const pathname = usePathname();
-  const allenPages = pathname === "/" || pathname.startsWith("/music") || pathname.startsWith("/biography") || pathname.startsWith("/hire") || pathname.startsWith("/shows");
-  const preferredGender = allenPages ? "male" : "female";
   const [supported, setSupported] = useState(true);
   const [status, setStatus] = useState("idle");
   const [voices, setVoices] = useState([]);
   const [voiceName, setVoiceName] = useState("");
   const run = useRef(0);
+  const position = useRef(0);
+  const group = useRef(null);
+  const keepFocus = useRef(false);
 
   useEffect(() => {
     if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
@@ -46,7 +48,7 @@ export default function PageReader() {
     }
     const refresh = () => {
       const available = window.speechSynthesis.getVoices();
-      setVoices(available.filter((voice) => voice.lang.toLowerCase().startsWith("en")));
+      setVoices(available.filter((item) => item.lang.toLowerCase().startsWith("en")));
       setVoiceName(preferredVoice(available, preferredGender)?.name || "");
     };
     refresh();
@@ -54,18 +56,18 @@ export default function PageReader() {
     return () => window.speechSynthesis.removeEventListener("voiceschanged", refresh);
   }, [preferredGender]);
 
-  useEffect(() => {
-    run.current += 1;
-    window.speechSynthesis?.cancel();
-    setStatus("idle");
-    return () => { run.current += 1; window.speechSynthesis?.cancel(); };
-  }, [pathname]);
-
   const stop = useCallback(() => {
     run.current += 1;
+    position.current = 0;
     window.speechSynthesis?.cancel();
     setStatus("idle");
   }, []);
+
+  /* A new page stops the old page's reading. */
+  useEffect(() => {
+    stop();
+    return () => { run.current += 1; window.speechSynthesis?.cancel(); };
+  }, [pathname, stop]);
 
   useEffect(() => {
     const stopForAnotherReader = (event) => {
@@ -75,24 +77,26 @@ export default function PageReader() {
     return () => window.removeEventListener(PLAYBACK_EVENT, stopForAnotherReader);
   }, [stop]);
 
-  function start() {
-    const chunks = pageText();
+  function speakFrom(startIndex, name = voiceName) {
+    const chunks = pageText(document.querySelector("main"));
     if (!chunks.length) return;
-    stop();
+    run.current += 1;
+    window.speechSynthesis.cancel();
     window.dispatchEvent(new CustomEvent(PLAYBACK_EVENT, { detail: { source: READER_SOURCE } }));
     const currentRun = run.current;
-    const voice = voices.find((item) => item.name === voiceName);
-    let index = 0;
+    const chosen = voices.find((item) => item.name === name);
+    let index = Math.min(startIndex, chunks.length - 1);
     setStatus("playing");
     const next = () => {
       if (currentRun !== run.current) return;
-      if (index >= chunks.length) { setStatus("idle"); return; }
-      const utterance = new SpeechSynthesisUtterance(chunks[index++]);
-      if (voice) utterance.voice = voice;
-      utterance.lang = voice?.lang || "en-AU";
+      if (index >= chunks.length) { position.current = 0; setStatus("idle"); return; }
+      position.current = index;
+      const utterance = new SpeechSynthesisUtterance(normaliseForSpeech(chunks[index++]));
+      if (chosen) utterance.voice = chosen;
+      utterance.lang = chosen?.lang || "en-AU";
       utterance.rate = 0.95;
       utterance.onend = next;
-      utterance.onerror = () => setStatus("idle");
+      utterance.onerror = () => { if (currentRun === run.current) setStatus("idle"); };
       window.speechSynthesis.speak(utterance);
     };
     next();
@@ -108,15 +112,37 @@ export default function PageReader() {
     }
   }
 
+  function changeVoice(name) {
+    setVoiceName(name);
+    /* Carry on from the same block in the new voice. */
+    if (status !== "idle") speakFrom(position.current, name);
+  }
+
+  const active = status !== "idle";
+
+  /* The pressed button is swapped for another set of controls, so keep focus
+     inside the reader rather than dropping it on the page body. */
+  useEffect(() => {
+    if (!keepFocus.current) return;
+    keepFocus.current = false;
+    group.current?.querySelector("button")?.focus();
+  }, [active]);
+
   if (!supported) return null;
-  return <div className="page-reader" aria-label="Page reader">
-    <button type="button" onClick={start}>Listen Here</button>
-    {status !== "idle" && <>
+  const seen = new Map();
+  const voiceLabels = voices.map((item) => {
+    const label = friendlyVoiceLabel(item);
+    const count = (seen.get(label) || 0) + 1;
+    seen.set(label, count);
+    return count > 1 ? `${label} ${count}` : label;
+  });
+  return <div ref={group} className={"page-reader" + (active ? " active" : "")} role="group" aria-label="Page reader">
+    {active ? <>
       <button type="button" onClick={togglePause}>{status === "paused" ? "Resume" : "Pause"}</button>
-      <button type="button" onClick={stop}>Stop</button>
-    </>}
-    {voices.length > 1 && <label>Voice <select value={voiceName} onChange={(event) => setVoiceName(event.target.value)}>
-      {voices.map((voice) => <option key={`${voice.name}-${voice.lang}`} value={voice.name}>{voice.name} ({voice.lang})</option>)}
-    </select></label>}
+      <button type="button" onClick={() => { keepFocus.current = true; stop(); }}>Stop</button>
+      {voices.length > 1 && <label>Voice <select value={voiceName} onChange={(event) => changeVoice(event.target.value)}>
+        {voices.map((item, index) => <option key={`${item.name}-${item.lang}`} value={item.name}>{voiceLabels[index]}</option>)}
+      </select></label>}
+    </> : <button type="button" className="page-reader-listen" onClick={() => { keepFocus.current = true; speakFrom(0); }}>Listen to this page</button>}
   </div>;
 }
