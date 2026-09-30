@@ -29,6 +29,7 @@ import {
 } from "../lib/seo.mjs";
 import { LEGAL_PATHS, SITES, faviconPath, resolveRequest } from "../lib/sites.mjs";
 import { artworks } from "../content/artworks.mjs";
+import { playLinksCurrent } from "../lib/storefront.mjs";
 
 const SITE_KEYS = ["main", "other"];
 const everyRoute = SITE_KEYS.flatMap((site) => allRoutes(site).map((route) => ({ site, route })));
@@ -210,7 +211,23 @@ test("host metadata: template, icons, manifest, Open Graph, twitter and theme co
     const manifest = JSON.parse(readFileSync(publicFile(meta.manifest), "utf8"));
     assert.equal(manifest.name, name);
     assert.equal(hostViewport(site).themeColor, manifest.theme_color);
+    // No layout-level description: an unwired page must not inherit the home one.
+    assert.equal(meta.description, undefined);
+    // The ICO holds 16, 32 and 48 px images.
+    assert.equal(meta.icons.icon.find((i) => i.url.endsWith(".ico")).sizes, "16x16 32x32 48x48");
   }
+});
+
+test("play snippets match the play gate, and the /anns-art range is the for-sale range", () => {
+  const plays = BOOKS.filter((b) => b.section === "plays");
+  assert.ok(plays.length > 0);
+  for (const b of plays) {
+    const d = routeMeta("other", `/read/${b.slug}`).description;
+    assert.match(d, playLinksCurrent ? /The full script is an A\$1 download\./ : /The full script will soon be an A\$1 download\./, b.slug);
+  }
+  const sale = artworks.filter((a) => a.availability === "available" && Number(a.priceCents) > 0).map((a) => a.priceCents / 100);
+  const range = `A$${Math.min(...sale)} to A$${Math.max(...sale)}`;
+  assert.ok(routeMeta("other", "/anns-art").description.includes(`Prices from ${range},`));
 });
 
 test("robots.txt: Disallow /api/ and the host's own sitemap, nothing else", () => {
@@ -293,6 +310,12 @@ test("sitemap.xml is well formed and differs per host", () => {
     assert.ok(!/&(?!amp;|lt;|gt;|quot;|apos;)/.test(xml), "unescaped ampersand");
   }
   assert.ok(other.includes("<image:loc>https://other.allengillon.com/images/art/gallery/"));
+  // sitemap 0.9 XSD order: <priority> comes before extension elements.
+  for (const block of other.match(/<url>[\s\S]*?<\/url>/g)) {
+    const p = block.indexOf("<priority>");
+    const i = block.indexOf("<image:image>");
+    if (p >= 0 && i >= 0) assert.ok(p < i, block);
+  }
   assert.ok(!main.includes("other.allengillon.com"));
 });
 
@@ -309,7 +332,8 @@ test("the root favicon is rewritten to the host's own icon", () => {
 });
 
 test("public/_headers caches static assets and revalidates books", () => {
-  const headers = readFileSync(publicFile("/_headers"), "utf8");
+  // Normalise CRLF: core.autocrlf=true checkouts on Windows convert the file.
+  const headers = readFileSync(publicFile("/_headers"), "utf8").replace(/\r\n/g, "\n");
   const rule = (path) => {
     const m = headers.match(new RegExp(`^${path.replace(/[*/]/g, "\\$&")}\\n\\s+Cache-Control: (.+)$`, "m"));
     return m && m[1];

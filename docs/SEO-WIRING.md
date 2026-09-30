@@ -13,7 +13,10 @@ the orchestrator makes the changes below. Each one is small.
   - the icon set and manifest from `public/icons/<site>/`
   - `themeColor` #f8f6ee
   - Open Graph `siteName` and `en_AU` locale
-  - a `summary_large_image` twitter card
+  - a `summary_large_image` twitter card and the home Open Graph image as a fallback
+
+  The layouts set no description on purpose, so a page that is not wired yet
+  has no description rather than a copy of the home page's one.
 - **Site-wide JSON-LD.** Each group layout renders `siteGraph(site)` from
   `lib/schema.mjs` once, just before `SiteChrome`:
   - main: WebSite, Person (Allen) and Service (bookings)
@@ -28,6 +31,23 @@ the orchestrator makes the changes below. Each one is small.
 - **Caching.** `public/_headers` gives /images, /videos, /fonts, /icons, /og and
   /audio an immutable one-year cache. `/books/*` gets
   `max-age=86400, must-revalidate`.
+
+## Do not deploy before W4 and W5
+
+The other host's sitemap is generated from the content data, so it already lists
+routes that other workstreams are still building. Until they merge, these
+entries return 404:
+
+- all 7 `/read/<slug>/text` routes (W4 text route)
+- all 36 `/anns-art/<id>` pages (W5 painting route)
+- the `/books/<slug>/p001.webp` image entries for the three textbooks
+  (practice-in-communication-book-1, practice-in-communication-book-2,
+  riddled-with-language), until W4 builds their page images
+
+W6 must not reach production until the W4 text route, the W5 painting route and
+the textbook page images are merged. Otherwise Search Console gets 46 dead links.
+After those merges, fetch every `<loc>` and `<image:loc>` in
+`/sitemap.xml` on the built Worker and confirm each returns 200.
 
 ## The metadata line for each page
 
@@ -59,7 +79,7 @@ export const metadata = pageMetadata("main", "/hire");
 | `app/(other)/read/[slug]/page.jsx` | `export const generateMetadata = generateReadMetadata;` (import `generateReadMetadata`, and delete the old function) |
 | `app/(other)/read/[slug]/text/page.jsx` (W4) | `export const generateMetadata = generateReadTextMetadata;` |
 | `app/(other)/anns-art/[id]/page.jsx` (W5) | `export const generateMetadata = generateArtworkMetadata;` |
-| `app/comments/page.jsx` | `export async function generateMetadata() { return pageMetadata(siteForHost((await headers()).get("host")), "/comments"); }` (this is noindex, follow) |
+| `app/comments/page.jsx` | `export async function generateMetadata() { return pageMetadata(siteForHost((await headers()).get("host")), "/comments"); }` and `export const viewport = hostViewport();` (import both from `lib/seo.mjs`). /comments sits outside both group layouts, so without the viewport line it has no theme-color. This is noindex, follow. |
 | `app/dev/**` and any placeholder page | `export const metadata = noindexMetadata({ title: "..." });` |
 
 Notes:
