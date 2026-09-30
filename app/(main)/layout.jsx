@@ -1,17 +1,19 @@
 import SiteChrome from "../../components/SiteChrome";
+import { jsonLdProps, siteGraph } from "../../lib/schema.mjs";
+import { hostMetadata, hostViewport } from "../../lib/seo.mjs";
 
-export const metadata = {
-  metadataBase: new URL("https://allengillon.com"),
-  title: {
-    default: "Allen Gillon",
-    template: "%s · Allen Gillon",
-  },
-  openGraph: {
-    siteName: "Allen Gillon",
-    locale: "en_AU",
-  },
-};
+// Site-wide metadata for allengillon.com: metadataBase, title template, the
+// red-led icon set and manifest, Open Graph defaults and the twitter card.
+// Each page adds its own title, description and canonical with
+// pageMetadata("main", route) from lib/seo.mjs (docs/SEO-WIRING.md).
+export const metadata = hostMetadata("main");
+export const viewport = hostViewport("main");
 
 export default function MainLayout({ children }) {
-  return <SiteChrome site="main">{children}</SiteChrome>;
+  return (
+    <>
+      <script {...jsonLdProps(siteGraph("main"))} />
+      <SiteChrome site="main">{children}</SiteChrome>
+    </>
+  );
 }

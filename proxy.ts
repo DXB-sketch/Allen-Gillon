@@ -29,6 +29,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Skip build assets and any path with a file extension (images, audio, books, icons).
-  matcher: ["/((?!_next/|assets/|.*\\.[A-Za-z0-9]+$).*)"],
+  // Skip build assets and any path with a file extension (images, audio, books, icons),
+  // except /favicon.ico, which is rewritten to the host's own icon (lib/sites.mjs).
+  matcher: ["/((?!_next/|assets/|.*\\.[A-Za-z0-9]+$).*)", "/favicon.ico"],
 };
