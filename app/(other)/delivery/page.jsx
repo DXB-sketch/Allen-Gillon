@@ -1,25 +1,62 @@
 import Link from "next/link";
+import CrossSiteLink from "../../../components/CrossSiteLink";
+import legal from "../../../content/legal.config.json";
+import { SMS_DISPLAY, SMS_NUMBER, SUPPORT_EMAIL, isLegalPublished } from "../../../lib/legal.mjs";
+import { pageMetadata } from "../../../lib/seo.mjs";
 import "./delivery.css";
 
-// Ann Gillon sells the paintings, so this page keeps her name as the seller.
-export const metadata = {title:{absolute:"Delivery and payment · Ann Gillon"}};
+// Ann Gillon sells the paintings, so this page names her as the seller.
+export const metadata = pageMetadata("other", "/delivery");
 
 export default function DeliveryPage() {
+  const termsPublished = isLegalPublished(legal);
   return (
-    <main>
+    <div>
       <header className="pagehead band">
         <h1 className="script">Delivery & payment</h1>
       </header>
       <section className="delivery-body band">
         <div className="prose measure">
-          <h2>Original paintings</h2><p>Each painting is a one-off original by Ann Gillon. All prices are in Australian dollars. Extra photographs show another view of the same work, not another copy.</p>
-          <h2>Free delivery in Australia</h2><p>Delivery within Australia is included in the displayed price. Online checkout accepts Australian delivery addresses only. Please contact Allen before ordering if you need to discuss a delivery date, framing or the dimensions of a painting.</p>
-          <h2>Stripe payments</h2><p>Online purchases will use Stripe&rsquo;s secure checkout. Stripe handles the payment and delivery details. Card details are not stored on this website.</p>
-          <h2>Buying online</h2><p>Available paintings can be bought from Ann&rsquo;s art page. Stripe collects payment and the Australian delivery address. Because every painting is an original, its checkout closes after the first completed purchase.</p>
-          <h2>Questions or a problem with your order</h2><p><a href="sms:+61438747882">Text Allen on 0438 747 882</a> with the painting title and payment reference. Please contact him promptly about delivery damage or any issue with the painting.</p>
-          <p><Link href="/anns-art">Back to Ann's paintings</Link></p>
+          <h2>Original paintings</h2>
+          <p>
+            Each painting is a one-off original by Ann Gillon, and Ann is the seller. All prices are in Australian
+            dollars. Extra photographs show another view of the same work, not another copy.
+          </p>
+          <h2>Free delivery in Australia</h2>
+          <p>
+            Delivery within Australia is included in the displayed price. Online checkout accepts Australian delivery
+            addresses only. Please contact Allen before ordering if you need to discuss a delivery date, framing or the
+            dimensions of a painting.
+          </p>
+          <h2>Stripe payments</h2>
+          <p>
+            Online purchases use Stripe&rsquo;s secure checkout. Stripe handles the payment and delivery details. Card
+            details are not stored on this website.
+          </p>
+          <h2>Buying online</h2>
+          <p>
+            Available paintings can be bought from <Link href="/anns-art">Ann&rsquo;s art page</Link>. Stripe collects
+            payment and the Australian delivery address. Because every painting is an original, its checkout closes
+            after the first completed purchase.
+          </p>
+          <h2>Questions or a problem with your order</h2>
+          <p>
+            Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> or{" "}
+            <a href={`sms:${SMS_NUMBER}`}>text Allen on {SMS_DISPLAY}</a> with the painting title and payment
+            reference. If a painting arrives damaged, please get in touch within 7 days of delivery and include photos
+            of the painting and its packaging.
+          </p>
+          {termsPublished ? (
+            <p>
+              Refunds, returns and your rights under the Australian Consumer Law are set out in the{" "}
+              <CrossSiteLink site="main" path="/terms">terms of sale</CrossSiteLink>.
+            </p>
+          ) : null}
+          <p>
+            <Link href="/anns-art">Back to Ann&rsquo;s paintings</Link>
+          </p>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

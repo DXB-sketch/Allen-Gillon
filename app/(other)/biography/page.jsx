@@ -35,7 +35,7 @@ function Snap({ src, alt, width, height, caption, corners, className = "", eager
 
 export default function BiographyPage() {
   return (
-    <main className="timeless">
+    <div className="timeless">
       <header className="pagehead band timeless-head">
         <TimelessCurtain className="bleed" />
         <h1 className="script">Timeless</h1>
@@ -169,6 +169,6 @@ export default function BiographyPage() {
           </div>
         </section>
       </div>
-    </main>
+    </div>
   );
 }

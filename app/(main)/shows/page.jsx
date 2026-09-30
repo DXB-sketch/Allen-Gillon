@@ -27,7 +27,7 @@ const tracks = [
 
 export default function ShowsPage() {
   return (
-    <main>
+    <div>
       <header className="pagehead band">
         <h1 className="script">The Matthew Allen 5</h1>
         <p className="plain">At Chandler Theatre, 1998. Press play on any song to hear a 30-second preview of the show.</p>
@@ -53,6 +53,6 @@ export default function ShowsPage() {
           <figcaption>MA5 Show.</figcaption>
         </figure>
       </section>
-    </main>
+    </div>
   );
 }

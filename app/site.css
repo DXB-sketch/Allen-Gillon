@@ -109,7 +109,8 @@ img.gx-hero{width:100%;height:auto;object-fit:cover;display:block;}
 #main:focus{outline:none;}
 .skip-link{position:absolute;left:12px;top:-100px;z-index:100;padding:12px 16px;min-height:44px;
   background:var(--ink);color:var(--on);text-decoration:none;}
-.skip-link:focus{top:12px;outline:3px solid var(--paper);outline-offset:3px;}
+/* The link is an ink block on paper, so its ring is blue (a paper ring would vanish on the paper). */
+.skip-link:focus{top:12px;outline:3px solid var(--blue);outline-offset:3px;}
 
 /* "Listen to this page" */
 .page-reader{padding:6px var(--gutter);display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:1rem;}
@@ -137,8 +138,15 @@ footer p a:hover{color:oklch(0.78 0.13 33);}
 footer nav{display:flex;gap:4px;flex-wrap:wrap;}
 footer nav a{font-size:1rem;padding:8px 10px;min-height:44px;display:inline-flex;align-items:center;}
 footer :focus-visible{outline-color:var(--paper);}
-footer nav a.fb{gap:7px;}
-footer nav a.fb::before{content:"";width:17px;height:17px;flex:none;background:currentColor;
+/* Contact block: <address> holds contact details, so it is not italic.
+   Every footer link is a 44px target. */
+footer .fscript{margin:0 0 6px;}
+footer address{font-style:normal;}
+.footer-contact a{display:inline-flex;align-items:center;min-height:44px;}
+.footer-links{display:flex;flex-direction:column;gap:4px;}
+.footer-copy{flex-basis:100%;}
+footer a.fb{gap:7px;}
+footer a.fb::before{content:"";width:17px;height:17px;flex:none;background:currentColor;
   -webkit-mask:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4h-3V12h3V9.4c0-3 1.8-4.7 4.6-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.3l-.5 3.5h-2.8v8.4A12 12 0 0 0 24 12Z"/></svg>') center/contain no-repeat;
   mask:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4h-3V12h3V9.4c0-3 1.8-4.7 4.6-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.3l-.5 3.5h-2.8v8.4A12 12 0 0 0 24 12Z"/></svg>') center/contain no-repeat;}
 
@@ -181,6 +189,13 @@ button:disabled{cursor:wait;opacity:.65;}
 .audiobook-play:hover,.audiobook-play.playing{color:var(--red-deep);}
 .audiobook-play-icon{display:grid;place-items:center;width:36px;height:36px;border:2px solid currentColor;border-radius:50%;font-size:1rem;line-height:1;}
 
+/* --nowbar-h is the bar's height: a 48px button plus 12px padding above and
+   below (72px); at 480px and below the slider wraps onto its own 44px row
+   (measured 126px: 10 + 48 + 10 + 44 + 10, plus the 2px default margin
+   above and below the range input). While the bar is showing, scroll padding
+   keeps anything scrolled or tabbed to from ending up behind it. */
+:root{--nowbar-h:72px;}
+html:has(.nowbar.on){scroll-padding-bottom:var(--nowbar-h);}
 .nowbar{position:sticky;bottom:0;background:var(--ink);color:var(--on);display:none;}
 .nowbar.on{display:block;}
 .nowbar-inner{display:flex;align-items:center;gap:16px;padding:12px var(--gutter);}
@@ -214,6 +229,7 @@ button:disabled{cursor:wait;opacity:.65;}
 @media (max-width:480px){
   .mast.home-mast{padding-top:6px;}
   .mast.home-mast .logo{display:none;}
+  :root{--nowbar-h:126px;}
   .nowbar-inner{flex-wrap:wrap;gap:10px;padding-block:10px;}
   .nowbar input[type=range]{flex:1 1 100%;order:3;}
 }

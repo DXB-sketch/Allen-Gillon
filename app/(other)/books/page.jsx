@@ -60,7 +60,7 @@ export default function BooksPage() {
   const checkoutOpen = plays.some((book) => stripePaymentLink(`play-${book.slug}`));
 
   return (
-    <main className="writing-page">
+    <div className="writing-page">
       <header className="writing-head band">
         <h1 className="script">Stories, plays and textbooks</h1>
         <p className="writing-intro">Allen wrote for children, school stages and classrooms. His work is gathered here in one place.</p>
@@ -144,6 +144,6 @@ export default function BooksPage() {
       <div className="band books-comment">
         <SectionComment subject="Stories, plays and textbooks" returnTo="/books" returnLabel="Stories" />
       </div>
-    </main>
+    </div>
   );
 }

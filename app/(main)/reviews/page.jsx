@@ -20,7 +20,7 @@ const tableComments = [
 // cluster, the approved reviews, then the form. Space separates the parts.
 export default function ReviewsPage() {
   return (
-    <main>
+    <div>
       <header className="reviewsHead pagehead band">
         <h1 className="script">Friendly reviews</h1>
         <p className="intro">Comments from people who have heard Allen play around Bribie Island.</p>
@@ -52,6 +52,6 @@ export default function ReviewsPage() {
 
         <FriendlyReviewForm />
       </div>
-    </main>
+    </div>
   );
 }

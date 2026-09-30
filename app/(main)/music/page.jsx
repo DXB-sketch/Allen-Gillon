@@ -30,7 +30,7 @@ const shelf = albums.map((album) => ({ ...album, shelfCover: `/images/albums/she
 
 export default function MusicPage() {
   return (
-    <main className="music-page">
+    <div className="music-page">
       <header className="pagehead band music-head">
         <h1 className="script">Albums</h1>
         <p className="plain">
@@ -65,6 +65,7 @@ export default function MusicPage() {
             aria-label="Ann and Allen performing This Masquerade"
           >
             <source src="/videos/timeless-masquerade.mp4" type="video/mp4" />
+            <track kind="captions" src="/videos/timeless-masquerade.v1.en.vtt" srcLang="en" label="English" default />
             Your browser does not support video playback.
           </video>
         </div>
@@ -79,6 +80,7 @@ export default function MusicPage() {
             aria-label="Ann and Allen performing Unforgettable"
           >
             <source src="/videos/timeless-unforgettable.mp4" type="video/mp4" />
+            <track kind="captions" src="/videos/timeless-unforgettable.v1.en.vtt" srcLang="en" label="English" default />
             Your browser does not support video playback.
           </video>
         </div>
@@ -126,6 +128,6 @@ export default function MusicPage() {
         </div>
         <SectionComment subject="Original songs" returnTo="/music#originals" returnLabel="Original songs" />
       </section>
-    </main>
+    </div>
   );
 }

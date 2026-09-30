@@ -47,12 +47,12 @@ export default async function PaintingPage({ params }) {
     breadcrumbs([{ name: "Ann Gillon's art", url: "/anns-art" }, { name: art.title }], "other"),
   ];
   return (
-    <main>
+    <div>
       <div className="band painting-page">
         <p className="painting-back"><Link className="back-link" href="/anns-art">All of Ann&rsquo;s paintings</Link></p>
         <PaintingDetail art={art} checkoutUrl={stripePaymentLink(`art-${art.id}`)} Heading="h1" priority />
       </div>
       <script {...jsonLdProps(jsonLd)} />
-    </main>
+    </div>
   );
 }
