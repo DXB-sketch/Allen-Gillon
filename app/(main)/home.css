@@ -1,51 +1,107 @@
-/* Home (allengillon.com/). W3 foundation; W5 art-directs this page. */
+/* Home (allengillon.com/). W5 art direction.
+   Order: hero (name + full-bleed photo), two typographic doorways, the venue
+   handbill, one pull-quote, a line to the other site. Every band is the
+   12-column .band grid; grid lines: 1 full-start, 2 wide-start (column 1),
+   14 wide-end, 15 full-end. */
 
-.home-hero{padding-block:clamp(20px,3vw,48px) 0;row-gap:clamp(24px,3vw,44px);}
-.home-hero > h1{color:var(--blue);text-shadow:var(--overprint-red);}
-.home-photos{grid-column:wide-start / span 7;}
-.home-doors{grid-column:span 5 / wide-end;align-self:start;}
+/* ---------- Hero ----------
+   Phone: name, then the photo edge to edge, then the intro.
+   From 900px: the name and intro hang from the left of the wide area and the
+   photo bleeds off the right edge of the page. */
+.home-hero{padding-block:clamp(8px,2vw,24px) 0;row-gap:clamp(20px,2.4vw,36px);}
+.home-hero > h1{grid-row:1;}
+.home-name{white-space:nowrap;}
+.home-hero > .home-photo{grid-column:full;grid-row:2;min-width:0;}
+.home-photo img{display:block;width:100%;height:auto;aspect-ratio:10/9;object-fit:cover;
+  /* Keep his face and the headstock; the crop drops the watermark at the
+     bottom of the frame. */
+  object-position:50% 0;}
+.home-intro{grid-row:3;font-size:clamp(1.1em,1.25vw,1.3em);margin:0;}
 
-.photoCollage{position:relative;aspect-ratio:.88/1;max-width:880px;}
-.photoCollage .mainPhoto{width:78%;aspect-ratio:1/1;object-fit:cover;display:block;}
-/* A second photo laid on the big one. No frame: photos carry no border. */
-.photoCollage .photoThree{position:absolute;right:0;bottom:6%;width:47%;aspect-ratio:1/1;object-fit:cover;
-  transform:rotate(-5deg);}
+@media (min-width:900px){
+  .home-hero{grid-template-rows:1fr auto auto 1.4fr;row-gap:0;padding-top:clamp(8px,1.4vw,24px);}
+  .home-hero > h1{grid-row:2;align-self:end;}
+  .home-name{display:block;width:fit-content;}
+  .home-name + .home-name{margin-left:.62em;}
+  .home-hero > .home-photo{grid-column:8 / full-end;grid-row:1 / -1;}
+  .home-hero > .home-intro{grid-column:wide-start / 7;grid-row:3;margin-top:clamp(20px,2.4vw,40px);}
+}
 
-/* Venues, printed in the two inks. */
-.venues{list-style:none;margin:20px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 22px;font-size:1.1rem;line-height:1.4;}
-.venues li:nth-child(odd){color:var(--red-deep);}
-.venues li:nth-child(even){color:var(--blue);font-style:italic;}
+/* ---------- Doorways ----------
+   Two single links, each a drawing and one huge word. */
+.home-doorways{margin-top:var(--band-space);}
+.home-doors{display:grid;row-gap:clamp(28px,4vw,48px);column-gap:var(--col-gap);}
+.door{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;
+  column-gap:clamp(16px,2vw,36px);align-items:end;min-width:0;
+  color:var(--ink);text-decoration:none;
+  transition:color .2s var(--ease-out);}
+.door-art{grid-row:1 / span 2;align-self:end;height:auto;}
+.door-art--headstock{width:clamp(64px,8vw,150px);}
+.door-art--record{width:clamp(96px,12vw,220px);}
+.door-word{font-size:clamp(3rem,6.6vw,7.25rem);line-height:.95;letter-spacing:-.01em;}
+.door-line{font-size:clamp(1em,1.1vw,1.15em);line-height:1.4;color:var(--soft);margin-top:12px;max-width:26ch;}
+.door:hover{color:var(--red-deep);}
+.door:hover .door-line{color:var(--red-deep);}
+@media (min-width:820px){
+  /* Two equal tracks with the band's column gap: the same 6 + 6 split. */
+  .home-doors{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
 
-ol.idx{list-style:none;margin:0;padding:0;}
-ol.idx li{display:flex;align-items:center;gap:18px;}
-ol.idx .no{font-family:var(--script);font-size:2.4rem;color:var(--red);text-shadow:var(--overprint);min-width:1.4ch;text-align:right;line-height:1;}
-ol.idx li:nth-child(even) .no{color:var(--blue);text-shadow:var(--overprint-red);}
-ol.idx a{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:2px;
-  text-decoration:none;min-height:72px;padding:12px 0;font-size:1.4rem;line-height:1.25;}
-ol.idx a:hover{color:var(--red-deep);}
-ol.idx a small{font-size:1rem;color:var(--soft);}
-.idx-art{width:clamp(68px,7vw,108px);aspect-ratio:1/1;flex:0 0 auto;margin:8px 0;}
-.idx-art img{width:100%;height:100%;object-fit:cover;display:block;}
-.heroIntro{font-size:1.1em;margin:24px 0 0;}
-
-.home-quote{margin-top:var(--band-space);}
-.home-quote blockquote{position:relative;margin:0;padding-left:42px;max-width:var(--measure);}
+/* ---------- Venue handbill ----------
+   A letterpress bill in the two inks. The frame is two passes of the press:
+   a red rule and a blue one that did not quite line up. */
+.home-bill{margin-top:var(--band-space);align-items:center;}
+.bill{position:relative;text-align:center;padding:clamp(28px,4.4vw,72px) clamp(18px,4vw,64px);}
+.bill::before,.bill::after{content:"";position:absolute;inset:0;border:2.75px solid var(--red);pointer-events:none;}
+.bill::after{border-color:var(--blue);opacity:.3;transform:translate(3px,3px);}
+.bill-title{font-size:clamp(1.35rem,2vw,1.7rem);font-weight:400;font-style:italic;line-height:1.3;margin:0 0 clamp(16px,2vw,28px);}
+/* Phone: one venue per line, like a narrow bill. From 700px: three set
+   lines (.bill-nl starts one) with a printer's star between names. */
+.bill-venues{list-style:none;margin:0;padding:0;line-height:1.25;}
+.bill-venues li{display:block;}
+.bill-venues li + li{margin-top:.15em;}
+.bill-l{font-size:clamp(1.8rem,3.4vw,3.3rem);}
+.bill-m{font-size:clamp(1.5rem,2.5vw,2.4rem);}
+.bill-s{font-size:clamp(1.3rem,1.9vw,1.85rem);}
+.bill-r{color:var(--red-deep);}
+.bill-b{color:var(--blue);font-style:italic;}
+.bill-star{display:none;}
+@media (min-width:700px){
+  .bill-venues{line-height:1.45;}
+  .bill-venues li{display:inline;}
+  .bill-venues li + li{margin-top:0;}
+  .bill-venues li.bill-nl:not(:first-child)::before{content:"\A";white-space:pre;}
+  .bill-star{display:inline-block;width:.42em;height:.42em;margin:0 .5em;vertical-align:.12em;}
+  .bill-venues span{white-space:nowrap;}
+}
+.bill-umbrella{display:none;}
 @media (min-width:1024px){
-  .home-quote blockquote{grid-column:4 / wide-end;}
+  .bill{grid-column:3 / 12;}
+  .bill-umbrella{display:block;grid-column:12 / wide-end;width:100%;max-width:220px;justify-self:center;}
 }
-.home-quote blockquote::before{content:"\201C";position:absolute;left:0;top:-18px;color:var(--red);font-family:var(--serif);font-size:4.4rem;line-height:1;}
-.home-quote blockquote p{margin:0;font-size:1.2em;line-height:1.6;}
-.home-quote cite{display:block;margin-top:12px;color:var(--soft);font-size:1rem;font-style:normal;font-weight:700;}
-.reviewsLink{display:inline-flex;align-items:center;min-height:44px;margin-top:10px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
-.reviewsLink:hover{color:var(--red-deep);}
 
-@media (max-width:860px){
-  .home-photos,.home-doors{grid-column:wide;}
-  ol.idx a{font-size:1.2rem;min-height:64px;}
+/* ---------- Pull-quote ---------- */
+.home-quote{margin-top:var(--band-space);}
+.home-quote figure{position:relative;margin:0;}
+.home-quote blockquote{margin:0;}
+.home-quote blockquote p{margin:0;font-size:clamp(1.15em,1.6vw,1.35em);line-height:1.5;}
+.home-quote blockquote::before{content:"\201C";position:absolute;left:-.08em;top:-.32em;
+  font-size:clamp(5rem,9vw,8.5rem);line-height:1;color:var(--red);}
+.home-quote blockquote{padding-left:clamp(44px,5vw,80px);}
+.home-quote figcaption{padding-left:clamp(44px,5vw,80px);margin-top:14px;}
+.home-quote cite{font-family:var(--script);font-style:normal;font-size:2.4rem;line-height:1.1;
+  color:var(--blue);text-shadow:var(--overprint-red);}
+.home-reviews{margin:12px 0 0;padding-left:clamp(44px,5vw,80px);}
+.home-reviews a{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
+.home-reviews a:hover{color:var(--red-deep);}
+@media (min-width:1024px){
+  .home-quote figure,.home-reviews{grid-column:3 / wide-end;}
 }
-@media (max-width:520px){
-  .photoCollage{aspect-ratio:.9/1;}
-  .photoCollage .mainPhoto{width:82%;}
-  .photoCollage .photoThree{width:53%;bottom:4%;}
-  .home-quote blockquote{padding-left:30px;}
-}
+
+/* ---------- Line to the other site ---------- */
+.home-cross{margin-top:var(--band-space);}
+.home-cross p{margin:0;display:flex;align-items:center;gap:clamp(14px,2vw,28px);flex-wrap:wrap;max-width:none;}
+.cross-art{width:clamp(72px,7vw,120px);height:auto;flex:none;}
+.home-cross a{font-size:1.25em;line-height:1.35;color:var(--blue);text-underline-offset:5px;text-decoration-thickness:1px;
+  display:inline-flex;align-items:center;min-height:44px;}
+.home-cross a:hover{color:var(--red-deep);}
