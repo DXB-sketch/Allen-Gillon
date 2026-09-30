@@ -32,11 +32,12 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - Notes: merged W1 (f83c1f9) and W2. Page reader voice per site via SiteChrome. Handed to W6: sideboard 1200x630 OG image, blue-led icon set, manifest (TODO(W6) in app/(other)/other-home/page.jsx). data-site on <html> via inline SITE_MARKER_SCRIPT. start:vinext now uses scripts/start-local.mjs (no routes, SITE_PREVIEW=1).
 
 ## W3 Design foundation
-- [ ] Tokens, named-line grid, full width mast/footer/bands
-- [ ] Per-page `<style>` moved to CSS files
-- [ ] Shadows, double rules, decorative rules, chrome, kickers removed
-- [ ] Times New Roman body, Lora removed, DESIGN.md Layout/Illustration/Motion + line 51/56 updated
-- [ ] Gate: grep checks pass, no horizontal overflow, before/after screenshots
+- [x] Tokens, named-line grid, full width mast/footer/bands
+- [x] Per-page `<style>` moved to CSS files
+- [x] Shadows, double rules, decorative rules, chrome, kickers removed
+- [x] Times New Roman body, Lora removed, DESIGN.md Layout/Illustration/Motion + line 51/56 updated
+- [x] Gate: grep checks pass, no horizontal overflow, before/after screenshots (docs/screenshots/after-w3, CHECKLIST.md; e2e/layout.spec.mjs 8 widths x both hosts)
+- Notes: --measure is 56ch, not 66ch (66ch at 20px Times gave 68-75 char lines; DESIGN.md rule is 60-72). Filled buttons use red-deep (white on red was 3.78:1). Play gate added: playPrice=100, playLinksCurrent=false, play-* links blank.
 
 ## W4 Reader, audiobooks, textbooks
 - [ ] One BookReader (react-pageflip) for all 12 titles, shared controls
@@ -101,3 +102,4 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py
 - [B] Cue ear-check sign-off per story (docs/cue-review/<slug>/index.html; low-confidence picture pages listed there); ElevenLabs source script if alignment confidence < 0.6
 - [B] Confirm "Albums" as the /music H1 wording
+- [B] Confirm /music lede edit: "Individual song downloads are available in each track list." (was "...under the three-dot menus")
