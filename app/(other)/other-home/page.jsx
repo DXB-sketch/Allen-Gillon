@@ -4,20 +4,33 @@ import "./other-home.css";
 
 // "The sideboard": the home page of other.allengillon.com. It is served at "/"
 // through the proxy rewrite; /other-home itself returns 301 to "/".
+//
+// metadataBase is cleared here on purpose: with a metadataBase, vinext (like
+// Next) prints a root canonical as the bare origin "https://other.allengillon.com",
+// dropping the trailing slash. Without one, absolute URLs are printed exactly
+// as written, so every URL in this metadata must stay absolute.
+//
+// TODO(W6): the 1200x630 OG image, the blue-led icon set and the "More on
+// Allen" manifest are W6 deliverables. The OG image below is a stand-in.
+const CANONICAL = "https://other.allengillon.com/";
+
 export const metadata = {
+  metadataBase: null,
   title: { absolute: "More on Allen: stories, Timeless and Ann's art" },
   description:
     "Allen Gillon's personal side: stories and school plays for young readers, the Timeless story of Allen and Ann, and Ann Gillon's original paintings.",
-  alternates: { canonical: "https://other.allengillon.com/" },
+  alternates: { canonical: CANONICAL },
   openGraph: {
     title: "More on Allen",
     description:
       "Stories and school plays for young readers, the Timeless story of Allen and Ann, and Ann Gillon's original paintings.",
-    url: "https://other.allengillon.com/",
+    url: CANONICAL,
     siteName: "More on Allen",
     locale: "en_AU",
     type: "website",
-    images: [{ url: "/images/chinese-chimes-together.webp", width: 1080, height: 607 }],
+    images: [
+      { url: "https://other.allengillon.com/images/chinese-chimes-together.webp", width: 1080, height: 607 },
+    ],
   },
 };
 
@@ -31,13 +44,10 @@ export default function OtherHome() {
 
       <div className="doorways">
         <Link className="doorway doorway-book" href="/books">
+          {/* An open Chime Time Stories book: the Little Ray cover and its first page. */}
           <span className="doorway-object" aria-hidden="true">
-            <img
-              src="/images/chinese-chimes-together.webp"
-              alt=""
-              width="1080"
-              height="607"
-            />
+            <img src="/books/little-ray/p001.webp" alt="" width="1000" height="1000" />
+            <img src="/books/little-ray/p002.webp" alt="" width="1003" height="1000" />
           </span>
           <span className="doorway-label">Stories, plays and textbooks</span>
         </Link>
