@@ -1,11 +1,24 @@
-import SectionComment from "../../../components/SectionComment";
-import Audiobook from "../../../components/Audiobook";
-import PurchaseLink from "../../../components/PurchaseLink";
 import Link from "next/link";
-import { formatAud, playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
-// Workers have no runtime filesystem. Importing the index lets both Next.js
-// and Cloudflare bundle the book list at build time.
+import SectionComment from "../../../components/SectionComment";
+import PurchaseLink from "../../../components/PurchaseLink";
+import ShelfPlank from "../../../components/illustrations/ShelfPlank";
+import ShelfChimes from "../../../components/illustrations/ShelfChimes";
+import ShelfCurtain from "../../../components/illustrations/ShelfCurtain";
+import ShelfInkwell from "../../../components/illustrations/ShelfInkwell";
+import { playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
+import { buildShelves, priceLabel } from "./shelf-data.mjs";
+// Workers have no runtime filesystem: the book list and manifests are
+// imported so they are bundled at build time.
 import bookIndex from "../../../public/books/index.json";
+import breakoutManifest from "../../../public/books/breakout/manifest.json";
+import funnyFahManifest from "../../../public/books/funny-fah-learns-when-to-stop/manifest.json";
+import imaginativeMeeManifest from "../../../public/books/imaginative-little-mee/manifest.json";
+import hiDohManifest from "../../../public/books/little-hi-doh/manifest.json";
+import littleRayManifest from "../../../public/books/little-ray/manifest.json";
+import meltingPotManifest from "../../../public/books/melting-pot/manifest.json";
+import otherMansGrassManifest from "../../../public/books/the-other-mans-grass/manifest.json";
+import sherwoodManifest from "../../../public/books/three-heroes-of-sherwood/manifest.json";
+import calamityJaneManifest from "../../../public/books/tribute-to-calamity-jane/manifest.json";
 import "./books.css";
 
 export const metadata = {
@@ -13,122 +26,114 @@ export const metadata = {
   description: "Read Allen Gillon's Chinese Chimes stories, school plays and published classroom textbooks.",
 };
 
-const stories = [
-  { video: "OAu1PmILqeA", title: "Funny Fah Learns When to Stop", readSlug: "funny-fah-learns-when-to-stop", audio: "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop.mp3" },
-  { video: "ZwzVEIQp3Cw", title: "Imaginative Little Mee", readSlug: "imaginative-little-mee", audio: "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3" },
-  { video: "Ynu-5Rt7Vyw", title: "Hi Doh", readSlug: "little-hi-doh", audio: "/audio/chinese-chimes-audiobooks/hi-doh.mp3" },
-  { video: "cEuPWVPPN0o", title: "Little Ray", readSlug: "little-ray", audio: "/audio/chinese-chimes-audiobooks/little-ray.mp3" },
-];
+/* One book standing on the shelf. The cover is a second, mouse-only way into
+   the same place as the book's action link, so it is hidden from the keyboard
+   and screen readers (the title and the link say it all). The plank under
+   each book joins its neighbours into one drawn shelf. */
+function Book({ book, index, href, ground, children }) {
+  return (
+    <li className="book">
+      <Link className="book-cover" href={href} tabIndex={-1} aria-hidden="true">
+        <img src={book.cover} width={book.aspect[0]} height={book.aspect[1]} loading="lazy" decoding="async" alt="" />
+      </Link>
+      <ShelfPlank className="shelf-plank" grain={index} ground={ground} draw delay={index * 90} />
+      <h3>{book.title}</h3>
+      {children}
+    </li>
+  );
+}
 
-const chimesCover = "/images/chinese-chimes-together.webp";
-
-const playOrder = ["melting-pot", "the-other-mans-grass", "tribute-to-calamity-jane", "three-heroes-of-sherwood", "breakout"];
-
-const playAudio = {
-  "melting-pot": "/audio/school-play-audiobooks/melting-pot.mp3",
-  breakout: "/audio/school-play-audiobooks/breakout.mp3",
-};
-
-const teachingCovers = {
-  "practice-in-communication-book-1": "/images/books/practice-in-communication-book-1.webp",
-  "practice-in-communication-book-2": "/images/books/practice-in-communication-book-2.webp",
-  "riddled-with-language": "/images/books/riddled-with-language.webp",
+const manifests = {
+  breakout: breakoutManifest,
+  "funny-fah-learns-when-to-stop": funnyFahManifest,
+  "imaginative-little-mee": imaginativeMeeManifest,
+  "little-hi-doh": hiDohManifest,
+  "little-ray": littleRayManifest,
+  "melting-pot": meltingPotManifest,
+  "the-other-mans-grass": otherMansGrassManifest,
+  "three-heroes-of-sherwood": sherwoodManifest,
+  "tribute-to-calamity-jane": calamityJaneManifest,
 };
 
 export default function BooksPage() {
-  const index = bookIndex;
-  const bySlug = Object.fromEntries(index.map((book) => [book.slug, book]));
-  const plays = playOrder.map((slug) => bySlug[slug]).filter(Boolean);
-  const teaching = index.filter((book) => book.section === "teaching");
+  const { stories, plays, textbooks } = buildShelves(bookIndex, manifests);
+  const price = priceLabel(playPrice);
 
   return (
     <main className="writing-page">
       <header className="writing-head band">
         <h1 className="script">Stories, plays and textbooks</h1>
-        <nav className="writing-nav" aria-label="Writing sections">
-          <Link className="script" href="#stories">Stories</Link>
-          <Link className="script" href="#school-plays">Plays</Link>
-          <Link className="script" href="#classroom-texts">Textbooks</Link>
-        </nav>
         <p className="writing-intro">Allen wrote for children, school stages and classrooms. His work is gathered here in one place.</p>
+        <nav className="writing-nav" aria-label="Shelves on this page">
+          <a href="#stories">Stories</a>
+          <a href="#school-plays">Plays</a>
+          <a href="#classroom-texts">Textbooks</a>
+        </nav>
       </header>
 
-      <section className="writing-section band" id="stories" aria-labelledby="stories-title">
-        <div className="section-heading">
-          <h2 className="script" id="stories-title">Chinese Chimes stories</h2>
+      <section className="shelf-section band" id="stories" aria-labelledby="stories-title">
+        <div className="shelf-open stories-open">
+          <h2 className="shelf-title" id="stories-title"><span className="shelf-qual">Chinese Chimes</span> <span className="shelf-word">stories</span></h2>
           <p>The characters in these stories are named after the musical scale: Doh, Ray, Mee, Fah, Soh, Lah, Tee, Doh, with an added Hi-Doh and Low-Doh. Here are four of Allen's stories for young readers. Each story contains an important moral, and the name of the Little Chime sometimes highlights it. A teacher or parent can read the eBook online, or watch and listen to the audiobook.</p>
+          <ShelfChimes className="shelf-art chimes-art" draw />
         </div>
-        <ol className="audiobook-list">
-          {stories.map((story, storyIndex) => (
-            <li key={story.video}>
-              <span className="audiobook-number" aria-hidden="true">{storyIndex + 1}</span>
-              <img className="audiobook-cover" src={chimesCover} width="1080" height="607" loading="lazy" alt="The Chinese Chimes together" />
-              <div className="audiobook-copy">
-                <h3>{story.title}</h3>
-                <p>Narrated Chinese Chimes audiobook</p>
+        <ul className="shelf stories-shelf audiobook-list">
+          {stories.map((book, index) => (
+            <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`}>
+              <p className="book-blurb">{book.blurb}</p>
+              <div className="book-actions">
+                <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read and listen to ${book.title}`}>Read and listen</Link>
+                <Link className="book-text-link" href={`/read/${book.slug}/text`} aria-label={`Text only version of ${book.title}`}>Text only</Link>
               </div>
-              <div className="audiobook-actions">
-                <Link className="story-read-link" href={`/read/${story.readSlug}`}>Read the book</Link>
-                <Audiobook title={story.title} src={story.audio} />
-              </div>
-            </li>
-          ))}
-        </ol>
-        <div className="upcoming-books">
-          <h3>More Chinese Chimes stories</h3>
-          <p>Doh, Soh, Lah and Tee are still to come.</p>
-        </div>
-        <SectionComment subject="Chinese Chimes stories" returnTo="/books#stories" returnLabel="Stories" />
-      </section>
-
-      <section className="writing-section band" id="school-plays" aria-labelledby="plays-title">
-        <div className="section-heading">
-          <h2 className="script" id="plays-title">School plays</h2>
-          <p>Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each script costs {formatAud(playPrice)} as a PDF.</p>
-        </div>
-        <ol className="plays">
-          {plays.map((play, indexNumber) => (
-            <li key={play.slug}>
-              <span className="pno">{indexNumber + 1}</span>
-              <div>
-                <h3>{play.title}</h3>
-                <p>{play.blurb} {play.pageCount} pages.</p>
-                {playAudio[play.slug] ? <Audiobook title={play.title} src={playAudio[play.slug]} kind="play recording" /> : null}
-                <div className="item-actions">
-                  <Link className="item-primary-link" href={`/read/${play.slug}`}>Read online</Link>
-                  <PurchaseLink href={stripePaymentLink(`play-${play.slug}`)} pendingLabel={`${formatAud(playPrice)} download. Online checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <p className="plays-note">Read a play online before buying it. After checkout, Allen will email the PDF to the address used for payment.</p>
-        <SectionComment subject="School plays" returnTo="/books#school-plays" returnLabel="School Plays" />
-      </section>
-
-      <section className="writing-section band" id="classroom-texts" aria-labelledby="texts-title">
-        <div className="section-heading">
-          <h2 className="script" id="texts-title">Classroom texts</h2>
-          <p>These books come from Allen&rsquo;s twenty-five years of teaching. They were published for use in schools.</p>
-        </div>
-        <ul className="texts-list" aria-label="Published classroom texts">
-          {teaching.map((book) => (
-            <li key={book.slug}>
-              <a className="cover-link" href={teachingCovers[book.slug]} target="_blank" rel="noreferrer" aria-label={`View the front cover of ${book.title} at full size`}>
-                <img className="text-cover" src={teachingCovers[book.slug]} width="1000" height="1414" loading="lazy" alt={`Original front cover of ${book.title}`} />
-              </a>
-              <div>
-                <h3>{book.title}</h3>
-                <p>{book.blurb} Contact Allen if you would like help finding a copy.</p>
-                <div className="item-actions">
-                  <Link className="item-primary-link" href={`/read/${book.slug}`}>View details</Link>
-                </div>
-              </div>
-            </li>
+            </Book>
           ))}
         </ul>
-        <SectionComment subject="Classroom texts" returnTo="/books#classroom-texts" returnLabel="Classroom Texts" />
+        <p className="shelf-coda">Doh, Soh, Lah and Tee are still to come.</p>
       </section>
+
+      <section className="shelf-section band" id="school-plays" aria-labelledby="plays-title">
+        <div className="shelf-open plays-open">
+          <ShelfCurtain className="shelf-art curtain-art" lead="red" draw />
+          <h2 className="shelf-title" id="plays-title"><span className="shelf-qual">School</span> <span className="shelf-word">plays</span></h2>
+          <p className="plays-lede">Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each script costs <strong>{price}</strong> as a PDF.</p>
+        </div>
+        <ul className="shelf plays-shelf">
+          {plays.map((book, index) => (
+            <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`}>
+              <p className="book-blurb">{book.blurb}</p>
+              <p className="book-price"><strong>{priceLabel(book.price)}</strong> <span>script, {book.fullPages} pages</span></p>
+              <div className="book-actions">
+                <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read a preview of ${book.title}`}>Read a preview</Link>
+                <PurchaseLink href={stripePaymentLink(`play-${book.slug}`)} pendingLabel="Online checkout coming soon">Buy the script, {priceLabel(book.price)}</PurchaseLink>
+              </div>
+            </Book>
+          ))}
+        </ul>
+        <p className="shelf-coda">Read the first pages of any play online before buying it. After checkout, Allen will email the PDF to the address used for payment.</p>
+      </section>
+
+      <section className="shelf-section texts-section band ink" id="classroom-texts" aria-labelledby="texts-title">
+        <div className="shelf-open texts-open">
+          <h2 className="shelf-title" id="texts-title"><span className="shelf-qual">Classroom</span> <span className="shelf-word">textbooks</span></h2>
+          <p>These books come from Allen&rsquo;s twenty-five years of teaching. They were published for use in schools.</p>
+          <ShelfInkwell className="shelf-art inkwell-art" ground="ink" draw />
+        </div>
+        <ul className="shelf texts-shelf">
+          {textbooks.map((book, index) => (
+            <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`} ground="ink">
+              <p className="book-blurb">{book.blurb}</p>
+              <div className="book-actions">
+                <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read online: ${book.title}`}>Read online</Link>
+                {book.pdf ? <a className="book-action" href={book.pdf} download aria-label={`Download PDF of ${book.title}`}>Download PDF</a> : null}
+              </div>
+            </Book>
+          ))}
+        </ul>
+      </section>
+
+      <div className="band books-comment">
+        <SectionComment subject="Stories, plays and textbooks" returnTo="/books" returnLabel="Stories" />
+      </div>
     </main>
   );
 }
