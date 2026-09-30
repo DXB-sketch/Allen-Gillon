@@ -2,7 +2,7 @@ import { artFallbackSrc, artSrcSet } from "../../lib/art-catalog.mjs";
 
 /*
  * One photograph of a painting as a responsive <picture>: AVIF, then WebP,
- * at 480/960/1600 (capped at the photograph's width), built by
+ * at 480/720/960/1600 (capped at the photograph's width), built by
  * scripts/build-art-images.mjs. width/height keep the true aspect ratio so
  * nothing shifts while it loads. `sizes` describes how wide it renders.
  */

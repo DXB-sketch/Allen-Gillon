@@ -41,6 +41,7 @@ import {
   TURN_LEAD,
 } from "../../lib/reader-follow.mjs";
 import { paragraphs } from "../../lib/book-text.mjs";
+import { pageSrcSet, READER_PAGE_SIZES } from "../../lib/books.mjs";
 
 const NEAR = 3; /* pages either side of the spread that get a real image */
 const TURN_MS = 700;
@@ -205,7 +206,15 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     const at = indexRef.current;
     root.querySelectorAll("img[data-page]").forEach((img) => {
       const i = Number(img.dataset.page);
-      if (Math.abs(i - at) <= NEAR + 1 && !img.getAttribute("src")) img.setAttribute("src", img.dataset.src);
+      if (Math.abs(i - at) <= NEAR + 1 && !img.getAttribute("src")) {
+        /* The same srcset and sizes as the plain page, so the flip book reuses
+           the copy the browser already has instead of fetching another size. */
+        if (img.dataset.srcset) {
+          img.setAttribute("sizes", READER_PAGE_SIZES);
+          img.setAttribute("srcset", img.dataset.srcset);
+        }
+        img.setAttribute("src", img.dataset.src);
+      }
     });
   }, []);
   useEffect(() => {
@@ -385,7 +394,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     for (let i = 0; i < shownPages; i += 1) {
       out.push(
         <div className="bkr-page" key={i} data-density={i === 0 ? "hard" : "soft"}>
-          <img data-page={i} data-src={pageSrc(slug, i)} alt={`${pageHeading(book, i)} of ${title}`} width={w} height={h} decoding="async" draggable="false" />
+          <img data-page={i} data-src={pageSrc(slug, i)} data-srcset={pageSrcSet(slug, i + 1, w)} alt={`${pageHeading(book, i)} of ${title}`} width={w} height={h} decoding="async" draggable="false" />
         </div>
       );
     }
@@ -436,7 +445,19 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
       {plainIndex >= shownPages ? (
         pages[pages.length - 1]
       ) : (
-        <img src={pageSrc(slug, plainIndex)} alt={`${pageHeading(book, plainIndex)} of ${title}`} width={w} height={h} decoding="async" />
+        /* The page on screen before the flip book loads, and the LCP element
+           of /read: a phone gets the 720px copy (app/(other)/read/[slug]
+           preloads the same srcset with high priority). */
+        <img
+          src={pageSrc(slug, plainIndex)}
+          srcSet={pageSrcSet(slug, plainIndex + 1, w)}
+          sizes={READER_PAGE_SIZES}
+          alt={`${pageHeading(book, plainIndex)} of ${title}`}
+          width={w}
+          height={h}
+          fetchPriority={plainIndex === 0 ? "high" : undefined}
+          decoding="async"
+        />
       )}
     </div>
   );

@@ -13,7 +13,7 @@ import {
   legalRouteVisible,
   SUPPORT_EMAIL,
 } from "../lib/legal.mjs";
-import { LEGAL_PATHS, resolveRequest } from "../lib/sites.mjs";
+import { LEGAL_PATHS, MISSING_PATH, resolveRequest } from "../lib/sites.mjs";
 
 const PROD = { NODE_ENV: "production" };
 const UNPUBLISHED = { published: false };
@@ -54,12 +54,14 @@ test("flipping the flag shows the legal routes", () => {
   assert.equal(legalRouteVisible("/hire", PUBLISHED), false);
 });
 
-test("unpublished legal routes are not redirected on either host, so the page's notFound() 404s on both", () => {
+test("unpublished legal routes are not redirected on either host, so both 404", () => {
   for (const path of LEGAL_PATHS) {
-    for (const host of ["allengillon.com", "other.allengillon.com"]) {
-      const result = resolveRequest(host, path, { env: PROD, legalPublished: isLegalPublished(UNPUBLISHED) });
-      assert.equal(result.action, "next", `${host}${path}`);
-    }
+    const opts = { env: PROD, legalPublished: isLegalPublished(UNPUBLISHED) };
+    // main: the page's notFound() (the (main) group's not-found).
+    assert.equal(resolveRequest("allengillon.com", path, opts).action, "next", `allengillon.com${path}`);
+    // other: rewritten to a path with no route, so global-not-found renders
+    // the 404 with the More on Allen chrome.
+    assert.deepEqual(resolveRequest("other.allengillon.com", path, opts), { site: "other", action: "rewrite", pathname: MISSING_PATH });
   }
 });
 

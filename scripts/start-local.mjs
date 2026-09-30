@@ -9,7 +9,7 @@
 //
 // Port: SITE_DEV_PORT, default 8787. Extra arguments go to wrangler.
 import { readFileSync, writeFileSync } from "node:fs";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import path from "node:path";
 
 const built = path.resolve("dist/server/wrangler.json");
@@ -28,7 +28,23 @@ delete config.route;
 config.vars = { ...(config.vars || {}), SITE_PREVIEW: "1", SITE_DEV_PORT: port };
 writeFileSync(local, JSON.stringify(config, null, 2));
 
-const args = ["wrangler", "dev", "--config", local, "--port", port, ...process.argv.slice(2)];
+// The built config lives in dist/server, so wrangler keeps this preview's
+// local D1 in dist/server/.wrangler, which a rebuild starts empty. Apply the
+// reviews migrations to that state first (a no-op once applied), so
+// /api/reviews answers 200 locally instead of "no such table".
+const extra = process.argv.slice(2);
+const persistAt = extra.indexOf("--persist-to");
+const persist = persistAt >= 0 ? extra.slice(persistAt, persistAt + 2) : [];
+for (const db of config.d1_databases || []) {
+  const migrate = spawnSync("npx", ["wrangler", "d1", "migrations", "apply", db.database_name, "--local", "--config", local, ...persist], {
+    stdio: "inherit",
+    shell: process.platform === "win32",
+    env: { ...process.env, CI: "1" },
+  });
+  if (migrate.status !== 0) console.warn(`start-local: could not apply the local D1 migrations for ${db.database_name}; /api/reviews may answer 503.`);
+}
+
+const args = ["wrangler", "dev", "--config", local, "--port", port, ...extra];
 const child = spawn("npx", args, { stdio: "inherit", shell: process.platform === "win32" });
 child.on("exit", (code) => process.exit(code ?? 0));
 for (const signal of ["SIGINT", "SIGTERM"]) process.on(signal, () => child.kill(signal));

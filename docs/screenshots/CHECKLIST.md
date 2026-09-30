@@ -8,8 +8,10 @@ Three sets, all full page, downscaled to 960px wide, JPEG quality 60 (sharp):
   Re-captured on 2026-10-01 by the playwright-matrix-visual verifier (round 2) against the built Worker (`npm run build:vinext`, then
   `SITE_DEV_PORT=<port> node scripts/start-local.mjs`) with **prefers-reduced-motion: reduce**, so every drawing is in its final state and
   Ann's art shows the salon-hang index (its reduced-motion default). The capture scrolls the whole page once and decodes every image before
-  the shot. Note: `scripts/capture-screenshots.mjs` itself does not set reduced motion; this set was taken with a copy that passes
-  `reducedMotion: "reduce"` to `newPage`. It adds routes the earlier sets did not have: the 404 page on both hosts, /comments on the other
+  the shot. Re-captured again after fixer round 2 with the repo script itself, which now passes `reducedMotion: "reduce"` and lists
+  every route below (`SITE_DEV_PORT=<port> node scripts/capture-screenshots.mjs docs/screenshots/after`). Round 2 visible changes: the
+  More on Allen mast and footer logos and prose links are blue, Bookings is no longer bold red in the main nav, and on short pages the
+  footer reaches the bottom of the window. It adds routes the earlier sets did not have: the 404 page on both hosts, /comments on the other
   host, a story's text route, a textbook reader and a painting route.
 
 Each `after/` shot at 1280 and 375 was looked at against the anti-pattern list and the art-direction requirements in
@@ -130,10 +132,9 @@ Round 2 review (every 1280 and 375 shot opened and looked at):
 - No readable text below 16px on any route at 1280 (every visible text node checked).
 - Timeless: two scrapbook prints are deliberately tucked over a corner of the neighbouring photo (`.snap--inset`).
 - Main home hero is half width, recorded as an accepted change in DESIGN.md (the only photo is 600px wide).
-- Open design points, not blocking: "Bookings" is always bold red in the main nav (`.mnav a.nav-booking`), even on /music where Albums is
-  current, which reads as a single recoloured accent word; on the other site the logo and in-prose links (`p a`) are red although the site
-  is blue-led; on short pages (404) at 1280x900 a strip of paper shows under the footer; the reviews form has no privacy link until the
-  legal pages are published (gated by content/legal.config.json).
+- Design points raised in round 2 and fixed in fixer round 2: Bookings no longer has its own bold red style (only the current page is
+  marked); the More on Allen logo, footer logo and prose links are blue; the footer reaches the bottom of short pages (404). Still open:
+  the reviews form has no privacy link until the legal pages are published (gated by content/legal.config.json).
 
 ## W3 design foundation (after-w3/)
 

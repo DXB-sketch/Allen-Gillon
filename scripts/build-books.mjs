@@ -1,6 +1,6 @@
 // build-books.mjs
 // Turns the source PDFs into the static reader assets in public/books/<slug>/
-// (WebP pages, manifest.json, and the PDF only when download is "public") for
+// (WebP pages and their smaller copies, manifest.json, and the PDF only when download is "public") for
 // every title in content/books.config.json, then writes public/books/index.json.
 //
 // Paid content never reaches public/:
@@ -29,7 +29,7 @@ import path from "node:path";
 import process from "node:process";
 import sharp from "sharp";
 import { playPrice } from "../lib/storefront.mjs";
-import { normaliseBook, pageFile, keepFile } from "../lib/books.mjs";
+import { normaliseBook, pageFile, pageVariantFile, keepFile, PAGE_VARIANT_WIDTHS } from "../lib/books.mjs";
 
 const execFileP = promisify(execFile);
 const require = createRequire(import.meta.url);
@@ -146,6 +146,26 @@ async function prune(outDir, manifest) {
   return removed;
 }
 
+// The smaller copies of each page image (lib/books.mjs PAGE_VARIANT_WIDTHS),
+// made from the full pNNN.webp so titles without a source PDF get them too.
+// A copy is (re)made when it is missing, older than the full image, or --force.
+async function buildVariants(outDir, shownPages, fullWidth) {
+  let made = 0;
+  for (let n = 1; n <= shownPages; n++) {
+    const full = path.join(outDir, pageFile(n));
+    if (!(await exists(full))) continue;
+    const fullTime = (await stat(full)).mtimeMs;
+    for (const width of PAGE_VARIANT_WIDTHS) {
+      if (width >= fullWidth) continue;
+      const dest = path.join(outDir, pageVariantFile(n, width));
+      if (!FORCE && (await exists(dest)) && (await stat(dest)).mtimeMs >= fullTime) continue;
+      await sharp(full).resize({ width }).webp({ quality: SCREEN_QUALITY }).toFile(dest);
+      made += 1;
+    }
+  }
+  return made;
+}
+
 async function buildBook(raw, tool) {
   const outDir = path.join(OUT_ROOT, raw.slug);
   const manifestPath = path.join(outDir, "manifest.json");
@@ -194,6 +214,10 @@ async function buildBook(raw, tool) {
 
   let manifest = normaliseBook(raw, { pageCount, aspect, price: playPrice });
   await mkdir(outDir, { recursive: true });
+  if (aspect) {
+    const made = await buildVariants(outDir, manifest.shownPages, aspect[0]);
+    if (made) console.log(`  ${raw.slug}: made ${made} smaller page image(s).`);
+  }
 
   if (manifest.download === "public") {
     const dest = path.join(outDir, `${manifest.slug}.pdf`);

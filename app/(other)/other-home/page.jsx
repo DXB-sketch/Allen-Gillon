@@ -7,6 +7,7 @@ import SideboardCorner from "../../../components/illustrations/SideboardCorner";
 import SideboardFrame from "../../../components/illustrations/SideboardFrame";
 import SideboardShelf from "../../../components/illustrations/SideboardShelf";
 import { pageMetadata } from "../../../lib/seo.mjs";
+import { pageSrcSet } from "../../../lib/books.mjs";
 import "./other-home.css";
 
 // "The sideboard": the home page of other.allengillon.com. It is served at "/"
@@ -23,6 +24,11 @@ export const metadata = pageMetadata("other", "/");
 // the sideboard loads lazily.
 const LCP = "/books/little-ray/p002.webp";
 const FACING = "/books/little-ray/p001.webp";
+// Each page is half the book: half the column on a phone, about a sixth of
+// the screen on the three-object sideboard. Phones get the 720px copies.
+const LCP_SRCSET = pageSrcSet("little-ray", 2, 1003);
+const FACING_SRCSET = pageSrcSet("little-ray", 1, 1000);
+const PAGE_SIZES = "(min-width: 820px) 16vw, calc(50vw - 16px)";
 
 // Three objects standing on one drawn sideboard, each a single link: an open
 // Chime Time Stories book, a framed painting of Ann's, and a 1968 photo held
@@ -32,7 +38,7 @@ export default function OtherHome() {
   return (
     <div className="sideboard band">
       {/* React hoists this into <head>. */}
-      <link rel="preload" as="image" href={LCP} fetchPriority="high" />
+      <link rel="preload" as="image" href={LCP} imageSrcSet={LCP_SRCSET} imageSizes={PAGE_SIZES} fetchPriority="high" />
       <header className="sideboard-head">
         <h1 className="script">More on Allen</h1>
         <p>Allen&rsquo;s personal side: family, writing, Timeless and Ann&rsquo;s art.</p>
@@ -46,8 +52,8 @@ export default function OtherHome() {
           </span>
           <span className="doorway-object" aria-hidden="true">
             <span className="book-pages">
-              <img src={FACING} alt="" width="1000" height="1000" fetchPriority="high" />
-              <img src={LCP} alt="" width="1003" height="1000" fetchPriority="high" />
+              <img src={FACING} srcSet={FACING_SRCSET} sizes={PAGE_SIZES} alt="" width="1000" height="1000" fetchPriority="high" />
+              <img src={LCP} srcSet={LCP_SRCSET} sizes={PAGE_SIZES} alt="" width="1003" height="1000" fetchPriority="high" />
             </span>
             <SideboardBook className="book-edges" />
           </span>

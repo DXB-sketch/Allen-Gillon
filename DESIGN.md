@@ -91,15 +91,27 @@ selects one. Until then that block stays empty on purpose.
   - **One action per book on /books.** Each book has one link (Read and
     listen, Read a preview or Read online). The plain-text version and the PDF
     download are in the reader, beside Listen and in its toolbar.
-  - **Title colour by site.** On More on Allen every page title (`h1.script`)
+  - **Colour by site.** On More on Allen every page title (`h1.script`)
     takes the blue lead with the red overprint (blue means the written work);
-    main keeps the red lead.
+    main keeps the red lead. The same goes for the mast logo ("More on Allen"
+    in blue with the red overprint), text links in prose (blue instead of
+    red-deep) and the footer logo (a light blue, oklch(0.74 0.11 262), that
+    holds 3:1 on the ink band). The rules key on the server-rendered
+    `[data-site]` of the `.site` wrapper, mast and footer, so they hold
+    before and without JS; `<html data-site>` is added by the inline marker
+    script for rules that need the root.
+  - **Main nav.** Only the current page is styled (`aria-current`: red-deep
+    with the red underline on main, blue on other). Bookings has no extra
+    weight or colour: a single recoloured word competed with the current-page
+    mark.
+  - **Short pages.** The site column is at least the viewport tall and main
+    takes the slack, so the ink footer always reaches the bottom of the window.
 
 ## Illustration
 - Hand-authored inline SVG components in components/illustrations/.
 - A single stroke of 2.5-3px with round caps, plus a misregistered second-ink copy
   offset about 3px at 30% opacity.
-- Red-led on main and blue-led on other, set by `html[data-site]`.
+- Red-led on main and blue-led on other, set by `[data-site]` (server-rendered on the `.site` wrapper, so no JS is needed).
 - aria-hidden and pointer-events:none, and never under text.
 - At most 40KB of decorative SVG per page.
 - No AI rasters and no libraries: no GSAP, Framer, Lottie, Three or carousel
@@ -120,10 +132,15 @@ selects one. Until then that block stays empty on purpose.
   record of an open album slides out and keeps turning on a linear infinite
   rotation (`discspin` in app/(main)/music/music.css), because a record turns at
   a constant speed. It stops when the album closes and never runs under reduced
-  motion (the global reduced-motion rule sets `animation:none`). W5 narrows it so
-  the disc spins only while that album's audio status is `playing`.
+  motion (the global reduced-motion rule sets `animation:none`). The disc turns
+  only while that album's audio status is `playing` (`.album.is-playing .disc`
+  in music.css) and stays out, paused, while its track is loaded.
 
 ## Shared components (styled per direction)
+- **Dialogs** (the painting dialog on /anns-art): native `<dialog>` opened with
+  `showModal()`, so the page behind is inert. Tab and Shift+Tab wrap from the
+  last control to the first and back inside the dialog (never out to the browser
+  toolbar), Esc closes, and focus returns to the painting that opened it.
 - **Work item** (play, book, or album): title, one plain-language line, and the metadata the
   buyer needs. For a play: age band, cast size, run time. For a book: age or classroom use,
   length, format. For an album: length, free-to-stream. Price or "Free" is always visible.
@@ -153,10 +170,19 @@ selects one. Until then that block stays empty on purpose.
   no photo borders except gallery frames, sleeves and books. No shadows (except the book-
   spine inset, react-pageflip's page curl and the Dynalight overprint), no glass, no
   gradients (except the .disc record drawing).
-- Signature element: the numbered index with Dynalight numerals in red, next to the hero.
+- Signature element: the hand-drawn two-ink illustrations beside the page titles and
+  under the objects (guitar, flute, bookshelf planks, the sideboard, the picture rail),
+  red-led on main and blue-led on other. The numbered index with Dynalight numerals was
+  removed in the overhaul.
 - Motion: see the Motion section above (the W5 rules). Player state changes are instant.
 
 ## Implementation note (current build)
-Static multi-page site: index, music, hire, books, plays, biography. Shared `site.css`,
-`gallery.js` image swapper kept from the mockup phase, `player.js` for the free album
-streaming (audio pulled from the old Wix site, see project context file).
+A Next.js App Router app built with vinext and served by one Cloudflare Worker on
+both hosts (allengillon.com and other.allengillon.com; routing in lib/sites.mjs and
+proxy.ts). The (main) and (other) route groups each have a layout with the site's
+mast, footer and metadata. Styles are app/site.css and app/illustrations.css plus
+per-route CSS next to each page. The shared player (components/Player.jsx, the
+now-playing bar) lives in the root layout; Ann's art is components/art/, the book
+reader components/reader/BookReader.jsx, and the illustrations
+components/illustrations/. The old static pages (index.html, gallery.js, player.js,
+plays.html) are left in the repo root from the mockup phase and are not served.

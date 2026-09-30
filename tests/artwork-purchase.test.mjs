@@ -132,7 +132,7 @@ test("wall labels: the price, or Sold", () => {
   assert.equal(artDetails(artworks.find((a) => a.title === "Mare and Foal")), "", "unknown medium and size stay out");
 });
 
-test("every responsive image exists at 480/960/1600 (capped at the source width) in AVIF and WebP", async () => {
+test("every responsive image exists at 480/720/960/1600 (capped at the source width) in AVIF and WebP", async () => {
   for (const art of artworks) {
     for (const image of art.images) {
       const widths = artImageWidths(image);

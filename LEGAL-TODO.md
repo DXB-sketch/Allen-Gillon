@@ -24,6 +24,13 @@ relevant regulator's guidance should settle anything marked "legal check".
 - [ ] The damage-claim request: photos within 7 days of delivery. It is worded as
       a request that does not remove ACL rights. Confirm Ann and Allen agree.
 - [ ] Governing law: "the law of Queensland, Australia" (legal check).
+- [ ] Structured data return policy. Each painting's JSON-LD offer (lib/schema.mjs)
+      declares `hasMerchantReturnPolicy` with `returnPolicyCategory:
+      MerchantReturnNotPermitted`. The decided policy is "no change-of-mind
+      returns" plus the ACL remedies, and the pages never say "no refunds", but
+      search engines may show this as a flat "no returns". Confirm the category
+      is acceptable, or once /terms is published point the policy at it with
+      `merchantReturnLink` (legal check).
 
 ## Business and seller facts
 

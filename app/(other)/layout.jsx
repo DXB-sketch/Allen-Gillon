@@ -10,6 +10,9 @@ import { hostMetadata, hostViewport } from "../../lib/seo.mjs";
 export const metadata = hostMetadata("other");
 export const viewport = hostViewport("other");
 
+// Static HTML with an edge cache header; see app/(main)/layout.jsx.
+export const revalidate = false;
+
 export default function OtherLayout({ children }) {
   return (
     <>

@@ -6,6 +6,7 @@ import { stripePaymentLink } from "../../../../lib/storefront.mjs";
 import { numbering } from "../../../../lib/reader-pages.mjs";
 import { book as bookSchema, breadcrumbs, jsonLdProps } from "../../../../lib/schema.mjs";
 import { generateReadMetadata } from "../../../../lib/seo.mjs";
+import { pageSrcSet, READER_PAGE_SIZES } from "../../../../lib/books.mjs";
 import { cueFiles, manifests, pageTexts, readableSlugs, SECTION_BACK } from "../books-data.mjs";
 import "./read.css";
 
@@ -57,6 +58,18 @@ export default async function ReadPage({ params }) {
   return (
     <div className="read-page">
       <script {...jsonLdProps(schema)} />
+      {/* The first page is the LCP image: preload the same srcset and sizes
+          the reader's first img uses, so a phone fetches the 720px copy early. */}
+      {m.cover ? (
+        <link
+          rel="preload"
+          as="image"
+          href={m.cover}
+          imageSrcSet={pageSrcSet(slug, 1, m.aspect[0])}
+          imageSizes={READER_PAGE_SIZES}
+          fetchPriority="high"
+        />
+      ) : null}
       <header className="pagehead band read-head">
         <h1 className="script">{m.title}</h1>
         <p className="plain">{lede(m)}</p>

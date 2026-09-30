@@ -63,9 +63,10 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [x] Icons + manifest per host (group layouts and pageMetadata)
 - [x] OG images (65 built via scripts/build-og.mjs; served through pageMetadata)
 - [x] JSON-LD wired into every page (/books: all 12 Book nodes; /read: Book + breadcrumbs; /delivery and legal: breadcrumbs)
-- [B] JS budget 150 KB gzip: 10 of 16 measured routes pass; /music, /reviews, /anns-art, painting pages and /read are over (vinext floor 138.3 KB; docs/PERFORMANCE.md). Human decision, see bottom.
+- [B] JS budget 150 KB gzip: 9 of 16 measured routes pass; /music (152.6), /reviews (151.2), /comments (150.1), /anns-art (156.2), painting pages (152.3) and /read (167.9) are over (vinext floor 138.3 KB; docs/PERFORMANCE.md). Human decision, see bottom.
+- [x] Static HTML with cache headers: every (main) and (other) page is static (`revalidate = false` in the group layouts; the host-aware root not-found that made every page `no-store` is replaced by static per-group not-founds). The edge gets `s-maxage=31536000, stale-while-revalidate` through @vinext/cloudflare's CDN adapter, the browser `private, max-age=0, must-revalidate`; /comments and 404s stay `no-store` (docs/PERFORMANCE.md, Cache headers). [B] confirm `cf-cache-status: HIT` after deploy.
 - [x] Performance: Dynalight self-hosted (plus a size-adjusted Times fallback), _headers (/_next/static immutable, /icons daily revalidate), LCP preload with fetchpriority (other home now preloads its real LCP page), responsive shelf covers on /music
-- [x] Lighthouse mobile recorded in docs/PERFORMANCE.md: CLS 0.000 to 0.008, Accessibility, Best Practices and SEO 100 on the measured routes; simulated LCP about 3 s is [B] with the JS budget and a post-deploy re-run. /comments SEO 66 is the spec-mandated noindex exception.
+- [x] Lighthouse mobile recorded in docs/PERFORMANCE.md for every route on both hosts (fixer round 2): Performance 91 to 97 everywhere, CLS 0.000 to 0.008, Accessibility and Best Practices 100, SEO 100 except /comments (66, the spec-mandated noindex exception). 720px copies of book pages and paintings, a srcset preload for the /read cover, low-priority wall photos on /anns-art. Simulated LCP 2.35 to 3.40 s is [B] with the JS budget and a post-deploy re-run.
 
 ## W7 Accessibility and legal
 - [x] Landmarks, captions, transcripts, scroll padding, contrast fixes (e2e/w7-a11y.spec.mjs, tests/contrast.test.mjs)
@@ -81,8 +82,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [x] Chimes auto-turn: no story's cues are signed off, so all 4 ship with follow off; the follow rules are unit tested and e2e/reader-audio.spec.mjs checks them in a browser with the flag flipped in memory (turns land within 0.5 s using a 0.45 s look-ahead). Per-title sign-off is [B].
 - [x] Cue reports: all 4 in docs/cue-review; every title has follow off until signed off
 - [x] One reader
-- [x] Play previews (no $50 link rendered; "A- [ ] Progress
- download. Online checkout coming soon" in the readers and on /books)
+- [x] Play previews (no $50 link rendered; "A$1 download. Online checkout coming soon" in the readers and on /books)
 - [x] Textbooks
 - [x] No paid-content leak in public/ and dist/client (tests/books-leak.test.mjs). private/ is no longer tracked in git; [B] the public repo history still holds the files (see bottom).
 - [x] Albums free
@@ -96,7 +96,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [x] Art direction
 - [x] Full width (e2e/layout.spec.mjs)
 - [B] SEO: every W6 item is present; the Rich Results Test and Schema validator need the deployed URLs
-- [B] Accessibility: axe and pa11y pass; Lighthouse Accessibility 100 on the measured routes; the Lighthouse Performance and LCP thresholds wait on the JS budget decision and a post-deploy run (docs/PERFORMANCE.md)
+- [B] Accessibility: axe and pa11y pass; Lighthouse Accessibility 100, Best Practices 100 and Performance 90 or more on every route; the LCP 2.5 s threshold (simulated) waits on the JS budget decision and a post-deploy run (docs/PERFORMANCE.md). The legal pages can only be audited once published.
 - [x] Legal (pages exist, gated on sign-off by content/legal.config.json)
 - [x] Progress
 
@@ -107,7 +107,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] Cloudflare: Email Routing for support@, `other` custom domain + DNS, cache purge, managed robots.txt, retire Vercel
 - [B] Legal text sign-off, play licence terms (legal pages stay unpublished)
 - [B] Ultra-wide cap, /shows indexing, tel: links, painting dimensions and medium
-- [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py
+- [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py. /audio/* is cached for a year as immutable, so save the new recording under a new file name and update content/story-cues and the audio manifest (audioSha256) with it; never overwrite the mp3 in place (the same goes for /images and /og)
 - [B] Cue ear-check sign-off per story (docs/cue-review/<slug>/index.html; low-confidence picture pages listed there); ElevenLabs source script if alignment confidence < 0.6
 - [B] JS budget: accept the overage on interactive routes, raise the budget to 160 KB, or choose one of the options in docs/PERFORMANCE.md
 - [B] Confirm "Albums" as the /music H1 wording
@@ -116,4 +116,9 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] Home hero: supply a larger original of allen-playing-red-gibson-waterfront.jpg (at least 2400px wide) if the hero should become a full-bleed band (DESIGN.md Layout, amendments)
 - [B] After deploy: check `curl -I -H "Range: bytes=0-1" https://other.allengillon.com/audio/chinese-chimes-audiobooks/little-ray.mp3` returns 206 (the local wrangler dev preview answers 200, so seeking fails there; vinext dev returns 206)
 - [B] After deploy: Lighthouse mobile on both hosts, the Rich Results Test and the Schema validator
+- [B] After deploy: `curl -sI https://other.allengillon.com/other-home` and `/plays` give a Location that is https or relative (the local wrangler preview shows http://; vinext relativises same-origin redirects, so production should send "/")
+- [B] After deploy: `npm run reviews:migrate:remote`, then `GET https://allengillon.com/api/reviews` returns 200
+- [B] After deploy: request a page twice on each host and check `cf-cache-status: HIT` on the second, with no host collision
+- [B] After the legal pages are published: `npm run a11y:pa11y`, the axe sweep and Lighthouse on /privacy, /terms and /accessibility
+- [B] Legal check: the paintings' JSON-LD return policy (MerchantReturnNotPermitted), see LEGAL-TODO.md
 - [B] Desktop only: opening a play preview's cover in a two-page spread shifts layout by about 0.10 once (react-pageflip's hard cover). Accept, use a soft cover, or stop the automatic opening (docs/PERFORMANCE.md)

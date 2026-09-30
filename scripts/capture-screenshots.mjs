@@ -4,6 +4,7 @@
 // Each shot is downscaled to 960px wide and saved as a quality-60 JPEG with
 // sharp, to keep the repo small. Names follow docs/screenshots/before/:
 // <route>-<width>.jpg, with "/" -> "_" and the other host's home as other-home.
+// Pages are captured with prefers-reduced-motion: reduce.
 import { chromium } from "@playwright/test";
 import sharp from "sharp";
 import { mkdir } from "node:fs/promises";
@@ -31,6 +32,8 @@ export const SHOTS = [
   { host: "other", path: "/anns-art", name: "anns-art" },
   { host: "other", path: "/anns-art/ann-426502619623139", name: "anns-art_painting" },
   { host: "other", path: "/delivery", name: "delivery" },
+  { host: "other", path: "/comments", name: "other-comments" },
+  { host: "other", path: "/no-such-page", name: "other-not-found" },
 ];
 
 const origin = (host) => (host === "other" ? `http://other.localhost:${port}` : `http://localhost:${port}`);
@@ -39,7 +42,9 @@ await mkdir(outDir, { recursive: true });
 const browser = await chromium.launch();
 try {
   for (const width of WIDTHS) {
-    const page = await browser.newPage({ viewport: { width, height: 900 } });
+    // Reduced motion: drawings are in their final state and /anns-art shows
+    // its index layout, so every run captures the same frames.
+    const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
     // SHOTS_ONLY=name,name limits a run to some routes.
     const only = (process.env.SHOTS_ONLY || "").split(",").filter(Boolean);
     for (const shot of SHOTS) {

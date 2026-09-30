@@ -51,6 +51,11 @@ export default function ArtWall({ artworks, checkoutLinks }) {
   const drag = useRef(null);
   const suppressClick = useRef(false);
   const currentRef = useRef(0);
+  // While go() scrolls smoothly to a painting, the scroll listener must not
+  // hand "current" (the counter and the one tab stop) to the paintings it
+  // passes on the way. pinnedRef holds the target until the scroll arrives.
+  const pinnedRef = useRef(null);
+  const pinTimer = useRef(0);
 
   const works = useMemo(() => artworks.filter((art) => inRoom(art, room)), [artworks, room]);
   const openArt = openId ? artworks.find((art) => art.id === openId) : null;
@@ -106,7 +111,13 @@ export default function ArtWall({ artworks, checkoutLinks }) {
     const count = track?.children.length || 0;
     if (!count) return;
     const target = Math.max(0, Math.min(count - 1, i));
-    track.scrollTo({ left: centreOf(target), behavior: instant || reduceMotion() ? "auto" : "smooth" });
+    // A long jump (Home, End) moves at once: a smooth scroll across the whole
+    // hall takes seconds, and the counter should say where focus already is.
+    const smooth = !instant && !reduceMotion() && Math.abs(target - currentRef.current) <= 3;
+    clearTimeout(pinTimer.current);
+    pinnedRef.current = smooth ? target : null;
+    if (smooth) pinTimer.current = setTimeout(() => { pinnedRef.current = null; }, 2000);
+    track.scrollTo({ left: centreOf(target), behavior: smooth ? "smooth" : "auto" });
     setCurrent(target);
     currentRef.current = target;
     if (focus) slideAt(target)?.querySelector("a")?.focus({ preventScroll: true });
@@ -128,6 +139,10 @@ export default function ArtWall({ artworks, checkoutLinks }) {
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         const i = nearest();
+        if (pinnedRef.current !== null) {
+          if (i !== pinnedRef.current) return;
+          pinnedRef.current = null;
+        }
         if (i !== currentRef.current) { currentRef.current = i; setCurrent(i); }
       });
     };
@@ -151,6 +166,7 @@ export default function ArtWall({ artworks, checkoutLinks }) {
 
   const onPointerDown = (event) => {
     if (!hall || event.pointerType !== "mouse" || event.button !== 0) return;
+    pinnedRef.current = null;
     drag.current = { x: event.clientX, left: trackRef.current.scrollLeft, id: event.pointerId, moved: false };
   };
   const onPointerMove = (event) => {
@@ -231,6 +247,28 @@ export default function ArtWall({ artworks, checkoutLinks }) {
     return () => window.removeEventListener("popstate", onPop);
   }, [openId, artworks, works, hall, go]);
 
+  // showModal() makes the page behind inert, but Tab from the last control
+  // would still leave for the browser's own toolbar. Wrap it instead, so focus
+  // goes from the last control to the first (and Shift+Tab the other way).
+  const onDialogKeyDown = (event) => {
+    if (event.key !== "Tab" || event.altKey || event.ctrlKey || event.metaKey) return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    const focusable = [...dialog.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')]
+      .filter((el) => el.tabIndex >= 0 && el.getClientRects().length > 0 && !el.closest("[inert]"));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+    if (event.shiftKey && (active === first || !dialog.contains(active))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && (active === last || !dialog.contains(active))) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   // A click on the backdrop (outside the dialog box) closes it too.
   const onDialogClick = (event) => {
     if (event.target === dialogRef.current) dialogRef.current.close();
@@ -285,11 +323,15 @@ export default function ArtWall({ artworks, checkoutLinks }) {
                 >
                   <ArtWire className="work-wire" />
                   <span className="work-frame">
+                    {/* The page's LCP is the lede above the wall. Low priority keeps
+                        these photographs from competing with the CSS and the text
+                        for the first paint. */}
                     <ArtPicture
                       image={art.images[0]}
                       alt=""
                       sizes="(max-width: 700px) 80vw, 34vw"
                       loading={i < 4 ? "eager" : "lazy"}
+                      fetchPriority="low"
                     />
                   </span>
                   <span className="work-label">
@@ -332,6 +374,7 @@ export default function ArtWall({ artworks, checkoutLinks }) {
         aria-labelledby={openArt ? "painting-dialog-title" : undefined}
         onClose={onDialogClose}
         onClick={onDialogClick}
+        onKeyDown={onDialogKeyDown}
       >
         {openArt ? (
           <div className="painting-dialog-inner">

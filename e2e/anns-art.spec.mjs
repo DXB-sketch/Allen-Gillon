@@ -64,6 +64,22 @@ test.describe("reduced motion", () => {
 test.describe("hallway", () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
+  test("End and Home jump at once: the counter and the one tab stop follow focus straight away", async ({ page }) => {
+    await openWall(page);
+    const links = page.locator(".work-link");
+    const total = artworks.length;
+    await page.locator(".wall-toggle").focus();
+    await page.keyboard.press("Tab");
+    await expect(links.first()).toBeFocused();
+    for (const [key, index] of [["End", total - 1], ["Home", 0]]) {
+      await page.keyboard.press(key);
+      await expect(links.nth(index)).toBeFocused();
+      // Well inside the old 1.5 to 2.5 s smooth scroll.
+      await expect(page.locator(".hall-count")).toHaveText(`${index + 1} of ${total}`, { timeout: 600 });
+      await expect(links.nth(index)).not.toHaveAttribute("tabindex", "-1");
+    }
+  });
+
   test("keyboard only: walk the wall, open a painting, Tab stays in the dialog, Esc returns", async ({ page }) => {
     await openWall(page);
     await expect(page.locator(".wall-toggle")).toHaveText("See every painting at once");
@@ -92,13 +108,12 @@ test.describe("hallway", () => {
     await expect(page).toHaveURL(`${OTHER}/anns-art/${art.id}`);
     await expect(dialog.getByRole("heading", { level: 2 })).toHaveText(art.title);
     await expect(dialog.locator("a", { hasText: /Buy this painting|Enquire about this painting/ })).toHaveCount(1);
-    for (let i = 0; i < 8; i += 1) {
-      await page.keyboard.press("Tab");
-      const inside = await page.evaluate(() => {
-        const a = document.activeElement;
-        return !a || a === document.body || !!a.closest("dialog");
-      });
-      expect(inside).toBe(true);
+    // A strict trap: Tab and Shift+Tab wrap inside the dialog and never
+    // reach <body> (the browser toolbar) or the inert page behind it.
+    for (const key of [...Array(20).fill("Tab"), ...Array(20).fill("Shift+Tab")]) {
+      await page.keyboard.press(key);
+      const inside = await page.evaluate(() => !!document.activeElement?.closest("dialog"));
+      expect(inside, key).toBe(true);
     }
     const results = await new AxeBuilder({ page }).include("dialog").withTags(TAGS).analyze();
     expect(results.violations).toEqual([]);

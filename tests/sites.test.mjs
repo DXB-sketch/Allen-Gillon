@@ -64,7 +64,7 @@ const table = [
   ["unknown host /api/reviews", "allen-gillon.example.workers.dev", "/api/reviews", { env: PROD }, { action: "next" }],
 
   // legal pages: main only once published, 404 on both while unpublished
-  ["other /privacy while unpublished falls through", OTHER, "/privacy", { env: PROD }, { action: "next" }],
+  ["other /privacy while unpublished 404s through global-not-found", OTHER, "/privacy", { env: PROD }, { action: "rewrite", pathname: "/__missing-page" }],
   ["other /privacy once published goes to main", OTHER, "/privacy", { env: PROD, legalPublished: true }, { action: "redirect", status: 301, location: "https://allengillon.com/privacy" }],
   ["main /terms once published renders", MAIN, "/terms", { env: PROD, legalPublished: true }, { action: "next" }],
 

@@ -69,7 +69,7 @@ test("no play page image beyond previewPages, and nothing else in a play folder"
       const folder = join(dir, "books", play.slug);
       for (const file of walk(folder)) {
         const rel = relative(folder, file).replace(/\\/g, "/");
-        const m = /^p(\d{3})\.webp$/.exec(rel);
+        const m = /^p(\d{3})(?:-\d+)?\.webp$/.exec(rel);
         if (m) assert.ok(Number(m[1]) <= limit, `${relative(root, file)} is beyond the ${limit}-page preview`);
         assert.ok(keepFile(manifest, rel), `${relative(root, file)} must not be public`);
       }

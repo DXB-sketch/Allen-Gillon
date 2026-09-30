@@ -64,6 +64,9 @@ body{
 img,video{max-width:100%;}
 a{color:inherit;}
 p a{color:var(--red-deep);}
+/* More on Allen is blue-led, so its text links take the blue ink. :where()
+   keeps this at the specificity of "p a", so ink bands keep their paper links. */
+:where(.site[data-site="other"]) p a{color:var(--blue);}
 p{max-width:var(--measure);}
 :focus-visible{outline:3px solid var(--blue);outline-offset:3px;}
 
@@ -95,7 +98,9 @@ p{max-width:var(--measure);}
 h1.script{font-size:clamp(4rem,11vw,10rem);overflow-wrap:break-word;}
 /* Blue means the written work, and More on Allen is blue-led: its page titles
    take the blue ink with the red overprint (main keeps the red lead). */
-html[data-site="other"] h1.script{color:var(--blue);text-shadow:var(--overprint-red);}
+/* [data-site] is on the server-rendered .site wrapper (and on <html> once the
+   marker script runs), so this holds without JS. */
+[data-site="other"] h1.script{color:var(--blue);text-shadow:var(--overprint-red);}
 h2.script{font-size:clamp(2.4rem,6vw,3.6rem);line-height:1.08;margin:0 0 10px;}
 h3{font-size:1.35rem;line-height:1.3;margin:0;}
 .ink-r{color:var(--red);}
@@ -108,11 +113,11 @@ img.gx-hero{width:100%;height:auto;object-fit:cover;display:block;}
 .mast{display:flex;align-items:baseline;justify-content:space-between;gap:8px 24px;flex-wrap:wrap;
   padding:18px var(--gutter) 10px;}
 .mast .logo{font-family:var(--script);font-size:2.2rem;text-decoration:none;line-height:1;color:var(--red);text-shadow:var(--overprint);}
+.mast[data-site="other"] .logo{color:var(--blue);text-shadow:var(--overprint-red);}
 .mnav{display:flex;gap:2px;flex-wrap:wrap;}
 .mnav a{font-size:1.05rem;text-decoration:none;padding:10px 12px;min-height:44px;display:inline-flex;align-items:center;}
 .mnav a:hover{color:var(--red-deep);}
 .mnav a[aria-current="page"]{color:var(--red-deep);border-bottom:3px solid var(--red);}
-.mnav a.nav-booking{color:var(--red-deep);font-weight:700;}
 /* Cross-site link: a plain absolute <a> to the other host (full page load). */
 .mnav a.nav-cross{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;}
 .site[data-site="main"] .mnav a.nav-cross{color:var(--blue);}
@@ -140,9 +145,15 @@ img.gx-hero{width:100%;height:auto;object-fit:cover;display:block;}
 }
 
 /* ---------- Footer ---------- */
+/* Short pages: the site column fills the viewport and main takes the slack,
+   so the ink footer always reaches the bottom (no paper strip under it). */
+.site{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;}
+.site > main{flex:1 0 auto;}
 footer{margin-top:var(--band-space);background:var(--ink);color:var(--on);}
 .footer-inner{padding:36px var(--gutter) 44px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:baseline;}
 footer .fscript{font-family:var(--script);font-size:2.2rem;line-height:1.1;color:var(--red);text-shadow:0.045em 0.055em 0 oklch(0.455 0.150 262 / 0.45);}
+/* More on Allen: a light blue that holds 3:1 or better on the ink band. */
+footer[data-site="other"] .fscript{color:oklch(0.74 0.11 262);text-shadow:0.045em 0.055em 0 oklch(0.615 0.195 33 / 0.40);}
 footer nav a:hover{color:oklch(0.78 0.13 33);}
 footer p{margin:0;color:oklch(0.80 0.02 92);font-size:1rem;}
 footer p a{color:inherit;}

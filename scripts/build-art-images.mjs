@@ -4,7 +4,7 @@
 //
 // Reads each image listed in content/artworks.mjs (public/images/art/gallery/*.webp)
 // and writes public/images/art-responsive/<name>-<width>.avif and .webp at
-// the widths from artImageWidths() in lib/art-catalog.mjs: 480, 960 and 1600,
+// the widths from artImageWidths() in lib/art-catalog.mjs: 480, 720, 960 and 1600,
 // capped at the photograph's own width (the Facebook sources are 1400px at
 // most, so the largest copy is the source width, never an upscale).
 // Existing files are kept unless --force is given.

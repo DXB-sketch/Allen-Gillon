@@ -337,6 +337,7 @@ export function NowBar() {
             value={pos}
             onChange={onSeek}
             aria-label="Seek within track"
+            aria-valuetext={time.replace(" / ", " of ")}
           />
           <span className="nowtime" id="nowtime">
             {time}
