@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
+// Redirects, including the old /plays page, live in lib/sites.mjs and run from proxy.ts.
 export default {
-  async redirects() {
-    return [{ source: "/plays", destination: "/books#school-plays", permanent: true }];
+  experimental: {
+    // Route misses render app/global-not-found.jsx, which is host-aware.
+    globalNotFound: true,
   },
 };
