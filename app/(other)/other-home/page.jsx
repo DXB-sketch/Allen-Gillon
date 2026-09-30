@@ -45,7 +45,7 @@ export const metadata = {
 // link (alt=""); the label text names the link.
 export default function OtherHome() {
   return (
-    <main className="sideboard band">
+    <div className="sideboard band">
       <header className="sideboard-head">
         <h1 className="script">More on Allen</h1>
         <p>Allen&rsquo;s personal side: family, writing, Timeless and Ann&rsquo;s art.</p>
@@ -123,6 +123,6 @@ export default function OtherHome() {
           Allen&rsquo;s music, bookings and albums are on allengillon.com
         </CrossSiteLink>
       </p>
-    </main>
+    </div>
   );
 }

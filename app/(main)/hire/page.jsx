@@ -14,7 +14,7 @@ const DINERS = ["Beautiful.", "Unforgettable.", "I love Al’s light jazz.", "Po
 
 export default function HirePage() {
   return (
-    <main className="hire">
+    <div className="hire">
       <header className="pagehead band">
         <h1 className="script">Bookings</h1>
         <p className="plain">Light jazz guitar for restaurants where people are eating, drinking and enjoying themselves. Allen has been doing exactly this for many years, and he still loves a full diary.</p>
@@ -66,6 +66,6 @@ export default function HirePage() {
           ))}
         </ul>
       </section>
-    </main>
+    </div>
   );
 }

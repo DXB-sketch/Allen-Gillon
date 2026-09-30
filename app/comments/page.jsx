@@ -32,7 +32,7 @@ export default async function CommentsPage({ searchParams }) {
       : "the page";
   return (
     <SiteChrome site={site}>
-      <main>
+      <div>
         <header className="pagehead band">
           {/* The way back is a text link, never a second button: the page's
               one primary action is "Send as a text to Allen". */}
@@ -52,7 +52,7 @@ export default async function CommentsPage({ searchParams }) {
             <CommentForm subject={subject} />
           </div>
         </section>
-      </main>
+      </div>
     </SiteChrome>
   );
 }

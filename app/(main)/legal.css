@@ -1,0 +1,17 @@
+/* Legal pages (/privacy, /terms, /accessibility), main host only.
+   Plain reading pages: the title, a dated lede and prose at the measure. */
+
+.legal-body{margin-top:clamp(16px,2vw,32px);}
+@media (min-width:1024px){
+  .legal-body > .prose{grid-column:3 / wide-end;}
+}
+.legal-body .prose ul{margin:0 0 18px;padding-left:1.2em;max-width:var(--measure);}
+.legal-body .prose li{margin:0 0 8px;}
+.legal-body .prose h3{margin:24px 0 6px;}
+.legal-body .prose a{color:var(--red-deep);text-underline-offset:3px;}
+.legal-body .prose a:hover{color:var(--ink);}
+.legal-updated{font-size:1rem;color:var(--soft);margin-top:36px;}
+/* The ACL wording is quoted exactly, so it is set in from the text (no side stripe). */
+.legal-acl{margin:0 0 18px 1.2em;padding:0;max-width:var(--measure);}
+.legal-acl p{margin:0 0 10px;}
+.legal-acl p:last-child{margin-bottom:0;}

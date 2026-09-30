@@ -21,6 +21,12 @@ selects one. Until then that block stays empty on purpose.
   - red on paper 3.75:1 and on-text on red 3.78:1: large Dynalight titles only
     (3:1 large-text floor). Filled buttons therefore use red-deep (on-text 6.07:1)
     or blue (6.95:1), not red.
+  - red on ink 4.28:1: the Dynalight name in the footer (large text, passes 3:1).
+  - Focus rings (3:1 non-text floor): blue on paper 6.89:1, blue on paper-2
+    6.55:1, paper on ink 16.04:1 (ink bands, footer, now-playing bar). The skip
+    link is an ink block on paper, so its ring is blue, not paper.
+  - `scripts/contrast.mjs` reads the tokens from app/site.css and exits 1 if any
+    pair falls under its threshold; tests/contrast.test.mjs runs it in `npm test`.
 
 ## Typography
 - Body ≥ 18px, ideally 19 to 20px. Line length 60 to 72ch. Line-height ~1.6.

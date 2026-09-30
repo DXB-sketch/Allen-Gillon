@@ -39,7 +39,7 @@ const VENUES = [
 export default function Page() {
   const cross = CROSS_LINK.main;
   return (
-    <main className="home">
+    <div className="home">
       {/* React hoists this into <head>. */}
       <link rel="preload" as="image" href={HERO.src} fetchPriority="high" />
       <header className="home-hero band">
@@ -115,6 +115,6 @@ export default function Page() {
           </CrossSiteLink>
         </p>
       </aside>
-    </main>
+    </div>
   );
 }

@@ -25,7 +25,7 @@ export default function AnnsArtPage() {
     { url: "/anns-art", name: "Ann Gillon's art", description, site: "other" },
   );
   return (
-    <main>
+    <div>
       <header className="pagehead band art-head">
         <h1 className="script">Ann Gillon</h1>
         <p className="plain">Ann is an experienced stage and restaurant singer. She also plays piano and flute. Ann also plays solo gigs with piano and headphones. When she is not making music, she paints.</p>
@@ -39,6 +39,6 @@ export default function AnnsArtPage() {
         <ArtWall artworks={artworks} checkoutLinks={checkoutLinks} />
       </section>
       <script {...jsonLdProps(jsonLd)} />
-    </main>
+    </div>
   );
 }

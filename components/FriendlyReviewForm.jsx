@@ -62,13 +62,13 @@ export default function FriendlyReviewForm() {
         </label>
         <label>
           <span className="fieldName">Your name</span>
-          <input required maxLength={80} autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} />
+          <input type="text" required maxLength={80} autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} />
         </label>
         <label>
           <span className="fieldName">
             Where you heard Allen <span className="fieldHint">(optional)</span>
           </span>
-          <input maxLength={120} value={place} onChange={(event) => setPlace(event.target.value)} />
+          <input type="text" maxLength={120} value={place} onChange={(event) => setPlace(event.target.value)} />
         </label>
         <label className="reviewField">
           <span className="fieldName">Your review</span>
