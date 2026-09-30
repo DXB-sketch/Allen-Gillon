@@ -1,0 +1,125 @@
+{
+  "slug": "little-ray",
+  "audio": "/audio/chinese-chimes-audiobooks/little-ray.mp3",
+  "audioSha256": "43a36abe8670ab7ffe01d7cbf0ee3b778f96d850c5db3993de0eea4a90bb2483",
+  "duration": 325.281,
+  "pageCount": 19,
+  "verified": false,
+  "method": "OCR page text (RapidOCR) segmented against stable-ts 2.19.1 (small) word timestamps (IDF-weighted dynamic programming refined to each page's first printed words), cues snapped to speech onsets (silence detection)",
+  "cues": [
+    {
+      "page": 1,
+      "start": 0.0,
+      "confidence": 1.0,
+      "firstWords": "As a new day dawns on"
+    },
+    {
+      "page": 2,
+      "start": 0.01,
+      "confidence": 0.9,
+      "firstWords": "As a new day dawns on"
+    },
+    {
+      "page": 3,
+      "start": 21.21,
+      "confidence": 0.74,
+      "firstWords": "Master Chai Lu is sweeping the"
+    },
+    {
+      "page": 4,
+      "start": 46.3,
+      "confidence": 0.9,
+      "firstWords": "Soon the chimes begin tinkling against"
+    },
+    {
+      "page": 5,
+      "start": 65.85,
+      "confidence": 0.77,
+      "firstWords": "Wow, what a walloping swing by"
+    },
+    {
+      "page": 6,
+      "start": 80.14,
+      "confidence": 0.9,
+      "firstWords": "Hey, watch what you're doing or"
+    },
+    {
+      "page": 7,
+      "start": 91.49,
+      "confidence": 0.7,
+      "firstWords": "Angry Little Ray continues to shout"
+    },
+    {
+      "page": 8,
+      "start": 108.18,
+      "confidence": 0.9,
+      "firstWords": "He turns his back to walk"
+    },
+    {
+      "page": 9,
+      "start": 119.21,
+      "confidence": 0.7,
+      "firstWords": "Little T is feeling better. She"
+    },
+    {
+      "page": 10,
+      "start": 133.47,
+      "confidence": 0.9,
+      "firstWords": "Look, the breeze has stopped. Master"
+    },
+    {
+      "page": 11,
+      "start": 150.77,
+      "confidence": 0.9,
+      "firstWords": "What is happening? Master Chai Lu"
+    },
+    {
+      "page": 12,
+      "start": 161.12,
+      "confidence": 0.79,
+      "firstWords": "Little Lo was worried because she"
+    },
+    {
+      "page": 13,
+      "start": 176.86,
+      "confidence": 0.81,
+      "firstWords": "What's the matter, Little Ray? Leave"
+    },
+    {
+      "page": 14,
+      "start": 181.43,
+      "confidence": 0.9,
+      "firstWords": "You look so tired today, Little"
+    },
+    {
+      "page": 15,
+      "start": 207.93,
+      "confidence": 0.7,
+      "firstWords": "Master Chai Lu has a silkworm"
+    },
+    {
+      "page": 16,
+      "start": 234.1,
+      "confidence": 0.7,
+      "firstWords": "The Little Chimes watch Nosey and"
+    },
+    {
+      "page": 17,
+      "start": 259.56,
+      "confidence": 0.9,
+      "firstWords": "It is not easy for Nosey"
+    },
+    {
+      "page": 18,
+      "start": 280.22,
+      "confidence": 0.9,
+      "firstWords": "The sounds of the Little Chimes"
+    },
+    {
+      "page": 19,
+      "start": 303.07,
+      "confidence": 0.81,
+      "firstWords": "Now Nosey and Butterfly are flying"
+    }
+  ]
+}

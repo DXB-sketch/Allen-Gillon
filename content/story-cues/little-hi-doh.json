@@ -1,0 +1,161 @@
+{
+  "slug": "little-hi-doh",
+  "audio": "/audio/chinese-chimes-audiobooks/hi-doh.mp3",
+  "audioSha256": "26e329bd8dca32bf57a9e9ba18d157c2af9b1fa997bdad85b723763a0a4d21be",
+  "duration": 302.45,
+  "pageCount": 25,
+  "verified": false,
+  "method": "OCR page text (RapidOCR) segmented against stable-ts 2.19.1 (small) word timestamps (IDF-weighted dynamic programming refined to each page's first printed words), cues snapped to speech onsets (silence detection); other pages without narrated text start at the unprinted narration after the previous page's text",
+  "cues": [
+    {
+      "page": 1,
+      "start": 0.0,
+      "confidence": 1.0,
+      "firstWords": "This is the story of Little"
+    },
+    {
+      "page": 2,
+      "start": 4.62,
+      "confidence": 0.9,
+      "firstWords": "It is wonderful to hear the"
+    },
+    {
+      "page": 3,
+      "start": 35.79,
+      "confidence": 0.7,
+      "firstWords": "Mr. Diego can see all the"
+    },
+    {
+      "page": 4,
+      "start": 55.85,
+      "confidence": 0.7,
+      "firstWords": "Mr. Diego now learns that their"
+    },
+    {
+      "page": 5,
+      "start": 73.81,
+      "confidence": 0.88,
+      "firstWords": "Especially Little High Doe, he has"
+    },
+    {
+      "page": 6,
+      "start": 87.64,
+      "confidence": 0.7,
+      "firstWords": "High Doe grew proud in his"
+    },
+    {
+      "page": 7,
+      "start": 108.72,
+      "confidence": 0.9,
+      "firstWords": "I don't like you lazy law"
+    },
+    {
+      "page": 8,
+      "start": 112.7,
+      "confidence": 0.9,
+      "firstWords": "You are all different from me."
+    },
+    {
+      "page": 9,
+      "start": 119.53,
+      "confidence": 0.7,
+      "firstWords": "funny far whispered. You were embarrassing"
+    },
+    {
+      "page": 10,
+      "start": 137.89,
+      "confidence": 0.9,
+      "firstWords": "I don't need all of you."
+    },
+    {
+      "page": 11,
+      "start": 144.83,
+      "confidence": 0.9,
+      "firstWords": "The other chimes are so sad"
+    },
+    {
+      "page": 12,
+      "start": 157.13,
+      "confidence": 0.7,
+      "firstWords": "The little chimes could still play"
+    },
+    {
+      "page": 13,
+      "start": 169.3,
+      "confidence": 0.7,
+      "firstWords": "L\u00faguido is now anxiously walking towards"
+    },
+    {
+      "page": 14,
+      "start": 179.89,
+      "confidence": 0.7,
+      "firstWords": "High Doe went out and had"
+    },
+    {
+      "page": 15,
+      "start": 194.64,
+      "confidence": 0.7,
+      "firstWords": "Mr. Diego bought tickets and sat"
+    },
+    {
+      "page": 16,
+      "start": 209.71,
+      "confidence": 0.87,
+      "firstWords": "At first everyone thought it was"
+    },
+    {
+      "page": 17,
+      "start": 223.74,
+      "confidence": 0.7,
+      "firstWords": "High Doe was so embarrassed. High"
+    },
+    {
+      "page": 18,
+      "start": 225.9,
+      "confidence": 0.75,
+      "firstWords": "High Doe is very lonely now."
+    },
+    {
+      "page": 19,
+      "start": 246.99,
+      "confidence": 0.84,
+      "firstWords": "He can't wait to get back"
+    },
+    {
+      "page": 20,
+      "start": 250.14,
+      "confidence": 0.7,
+      "firstWords": "High Doe returned to his friends"
+    },
+    {
+      "page": 21,
+      "start": 254.04,
+      "confidence": 0.85,
+      "firstWords": "He Doe was glad Mr. Diego"
+    },
+    {
+      "page": 22,
+      "start": 265.04,
+      "confidence": 0.72,
+      "firstWords": "High Doe could see that each"
+    },
+    {
+      "page": 23,
+      "start": 282.24,
+      "confidence": 0.3,
+      "firstWords": "Everyone could see he was so"
+    },
+    {
+      "page": 24,
+      "start": 286.0,
+      "confidence": 0.9,
+      "firstWords": "Now they are all together again"
+    },
+    {
+      "page": 25,
+      "start": 291.04,
+      "confidence": 0.9,
+      "firstWords": "their grand old Master Chai L\u00fa"
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "slug": "imaginative-little-mee",
+  "audio": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
+  "audioSha256": "8e509d47cefb0da0b50bdbc3c8daa53a60fda12b7a293c98e15d8e6f24128974",
+  "duration": 439.898,
+  "pageCount": 29,
+  "verified": false,
+  "method": "OCR page text (RapidOCR) segmented against stable-ts 2.19.1 (small) word timestamps (IDF-weighted dynamic programming refined to each page's first printed words), cues snapped to speech onsets (silence detection); picture-only pages placed from YouTube caption timing and ffmpeg scene changes",
+  "cues": [
+    {
+      "page": 1,
+      "start": 0.0,
+      "confidence": 1.0,
+      "firstWords": "When the afternoon breeze blows through"
+    },
+    {
+      "page": 2,
+      "start": 0.04,
+      "confidence": 0.9,
+      "firstWords": "When the afternoon breeze blows through"
+    },
+    {
+      "page": 3,
+      "start": 14.12,
+      "confidence": 0.7,
+      "firstWords": "The Little Chimes play the circle"
+    },
+    {
+      "page": 4,
+      "start": 28.95,
+      "confidence": 0.9,
+      "firstWords": "Whenever they can, the Little Chimes"
+    },
+    {
+      "page": 5,
+      "start": 44.77,
+      "confidence": 0.9,
+      "firstWords": "One evening, as the breeze dropped"
+    },
+    {
+      "page": 6,
+      "start": 61.29,
+      "confidence": 0.7,
+      "firstWords": "Tiny tea cautiously agreed because everyone"
+    },
+    {
+      "page": 7,
+      "start": 77.54,
+      "confidence": 0.9,
+      "firstWords": "The other Chimes roll their eyes"
+    },
+    {
+      "page": 8,
+      "start": 92.42,
+      "confidence": 0.9,
+      "firstWords": "We could get cymbals and I"
+    },
+    {
+      "page": 9,
+      "start": 102.79,
+      "confidence": 0.88,
+      "firstWords": "I'll send a note to eBay"
+    },
+    {
+      "page": 10,
+      "start": 114.13,
+      "confidence": 0.9,
+      "firstWords": "As they were settling down for"
+    },
+    {
+      "page": 11,
+      "start": 135.35,
+      "confidence": 0.9,
+      "firstWords": "She lay there imagining the Little"
+    },
+    {
+      "page": 12,
+      "start": 151.69,
+      "confidence": 0.9,
+      "firstWords": "After days of anxious waiting for"
+    },
+    {
+      "page": 13,
+      "start": 158.67,
+      "confidence": 0.7,
+      "firstWords": "Little Me excitedly ripped open the"
+    },
+    {
+      "page": 14,
+      "start": 164.68,
+      "confidence": 0.9,
+      "firstWords": "Can I have a go? asked"
+    },
+    {
+      "page": 15,
+      "start": 186.83,
+      "confidence": 0.0,
+      "firstWords": "Crash. Immediately, their smiling faces turned"
+    },
+    {
+      "page": 16,
+      "start": 192.71,
+      "confidence": 0.61,
+      "firstWords": "Wow. The birds took off with"
+    },
+    {
+      "page": 17,
+      "start": 194.17,
+      "confidence": 0.7,
+      "firstWords": "The birds took off with a"
+    },
+    {
+      "page": 18,
+      "start": 201.31,
+      "confidence": 0.9,
+      "firstWords": "No one could stand that sound"
+    },
+    {
+      "page": 19,
+      "start": 225.71,
+      "confidence": 0.7,
+      "firstWords": "Hey Doe, then shouted as the"
+    },
+    {
+      "page": 20,
+      "start": 253.79,
+      "confidence": 0.72,
+      "firstWords": "As Little Me settled down, the"
+    },
+    {
+      "page": 21,
+      "start": 274.53,
+      "confidence": 0.4,
+      "firstWords": "Just wait your turn, said angry"
+    },
+    {
+      "page": 22,
+      "start": 294.13,
+      "confidence": 0.9,
+      "firstWords": "There was silence. Little Me was"
+    },
+    {
+      "page": 23,
+      "start": 326.88,
+      "confidence": 0.87,
+      "firstWords": "Suddenly crash, Little Me woke up"
+    },
+    {
+      "page": 24,
+      "start": 348.9,
+      "confidence": 0.9,
+      "firstWords": "Anxious moments went by as Funny"
+    },
+    {
+      "page": 25,
+      "start": 371.21,
+      "confidence": 0.9,
+      "firstWords": "After talking to Little Me for"
+    },
+    {
+      "page": 26,
+      "start": 383.89,
+      "confidence": 0.9,
+      "firstWords": "They all looked at each other,"
+    },
+    {
+      "page": 27,
+      "start": 396.66,
+      "confidence": 0.9,
+      "firstWords": "Everybody loves their imaginative little friend."
+    },
+    {
+      "page": 28,
+      "start": 411.95,
+      "confidence": 0.9,
+      "firstWords": "And now the willing workers still"
+    },
+    {
+      "page": 29,
+      "start": 419.56,
+      "confidence": 0.9,
+      "firstWords": "But two of the Little Chimes"
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "slug": "funny-fah-learns-when-to-stop",
+  "audio": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop.mp3",
+  "audioSha256": "39545ad9559858c9d0912b381cbd6bd5f937d0169a0be541b1480bca5c140b13",
+  "duration": 746.862,
+  "pageCount": 34,
+  "verified": false,
+  "method": "OCR page text (RapidOCR) segmented against stable-ts 2.19.1 (small) word timestamps (IDF-weighted dynamic programming refined to each page's first printed words), cues snapped to speech onsets (silence detection); picture-only pages placed from YouTube caption timing and ffmpeg scene changes",
+  "warnings": [
+    "The mp3 repeats part of the story from 541.0 s to the end. Cues follow the first reading, so the last page stays up while the repeat plays; trim the audio at about 541.0 s (then rerun this script) or re-render it."
+  ],
+  "cues": [
+    {
+      "page": 1,
+      "start": 0.0,
+      "confidence": 1.0,
+      "firstWords": "In a palace far away lives"
+    },
+    {
+      "page": 2,
+      "start": 0.01,
+      "confidence": 0.9,
+      "firstWords": "In a palace far away lives"
+    },
+    {
+      "page": 3,
+      "start": 19.2,
+      "confidence": 0.85,
+      "firstWords": "One morning when the breeze began"
+    },
+    {
+      "page": 4,
+      "start": 40.31,
+      "confidence": 0.9,
+      "firstWords": "and all the little chimes are"
+    },
+    {
+      "page": 5,
+      "start": 71.55,
+      "confidence": 0.9,
+      "firstWords": "What has ten wheels and flies?"
+    },
+    {
+      "page": 6,
+      "start": 84.53,
+      "confidence": 0.91,
+      "firstWords": "Sometimes Funny Far goes too far"
+    },
+    {
+      "page": 7,
+      "start": 94.46,
+      "confidence": 0.9,
+      "firstWords": "He shouted again. Where do cows"
+    },
+    {
+      "page": 8,
+      "start": 112.29,
+      "confidence": 0.9,
+      "firstWords": "They just sighed, Oh, after breakfast"
+    },
+    {
+      "page": 9,
+      "start": 118.82,
+      "confidence": 0.9,
+      "firstWords": "A feather flew in through the"
+    },
+    {
+      "page": 10,
+      "start": 132.39,
+      "confidence": 0.4,
+      "firstWords": "Funny Far quickly tickled her under"
+    },
+    {
+      "page": 11,
+      "start": 146.39,
+      "confidence": 0.99,
+      "firstWords": "Then he tried to tickle Little"
+    },
+    {
+      "page": 12,
+      "start": 165.9,
+      "confidence": 0.4,
+      "firstWords": "Stop it. Let us see if"
+    },
+    {
+      "page": 13,
+      "start": 170.91,
+      "confidence": 0.96,
+      "firstWords": "Every evening before the sun sets"
+    },
+    {
+      "page": 14,
+      "start": 185.59,
+      "confidence": 0.4,
+      "firstWords": "Can you see the big smile?"
+    },
+    {
+      "page": 15,
+      "start": 194.93,
+      "confidence": 0.94,
+      "firstWords": "The little chimes start to yawn"
+    },
+    {
+      "page": 16,
+      "start": 221.87,
+      "confidence": 0.9,
+      "firstWords": "Guess what happened when it was"
+    },
+    {
+      "page": 17,
+      "start": 243.88,
+      "confidence": 0.7,
+      "firstWords": "Little So started to cry, Please"
+    },
+    {
+      "page": 18,
+      "start": 255.03,
+      "confidence": 0.9,
+      "firstWords": "The evening breeze had stopped and"
+    },
+    {
+      "page": 19,
+      "start": 282.2,
+      "confidence": 0.9,
+      "firstWords": "The only sound to be heard"
+    },
+    {
+      "page": 20,
+      "start": 303.93,
+      "confidence": 0.7,
+      "firstWords": "Funny Far was almost asleep when"
+    },
+    {
+      "page": 21,
+      "start": 309.76,
+      "confidence": 0.4,
+      "firstWords": "He lifted his head up with"
+    },
+    {
+      "page": 22,
+      "start": 319.6,
+      "confidence": 0.99,
+      "firstWords": "What was he looking at? The"
+    },
+    {
+      "page": 23,
+      "start": 342.14,
+      "confidence": 0.9,
+      "firstWords": "Everyone else was asleep. Funny Far"
+    },
+    {
+      "page": 24,
+      "start": 351.12,
+      "confidence": 0.4,
+      "firstWords": "Are you coming to get me,"
+    },
+    {
+      "page": 25,
+      "start": 375.37,
+      "confidence": 0.7,
+      "firstWords": "Little tea, little tea. Wake up."
+    },
+    {
+      "page": 26,
+      "start": 389.06,
+      "confidence": 0.4,
+      "firstWords": "Little tea said, Yeah, yeah, yeah,"
+    },
+    {
+      "page": 27,
+      "start": 403.22,
+      "confidence": 0.71,
+      "firstWords": "Funny Far looked back at the"
+    },
+    {
+      "page": 28,
+      "start": 424.08,
+      "confidence": 0.9,
+      "firstWords": "Tears rolled down his cheeks. He"
+    },
+    {
+      "page": 29,
+      "start": 437.04,
+      "confidence": 0.9,
+      "firstWords": "I tickled little tea. I said,"
+    },
+    {
+      "page": 30,
+      "start": 450.71,
+      "confidence": 0.9,
+      "firstWords": "Next day the sun shone brightly"
+    },
+    {
+      "page": 31,
+      "start": 461.36,
+      "confidence": 0.83,
+      "firstWords": "Funny Far still tells jokes. But"
+    },
+    {
+      "page": 32,
+      "start": 490.29,
+      "confidence": 0.9,
+      "firstWords": "It was actually the Gardener collecting"
+    },
+    {
+      "page": 33,
+      "start": 499.74,
+      "confidence": 0.9,
+      "firstWords": "Can you see the moon shadow"
+    },
+    {
+      "page": 34,
+      "start": 527.45,
+      "confidence": 0.82,
+      "firstWords": "Funny Far still does not know"
+    }
+  ]
+}
