@@ -65,7 +65,7 @@ export default async function BooksPage() {
         <div className="wrap">
           <div className="section-heading">
             <h2 className="script" id="stories-title">Chinese Chimes stories</h2>
-            <p>Four stories for young readers, each with a moral. Read them online or listen to the audiobooks.</p>
+            <p>The characters in these stories are named after the musical scale: Doh, Ray, Mee, Fah, Soh, Lah, Tee, Doh, with an added Hi-Doh and Low-Doh. Here are four of Allen's stories for young readers. Each story contains an important moral, and the name of the Little Chime sometimes highlights it. A teacher or parent can read the eBook online, or watch and listen to the audiobook.</p>
           </div>
           <ol className="audiobook-list">
             {stories.map((story, storyIndex) => {
