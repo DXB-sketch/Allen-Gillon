@@ -81,6 +81,48 @@ test("the offers are headed columns without rules, and quotes appear once", asyn
   }
 });
 
+test("on a phone the number is on the first screen", async ({ page }) => {
+  for (const [width, height] of [[375, 812], [390, 844], [768, 1024]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(URL, { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
+    const bottom = await page.locator("#booking a.sms").evaluate((el) => el.getBoundingClientRect().bottom);
+    expect(bottom, `${width}x${height}`).toBeLessThan(height);
+  }
+});
+
+test("the spotlight sits beside the number and its beam is level with it", async ({ page }) => {
+  for (const [width, lamp] of [[375, ".spotlight--down"], [1024, ".spotlight--across"], [1280, ".spotlight--across"], [1920, ".spotlight--across"]]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(URL, { waitUntil: "load" });
+    await page.evaluate(() => document.fonts.ready);
+    const r = await page.evaluate((sel) => {
+      const box = (el) => el.getBoundingClientRect().toJSON();
+      const visible = [...document.querySelectorAll("#booking .spotlight")].filter((el) => el.getClientRects().length);
+      return {
+        count: visible.length,
+        matches: visible[0]?.matches(sel),
+        lamp: box(visible[0]),
+        num: box(document.querySelector("#booking .sms-number")),
+        head: box(document.querySelector("#book-a-date")),
+      };
+    }, lamp);
+    expect(r.count, `${width}: one lamp`).toBe(1);
+    expect(r.matches, `${width}: ${lamp}`).toBe(true);
+    if (lamp === ".spotlight--across") {
+      // Left of the number, and the middle of the number within the lamp's height.
+      expect(r.lamp.right, `${width}: lamp clear of number`).toBeLessThanOrEqual(r.num.left);
+      const mid = (r.num.top + r.num.bottom) / 2;
+      expect(mid).toBeGreaterThan(r.lamp.top);
+      expect(mid).toBeLessThan(r.lamp.bottom);
+    } else {
+      // Above the number, clear of the heading text.
+      expect(r.lamp.bottom, `${width}: lamp above number`).toBeLessThanOrEqual(r.num.top + 1);
+      expect(r.lamp.left, `${width}: lamp clear of heading`).toBeGreaterThanOrEqual(r.head.left + 100);
+    }
+  }
+});
+
 test("decorative SVG stays inside the budget and is hidden", async ({ page }) => {
   await page.goto(URL, { waitUntil: "load" });
   const svgs = await page.locator("main svg").evaluateAll((els) =>
@@ -119,4 +161,9 @@ test("screenshots", async ({ page }) => {
     await page.waitForTimeout(1800);
     await page.screenshot({ path: `${dir}/hire-${width}.png`, fullPage: true });
   }
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto(URL, { waitUntil: "load" });
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(1800);
+  await page.screenshot({ path: `${dir}/hire-375-fold.png` });
 });

@@ -15,7 +15,14 @@
 /* ---------- The ink band ---------- */
 .book-band{margin-top:clamp(28px,4vw,56px);padding-block:clamp(40px,6vw,104px);row-gap:clamp(16px,2vw,28px);align-items:center;}
 .book-band h2{margin:0;}
-.book-band .spotlight{width:min(62%,300px);height:auto;}
+/* Phones and tablets: the lamp hangs at the right of the heading row and
+   shines down onto the number, which follows the heading directly, so the
+   number is on the first screen. */
+.book-band h2,.book-band .spotlight--down{grid-row:1;}
+.book-band h2{align-self:end;padding-right:calc(clamp(112px,30vw,190px) + 12px);}
+.book-band .spotlight--down{width:clamp(112px,30vw,190px);height:auto;justify-self:end;align-self:start;margin-bottom:-18%;}
+.book-band .spotlight--across{display:none;}
+.book-band .phones{grid-row:2;}
 .phones{min-width:0;}
 .phones .sms{
   display:block;width:max-content;max-width:100%;
@@ -27,20 +34,23 @@
 .phones .sms span{display:block;}
 .phones .sms-verb{font-weight:400;font-style:italic;}
 .phones .sms-number{white-space:nowrap;}
-/* Tap feedback and hover: the digits take the red, the verb keeps paper.
-   Colour only, never movement. */
-.phones .sms:hover .sms-number{color:oklch(0.72 0.16 33);}
+/* Tap feedback and hover: the digits take the red (large text, above 3:1 on
+   ink), the verb keeps paper. Colour only, never movement. */
+.phones .sms:hover .sms-number{color:var(--red);}
 .phones .sms:focus-visible{outline:3px solid var(--paper);outline-offset:6px;}
 .phones p{margin:clamp(20px,2.4vw,36px) 0 0;font-size:1.1em;max-width:var(--measure);}
 .phones p a{text-underline-offset:4px;text-decoration-thickness:2px;}
-.phones p a:hover{color:oklch(0.80 0.12 33);}
+/* Body-size text keeps the paper colour on hover (red on ink is under 4.5:1);
+   only the underline takes the red. */
+.phones p a:hover{text-decoration-color:var(--red);}
 
 @media (min-width:1024px){
-  /* The title and the lamp on the left, the lamp shining right onto the
-     number, which takes the other eight columns. */
+  /* The title and the lamp on the left, the lamp's beam running right into
+     the number, which takes the other eight columns. */
   .book-band{row-gap:8px;}
-  .book-band h2{grid-column:wide-start / span 4;grid-row:1;align-self:end;}
-  .book-band .spotlight{grid-column:wide-start / span 4;grid-row:2;width:100%;max-width:clamp(300px,24vw,440px);justify-self:start;align-self:start;}
+  .book-band h2{grid-column:wide-start / span 4;grid-row:1;align-self:end;padding-right:0;}
+  .book-band .spotlight--down{display:none;}
+  .book-band .spotlight--across{display:block;grid-column:wide-start / span 4;grid-row:2;width:100%;height:auto;align-self:start;}
   .book-band .phones{grid-column:span 8 / wide-end;grid-row:1 / span 2;}
 }
 
@@ -51,15 +61,26 @@
 .offer h2{font-size:clamp(1.5rem,2.2vw,2rem);line-height:1.2;font-weight:700;margin:0 0 12px;color:var(--ink);}
 /* The offer descriptions are the page's body copy: full body size. */
 .offer p{margin:0;font-size:1em;max-width:var(--measure);}
-.hire-offers .gx-hero{display:block;width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;max-width:min(460px,100%);}
-@media (min-width:768px){
-  .offer{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .hire-offers .gx-hero{max-width:none;grid-column:wide-start / span 6;}
+.hire-offers .gx-hero{display:block;width:100%;height:auto;object-fit:cover;object-position:50% 25%;max-width:min(520px,100%);}
+@media (min-width:768px) and (max-width:1279px){
+  /* Tablets: the two offers stacked on the left, the photo beside them. */
+  .hire-offers{align-items:center;}
+  .offer{grid-column:wide-start / span 6;grid-row:1;}
+  .hire-offers .gx-hero{max-width:none;grid-column:span 6 / wide-end;grid-row:1;}
 }
 @media (min-width:1280px){
-  /* The two columns side by side, the photo closing the row on the right. */
-  .offer{grid-column:wide-start / span 8;}
-  .hire-offers .gx-hero{grid-column:span 4 / wide-end;}
+  .offer{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:1280px){
+  /* The two columns side by side, the photo closing the row on the right,
+     cropped landscape so it stands about as tall as the columns, which sit
+     centred against it. */
+  .hire-offers{align-items:center;}
+  .offer{grid-column:wide-start / span 8;grid-row:1;}
+  .hire-offers .gx-hero{max-width:none;grid-column:span 4 / wide-end;grid-row:1;aspect-ratio:4/3;}
+}
+@media (min-width:1600px){
+  .hire-offers .gx-hero{aspect-ratio:16/10;}
 }
 
 /* ---------- The diners' words: one typographic strip ---------- */
@@ -75,7 +96,6 @@
 @media (max-width:767px){
   .diners ul{flex-direction:column;align-items:flex-start;}
 }
-@media (min-width:1600px){
-  /* Wide screens: a landscape crop keeps the photo level with the offers. */
-  .hire-offers .gx-hero{aspect-ratio:5/4;object-position:50% 60%;}
-}
+/* The strip runs straight into the ink footer: cancel the footer's lead-in
+   space here so no stray band of plain paper sits between them. */
+.hire > .diners:last-child{margin-bottom:calc(var(--band-space) * -1);}

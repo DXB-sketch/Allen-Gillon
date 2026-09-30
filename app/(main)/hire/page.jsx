@@ -24,7 +24,8 @@ export default function HirePage() {
           tel: link here only once Allen confirms he takes phone calls. */}
       <section id="booking" className="book-band band ink" aria-labelledby="book-a-date">
         <h2 className="script" id="book-a-date">Book a date</h2>
-        <HireSpotlight className="spotlight" ground="ink" draw />
+        <HireSpotlight className="spotlight spotlight--across" aim="across" ground="ink" draw />
+        <HireSpotlight className="spotlight spotlight--down" aim="down" ground="ink" offset={5} draw />
         <div className="phones">
           <a className="sms" href="sms:+61438747882">
             <span className="sms-verb">Text</span> <span className="sms-number">0438 747 882</span>
@@ -46,10 +47,10 @@ export default function HirePage() {
         </ul>
         <img
           className="gx-hero"
-          src="/images/personal/duo-live-on-stage.jpg"
-          alt="Allen in a flat cap playing his red Gibson on a dark stage, with Ann singing at a microphone across from him and a stage light glowing between them"
-          width="1080"
-          height="1080"
+          src="/images/personal/allen-playing-chandler-theatre.jpg"
+          alt="Allen in a pale jacket playing his red Gibson on a dark stage, one hand raised at the end of a strum"
+          width="670"
+          height="607"
           loading="lazy"
           decoding="async"
         />
