@@ -20,7 +20,7 @@ test.describe("/books shelves", () => {
     await expect(paragraph).toContainText("The characters in these stories are named after the musical scale");
   });
 
-  test("one action per book: stories read and listen, plays a preview and a price, textbooks read online", async ({ page }) => {
+  test("one action per book: stories read and listen, plays a preview and a price, textbooks read online and download the PDF", async ({ page }) => {
     await page.goto(BOOKS);
     const stories = page.locator(".stories-shelf > li");
     await expect(stories).toHaveCount(4);
@@ -51,8 +51,8 @@ test.describe("/books shelves", () => {
     const textbooks = page.locator(".texts-shelf > li");
     await expect(textbooks).toHaveCount(3);
     for (const book of await textbooks.all()) {
-      await expect(book.locator(".book-action")).toHaveText(["Read online"]);
-      await expect(book.locator("a[download]")).toHaveCount(0);
+      await expect(book.locator(".book-action")).toHaveText(["Read online", "Download PDF"]);
+      await expect(book.locator("a[download]")).toHaveAttribute("href", /^\/books\/[a-z0-9-]+\/[a-z0-9-]+\.pdf$/);
     }
     await expect(page.locator("main")).not.toContainText("Contact Allen");
   });

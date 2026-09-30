@@ -79,8 +79,10 @@ test("the page: no numerals, menus, restricted branch or section-heading", () =>
   for (const action of ["Read and listen", "Read a preview", "Read online"]) {
     assert.ok(page.includes(action), action);
   }
-  /* One action per book: text-only and the PDF download are in the reader. */
-  for (const second of ["Text only", "Download PDF", "/text`"]) {
+  /* One action per book (text-only is in the reader), except textbooks,
+     which also offer "Download PDF" (W4). */
+  assert.ok(page.includes("Download PDF"), "textbook Download PDF");
+  for (const second of ["Text only", "/text`"]) {
     assert.ok(!page.includes(second), second);
   }
   /* Every Buy goes through PurchaseLink with a link from the storefront. */

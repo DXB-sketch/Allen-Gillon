@@ -167,9 +167,13 @@ export default function BooksPage() {
           {textbooks.map((book, index) => (
             <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`} ground="ink">
               <p className="book-blurb">{book.blurb}</p>
-              {/* One action per book: the PDF download is in the reader's toolbar. */}
+              {/* Textbooks are the spec's one exception to one action per book
+                  (W4): read online, or download the free PDF. */}
               <div className="book-actions">
                 <Link prefetch={false} className="book-action" href={`/read/${book.slug}`} aria-label={`Read online: ${book.title}`}>Read online</Link>
+                {book.pdf ? (
+                  <a className="book-action" href={book.pdf} download aria-label={`Download PDF: ${book.title}`}>Download PDF</a>
+                ) : null}
               </div>
             </Book>
           ))}
