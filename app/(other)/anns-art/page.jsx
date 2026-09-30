@@ -1,6 +1,7 @@
 import ArtWall from "../../../components/art/ArtWall";
+import ArtHallScript from "../../../components/art/ArtHallScript";
 import ArtEasel from "../../../components/illustrations/ArtEasel";
-import { ART_HALL_SCRIPT, artworks } from "../../../lib/art-catalog.mjs";
+import { artworks } from "../../../lib/art-catalog.mjs";
 import { stripePaymentLink } from "../../../lib/storefront.mjs";
 import { ogImages } from "../../../lib/og.mjs";
 import { collectionPage, jsonLdProps } from "../../../lib/schema.mjs";
@@ -33,8 +34,8 @@ export default function AnnsArtPage() {
       </header>
       <section className="wall band" aria-labelledby="paintings-heading">
         <h2 id="paintings-heading" className="visually-hidden">Paintings</h2>
-        {/* Lays the wall out as the hallway before first paint (JS on, motion allowed). */}
-        <script dangerouslySetInnerHTML={{ __html: ART_HALL_SCRIPT }} />
+        {/* Lays the wall out as the hallway before first paint on a full load (JS on, motion allowed). */}
+        <ArtHallScript />
         <ArtWall artworks={artworks} checkoutLinks={checkoutLinks} />
       </section>
       <script {...jsonLdProps(jsonLd)} />

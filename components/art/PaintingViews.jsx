@@ -55,14 +55,21 @@ export default function PaintingViews({ art, sizes, priority = false, keyScope }
     ? `${art.title}, a painting by Ann Gillon`
     : `${art.title}, another photograph of the same painting`;
 
+  // The stage is as tall as the tallest view needs at full width (capped by
+  // --stage-h in the CSS), so the page does not jump as the views change and
+  // no empty band is kept above and below a landscape photograph.
+  const stageRatio = Math.min(...images.map((img) => img.width / img.height));
+
   return (
-    <div className={count > 1 ? "views views--multi" : "views"} ref={rootRef}>
+    <div className={count > 1 ? "views views--multi" : "views"} ref={rootRef} style={{ "--stage-ar": stageRatio.toFixed(4) }}>
       <div
         className="views-stage"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerCancel={() => { swipe.current = null; }}
       >
+        {/* The arrows sit inside the frame, so they lie over the picture's own
+            edges whatever its shape. */}
         <span className="views-frame" style={{ "--ar": image.width / image.height }}>
           <ArtPicture
             key={image.src}
@@ -72,17 +79,17 @@ export default function PaintingViews({ art, sizes, priority = false, keyScope }
             loading={priority || index > 0 ? "eager" : "lazy"}
             fetchPriority={priority && index === 0 ? "high" : undefined}
           />
+          {count > 1 ? (
+            <>
+              <button type="button" className="view-arrow view-prev" aria-label="Previous view" onClick={() => step(-1)}>
+                <ArtArrow className="arrow-glyph arrow-back" />
+              </button>
+              <button type="button" className="view-arrow view-next" aria-label="Next view" onClick={() => step(1)}>
+                <ArtArrow className="arrow-glyph" />
+              </button>
+            </>
+          ) : null}
         </span>
-        {count > 1 ? (
-          <>
-            <button type="button" className="view-arrow view-prev" aria-label="Previous view" onClick={() => step(-1)}>
-              <ArtArrow className="arrow-glyph arrow-back" />
-            </button>
-            <button type="button" className="view-arrow view-next" aria-label="Next view" onClick={() => step(1)}>
-              <ArtArrow className="arrow-glyph" />
-            </button>
-          </>
-        ) : null}
       </div>
       {count > 1 ? (
         <div className="views-nav">

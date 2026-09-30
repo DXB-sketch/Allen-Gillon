@@ -117,6 +117,60 @@ test.describe("hallway", () => {
     await expect(page.locator("dialog.painting-dialog")).toBeHidden();
     await expect(page).toHaveURL(`${OTHER}/anns-art`);
     await expect(page.locator(".wall-toggle")).toHaveText("See every painting at once");
+    // Forward opens it again, so the address and the screen agree.
+    await page.goForward();
+    await expect(page).toHaveURL(`${OTHER}/anns-art/${artworks[0].id}`);
+    await expect(page.locator("dialog.painting-dialog")).toBeVisible();
+    await expect(page.locator("dialog.painting-dialog h2")).toHaveText(artworks[0].title);
+    await page.keyboard.press("Escape");
+    await expect(page.locator("dialog.painting-dialog")).toBeHidden();
+    await expect(page).toHaveURL(`${OTHER}/anns-art`);
+  });
+
+  test("arriving by a nav link (client-side) also shows the hallway, with no console errors", async ({ page }) => {
+    const errors = [];
+    page.on("console", (msg) => { if (msg.type() === "error") errors.push(msg.text()); });
+    for (const from of ["/", "/books"]) {
+      await page.goto(`${OTHER}${from}`);
+      await page.waitForLoadState("networkidle");
+      const navigations = [];
+      const onRequest = (req) => { if (req.isNavigationRequest()) navigations.push(req.url()); };
+      page.on("request", onRequest);
+      await page.locator('header a[href="/anns-art"]').first().click();
+      await expect(page).toHaveURL(`${OTHER}/anns-art`);
+      await expect(page.locator(".wall-toggle")).toHaveText("See every painting at once");
+      expect(await page.evaluate(() => document.documentElement.classList.contains("art-hall"))).toBe(true);
+      await expect(page.locator(".hall-controls")).toBeVisible();
+      page.off("request", onRequest);
+      expect(navigations, `${from}: a client-side visit`).toEqual([]);
+    }
+    // And back from a painting page by its "All of Ann's paintings" link.
+    await page.goto(`${OTHER}/anns-art/${artworks[0].id}`);
+    await page.waitForLoadState("networkidle");
+    await page.locator(".back-link").click();
+    await expect(page.locator(".wall-toggle")).toHaveText("See every painting at once");
+    expect(errors.filter((e) => /script tag|hydrat/i.test(e))).toEqual([]);
+  });
+
+  test("dialog view arrows lie over the picture, with the count centred under it", async ({ page }) => {
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await openWall(page);
+    await page.locator(`a[href="/anns-art/${macaws.id}"]`).click();
+    const dialog = page.locator("dialog.painting-dialog");
+    await expect(dialog).toBeVisible();
+    const frame = await dialog.locator(".views-frame").boundingBox();
+    const prev = await dialog.getByRole("button", { name: "Previous view" }).boundingBox();
+    const next = await dialog.getByRole("button", { name: "Next view" }).boundingBox();
+    expect(prev.x).toBeGreaterThanOrEqual(frame.x);
+    expect(prev.x).toBeLessThan(frame.x + 40);
+    expect(next.x + next.width).toBeLessThanOrEqual(frame.x + frame.width);
+    expect(next.x + next.width).toBeGreaterThan(frame.x + frame.width - 40);
+    const nav = await dialog.locator(".views-nav").evaluate((el) => {
+      const kids = [...el.children].map((c) => c.getBoundingClientRect());
+      return { left: Math.min(...kids.map((r) => r.left)), right: Math.max(...kids.map((r) => r.right)) };
+    });
+    const frameMid = frame.x + frame.width / 2;
+    expect(Math.abs((nav.left + nav.right) / 2 - frameMid)).toBeLessThan(24);
   });
 
   test("the vertical wheel never moves the hallway; the arrows do", async ({ page }) => {

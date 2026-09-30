@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { access, readFile } from "node:fs/promises";
+import { access, mkdtemp, readFile, rm } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { build } from "esbuild";
+import { JSDOM } from "jsdom";
 import { stripePaymentLinks } from "../content/stripe-payment-links.mjs";
 import { stripePaymentLink } from "../lib/storefront.mjs";
 import {
@@ -11,8 +17,42 @@ import {
 // passes paintingAction(art, stripePaymentLink(`art-${id}`)) to PurchaseLink
 // ("Buy this painting") or to one "Enquire about this painting" link.
 
-const detailSource = await readFile(new URL("../components/art/PaintingDetail.jsx", import.meta.url), "utf8");
 const routeSource = await readFile(new URL("../app/(other)/anns-art/[id]/page.jsx", import.meta.url), "utf8");
+
+// PaintingDetail is JSX, which Node cannot import directly: bundle it with
+// react-dom/server (esbuild, already installed by the build toolchain) into a
+// temporary module and render it for real with renderToStaticMarkup.
+async function loadDetailRenderer() {
+  const root = fileURLToPath(new URL("..", import.meta.url));
+  const dir = await mkdtemp(path.join(tmpdir(), "art-detail-"));
+  const outfile = path.join(dir, "render.mjs");
+  try {
+    await build({
+      stdin: {
+        contents: [
+          'import { createElement } from "react";',
+          'import { renderToStaticMarkup } from "react-dom/server";',
+          'import PaintingDetail from "./components/art/PaintingDetail.jsx";',
+          "export const render = (art, checkoutUrl) => renderToStaticMarkup(createElement(PaintingDetail, { art, checkoutUrl, Heading: \"h1\" }));",
+        ].join("\n"),
+        resolveDir: root,
+        loader: "js",
+      },
+      bundle: true,
+      format: "esm",
+      platform: "node",
+      jsx: "automatic",
+      loader: { ".jsx": "jsx" },
+      define: { "process.env.NODE_ENV": '"production"' },
+      banner: { js: 'import { createRequire } from "node:module"; const require = createRequire(import.meta.url);' },
+      logLevel: "error",
+      outfile,
+    });
+    return (await import(pathToFileURL(outfile).href)).render;
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
 
 test("every artwork with a Stripe link gets exactly that link as its one Buy action", () => {
   let withLinks = 0;
@@ -44,12 +84,42 @@ test("sold, commissioned and not-for-sale works never offer checkout, even with 
   }
 });
 
-test("the detail view renders one action: PurchaseLink with the action href, or one enquiry link", () => {
-  assert.match(detailSource, /<PurchaseLink href=\{action\.href\}>\{action\.label\}<\/PurchaseLink>/);
-  assert.equal((detailSource.match(/<PurchaseLink\b/g) || []).length, 1);
-  assert.equal((detailSource.match(/href=\{action\.href\}/g) || []).length, 2, "one branch each: buy or enquire");
+test("the detail view, rendered, has exactly one action: that painting's own Stripe link, or one enquiry", async () => {
+  const renderDetail = await loadDetailRenderer();
+  let buys = 0;
+  for (const art of artworks) {
+    const html = renderDetail(art, stripePaymentLink(`art-${art.id}`));
+    const doc = new JSDOM(`<!doctype html><body>${html}</body>`).window.document;
+    const actions = [...doc.querySelectorAll("a")].filter((a) => /^(Buy this painting|Enquire about this painting)$/.test(a.textContent.trim()));
+    assert.equal(actions.length, 1, `${art.id}: one Buy or Enquire link`);
+    const stripeHrefs = [...doc.querySelectorAll("a")].map((a) => a.getAttribute("href")).filter((href) => href.startsWith("https://buy.stripe.com"));
+    const raw = stripePaymentLinks[`art-${art.id}`];
+    if (raw && art.availability === "available") {
+      buys += 1;
+      assert.equal(actions[0].textContent.trim(), "Buy this painting", art.id);
+      assert.equal(actions[0].getAttribute("href"), raw, `${art.id} must link to its own Payment Link`);
+      assert.deepEqual(stripeHrefs, [raw], `${art.id}: no other checkout link on the page`);
+    } else {
+      assert.equal(actions[0].textContent.trim(), "Enquire about this painting", art.id);
+      assert.deepEqual(stripeHrefs, [], `${art.id}: no checkout link`);
+    }
+    assert.ok(doc.querySelector('a[href="/delivery"]'), `${art.id}: delivery link`);
+  }
+  assert.equal(buys, 29);
+});
+
+test("the painting route passes each painting its own Stripe link and lists every painting", () => {
   assert.match(routeSource, /checkoutUrl=\{stripePaymentLink\(`art-\$\{art\.id\}`\)\}/);
   assert.match(routeSource, /generateStaticParams/);
+});
+
+test("no painting shows the same photograph twice", async () => {
+  for (const art of artworks) {
+    const hashes = await Promise.all(art.images.map(async (image) =>
+      createHash("sha256").update(await readFile(new URL(`../public${image.src}`, import.meta.url))).digest("hex")));
+    assert.equal(new Set(hashes).size, hashes.length, art.title);
+  }
+  assert.equal(artworks.find((a) => a.title === "Blue Macaws").images.length, 3);
 });
 
 test("wall labels: the price, or Sold", () => {

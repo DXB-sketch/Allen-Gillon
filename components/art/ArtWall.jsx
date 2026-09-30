@@ -1,12 +1,12 @@
 "use client";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import ArtPicture from "./ArtPicture";
 import PaintingDetail from "./PaintingDetail";
 import ArtRail from "../illustrations/ArtRail";
 import ArtSkirting from "../illustrations/ArtSkirting";
 import ArtWire from "../illustrations/ArtWire";
 import ArtArrow from "../illustrations/ArtArrow";
-import { ART_HALL_CLASS, ROOMS, artStatus, artRatio, inRoom } from "../../lib/art-catalog.mjs";
+import { ART_HALL_CLASS, ROOMS, artHallAllowed, artStatus, artRatio, inRoom } from "../../lib/art-catalog.mjs";
 
 /*
  * Ann's paintings on /anns-art.
@@ -15,8 +15,9 @@ import { ART_HALL_CLASS, ROOMS, artStatus, artRatio, inRoom } from "../../lib/ar
  * ratio, each a plain link to its own page /anns-art/[id]. That is the no-JS
  * and search base, and the default under prefers-reduced-motion.
  *
- * With JS and motion allowed, ART_HALL_SCRIPT (lib/art-catalog.mjs, inline before first paint)
- * puts html.art-hall on the page and the same list becomes the hallway: one
+ * With JS and motion allowed, html.art-hall goes on the page before first
+ * paint (ART_HALL_SCRIPT inline on a full load, the layout effect below on a
+ * client-side visit) and the same list becomes the hallway: one
  * horizontal scroll-snap track under a drawn picture rail, moved only by the
  * 64px arrows, the left and right keys, a mouse drag or a swipe. The vertical
  * wheel is never turned into horizontal movement. "See every painting at
@@ -55,11 +56,15 @@ export default function ArtWall({ artworks, checkoutLinks }) {
   const openArt = openId ? artworks.find((art) => art.id === openId) : null;
   const hall = mode === "hall";
 
-  // Pick up the mode the inline script chose before paint.
-  useEffect(() => {
+  // Pick up the mode the inline script chose before paint. On a client-side
+  // visit that script never ran, so make the same choice here (a layout
+  // effect runs before the browser paints the new page).
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    if (!root.classList.contains(HALL_CLASS) && artHallAllowed()) root.classList.add(HALL_CLASS);
     setMounted(true);
-    if (document.documentElement.classList.contains(HALL_CLASS)) setMode("hall");
-    return () => document.documentElement.classList.remove(HALL_CLASS);
+    if (root.classList.contains(HALL_CLASS)) setMode("hall");
+    return () => root.classList.remove(HALL_CLASS);
   }, []);
 
   useEffect(() => {
@@ -206,18 +211,25 @@ export default function ArtWall({ artworks, checkoutLinks }) {
     if (link) requestAnimationFrame(() => link.focus({ preventScroll: hall }));
   };
 
-  // The back button closes the dialog.
+  // The back button closes the dialog; the forward button opens it again, so
+  // the address and what is on screen always agree.
   useEffect(() => {
     const onPop = () => {
       const dialog = dialogRef.current;
-      if (dialog?.open && history.state?.annArt !== openId) {
+      const wanted = history.state?.annArt;
+      if (dialog?.open && wanted !== openId) {
         pushed.current = false;
         dialog.close();
+      } else if (!dialog?.open && wanted && artworks.some((art) => art.id === wanted)) {
+        pushed.current = true;
+        const i = works.findIndex((art) => art.id === wanted);
+        if (hall && i >= 0) go(i, { instant: true });
+        setOpenId(wanted);
       }
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
-  }, [openId]);
+  }, [openId, artworks, works, hall, go]);
 
   // A click on the backdrop (outside the dialog box) closes it too.
   const onDialogClick = (event) => {

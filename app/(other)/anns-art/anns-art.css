@@ -65,7 +65,7 @@
 html.art-hall .hall{grid-column:full;position:relative;container-type:inline-size;
   --hall-h:min(50svh,520px);padding-top:4px;}
 html.art-hall .hall-rail{display:block;position:absolute;top:0;left:0;width:100%;height:20px;}
-html.art-hall .artgrid{flex-wrap:nowrap;align-items:flex-start;gap:clamp(56px,7cqi,150px);
+html.art-hall .artgrid{flex-wrap:nowrap;align-items:flex-start;gap:clamp(48px,4.6cqi,96px);
   overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;
   scroll-snap-type:x mandatory;scrollbar-width:none;
   padding:9px var(--gutter) 8px;cursor:grab;touch-action:pan-x pan-y;}
@@ -95,6 +95,20 @@ html.art-hall .hall-controls{display:flex;align-items:center;gap:clamp(16px,2vw,
 .hall-arrow[aria-disabled="true"]:hover{background:var(--paper);}
 .hall-arrow[aria-disabled="true"]:hover .two-ink{--art-lead:var(--blue);}
 .hall-count{margin:0;min-width:6.5ch;text-align:center;font-size:1.15rem;font-variant-numeric:tabular-nums;}
+@media (min-width:1024px){
+  /* Wide screens: the arrows stand at either end of the wall, level with the
+     paintings, and the counter sits centred under the skirting. The wall is
+     inset a little more than the gutter so the arrows never cover the first
+     or last painting. (DOM order is unchanged: Tab still goes painting,
+     previous, next.) */
+  html.art-hall .work:first-child{margin-left:max(0px,calc(88px - var(--gutter)));}
+  html.art-hall .work:last-child{margin-right:max(0px,calc(88px - var(--gutter)));}
+  html.art-hall .hall-controls{justify-content:center;padding-top:clamp(10px,1.4vw,18px);}
+  html.art-hall .hall-arrow{position:absolute;z-index:1;
+    top:calc(13px + clamp(30px,5svh,56px) + var(--hall-h) * .42 - 32px);}
+  html.art-hall .hall-arrow:first-child{left:12px;}
+  html.art-hall .hall-arrow:last-child{right:12px;}
+}
 .arrow-glyph{width:34px;height:auto;}
 .arrow-back{transform:scaleX(-1);}
 
@@ -104,10 +118,12 @@ html.art-hall .hall-controls{display:flex;align-items:center;gap:clamp(16px,2vw,
   .painting{grid-template-columns:minmax(0,1fr) clamp(300px,27vw,440px);}
 }
 .views{min-width:0;}
-/* A painting with several views keeps a fixed stage, so the page does not
-   jump as the views change; a single photograph takes only its own height. */
+/* A painting with several views keeps a steady stage, so the page does not
+   jump as the views change: as tall as its tallest view needs at full width
+   (--stage-ar, set by PaintingViews), never taller than --stage-h. A single
+   photograph takes only its own height. */
 .views-stage{position:relative;display:flex;align-items:center;justify-content:center;touch-action:pan-y;}
-.views--multi .views-stage{height:var(--stage-h);}
+.views--multi .views-stage{width:100%;aspect-ratio:var(--stage-ar);max-height:var(--stage-h);}
 .views-frame{max-width:100%;max-height:100%;}
 .views-frame picture{display:contents;}
 .views-frame img{display:block;width:auto;height:auto;max-width:100%;
@@ -115,8 +131,9 @@ html.art-hall .hall-controls{display:flex;align-items:center;gap:clamp(16px,2vw,
 .view-arrow{position:absolute;top:50%;margin-top:-32px;width:64px;height:64px;display:grid;place-items:center;padding:0;
   border:2px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);cursor:pointer;
   transition:opacity .25s var(--ease-out),background-color .2s var(--ease-out);}
-.view-prev{left:0;}
-.view-next{right:0;}
+/* Inside the frame: on the picture's own left and right edges. */
+.view-prev{left:clamp(8px,1vw,16px);}
+.view-next{right:clamp(8px,1vw,16px);}
 .view-arrow:hover{background:var(--ink);}
 .view-arrow:hover .two-ink{--art-lead:var(--on);}
 /* Mouse and trackpad: the arrows fade in over the picture. Touch: always shown.
@@ -125,7 +142,7 @@ html.art-hall .hall-controls{display:flex;align-items:center;gap:clamp(16px,2vw,
   .view-arrow{opacity:0;}
   .views-stage:hover .view-arrow,.views-stage:focus-within .view-arrow{opacity:1;}
 }
-.views-nav{display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;margin-top:10px;}
+.views-nav{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 16px;margin-top:10px;}
 .views-count{margin:0;font-size:1rem;font-variant-numeric:tabular-nums;}
 .views-dots{display:flex;}
 .views-dot{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:transparent;cursor:pointer;}
@@ -180,6 +197,20 @@ html.art-hall .hall-controls{display:flex;align-items:center;gap:clamp(16px,2vw,
   .artgrid{--row-h:150px;gap:28px 16px;}
   .work-title{font-size:1.05rem;}
   .rooms{margin-left:-10px;}
-  .painting{--stage-h:min(58svh,520px);}
-  .painting-page .painting{--stage-h:min(62svh,560px);}
+  /* One painting on a phone: the name and the price come first, then the
+     picture, then the one action straight under it, so the price and the
+     button are reached without a long scroll. The stage takes only the
+     current view's own height (no band kept for a taller view). */
+  .painting{gap:0;--stage-h:64svh;}
+  .painting-page .painting{--stage-h:64svh;}
+  .painting-text{display:contents;}
+  .painting-title{order:1;margin-bottom:6px;}
+  .painting-details{order:2;}
+  .painting-price{order:3;font-size:1.4rem;}
+  .views{order:4;margin-top:16px;}
+  .painting-note,.painting-action,.painting-sms,.painting-delivery{order:5;}
+  .painting-action{margin-top:16px;}
+  .painting-delivery{margin-top:10px;}
+  .views--multi .views-stage{aspect-ratio:auto;max-height:none;}
+  .views-nav{margin-top:4px;}
 }
