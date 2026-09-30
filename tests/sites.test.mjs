@@ -4,10 +4,14 @@ import {
   ROUTE_OWNER,
   crossSiteUrl,
   isCurrentNav,
+  isPreviewEnv,
   NAV,
   resolveRequest,
+  runtimeEnv,
   safeReturnTo,
   siteForHost,
+  SITE_MARKER_SCRIPT,
+  usesLocalLinks,
 } from "../lib/sites.mjs";
 
 const PROD = { NODE_ENV: "production" };
@@ -50,11 +54,11 @@ const table = [
   ["main /plays goes to school plays", MAIN, "/plays", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books#school-plays" }],
   ["other /plays goes to school plays", OTHER, "/plays", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books#school-plays" }],
 
-  // api is never redirected
-  ["main POST /api/reviews", MAIN, "/api/reviews", { env: PROD, method: "POST" }, { action: "next" }],
-  ["other POST /api/reviews", OTHER, "/api/reviews", { env: PROD, method: "POST" }, { action: "next" }],
-  ["www POST /api/reviews", "www.allengillon.com", "/api/reviews", { env: PROD, method: "POST" }, { action: "next" }],
-  ["unknown host POST /api/reviews", "allen-gillon.example.workers.dev", "/api/reviews", { env: PROD, method: "POST" }, { action: "next" }],
+  // api is never redirected (resolveRequest ignores the method; e2e/sites.spec.mjs sends real POSTs)
+  ["main /api/reviews", MAIN, "/api/reviews", { env: PROD }, { action: "next" }],
+  ["other /api/reviews", OTHER, "/api/reviews", { env: PROD }, { action: "next" }],
+  ["www /api/reviews", "www.allengillon.com", "/api/reviews", { env: PROD }, { action: "next" }],
+  ["unknown host /api/reviews", "allen-gillon.example.workers.dev", "/api/reviews", { env: PROD }, { action: "next" }],
 
   // legal pages: main only once published, 404 on both while unpublished
   ["other /privacy while unpublished falls through", OTHER, "/privacy", { env: PROD }, { action: "next" }],
@@ -65,6 +69,10 @@ const table = [
   ["unknown host in production goes to main", "allen-gillon.example.workers.dev", "/music", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/music" }],
   ["unknown host in development never redirects", "preview.example.com", "/books", { env: DEV }, { action: "next" }],
   ["unknown host with preview flag never redirects", "preview.example.com", "/books", { env: { NODE_ENV: "production", SITE_PREVIEW: "1" } }, { action: "next" }],
+  ["LAN IP with preview flag (start:vinext) never redirects", "192.168.1.5:8787", "/books", { env: { NODE_ENV: "production", SITE_PREVIEW: "1" } }, { action: "next" }],
+  ["LAN IP in production goes to main", "192.168.1.5:8787", "/books", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/books" }],
+  ["Vercel deployment never redirects", "allen-gillon.vercel.app", "/music", { env: { NODE_ENV: "production", VERCEL: "1" } }, { action: "next" }],
+  ["known host still routes with preview flag", MAIN, "/books", { env: { NODE_ENV: "production", SITE_PREVIEW: "1" } }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books" }],
   ["unknown other.* host in development rewrites home", "other.preview.example.com", "/", { env: DEV }, { action: "rewrite", pathname: "/other-home" }],
 
   // loopback and *.localhost never redirect, even in production
@@ -118,10 +126,10 @@ test("loopback and *.localhost hosts never redirect for any path", () => {
   }
 });
 
-test("POST /api/reviews is never 3xx on either host in any environment", () => {
+test("/api/reviews is never 3xx on either host in any environment", () => {
   for (const host of [MAIN, OTHER, "www.allengillon.com", "localhost:8787", "other.localhost:8787"]) {
     for (const env of [PROD, DEV]) {
-      assert.equal(is3xx(resolveRequest(host, "/api/reviews", { env, method: "POST" })), false, host);
+      assert.equal(is3xx(resolveRequest(host, "/api/reviews", { env })), false, host);
     }
   }
 });
@@ -143,6 +151,45 @@ test("crossSiteUrl uses production, local or SITE_DEV_PORT origins", () => {
   assert.equal(crossSiteUrl("main", "/", { host: "allengillon.com" }), "https://allengillon.com/");
   assert.equal(crossSiteUrl("other", "/", { dev: true }), "http://other.localhost:3001/");
   assert.equal(crossSiteUrl("other", "/", { dev: true, env: { SITE_DEV_PORT: "8787" } }), "http://other.localhost:8787/");
+});
+
+test("preview and local-link flags", () => {
+  assert.equal(isPreviewEnv(PROD), false);
+  assert.equal(isPreviewEnv(DEV), true);
+  assert.equal(isPreviewEnv({}), true);
+  assert.equal(isPreviewEnv({ NODE_ENV: "production", SITE_PREVIEW: "1" }), true);
+  assert.equal(isPreviewEnv({ NODE_ENV: "production", VERCEL: "1" }), true);
+  // Local links in dev and in the local Worker preview, not on Vercel or in production.
+  assert.equal(usesLocalLinks(PROD), false);
+  assert.equal(usesLocalLinks(DEV), true);
+  assert.equal(usesLocalLinks({ NODE_ENV: "production", SITE_PREVIEW: "1" }), true);
+  assert.equal(usesLocalLinks({ NODE_ENV: "production", VERCEL: "1" }), false);
+});
+
+test("runtimeEnv reads the routing variables from process.env", () => {
+  const saved = { SITE_PREVIEW: process.env.SITE_PREVIEW, VERCEL: process.env.VERCEL };
+  process.env.SITE_PREVIEW = "1";
+  delete process.env.VERCEL;
+  try {
+    const env = runtimeEnv();
+    assert.equal(env.SITE_PREVIEW, "1");
+    assert.equal(env.VERCEL, undefined);
+  } finally {
+    for (const [key, value] of Object.entries(saved)) {
+      if (value === undefined) delete process.env[key];
+      else process.env[key] = value;
+    }
+  }
+});
+
+test("the html data-site script uses the siteForHost rule", () => {
+  for (const [hostname, site] of [["other.allengillon.com", "other"], ["other.localhost", "other"], ["allengillon.com", "main"], ["localhost", "main"]]) {
+    const attrs = {};
+    const document = { documentElement: { setAttribute: (name, value) => { attrs[name] = value; } } };
+    new Function("document", "location", SITE_MARKER_SCRIPT)(document, { hostname });
+    assert.equal(attrs["data-site"], site, hostname);
+    assert.equal(siteForHost(hostname), site, hostname);
+  }
 });
 
 test("other Home link is current on / and on /other-home", () => {

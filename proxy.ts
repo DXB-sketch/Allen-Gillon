@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { resolveRequest } from "./lib/sites.mjs";
+import { resolveRequest, runtimeEnv } from "./lib/sites.mjs";
 import legal from "./content/legal.config.json";
 
 // Host routing for allengillon.com and other.allengillon.com.
@@ -11,10 +11,9 @@ export function proxy(request: NextRequest) {
   const host = request.headers.get("host") || request.nextUrl.host;
   const { pathname, search } = request.nextUrl;
   const result = resolveRequest(host, `${pathname}${search}`, {
-    env: {
-      NODE_ENV: process.env.NODE_ENV,
-      SITE_PREVIEW: process.env.SITE_PREVIEW,
-    },
+    // NODE_ENV, SITE_PREVIEW (set by start:vinext) and VERCEL decide whether
+    // unknown hosts are sent to production; see isPreviewEnv().
+    env: runtimeEnv(),
     legalPublished: legal.published === true,
   });
 
