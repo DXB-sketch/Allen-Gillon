@@ -1,28 +1,146 @@
-/* Timeless (/biography). W3 foundation; W5 turns the eras into scenes and
-   removes the duplicated photo column. */
+/* Timeless (/biography). The eras are scenes on the band grid: a large
+   Dynalight year in the outer margin (red: music and performance), the text
+   at the measure, and scrapbook photos that bleed off alternating sides.
+   Every photo and the video render once. The Matthew Allen 5 scene is quiet. */
 
-.bio{margin-top:clamp(20px,3vw,40px);align-items:start;}
-.bio .prose{grid-column:wide-start / span 7;}
-.bio aside{grid-column:span 4 / wide-end;display:flex;flex-direction:column;gap:28px;position:sticky;top:20px;}
-.bio figure{margin:0;}
-.bio .gx-hero{aspect-ratio:4/3;}
-.bio .gx-hero.tall{aspect-ratio:3/4;}
-.bio .gx-video{display:block;width:100%;height:auto;background:var(--ink);}
-.bio figcaption{font-size:1rem;color:var(--soft);margin-top:6px;}
-.bio .era{font-family:var(--script);font-weight:400;font-size:clamp(2.2rem,4vw,3rem);color:var(--blue);text-shadow:var(--overprint-red);margin:48px 0 8px;line-height:1.1;}
-.bio .era:first-child{margin-top:0;}
-.bio .era.red{color:var(--red);text-shadow:var(--overprint);}
-
-/* On phones the photo column is hidden and each photo sits inline,
-   directly under the era title it belongs to. */
-.bio figure.inline{display:none;}
-
-@media (max-width:900px){
-  .bio .prose,.bio aside{grid-column:wide;}
-  .bio aside{position:static;flex-direction:row;flex-wrap:wrap;margin-top:32px;}
-  .bio aside figure{flex:1 1 260px;}
+/* ---------- Opening: the stage ---------- */
+.timeless-head{padding-top:clamp(6px,1.2vw,18px);}
+.timeless-head h1.script{color:var(--blue);text-shadow:var(--overprint-red);text-align:center;}
+.timeless-head > .plain{justify-self:center;text-align:center;max-width:44ch;}
+@media (min-width:1024px){
+  .timeless-head > .plain{grid-column:wide;}
 }
-@media (max-width:640px){
-  .bio aside{display:none;}
-  .bio figure.inline{display:block;margin:14px 0 18px;max-width:min(420px,100%);}
+
+/* The pelmet sits in its own strip ABOVE the h1 and never overlaps it.
+   It clips its own decoration (the misregistration past the edges). */
+.curtain{
+  --drape:clamp(84px,19vw,330px);
+  --pelmet:clamp(22px,3.4vw,54px);
+  position:relative;overflow:clip;
+  height:calc(var(--pelmet) + var(--drape) * 0.6667 + 6px);
+  margin-bottom:clamp(4px,1vw,16px);
+}
+.curtain-pelmet{position:absolute;top:0;left:0;width:100%;height:var(--pelmet);}
+.curtain-drape{position:absolute;top:calc(var(--pelmet) - 1px);width:var(--drape);height:auto;}
+.curtain-drape--l{left:0;transform-origin:0 0;}
+.curtain-drape--r{right:0;transform-origin:100% 0;}
+
+/* It parts once, through the motion system. The parted drawing is the
+   default render and what shows at load: the curtain is on screen at mount,
+   so it gets .is-static and does not move (no flash, no replay). Only when
+   the page opens scrolled past it (a link to #timeless) do the drapes start
+   drawn in towards the centre, then slide apart once when the curtain is
+   scrolled to (.is-in). A translate only, so the line weights never
+   distort. Without JS or under reduced motion nothing moves. */
+html.motion-ok .curtain[data-motion]:not(.is-in):not(.is-static){opacity:1;}
+html.motion-ok .curtain[data-motion]:not(.is-in):not(.is-static) .curtain-drape--l{transform:translateX(55%);}
+html.motion-ok .curtain[data-motion]:not(.is-in):not(.is-static) .curtain-drape--r{transform:translateX(-55%);}
+html.motion-ok .curtain.is-in .curtain-drape{transition:transform 1.6s var(--ease-out) .15s;}
+
+/* ---------- Scenes ---------- */
+.bio{margin-top:clamp(28px,5vw,80px);}
+.scene{row-gap:clamp(20px,3vw,40px);align-items:start;}
+.scene + .scene{margin-top:var(--band-space);}
+
+.scene .scene-year{
+  font-family:var(--script);font-weight:400;line-height:.9;
+  font-size:clamp(3.6rem,7vw,8rem);
+  color:var(--red);text-shadow:var(--overprint);
+  margin:0;max-width:none;white-space:nowrap;
+}
+.scene h2{font-size:clamp(1.6rem,2.3vw,2.1rem);line-height:1.2;margin:0 0 14px;}
+.scene-text p{margin:0 0 18px;}
+.scene-text p:last-child{margin-bottom:0;}
+
+figure{margin:0;}
+figcaption{font-size:1rem;color:var(--soft);margin-top:8px;}
+
+/* Scrapbook prints */
+.snap-print{position:relative;display:block;}
+.snap img{display:block;width:100%;height:auto;}
+.snap-corner{position:absolute;width:clamp(22px,2.4vw,34px);height:auto;}
+.snap-corner--tl{top:-5px;left:-5px;}
+.snap-corner--tr{top:-5px;right:-5px;transform:rotate(90deg);}
+.snap-corner--br{bottom:-5px;right:-5px;transform:rotate(180deg);}
+.snap-corner--bl{bottom:-5px;left:-5px;transform:rotate(270deg);}
+
+/* A smaller print tucked over the inner corner of the bleeding photo,
+   slightly askew: the two prints share one cell, so neither is orphaned. */
+.scene-media{display:flex;flex-direction:column;}
+.snap--inset{position:relative;z-index:1;width:44%;margin-top:-12%;transform:rotate(-1.6deg);}
+.snap--inset figcaption{background:var(--paper);padding:2px 6px 0;}
+.scene--l .snap--inset{align-self:flex-end;margin-right:clamp(8px,1.4vw,20px);}
+.scene--r .snap--inset{align-self:flex-start;margin-left:clamp(8px,1.4vw,20px);transform:rotate(1.4deg);}
+/* A bleeding print never grows past its native size: it keeps touching its
+   edge and gives up width on the inner side, where the inset rides. */
+.scene--l .scene-media{justify-self:start;width:100%;max-width:678px;}
+.scene--r .scene-media:not(.scene-media--art){justify-self:end;width:100%;max-width:505px;}
+/* The bleeding print's caption sits on the side away from the inset. */
+.scene--l .snap--bleed figcaption{padding-left:var(--gutter);width:46%;}
+.scene--r .snap--bleed figcaption{padding-right:var(--gutter);text-align:right;margin-left:auto;width:46%;}
+
+/* Drawings sit in their own cell, never under text. */
+.scene-art{width:100%;height:auto;}
+.scene-art--gibson{max-width:210px;transform:rotate(9deg);}
+.scene-art--mics{max-width:300px;}
+
+.scene-video{margin-top:clamp(24px,3vw,40px);}
+.scene-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:var(--ink);}
+
+/* The quiet scene: text and one photo, no ornament. */
+.scene--quiet .prose{grid-column:wide-start / span 7;display:block;}
+.scene--quiet .quiet-photo{grid-column:span 4 / wide-end;}
+.quiet-photo img{display:block;width:100%;height:auto;}
+
+/* ---------- Wide: scenes on the 12 columns ---------- */
+@media (min-width:1024px){
+  .scene:not(.scene--quiet) .prose{display:grid;grid-template-columns:subgrid;align-content:start;}
+  /* Text left, year in the left margin, media bleeding off the right. */
+  .scene--r .prose{grid-column:wide-start / span 8;grid-row:1;}
+  .scene--r .scene-year{grid-column:1 / span 2;justify-self:end;}
+  .scene--r .scene-text{grid-column:3 / span 6;}
+  .scene--r .scene-media{grid-column:10 / full-end;grid-row:1;}
+  /* Media bleeding off the left, text right, year in the right margin.
+     Numeric lines count from full-start: column N starts at line N+1. */
+  .scene--l .scene-media{grid-column:full-start / 7;grid-row:1 / span 2;}
+  .scene--l .prose{grid-column:7 / wide-end;grid-row:1;}
+  .scene--l .scene-text{grid-column:1 / span 5;grid-row:1;}
+  .scene--l .scene-year{grid-column:6 / span 2;grid-row:1;justify-self:end;}
+  .scene-year{padding-top:4px;}
+
+
+  /* Drawings hang close to the text rather than floating at the far edge. */
+  .scene-media--art{display:flex;flex-direction:row;justify-content:flex-start;padding:clamp(16px,3vw,48px) 0 0 clamp(0px,2vw,48px);}
+  .scene--r .scene-media--art{grid-column:10 / wide-end;}
+}
+/* Very wide: the text column narrows to the measure's own width, the year
+   moves in with it, and a left-bleeding photo's cell shrinks to the photo,
+   so the scene stays one composition instead of three islands. (Numeric
+   lines count from full-start: column N starts at line N+1.) */
+@media (min-width:1500px){
+  .scene--r .scene-year{grid-column:1 / span 3;}
+  .scene--r .scene-text{grid-column:4 / span 5;}
+  .scene--r .scene-media--art{padding-left:0;}
+  .scene--l .scene-media{grid-column:full-start / 6;}
+  .scene--l .prose{grid-column:6 / wide-end;}
+  .scene--l .scene-text{grid-column:1 / span 4;}
+  .scene--l .scene-year{grid-column:5 / span 3;justify-self:start;padding-left:clamp(16px,1.5vw,32px);}
+}
+
+/* ---------- Narrow: one column, photos still bleed ---------- */
+@media (max-width:1023.98px){
+  .scene .prose{display:contents;}
+  .scene-year{grid-column:wide-start / span 8;grid-row:1;align-self:end;}
+  .scene-text{grid-column:wide;grid-row:2;}
+  .scene-media--art{grid-column:span 4 / wide-end;grid-row:1;align-self:end;display:flex;justify-content:flex-end;}
+  .scene-art--gibson{max-width:68px;}
+  .scene-art--mics{max-width:130px;}
+  .scene--r .scene-media:not(.scene-media--art){grid-column:3 / full-end;}
+  .scene--l .scene-media{grid-column:full-start / 11;}
+  .scene--quiet .scene-text,.scene--quiet .quiet-photo{grid-column:wide;grid-row:auto;}
+  .scene--quiet .quiet-photo{max-width:440px;}
+}
+@media (min-width:640px) and (max-width:1023.98px){
+  .scene--r .scene-media:not(.scene-media--art){grid-column:5 / full-end;}
+  .scene--l .scene-media{grid-column:full-start / 9;}
 }
