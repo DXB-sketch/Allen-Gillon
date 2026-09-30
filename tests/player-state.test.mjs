@@ -57,6 +57,8 @@ test("audio events drive the status", () => {
   assert.equal(statusForAudioEvent("pause", { ended: true }, "playing"), "ended");
   assert.equal(statusForAudioEvent("ended", {}, "paused"), "ended");
   assert.equal(statusForAudioEvent("error", {}, "loading"), "error");
+  /* Chromium fires "pause" right after a media error: the error must stay. */
+  assert.equal(statusForAudioEvent("pause", { ended: false, error: { code: 4 } }, "error"), "error");
   assert.equal(statusForAudioEvent("timeupdate", {}, "playing"), "playing");
 });
 

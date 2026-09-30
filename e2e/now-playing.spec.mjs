@@ -35,3 +35,15 @@ test("starting the page reader pauses the music and the bar says so", async ({ p
   expect(await nothingPlaying(page)).toBe(true);
   await page.evaluate(() => window.speechSynthesis?.cancel());
 });
+
+test("a track that fails to load says it couldn't play", async ({ page }) => {
+  await page.route(/\.mp3(\?.*)?$/, (route) => route.fulfill({ status: 404, body: "" }));
+  await page.goto("/shows", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: /^Play Masquerade/ }).click();
+  const name = page.locator("#nowname");
+  await expect(name).toHaveText("Couldn't play Masquerade", { timeout: 15_000 });
+  await page.waitForTimeout(1_000);
+  await expect(name).toHaveText("Couldn't play Masquerade");
+  await expect(page.locator("#nowannounce")).toHaveText("Couldn't play Masquerade");
+  await expect(page.locator("#nowplay")).toHaveAttribute("aria-label", "Try again");
+});
