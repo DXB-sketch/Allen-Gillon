@@ -81,3 +81,18 @@ Files changed:
 - `app/(other)/biography/biography.css`
 - `e2e/timeless.spec.mjs`
 - `public/videos/allen-steakout.en.vtt`
+
+##### base:illustrations
+## Questions for the human
+1. **Offset grows with size.** The misregistration offset is measured in drawing units, so it scales with the drawing: a headstock shown at 400px wide has about a 7px offset. Should big hero drawings pass a smaller `offset`, or should the offset stay about 3px on screen at any size?
+2. **No draw-on in the first screen.** A drawing already on screen at load stays still and never draws itself. This avoids content vanishing and reappearing as the page loads. The cost is that hero drawings in the first screen never animate. Is that acceptable?
+3. **Stroke lengths are measured in JS.** `draw` needs the browser to measure each stroke when it comes into view. The simpler CSS-only method left gaps in the finished lines because the stroke width doesn't scale with the drawing. It is about 10 lines of JS on top of the observer. Fine to keep?
+##### fix:W4-reader
+**Questions for you**
+1. **Title size vs. the fold.** DESIGN.md sets every page title at clamp(4rem,11vw,10rem). At 1280×800, pages with two-line titles show only about 180px of the book. Would you allow a smaller title on reader pages, or put the lede beside the title?
+2. **Funny Fah's printed page numbers are inconsistent.** Printed 16 is skipped, and the page after two unnumbered pages is printed 23. With numbering from 4, 24 of 33 pages match; pages printed 17 to 22 show one lower in the reader.
+3. **Preview length** (implementer's question 1) is still open: a 6-page preview shows only 1–2 pages of actual script.
+4. **Textbook worksheets** still contain some leftover noise from rotated labels and word-search grids. The contents pages, covers and prose read cleanly.
+5. **Deliberate choices in the story text:** Allen's own typos are kept (for example "Mater Chi Lu", "bighting", "ticked"), and signs drawn in the pictures (TV STUDIO, MEXICAN VILLA) are left out. Please check both.
+6. **Dev server port.** The server must be started with `SITE_DEV_PORT` set, or links to the other site point at `localhost:3001` and `sites.spec` fails. Worth noting for other agents.
+7. Implementer questions 5–8 still stand (`/books` audio field, the comments return-address whitelist for `/read/<slug>/text`, esbuild as a devDependency, the shared vite cache).
