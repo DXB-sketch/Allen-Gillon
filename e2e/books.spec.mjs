@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { existsSync } from "node:fs";
 
 // W5 Stories page (/books on the other host): three drawn shelves.
 const port = Number(process.env.SITE_DEV_PORT || 3001);
@@ -36,15 +37,23 @@ test.describe("/books shelves", () => {
     for (const book of await plays.all()) {
       await expect(book.locator(".book-action")).toHaveText(["Read a preview"]);
       await expect(book.locator(".book-price strong")).toHaveText("A$1");
-      // The storefront gate: play links are off, so Buy says "coming soon".
-      await expect(book.locator(".purchase-pending")).toHaveText("Online checkout coming soon");
+      // The storefront gate: play links are off, so no Buy and no per-book
+      // "coming soon"; the note is said once, in the coda.
+      await expect(book.locator(".purchase-pending")).toHaveCount(0);
       await expect(book.locator("a.btn")).toHaveCount(0);
     }
+    await expect(page.locator("#school-plays")).toContainText("Online checkout is coming soon.");
+    expect(await page.locator("main").innerText()).not.toMatch(/coming soon[\s\S]*coming soon/i);
+    // The price is on each play, not repeated in the lede.
+    await expect(page.locator(".plays-lede")).not.toContainText("A$");
 
     const textbooks = page.locator(".texts-shelf > li");
     await expect(textbooks).toHaveCount(3);
     for (const book of await textbooks.all()) {
-      await expect(book.locator(".book-action")).toHaveText(["Read online", "Download PDF"]);
+      const actions = await book.locator(".book-action").allInnerTexts();
+      expect(actions[0]).toBe("Read online");
+      // Download PDF appears only when the manifest says the PDF is public.
+      expect(actions.slice(1).every((a) => a === "Download PDF")).toBe(true);
     }
     await expect(page.locator("main")).not.toContainText("Contact Allen");
   });
@@ -62,6 +71,20 @@ test.describe("/books shelves", () => {
       await expect(cover).toHaveAttribute("aria-hidden", "true");
       await expect(cover).toHaveAttribute("tabindex", "-1");
     }
+  });
+
+  test("every link on the page resolves (the text-only links once W4's text route exists)", async ({ page, request }) => {
+    await page.goto(BOOKS);
+    const hrefs = [...new Set(await page.locator("main a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href"))))]
+      .filter((h) => h.startsWith("/"));
+    const textRoute = existsSync(new URL("../app/(other)/read/[slug]/text/page.jsx", import.meta.url));
+    const broken = [];
+    for (const href of hrefs) {
+      if (!textRoute && /^\/read\/[^/]+\/text$/.test(href)) continue;
+      const res = await request.get(`http://other.localhost:${port}${href}`, { maxRedirects: 0 });
+      if (res.status() >= 400) broken.push(`${href} ${res.status()}`);
+    }
+    expect(broken).toEqual([]);
   });
 
   test("decorative SVG stays inside the 40KB budget, all aria-hidden", async ({ page }) => {

@@ -43,20 +43,19 @@ function aspectFor(book) {
   return Array.isArray(a) && a.length === 2 && a[0] > 0 && a[1] > 0 ? a : FALLBACK_ASPECT;
 }
 
-/* A textbook's PDF, unless its download is switched off. The new manifest
-   names the file in `pdf` (a path or a bare file name); the old one had
-   nothing for textbooks, so the build's usual path is assumed. */
+/* A textbook's PDF link, only when the manifest says a free PDF exists.
+   New shape: download "public", with the file named in `pdf` (a path or a
+   bare file name) or the build's usual <slug>.pdf. Old shape: status "free"
+   with hasDownload. Anything else (the old "restricted" textbooks, "paid",
+   "none") gets no link, so the shelf shows "Read online" only until W4's
+   manifests land, and the link then turns on by itself. */
 export function textbookPdf(book) {
   if (book.download === "none" || book.download === "paid") return "";
+  const isPublic = book.download === "public"
+    || (book.download === undefined && book.status === "free" && book.hasDownload === true);
+  if (!isPublic) return "";
   const pdf = typeof book.pdf === "string" && book.pdf ? book.pdf : `${book.slug}.pdf`;
   return isAbsolute(pdf) ? pdf : `/books/${book.slug}/${pdf}`;
-}
-
-/* The manifest blurbs all start "A Chinese Chimes story about"; under the
-   Chinese Chimes heading that repeats four times, so it is trimmed. */
-function storyBlurb(blurb = "") {
-  const trimmed = blurb.replace(/^A Chinese Chimes story about\s+/i, "");
-  return trimmed === blurb ? blurb : trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
 }
 
 export function buildShelves(index, manifests = {}) {
@@ -71,7 +70,7 @@ export function buildShelves(index, manifests = {}) {
     const extra = Object.values(bySlug).filter((b) => b.section === section && !order.includes(b.slug));
     return [...listed, ...extra];
   };
-  const stories = pick(STORY_ORDER, "childrens").map((b) => ({ ...b, blurb: storyBlurb(b.blurb) }));
+  const stories = pick(STORY_ORDER, "childrens");
   const plays = pick(PLAY_ORDER, "plays").map((b) => ({
     ...b,
     fullPages: b.fullPageCount || b.pageCount,

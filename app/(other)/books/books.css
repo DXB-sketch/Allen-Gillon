@@ -34,10 +34,18 @@
 .stories-open > .shelf-title{grid-column:1 / span 9;grid-row:1;}
 .stories-open > p{grid-column:1 / -1;grid-row:2;}
 .stories-open > .chimes-art{grid-column:10 / -1;grid-row:1;justify-self:end;max-width:clamp(52px,8vw,64px);}
+/* From 1024px the paragraph sits right against the heading, its first line
+   level with "Chinese Chimes", and the chimes are sized so they never make
+   the opening taller than the paragraph. */
 @media (min-width:1024px){
-  .stories-open > .shelf-title{grid-column:1 / span 5;}
-  .stories-open > p{grid-column:6 / span 5;grid-row:1;padding-top:1.1em;}
-  .stories-open > .chimes-art{grid-column:11 / -1;max-width:150px;margin-top:-12px;}
+  .stories-open > .shelf-title{grid-column:1 / span 4;}
+  .stories-open > p{grid-column:5 / span 6;grid-row:1;padding-top:.35em;}
+  .stories-open > .chimes-art{grid-column:11 / -1;max-width:96px;margin-top:-8px;}
+}
+@media (min-width:1600px){
+  .stories-open > .shelf-title{grid-column:1 / span 3;}
+  .stories-open > p{grid-column:4 / span 6;}
+  .stories-open > .chimes-art{max-width:110px;}
 }
 
 /* Plays: the curtain draws back at the left, the heading steps in beside it. */
@@ -73,16 +81,15 @@
 /* ---------- The shelf ---------- */
 .shelf{list-style:none;margin:0;padding:0;display:grid;column-gap:var(--col-gap);row-gap:clamp(44px,5vw,72px);
   grid-template-columns:repeat(var(--per-row),minmax(0,1fr));align-items:start;}
-.stories-shelf{--per-row:1;--stand:auto;}
+.stories-shelf{--per-row:2;}
 .plays-shelf{--per-row:2;--stand:clamp(200px,52vw,280px);}
 .texts-shelf{--per-row:2;--stand:clamp(200px,52vw,280px);}
 @media (min-width:640px){
-  .stories-shelf{--per-row:2;--stand:clamp(160px,24vw,240px);}
   .plays-shelf{--per-row:3;--stand:clamp(240px,34vw,340px);}
   .texts-shelf{--per-row:3;--stand:clamp(220px,30vw,320px);}
 }
 @media (min-width:1024px){
-  .stories-shelf{--per-row:4;--stand:clamp(170px,15vw,300px);}
+  .stories-shelf{--per-row:4;}
   .texts-shelf{--stand:clamp(220px,19vw,380px);}
 }
 @media (min-width:1200px){
@@ -94,17 +101,27 @@
 .book-cover{display:flex;align-items:flex-end;height:var(--stand);position:relative;}
 .book-cover img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;
   border:1px solid oklch(0.22 0.02 300 / .4);}
+/* The stories share one square cover box. Two of the p001 pages are wide
+   (the cover art in the middle of a white page), and a centred square crop
+   takes off just the white margins, so all four stand the same height. */
 .stories-shelf .book-cover{height:auto;}
-.stories-shelf .book-cover img{max-height:none;}
-@media (min-width:640px){
-  .stories-shelf .book-cover{height:var(--stand);}
-  .stories-shelf .book-cover img{max-height:100%;}
-}
+.stories-shelf .book-cover img{width:100%;max-width:360px;max-height:none;aspect-ratio:1;object-fit:cover;object-position:center;}
 .texts-section .book-cover img{border-color:oklch(0.975 0.012 92 / .35);}
 
 /* The plank bridges the column gap, so a row of planks reads as one board,
    and its top edge runs along the foot of the covers. */
 .shelf-plank{width:calc(100% + var(--col-gap));height:24px;margin:-5px calc(var(--col-gap) / -2) 0;flex:none;}
+/* A short last row: the last book's plank runs on under the empty column,
+   so the shelf is one board to the row's end. (5 plays and 3 textbooks in
+   two columns; 5 plays in three.) */
+.shelf .book:last-child .shelf-plank{--span:1;width:calc(var(--span) * 100% + var(--span) * var(--col-gap));}
+@media (max-width:639px){
+  .plays-shelf .book:last-child:nth-child(odd) .shelf-plank,
+  .texts-shelf .book:last-child:nth-child(odd) .shelf-plank{--span:2;}
+}
+@media (min-width:640px) and (max-width:1199px){
+  .plays-shelf .book:last-child:nth-child(3n+2) .shelf-plank{--span:2;}
+}
 
 .book h3{font-size:1.3rem;line-height:1.25;margin:14px 0 0;}
 .book p{margin:4px 0 0;}

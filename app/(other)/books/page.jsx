@@ -5,7 +5,7 @@ import ShelfPlank from "../../../components/illustrations/ShelfPlank";
 import ShelfChimes from "../../../components/illustrations/ShelfChimes";
 import ShelfCurtain from "../../../components/illustrations/ShelfCurtain";
 import ShelfInkwell from "../../../components/illustrations/ShelfInkwell";
-import { playPrice, stripePaymentLink } from "../../../lib/storefront.mjs";
+import { stripePaymentLink } from "../../../lib/storefront.mjs";
 import { buildShelves, priceLabel } from "./shelf-data.mjs";
 // Workers have no runtime filesystem: the book list and manifests are
 // imported so they are bundled at build time.
@@ -57,7 +57,7 @@ const manifests = {
 
 export default function BooksPage() {
   const { stories, plays, textbooks } = buildShelves(bookIndex, manifests);
-  const price = priceLabel(playPrice);
+  const checkoutOpen = plays.some((book) => stripePaymentLink(`play-${book.slug}`));
 
   return (
     <main className="writing-page">
@@ -95,21 +95,31 @@ export default function BooksPage() {
         <div className="shelf-open plays-open">
           <ShelfCurtain className="shelf-art curtain-art" lead="red" draw />
           <h2 className="shelf-title" id="plays-title"><span className="shelf-qual">School</span> <span className="shelf-word">plays</span></h2>
-          <p className="plays-lede">Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each script costs <strong>{price}</strong> as a PDF.</p>
+          <p className="plays-lede">Allen wrote these five plays in the 1980s for primary-school end-of-year productions. Each script comes as a PDF.</p>
         </div>
         <ul className="shelf plays-shelf">
-          {plays.map((book, index) => (
-            <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`}>
-              <p className="book-blurb">{book.blurb}</p>
-              <p className="book-price"><strong>{priceLabel(book.price)}</strong> <span>script, {book.fullPages} pages</span></p>
-              <div className="book-actions">
-                <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read a preview of ${book.title}`}>Read a preview</Link>
-                <PurchaseLink href={stripePaymentLink(`play-${book.slug}`)} pendingLabel="Online checkout coming soon">Buy the script, {priceLabel(book.price)}</PurchaseLink>
-              </div>
-            </Book>
-          ))}
+          {plays.map((book, index) => {
+            const buyHref = stripePaymentLink(`play-${book.slug}`);
+            return (
+              <Book key={book.slug} book={book} index={index} href={`/read/${book.slug}`}>
+                <p className="book-blurb">{book.blurb}</p>
+                <p className="book-price"><strong>{priceLabel(book.price)}</strong> <span>script, {book.fullPages} pages</span></p>
+                <div className="book-actions">
+                  <Link className="book-action" href={`/read/${book.slug}`} aria-label={`Read a preview of ${book.title}`}>Read a preview</Link>
+                  {/* While the storefront gate holds the play links back, the
+                      "coming soon" note is said once, in the coda below. */}
+                  {buyHref ? <PurchaseLink href={buyHref}>Buy the script<span className="visually-hidden"> of {book.title}</span></PurchaseLink> : null}
+                </div>
+              </Book>
+            );
+          })}
         </ul>
-        <p className="shelf-coda">Read the first pages of any play online before buying it. After checkout, Allen will email the PDF to the address used for payment.</p>
+        <p className="shelf-coda">
+          Read the first pages of any play online before buying it.
+          {checkoutOpen
+            ? " After checkout, Allen will email the PDF to the address used for payment."
+            : " Online checkout is coming soon. After it opens, Allen will email the PDF to the address used for payment."}
+        </p>
       </section>
 
       <section className="shelf-section texts-section band ink" id="classroom-texts" aria-labelledby="texts-title">

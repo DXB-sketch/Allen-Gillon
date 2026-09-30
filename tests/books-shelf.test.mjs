@@ -52,9 +52,13 @@ test("plays show the A$1 price; the new manifest's price and page fields win", (
   assert.equal(play.previewPages, 4);
 });
 
-test("textbooks: Download PDF unless download is none or paid, old and new shapes", () => {
+test("textbooks: Download PDF only when the manifest says the PDF is public, old and new shapes", () => {
   const old = { slug: "riddled-with-language", section: "teaching", status: "restricted", pageCount: 0 };
-  assert.equal(textbookPdf(old), "/books/riddled-with-language/riddled-with-language.pdf");
+  assert.equal(textbookPdf(old), "");
+  assert.equal(textbookPdf({ slug: "riddled-with-language" }), "");
+  assert.equal(textbookPdf({ ...old, status: "free", hasDownload: true }), "/books/riddled-with-language/riddled-with-language.pdf");
+  assert.equal(textbookPdf({ ...old, status: "free", hasDownload: false }), "");
+  assert.equal(textbookPdf({ ...old, download: "public" }), "/books/riddled-with-language/riddled-with-language.pdf");
   assert.equal(textbookPdf({ ...old, download: "public", pdf: "rwl.pdf" }), "/books/riddled-with-language/rwl.pdf");
   assert.equal(textbookPdf({ ...old, download: "public", pdf: "/books/riddled-with-language/x.pdf" }), "/books/riddled-with-language/x.pdf");
   assert.equal(textbookPdf({ ...old, download: "none" }), "");
@@ -65,9 +69,9 @@ test("manifest fields merge over the index entry; junk entries are ignored", () 
   const shelves = buildShelves([null, { title: "no slug" }, { slug: "little-ray", section: "childrens", pageCount: 19, blurb: "A Chinese Chimes story about anger." }], { "little-ray": { aspect: [1000, 1000] } });
   assert.equal(shelves.stories.length, 1);
   assert.deepEqual(shelves.stories[0].aspect, [1000, 1000]);
-  assert.equal(shelves.stories[0].blurb, "Anger.");
+  // Allen's blurb is shown as written.
+  assert.equal(shelves.stories[0].blurb, "A Chinese Chimes story about anger.");
 });
-
 test("the page: no numerals, menus, restricted branch or section-heading", () => {
   for (const banned of ["section-heading", "Contact Allen", "restricted", "more-menu", "⋯", "audiobook-number", "pno"]) {
     assert.ok(!page.includes(banned), banned);
@@ -76,5 +80,8 @@ test("the page: no numerals, menus, restricted branch or section-heading", () =>
     assert.ok(page.includes(action), action);
   }
   /* Every Buy goes through PurchaseLink with a link from the storefront. */
-  assert.match(page, /<PurchaseLink href=\{stripePaymentLink\(`play-\$\{book\.slug\}`\)\}/);
+  assert.match(page, /const buyHref = stripePaymentLink\(`play-\$\{book\.slug\}`\);/);
+  assert.match(page, /<PurchaseLink href=\{buyHref\}>/);
+  /* The price is on each play, and not repeated in the lede or the Buy label. */
+  assert.ok(!/Buy the script, /.test(page));
 });
