@@ -44,7 +44,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [ ] Play audio preview clips; full recordings moved to private/
 - [ ] Text alternative toggle + /read/[slug]/text for stories and textbooks
 - [ ] books.config.json fields, build-books download gating, preview-only page images
-- [ ] Story cues + review reports (HTML + CSV) for 4 stories; unverified => follow off
+- [x] Story cues + review reports (HTML + CSV) for 4 stories; unverified => follow off (content/story-cues, docs/cue-review; stable-ts alignment; all verified:false). Reader wiring pending.
 - [ ] Auto-turn behaviour rules
 - [ ] Textbooks live (read online + download PDF)
 - [ ] Gate: story-cues, leak, reader DOM tests pass
@@ -98,5 +98,6 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] Cloudflare: Email Routing for support@, `other` custom domain + DNS, cache purge, managed robots.txt, retire Vercel
 - [B] Legal text sign-off, play licence terms (legal pages stay unpublished)
 - [B] Ultra-wide cap, /shows indexing, tel: links, painting dimensions and medium
-- [B] Cue ear-check sign-off per story; ElevenLabs source script if alignment confidence < 0.6
+- [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py
+- [B] Cue ear-check sign-off per story (docs/cue-review/<slug>/index.html; low-confidence picture pages listed there); ElevenLabs source script if alignment confidence < 0.6
 - [B] Confirm "Albums" as the /music H1 wording
