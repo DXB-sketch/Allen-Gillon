@@ -1,4 +1,4 @@
-import CommentLink from "../../../../components/CommentLink";
+import SectionComment from "../../../../components/SectionComment";
 import Link from "next/link";
 import CrossSiteLink from "../../../../components/CrossSiteLink";
 import { notFound } from "next/navigation";
@@ -16,6 +16,7 @@ import meltingPotManifest from "../../../../public/books/melting-pot/manifest.js
 import otherMansGrassManifest from "../../../../public/books/the-other-mans-grass/manifest.json";
 import sherwoodManifest from "../../../../public/books/three-heroes-of-sherwood/manifest.json";
 import calamityJaneManifest from "../../../../public/books/tribute-to-calamity-jane/manifest.json";
+import "./read.css";
 
 // Workers have no runtime filesystem. Keeping these JSON files as static
 // imports lets both Next.js and Cloudflare bundle the complete reader data.
@@ -44,6 +45,14 @@ const storyAudio = {
   "imaginative-little-mee": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
   "little-hi-doh": "/audio/chinese-chimes-audiobooks/hi-doh.mp3",
   "little-ray": "/audio/chinese-chimes-audiobooks/little-ray.mp3",
+};
+
+// The original YouTube narrations, offered as a tertiary link under the reader.
+const storyVideo = {
+  "funny-fah-learns-when-to-stop": "OAu1PmILqeA",
+  "imaginative-little-mee": "ZwzVEIQp3Cw",
+  "little-hi-doh": "Ynu-5Rt7Vyw",
+  "little-ray": "cEuPWVPPN0o",
 };
 
 // These page samples came from the original story videos used to digitise the
@@ -129,26 +138,20 @@ export default async function ReadPage({ params }) {
     const title = placeholders[slug];
     return (
       <main>
-        <header className="pagehead">
-          <div className="wrap">
-            <h1 className="script">{title}</h1>
-            <CommentLink subject={title} returnTo={`/read/${slug}`} returnLabel={title} />
-            <p className="plain">
-              This storybook is being digitised. Its scanned pages will be added here when they are ready.
-            </p>
-          </div>
+        <header className="pagehead band">
+          <h1 className="script">{title}</h1>
+          <p className="plain">
+            This storybook is being digitised. Its scanned pages will be added here when they are ready.
+          </p>
         </header>
-        <section aria-label="Coming soon">
-          <div className="wrap">
-            <div className="note">
-              <p>
-                If you would like a copy in the meantime, <CrossSiteLink site="main" path="/hire">contact Allen</CrossSiteLink>.
-              </p>
-            </div>
-            <p style={{ marginTop: "24px" }}>
-              <Link className="btn b" href="/books#stories">Back to Stories</Link>
-            </p>
-          </div>
+        <section className="read-body band" aria-label="Coming soon">
+          <p>
+            If you would like a copy in the meantime, <CrossSiteLink site="main" path="/hire">contact Allen</CrossSiteLink>.
+          </p>
+          <p className="read-back">
+            <Link className="back-link" href="/books#stories">Back to Stories</Link>
+          </p>
+          <SectionComment subject={title} returnTo={`/read/${slug}`} returnLabel={title} />
         </section>
       </main>
     );
@@ -158,25 +161,19 @@ export default async function ReadPage({ params }) {
   if (entry.status !== "free") {
     return (
       <main>
-        <header className="pagehead">
-          <div className="wrap">
-            <h1 className="script">{entry.title}</h1>
-            <CommentLink subject={entry.title} returnTo={`/read/${slug}`} returnLabel={entry.title} />
-            <p className="plain">{entry.blurb}</p>
-          </div>
+        <header className="pagehead band">
+          <h1 className="script">{entry.title}</h1>
+          <p className="plain">{entry.blurb}</p>
         </header>
-        <section aria-label="Availability">
-          <div className="wrap">
-            <div className="note">
-              <p>
-                {entry.title} is a published title available to schools through its publisher. It is not available to
-                read or download on this site. For help finding a copy, <CrossSiteLink site="main" path="/hire">get in touch</CrossSiteLink>.
-              </p>
-            </div>
-            <p style={{ marginTop: "24px" }}>
-              <Link className="btn b" href="/books#classroom-texts">Back to Classroom Texts</Link>
-            </p>
-          </div>
+        <section className="read-body band" aria-label="Availability">
+          <p>
+            {entry.title} is a published title available to schools through its publisher. It is not available to
+            read or download on this site. For help finding a copy, <CrossSiteLink site="main" path="/hire">get in touch</CrossSiteLink>.
+          </p>
+          <p className="read-back">
+            <Link className="back-link" href="/books#classroom-texts">Back to Classroom Texts</Link>
+          </p>
+          <SectionComment subject={entry.title} returnTo={`/read/${slug}`} returnLabel={entry.title} />
         </section>
       </main>
     );
@@ -205,18 +202,19 @@ export default async function ReadPage({ params }) {
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <header className="pagehead">
-        <div className="wrap">
-          <h1 className="script">{manifest.title}</h1>
-            <CommentLink subject={manifest.title} returnTo={`/read/${slug}`} returnLabel={manifest.title} />
-          <p className="plain">
-            {manifest.blurb} {manifest.pageCount} pages. {isPlay ? `Read it here before buying the ${formatAud(playPrice)} file.` : "Read it here, or download the PDF to keep."}
+      <header className="pagehead band">
+        <h1 className="script">{manifest.title}</h1>
+        <p className="plain">
+          {manifest.blurb} {manifest.pageCount} pages. {isPlay ? `Read it here before buying the ${formatAud(playPrice)} file.` : "Read it here, or download the PDF to keep."}
+        </p>
+        {isPlay ? (
+          <p className="read-buy">
+            <PurchaseLink href={stripePaymentLink(`play-${slug}`)} pendingLabel={`${formatAud(playPrice)} download. Online checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink>
           </p>
-          {isPlay ? <PurchaseLink href={stripePaymentLink(`play-${slug}`)} pendingLabel={`${formatAud(playPrice)} download. Stripe checkout coming soon`}>Buy the {formatAud(playPrice)} download</PurchaseLink> : null}
-        </div>
+        ) : null}
       </header>
-      <section aria-label={`Read ${manifest.title}`}>
-        <div className="wrap">
+      <section className="read-body band" aria-label={`Read ${manifest.title}`}>
+        <div className="read-reader">
           {storyAudio[slug] && storyPageCues ? (
             <SyncedStoryReader
               manifest={readerManifest}
@@ -226,10 +224,16 @@ export default async function ReadPage({ params }) {
           ) : (
             <BookReader manifest={readerManifest} />
           )}
-          <p style={{ marginTop: "32px" }}>
-            <Link className="btn b" href={backHref}>{backLabel}</Link>
-          </p>
         </div>
+        {storyVideo[slug] ? (
+          <p className="read-tertiary">
+            <a href={`https://www.youtube.com/watch?v=${storyVideo[slug]}`} target="_blank" rel="noreferrer">Original YouTube narration</a>
+          </p>
+        ) : null}
+        <p className="read-back">
+          <Link className="back-link" href={backHref}>{backLabel}</Link>
+        </p>
+        <SectionComment subject={manifest.title} returnTo={`/read/${slug}`} returnLabel={manifest.title} />
       </section>
     </main>
   );

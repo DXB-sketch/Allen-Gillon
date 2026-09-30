@@ -1,0 +1,87 @@
+/* Stories, plays and textbooks (/books). One page, three destinations.
+   W3 foundation; W5 puts the books on drawn shelves. */
+
+/* L1 is the page's h1.script lockup. The three section words under it are a
+   jump list, set clearly smaller than the lockup. */
+.writing-head{padding-block:clamp(32px,5vw,72px) 0;}
+.writing-nav{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 clamp(24px,3vw,48px);margin-top:clamp(12px,2vw,24px);}
+.writing-nav a{font-size:clamp(2rem,3.4vw,3rem);line-height:1.1;color:var(--red);text-decoration:none;text-shadow:var(--overprint);
+  min-height:44px;display:inline-flex;align-items:center;transition:color .2s var(--ease-out);}
+.writing-nav a:nth-child(2){color:var(--blue);text-shadow:var(--overprint-red);}
+.writing-nav a:hover{color:var(--red-deep);}
+.writing-intro{font-size:1.1em;color:var(--soft);margin:16px 0 0;}
+@media (min-width:1024px){
+  .writing-head > .writing-intro{grid-column:3 / wide-end;}
+}
+
+.writing-section{padding-top:var(--band-space);scroll-margin-top:20px;}
+/* The section intro starts level with its title, beside it on wide screens. */
+.section-heading{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1fr);gap:clamp(20px,4vw,64px);align-items:start;margin-bottom:32px;}
+.section-heading h2{margin:0;}
+.section-heading p{margin:0;color:var(--soft);font-size:1em;padding-top:.4em;}
+
+/* Chinese Chimes: each story keeps its actions right under its title. Two
+   stories to a row from 1280px, so the rows use the band's width. */
+.audiobook-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);column-gap:var(--col-gap);}
+.audiobook-list > li{display:grid;grid-template-columns:48px clamp(140px,13vw,240px) minmax(0,1fr);grid-template-rows:auto 1fr;gap:4px 24px;align-items:start;padding:18px 0;}
+.audiobook-list > li > *{min-width:0;}
+.audiobook-number{grid-row:1 / span 2;font-family:var(--script);font-size:2.4rem;line-height:1;color:var(--red);text-shadow:var(--overprint);text-align:center;}
+.audiobook-list > li:nth-child(even) .audiobook-number{color:var(--blue);text-shadow:var(--overprint-red);}
+.audiobook-cover{grid-row:1 / span 2;display:block;width:100%;height:auto;object-fit:cover;}
+.audiobook-copy{grid-column:3;}
+.audiobook-copy h3{font-size:1.35rem;}
+.audiobook-copy p{margin:2px 0 0;color:var(--soft);font-size:1rem;}
+.audiobook-actions{grid-column:3;display:flex;align-items:center;justify-content:flex-start;gap:4px 24px;flex-wrap:wrap;}
+.story-read-link{display:inline-flex;align-items:center;min-height:48px;padding:4px 0;color:var(--red-deep);font-weight:700;text-underline-offset:4px;}
+@media (min-width:1280px){
+  .audiobook-list{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+.upcoming-books{margin-top:40px;}
+.upcoming-books h3,.upcoming-books p{margin:0;}
+.upcoming-books p{color:var(--soft);}
+
+/* School plays: two to a row from 1024px, three from 1600px. */
+.plays{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:0 var(--col-gap);}
+.plays li{display:flex;gap:22px;align-items:flex-start;padding:22px 0;min-width:0;}
+.plays li > div{min-width:0;}
+.plays .pno{font-family:var(--script);font-size:2.4rem;color:var(--red);text-shadow:var(--overprint);min-width:1.5ch;text-align:right;line-height:1;}
+.plays li:nth-child(even) .pno{color:var(--blue);text-shadow:var(--overprint-red);}
+.plays h3{font-size:1.4rem;}
+/* Descriptions are running text: full body size. */
+.plays p,.texts-list p{margin:6px 0 0;color:var(--soft);font-size:1em;max-width:var(--measure);}
+.plays-note{margin:20px 0 0;font-size:1em;}
+.item-actions{display:flex;align-items:center;gap:8px 20px;flex-wrap:wrap;margin-top:8px;}
+.item-primary-link{display:inline-flex;align-items:center;min-height:44px;color:var(--blue);font-weight:700;text-underline-offset:4px;}
+@media (min-width:1024px){
+  .plays{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:1600px){
+  .plays{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+
+/* Classroom texts: cover beside the words; from 1200px the three books stand
+   side by side, cover above the words. */
+.texts-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);gap:0 var(--col-gap);}
+.texts-list li{display:grid;grid-template-columns:clamp(140px,14vw,240px) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start;padding:24px 0;min-width:0;}
+.texts-list li > *{min-width:0;}
+.cover-link{display:block;width:100%;}
+/* A book keeps a thin edge: it is an object. */
+.text-cover{display:block;width:100%;height:auto;border:1px solid oklch(0.22 0.02 300 / .35);}
+.texts-list h3{font-size:1.4rem;}
+@media (min-width:1200px){
+  .texts-list{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .texts-list li{grid-template-columns:minmax(0,1fr);gap:18px;}
+  .cover-link{width:clamp(160px,12vw,240px);}
+}
+
+@media (max-width:760px){
+  .section-heading{grid-template-columns:1fr;gap:8px;margin-bottom:22px;}
+  .section-heading p{padding-top:0;}
+  .texts-list li{grid-template-columns:1fr;gap:18px;}
+  .cover-link{width:min(220px,65%);}
+  .audiobook-list > li{grid-template-columns:38px minmax(0,1fr);grid-template-rows:none;gap:12px 14px;}
+  .audiobook-number{grid-row:auto;font-size:2rem;padding-top:4px;}
+  .audiobook-cover,.audiobook-copy,.audiobook-actions{grid-column:2;grid-row:auto;}
+  .audiobook-cover{width:min(100%,260px);}
+}

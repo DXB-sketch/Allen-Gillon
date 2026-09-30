@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import CommentForm from "../../components/CommentForm";
 import SiteChrome from "../../components/SiteChrome";
+import "./comments.css";
 import { SITES, defaultReturnTo, safeReturnTo, siteForHost } from "../../lib/sites.mjs";
 
 // Served on both hosts. The host decides the mast, footer, title and which
@@ -31,32 +32,18 @@ export default async function CommentsPage({ searchParams }) {
       : "the page";
   return (
     <SiteChrome site={site}>
-      <style>{`
-  .cwrap{max-width:640px;padding-bottom:48px;}
-  .cform{display:flex;flex-direction:column;gap:18px;margin-top:8px;}
-  .cform label{display:flex;flex-direction:column;gap:6px;font-size:1.1rem;font-weight:700;}
-  .cform input,.cform textarea{font-family:"Lora",Georgia,serif;font-size:1.1rem;font-weight:400;
-    padding:12px;border:2px solid var(--ink);border-radius:3px;background:#fff;color:var(--ink);}
-  .cform textarea{resize:vertical;}
-  .cbtns{display:flex;gap:14px;flex-wrap:wrap;}
-  .cbtns .btn{border:0;cursor:pointer;}
-  .cnote{color:var(--soft);font-size:1rem;margin:0;}
-  @media (max-width:640px){.cwrap{padding-left:12px;padding-right:12px;}}
-`}</style>
       <main>
-        <header className="pagehead">
-          <div className="wrap">
-            <h1 className="script">Write a comment</h1>
-            <p className="plain">
-              Tell Allen what you thought of a story, play, song, album or show.
-              Booking enquiries are welcome here too.
-            </p>
-          </div>
+        <header className="pagehead band">
+          <h1 className="script">Write a comment</h1>
+          <p className="plain">
+            Tell Allen what you thought of a story, play, song, album or show.
+            Booking enquiries are welcome here too.
+          </p>
         </header>
 
-        <section aria-label="Write a comment">
-          <div className="wrap cwrap">
-            <Link className="btn b" href={returnTo}>Back to {returnLabel}</Link>
+        <section className="cwrap band" aria-label="Write a comment">
+          <div className="measure">
+            <Link className="back-link" href={returnTo}>Back to {returnLabel}</Link>
             {subject ? <p>Commenting on: <strong>{subject}</strong></p> : null}
             <CommentForm subject={subject} />
           </div>

@@ -1,7 +1,8 @@
-import CommentLink from "../../../components/CommentLink";
 import Link from "next/link";
+import SectionComment from "../../../components/SectionComment";
 import CrossSiteLink from "../../../components/CrossSiteLink";
 import Album from "../../../components/Album";
+import "./music.css";
 
 export const metadata = {
   title: "Al's music style",
@@ -116,179 +117,98 @@ const hiddenAlbums = [
   },
 ];
 
+const originals = [
+  { id: "6idFN_r1Dlw", title: "At Last I'm Free", credit: "written by Allen Gillon" },
+  { id: "AWTyzHr4eaI", title: "Jamie", credit: "written by Allen Gillon and Barry Cochran" },
+  { id: "nqTpPzs9boQ", title: "Trippin' On My Senses", credit: "written by Allen Gillon" },
+  { id: "VnXBwH5PcxU", title: "Travellin' Road", credit: "written by Allen Gillon" },
+  { id: "21kIAn9ED28", title: "Taking Chances", credit: "written by Allen Gillon" },
+];
+
 export default function MusicPage() {
   return (
-    <>
-      <style>{`
-  .timelessLead{max-width:760px;margin:40px auto 28px;}
-  .timelessLead video{display:block;width:100%;height:auto;border:3px solid var(--ink);border-radius:3px;background:var(--ink);}
-  .duet{display:grid;grid-template-columns:320px 1fr;gap:36px;align-items:start;padding:0 0 8px;}
-  .duet video{display:block;width:100%;max-width:320px;aspect-ratio:1/1;object-fit:contain;border:3px solid var(--ink);border-radius:3px;background:var(--ink);}
-  .duet p{font-size:1.1rem;margin:0 0 16px;}
-  @media (max-width:820px){
-    .timelessLead{max-width:min(560px,100%);margin-top:32px;}
-    .duet{grid-template-columns:1fr;}
-    .duet video{max-width:min(320px,82vw);margin:0 auto;}
-    .duet h2{text-align:center;}
-    .duet p{max-width:34ch;margin:0 auto 16px;}
-  }
-  section{padding-top:16px;}
-  .secrule{border:0;border-top:var(--rule);margin:56px 0 0;}
-`}</style>
-      <main className="music-page">
-        <div className="music-ornament" aria-hidden="true">
-          <svg viewBox="0 0 90 210" fill="none" stroke="currentColor" strokeWidth="3">
-            <path d="M55 8c-7 28-10 51-8 72l-9 30c-4 13-14 20-25 29-13 11-12 34 3 47 15 14 38 10 49-4 9-11 13-23 9-35-4-10-9-19-9-29l7-38c5-20 7-43 7-67Z" />
-            <path d="m45 81 27 7M37 115l29 20M22 159c8-9 21-10 30-2 8 7 9 20 2 29M50 10l29 5" />
-            <circle cx="42" cy="165" r="8" />
-          </svg>
-          <svg className="ornament-mic" viewBox="0 0 60 120" fill="none" stroke="currentColor" strokeWidth="3">
-            <rect x="18" y="5" width="24" height="54" rx="12" />
-            <path d="M10 45v4c0 16 9 26 20 26s20-10 20-26v-4M30 75v25M17 100h26" />
-          </svg>
+    <main className="music-page">
+      <div className="music-ornament" aria-hidden="true">
+        <svg viewBox="0 0 90 210" fill="none" stroke="currentColor" strokeWidth="3">
+          <path d="M55 8c-7 28-10 51-8 72l-9 30c-4 13-14 20-25 29-13 11-12 34 3 47 15 14 38 10 49-4 9-11 13-23 9-35-4-10-9-19-9-29l7-38c5-20 7-43 7-67Z" />
+          <path d="m45 81 27 7M37 115l29 20M22 159c8-9 21-10 30-2 8 7 9 20 2 29M50 10l29 5" />
+          <circle cx="42" cy="165" r="8" />
+        </svg>
+        <svg className="ornament-mic" viewBox="0 0 60 120" fill="none" stroke="currentColor" strokeWidth="3">
+          <rect x="18" y="5" width="24" height="54" rx="12" />
+          <path d="M10 45v4c0 16 9 26 20 26s20-10 20-26v-4M30 75v25M17 100h26" />
+        </svg>
+      </div>
+      <header className="pagehead band">
+        <h1 className="script">Al&rsquo;s music style</h1>
+        <p className="plain">
+          Listen to Allen&rsquo;s four studio albums here. He arranged many of the backing tracks himself, including
+          &ldquo;Desafinado&rdquo; and &ldquo;Girl from Ipanema&rdquo;. Click a cover to open the track list, then choose a song.
+          Each complete album is free to download. Individual song downloads are available in each track list. If you would rather have Allen in the room,{" "}
+          <Link href="/hire">he still takes bookings</Link>.
+        </p>
+      </header>
+
+      <section className="albums-band band" aria-label="Albums">
+        <div className="albums">
+          {albums.map((album) => (
+            <Album key={album.id} {...album} />
+          ))}
         </div>
-        <header className="pagehead">
-          <div className="wrap">
-            <h1 className="script">Al&rsquo;s music style</h1>
-            <p className="plain">
-              Listen to Allen&rsquo;s four studio albums here. He arranged many of the backing tracks himself, including
-              &ldquo;Desafinado&rdquo; and &ldquo;Girl from Ipanema&rdquo;. Click a cover to open the track list, then choose a song.
-              Each complete album is free to download. Individual song downloads are available under the three-dot menus. If you would rather have Allen in the room,{" "}
-              <Link href="/hire">he still takes bookings</Link>.
+        <SectionComment subject="Allen's albums" returnTo="/music" returnLabel="the albums" />
+      </section>
+
+      <section id="timeless" className="timeless-band band" aria-label="The duet Timeless">
+        <div className="timelessLead">
+          <video controls playsInline preload="metadata" aria-label="Ann and Allen performing This Masquerade">
+            <source src="/videos/timeless-masquerade.mp4" type="video/mp4" />
+            Your browser does not support video playback.
+          </video>
+        </div>
+        <div className="duet">
+          <video controls playsInline preload="metadata" aria-label="Ann and Allen performing Unforgettable">
+            <source src="/videos/timeless-unforgettable.mp4" type="video/mp4" />
+            Your browser does not support video playback.
+          </video>
+          <div>
+            <h2 className="script">Timeless, with Ann</h2>
+            <p>
+              Allen and Ann have played together for many years. Their duet, <CrossSiteLink site="other" path="/biography">Timeless</CrossSiteLink>, has taken them from Sydney clubs to a convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
+            </p>
+            <p>
+              Ann also paints. You can see her work on <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s art page</CrossSiteLink>.
+            </p>
+            <p>
+              Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or
+              event, see <Link href="/hire">Contact Allen</Link>.
             </p>
           </div>
-        </header>
+        </div>
+      </section>
 
-        <section aria-label="Albums">
-          <div className="wrap albums">
-            {albums.map((album) => (
-              <Album key={album.id} {...album} />
-            ))}
-          </div>
-        </section>
-
-        <hr className="secrule" />
-
-        <section id="timeless" aria-label="The duet Timeless">
-          <div className="wrap">
-            <div className="timelessLead">
-              <video controls playsInline preload="metadata" aria-label="Ann and Allen performing This Masquerade">
-                <source src="/videos/timeless-masquerade.mp4" type="video/mp4" />
-                Your browser does not support video playback.
-              </video>
-            </div>
-          </div>
-          <div className="wrap duet">
-            <video controls playsInline preload="metadata" aria-label="Ann and Allen performing Unforgettable">
-              <source src="/videos/timeless-unforgettable.mp4" type="video/mp4" />
-              Your browser does not support video playback.
-            </video>
-            <div>
-              <h2 className="script">Timeless, with Ann</h2>
-              <p>
-                Allen and Ann have played together for many years. Their duet, <CrossSiteLink site="other" path="/biography">Timeless</CrossSiteLink>, has taken them from Sydney clubs to a convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
-              </p>
-              <p>
-                Ann also paints. You can see her work on <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s art page</CrossSiteLink>.
-              </p>
-              <p>
-                Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or
-                event, see <Link href="/hire">Contact Allen</Link>.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <hr className="secrule" />
-
-        <section id="originals" aria-label="Original songs">
-          <div className="wrap">
-            <h2 className="script" style={{ marginTop: "40px" }}>
-              Original Songs
-            </h2>
-            <p className="plain" style={{ marginBottom: "8px" }}>
-              Songs written by Allen Gillon.
-            </p>
-            <div className="videos">
-              <figure className="video">
-                <div className="frame">
-                  <iframe
-                    src="https://www.youtube-nocookie.com/embed/6idFN_r1Dlw"
-                    title="At Last I'm Free"
-                    loading="lazy"
-                    allow="encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <figcaption>
-                  At Last I'm Free <small>written by Allen Gillon</small>
-                  <CommentLink subject={"At Last I'm Free"} returnTo="/music#originals" returnLabel="Original Songs" />
-                </figcaption>
-              </figure>
-              <figure className="video">
-                <div className="frame">
-                  <iframe
-                    src="https://www.youtube-nocookie.com/embed/AWTyzHr4eaI"
-                    title="Jamie"
-                    loading="lazy"
-                    allow="encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <figcaption>
-                  Jamie <small>written by Allen Gillon and Barry Cochran</small>
-                  <CommentLink subject={"Jamie"} returnTo="/music#originals" returnLabel="Original Songs" />
-                </figcaption>
-              </figure>
-              <figure className="video">
-                <div className="frame">
-                  <iframe
-                    src="https://www.youtube-nocookie.com/embed/nqTpPzs9boQ"
-                    title="Trippin' On My Senses"
-                    loading="lazy"
-                    allow="encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <figcaption>
-                  Trippin' On My Senses <small>written by Allen Gillon</small>
-                  <CommentLink subject={"Trippin' On My Senses"} returnTo="/music#originals" returnLabel="Original Songs" />
-                </figcaption>
-              </figure>
-              <figure className="video">
-                <div className="frame">
-                  <iframe
-                    src="https://www.youtube-nocookie.com/embed/VnXBwH5PcxU"
-                    title="Travellin' Road"
-                    loading="lazy"
-                    allow="encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <figcaption>
-                  Travellin' Road <small>written by Allen Gillon</small>
-                  <CommentLink subject={"Travellin' Road"} returnTo="/music#originals" returnLabel="Original Songs" />
-                </figcaption>
-              </figure>
-              <figure className="video">
-                <div className="frame">
-                  <iframe
-                    src="https://www.youtube-nocookie.com/embed/21kIAn9ED28"
-                    title="Taking Chances"
-                    loading="lazy"
-                    allow="encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
-                </div>
-                <figcaption>
-                  Taking Chances <small>written by Allen Gillon</small>
-                  <CommentLink subject={"Taking Chances"} returnTo="/music#originals" returnLabel="Original Songs" />
-                </figcaption>
-              </figure>
-            </div>
-          </div>
-        </section>
-      </main>
-    </>
+      <section id="originals" className="originals-band band" aria-label="Original songs">
+        <h2 className="script">Original Songs</h2>
+        <p className="plain">Songs written by Allen Gillon.</p>
+        <div className="videos">
+          {originals.map((song) => (
+            <figure className="video" key={song.id}>
+              <div className="frame">
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${song.id}`}
+                  title={song.title}
+                  loading="lazy"
+                  allow="encrypted-media; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
+              <figcaption>
+                {song.title} <small>{song.credit}</small>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <SectionComment subject="Original Songs" returnTo="/music#originals" returnLabel="Original Songs" />
+      </section>
+    </main>
   );
 }

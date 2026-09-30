@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "./hire.css";
 
 export const metadata = {
   title: "Bookings",
@@ -8,81 +9,38 @@ export const metadata = {
 
 export default function HirePage() {
   return (
-    <>
-      <style>{`
-  .hireGrid{display:grid;grid-template-columns:1fr 380px;gap:44px;align-items:start;padding:16px 0;}
-  .hireGrid .gx-hero{border:3px solid var(--ink);border-radius:3px;aspect-ratio:3/4;}
-  .offer{margin:26px 0 0;}
-  .offer li{padding:16px 0;display:flex;flex-direction:column;gap:2px;}
-  .offer .what{font-size:1.3rem;font-weight:700;}
-  .offer .how{color:var(--soft);font-size:1.05rem;max-width:52ch;}
-  .book{margin-top:8px;background:var(--ink);color:var(--on);border-radius:3px;}
-  .book .pad{padding:32px 30px 34px;}
-  .book h2{margin:0 0 8px;}
-  .book p{margin:0 0 12px;font-size:1.1rem;max-width:52ch;}
-  .book a{color:var(--on);}
-  .phones{display:flex;gap:14px;flex-wrap:wrap;margin-top:16px;}
-  .phones a{font-size:1.25rem;font-weight:700;text-decoration:none;border:2px solid var(--on);border-radius:3px;padding:12px 20px;min-height:48px;display:inline-flex;align-items:center;}
-  .phones a:hover{background:var(--red);border-color:var(--red);}
-  @media (max-width:860px){.hireGrid{grid-template-columns:1fr;}.hireGrid .gx-hero{max-width:340px;}}
-  @media (max-width:640px){
-    .pagehead .plain{padding-left:12px;padding-right:4px;}
-    .offer li{padding-left:12px;padding-right:4px;}
-    .offer .how{max-width:34ch;}
-    .hireGrid .gx-hero{max-width:min(300px,78vw);margin:0 auto;}
-    .book .pad{padding:26px 22px 28px;}
-  }
-`}</style>
-      <main>
-        <header className="pagehead">
-          <div className="wrap">
-            <h1 className="script">Bookings</h1>
-            <p className="plain">Light jazz guitar for restaurants where people are eating, drinking and enjoying themselves. Allen has been doing exactly this for many years, and he still loves a full diary.</p>
-          </div>
-        </header>
+    <main>
+      <header className="pagehead band">
+        <h1 className="script">Bookings</h1>
+        <p className="plain">Light jazz guitar for restaurants where people are eating, drinking and enjoying themselves. Allen has been doing exactly this for many years, and he still loves a full diary.</p>
+      </header>
 
-        <section aria-label="Bookings">
-          <div className="wrap">
-            <div className="book">
-              <div className="pad">
-                <h2 className="script">Book a <span style={{ color: "var(--red)" }}>date</span></h2>
-                <p>Speak with Allen directly. Tell him the date and venue you have in mind. You can also reach Allen on Facebook.</p>
-                <div className="phones">
-                  <a href="sms:+61438747882">Text 0438 747 882</a>
-                  <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+      <section className="book-band band ink" aria-label="Bookings">
+        <h2 className="script">Book a date</h2>
+        <p>Speak with Allen directly. Tell him the date and venue you have in mind. You can also reach Allen on Facebook.</p>
+        <div className="phones">
+          <a href="sms:+61438747882">Text 0438 747 882</a>
+          <a href="https://www.facebook.com/people/Allen-Gillon/100011388424486/" target="_blank" rel="noopener">Allen on Facebook</a>
+        </div>
+      </section>
 
-        <section>
-          <div className="wrap hireGrid">
-            <div>
-              <ul className="ruled offer">
-                <li>
-                  <span className="what">Restaurant guitarist</span>
-                  <span className="how">Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; and &ldquo;Take Five&rdquo; on <Link href="/music">the albums page</Link>.</span>
-                </li>
-                <li>
-                  <span className="what">Functions and events</span>
-                  <span className="how">Allen plays weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him about the occasion and he will shape the set around it.</span>
-                </li>
-              </ul>
-            </div>
-            <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
-          </div>
-        </section>
+      <section className="hire-offers band">
+        <ul className="offer">
+          <li>
+            <span className="what">Restaurant guitarist</span>
+            <span className="how">Allen plays solo jazz guitar on the Trini Lopez Gibson he bought in Parramatta in 1967. He knows more than 300 melodies and keeps the volume comfortable for dinner. Many of the backing tracks are his own arrangements. Listen to &ldquo;Desafinado&rdquo; and &ldquo;Take Five&rdquo; on <Link href="/music">the albums page</Link>.</span>
+          </li>
+          <li>
+            <span className="what">Functions and events</span>
+            <span className="how">Allen plays weddings, anniversaries, club nights and private parties around Bribie Island, Brisbane and the Sunshine Coast. Tell him about the occasion and he will shape the set around it.</span>
+          </li>
+        </ul>
+        <img className="gx-hero" src="/images/personal/allen-playing-red-gibson-waterfront.jpg" alt="Allen playing his red Gibson on the waterfront" loading="lazy" />
+      </section>
 
-        <section aria-label="What diners say">
-          <div className="wrap">
-            <div className="note">
-              <p>Heard between courses: &ldquo;Beautiful.&rdquo; &ldquo;Unforgettable.&rdquo; &ldquo;I love Al&rsquo;s light jazz.&rdquo; &ldquo;Pour me another glass.&rdquo;</p>
-            </div>
-          </div>
-        </section>
-
-      </main>
-    </>
+      <section className="diners band" aria-label="What diners say">
+        <p>Heard between courses: &ldquo;Beautiful.&rdquo; &ldquo;Unforgettable.&rdquo; &ldquo;I love Al&rsquo;s light jazz.&rdquo; &ldquo;Pour me another glass.&rdquo;</p>
+      </section>
+    </main>
   );
 }

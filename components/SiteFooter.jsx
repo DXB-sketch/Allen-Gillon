@@ -23,7 +23,7 @@ export default function SiteFooter({ site = "main" }) {
   const cross = CROSS_LINK[key];
   return (
     <footer data-site={key}>
-      <div className="wrap">
+      <div className="footer-inner">
         <div>
           <div className="fscript">{SITES[key].name}</div>
           <p>Bribie Island, Queensland</p>

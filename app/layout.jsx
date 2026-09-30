@@ -19,12 +19,8 @@ export default function RootLayout({ children }) {
     <html lang="en-AU" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: SITE_MARKER_SCRIPT }} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Dynalight&family=Lora:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* Dynalight is self-hosted (public/fonts); body text is the system Times. */}
+        <link rel="preload" href="/fonts/dynalight-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body>
         <a className="skip-link" href="#main">

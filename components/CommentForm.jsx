@@ -45,7 +45,7 @@ export default function CommentForm({ subject = "" }) {
           Send as a text to Allen
         </button>
         <a
-          className="btn b"
+          className="cfb"
           href="https://www.facebook.com/people/Allen-Gillon/100011388424486/"
           target="_blank"
           rel="noopener"

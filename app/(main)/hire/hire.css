@@ -1,0 +1,38 @@
+/* Bookings (/hire). W3 foundation; W5 art-directs this page. */
+
+.book-band{margin-top:clamp(24px,3vw,40px);align-items:center;}
+.book-band h2{margin:0 0 8px;}
+.book-band p{margin:0 0 12px;font-size:1.1em;}
+.phones{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;}
+.phones a{font-size:1.25em;font-weight:700;text-decoration:none;border:2px solid var(--on);padding:12px 20px;min-height:48px;display:inline-flex;align-items:center;
+  transition:background-color .2s var(--ease-out),border-color .2s var(--ease-out);}
+.phones a:hover{background:var(--red-deep);border-color:var(--red-deep);}
+@media (min-width:1024px){
+  /* Title and words on the left half, the ways to reach Allen on the right. */
+  .book-band h2,.book-band p{grid-column:wide-start / span 6;}
+  .book-band .phones{grid-column:span 6 / wide-end;grid-row:1 / span 2;margin-top:0;}
+}
+
+.hire-offers{margin-top:var(--band-space);align-items:start;}
+.offer{list-style:none;margin:0;padding:0;grid-column:wide-start / span 7;}
+.offer li{padding:0 0 32px;display:flex;flex-direction:column;gap:4px;min-width:0;}
+.offer .what{font-size:1.4rem;font-weight:700;}
+/* The offer descriptions are the page's body copy: full body size. */
+.offer .how{color:var(--soft);font-size:1em;max-width:var(--measure);}
+.hire-offers .gx-hero{grid-column:span 4 / wide-end;aspect-ratio:3/4;}
+@media (min-width:1280px){
+  /* The two offers side by side, the photo right beside them. */
+  .offer{grid-column:wide-start / span 8;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:var(--col-gap);}
+  .hire-offers .gx-hero{aspect-ratio:1/1;}
+}
+
+.diners{margin-top:var(--band-space);}
+.diners p{font-size:1.2em;font-style:italic;color:var(--soft);margin:0;}
+@media (min-width:1024px){
+  .diners p{grid-column:3 / wide-end;}
+}
+
+@media (max-width:860px){
+  .offer,.hire-offers .gx-hero{grid-column:wide;}
+  .hire-offers .gx-hero{max-width:min(420px,100%);}
+}

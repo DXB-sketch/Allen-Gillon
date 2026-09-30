@@ -242,7 +242,7 @@ export function NowBar() {
         {announcement}
       </p>
       <div className={"nowbar" + (on ? " on" : "")} id="nowbar" data-status={status}>
-        <div className="wrap">
+        <div className="nowbar-inner">
           <button type="button" id="nowplay" aria-label={buttonLabel} onClick={togglePause}>
             {busy ? "❚❚" : "▶"}
           </button>

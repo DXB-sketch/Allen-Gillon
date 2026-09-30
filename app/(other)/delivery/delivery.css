@@ -1,0 +1,6 @@
+/* Delivery and payment (/delivery). */
+
+.delivery-body{margin-top:clamp(16px,2vw,32px);}
+@media (min-width:1024px){
+  .delivery-body > .prose{grid-column:3 / wide-end;}
+}

@@ -1,0 +1,28 @@
+/* Timeless (/biography). W3 foundation; W5 turns the eras into scenes and
+   removes the duplicated photo column. */
+
+.bio{margin-top:clamp(20px,3vw,40px);align-items:start;}
+.bio .prose{grid-column:wide-start / span 7;}
+.bio aside{grid-column:span 4 / wide-end;display:flex;flex-direction:column;gap:28px;position:sticky;top:20px;}
+.bio figure{margin:0;}
+.bio .gx-hero{aspect-ratio:4/3;}
+.bio .gx-hero.tall{aspect-ratio:3/4;}
+.bio .gx-video{display:block;width:100%;height:auto;background:var(--ink);}
+.bio figcaption{font-size:1rem;color:var(--soft);margin-top:6px;}
+.bio .era{font-family:var(--script);font-weight:400;font-size:clamp(2.2rem,4vw,3rem);color:var(--blue);text-shadow:var(--overprint-red);margin:48px 0 8px;line-height:1.1;}
+.bio .era:first-child{margin-top:0;}
+.bio .era.red{color:var(--red);text-shadow:var(--overprint);}
+
+/* On phones the photo column is hidden and each photo sits inline,
+   directly under the era title it belongs to. */
+.bio figure.inline{display:none;}
+
+@media (max-width:900px){
+  .bio .prose,.bio aside{grid-column:wide;}
+  .bio aside{position:static;flex-direction:row;flex-wrap:wrap;margin-top:32px;}
+  .bio aside figure{flex:1 1 260px;}
+}
+@media (max-width:640px){
+  .bio aside{display:none;}
+  .bio figure.inline{display:block;margin:14px 0 18px;max-width:min(420px,100%);}
+}
