@@ -2,14 +2,19 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { isLocalHost, resolveRequest, runtimeEnv } from "./lib/sites.mjs";
 import legal from "./content/legal.config.json";
+import { mediaAssetPath, serveMedia } from "./lib/media-range.mjs";
 
 // Host routing for allengillon.com and other.allengillon.com.
 // All rules live in lib/sites.mjs resolveRequest(); this file only applies them.
 // vinext 1.0.0-beta.12 loads proxy.ts (Next 16 convention) in dev and in the
 // built Worker; see CLOUDFLARE.md.
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const host = request.headers.get("host") || request.nextUrl.host;
   const { pathname, search } = request.nextUrl;
+
+  // Self-hosted audio and video, served with byte ranges so browsers can seek
+  // (lib/media-range.mjs). Answered here, on every host, before any routing.
+  if (mediaAssetPath(pathname)) return serveMedia(request);
 
   // Local previews only: drop a trailing slash on the same Host. The built
   // Worker under wrangler dev sees request.url as 127.0.0.1, so its own
@@ -41,6 +46,7 @@ export function proxy(request: NextRequest) {
 export const config = {
   // Skip build assets and any path with a file extension (images, audio, books, icons),
   // except /favicon.ico (rewritten to the host's own icon) and /robots.txt and
-  // /sitemap.xml, so the www rule in lib/sites.mjs sends them to the apex too.
-  matcher: ["/((?!_next/|assets/|.*\\.[A-Za-z0-9]+$).*)", "/favicon.ico", "/robots.txt", "/sitemap.xml"],
+  // /sitemap.xml, so the www rule in lib/sites.mjs sends them to the apex too,
+  // and /audio and /videos, which serveMedia answers with byte ranges.
+  matcher: ["/((?!_next/|assets/|.*\\.[A-Za-z0-9]+$).*)", "/favicon.ico", "/robots.txt", "/sitemap.xml", "/audio/:path*", "/videos/:path*"],
 };
