@@ -104,7 +104,8 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 
 ## Blocked on the human (TODO, not blocking other work)
 - [B] Create A$1 play Payment Links, then set `playLinksCurrent: true`
-- [B] Cloudflare: Email Routing for support@, `other` custom domain + DNS, cache purge, managed robots.txt, retire Vercel
+- [x] Cloudflare (2026-10-01): deployed overhaul (version 20e6c5ee); other.allengillon.com custom domain and DNS created by the deploy; remote D1 reviews migration applied (GET /api/reviews 200); Email Routing enabled with MX records live and support@allengillon.com forwarding to allen0295@gmail.com; Vercel copy (allengillon-mockups) paused. Live robots.txt shows only our rules, so no Managed robots.txt is prepended. No manual cache purge was needed: both hosts serve the new titles.
+- [B] Allen: click the Cloudflare verification email sent to allen0295@gmail.com, or support@ mail will not forward
 - [B] Legal text sign-off, play licence terms (legal pages stay unpublished)
 - [B] Ultra-wide cap, /shows indexing, tel: links, painting dimensions and medium
 - [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py. /audio/* is cached for a year as immutable, so save the new recording under a new file name and update content/story-cues and the audio manifest (audioSha256) with it; never overwrite the mp3 in place (the same goes for /images and /og)
@@ -114,11 +115,11 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] Confirm /music lede edit: "Individual song downloads are available in each track list." (was "...under the three-dot menus")
 - [B] The GitHub repo is public and its history (including origin/master) holds the full play PDFs, the full play recordings and play page images past the preview. private/ is now untracked and ignored; make the repo private or purge the history (git filter-repo) and force-push, which only the human can approve.
 - [B] Home hero: supply a larger original of allen-playing-red-gibson-waterfront.jpg (at least 2400px wide) if the hero should become a full-bleed band (DESIGN.md Layout, amendments)
-- [B] After deploy: check `curl -I -H "Range: bytes=0-1" https://other.allengillon.com/audio/chinese-chimes-audiobooks/little-ray.mp3` returns 206 (the local wrangler dev preview answers 200, so seeking fails there; vinext dev returns 206)
+- [x] Audio seeking (2026-10-01): production answered Range with 200 on every static file, so seeking failed live. /audio/* and /videos/* now go to the Worker first and proxy.ts serves them with 206/416 (lib/media-range.mjs, tests/media-range.test.mjs). Live: 206 with Content-Range, and a browser seek to 5:00 lands at 5:03.
 - [B] After deploy: Lighthouse mobile on both hosts, the Rich Results Test and the Schema validator
-- [B] After deploy: `curl -sI https://other.allengillon.com/other-home` and `/plays` give a Location that is https or relative (the local wrangler preview shows http://; vinext relativises same-origin redirects, so production should send "/")
-- [B] After deploy: `npm run reviews:migrate:remote`, then `GET https://allengillon.com/api/reviews` returns 200
-- [B] After deploy: request a page twice on each host and check `cf-cache-status: HIT` on the second, with no host collision
+- [x] After deploy: /other-home and /plays redirect to https (checked live)
+- [x] After deploy: remote reviews migration applied; GET /api/reviews returns 200
+- [x] After deploy: cf-cache-status HIT on both hosts, each serving its own title (no host collision); robots.txt and sitemap.xml differ per host (5 and 60 URLs)
 - [B] After the legal pages are published: `npm run a11y:pa11y`, the axe sweep and Lighthouse on /privacy, /terms and /accessibility
 - [B] Legal check: the paintings' JSON-LD return policy (MerchantReturnNotPermitted), see LEGAL-TODO.md
 - [B] Desktop only: opening a play preview's cover in a two-page spread shifts layout by about 0.10 once (react-pageflip's hard cover). Accept, use a soft cover, or stop the automatic opening (docs/PERFORMANCE.md)
