@@ -22,7 +22,7 @@ test.describe("main home", () => {
     await expect(page.locator(".home-hero > h1.script")).toHaveText("Allen Gillon");
   });
 
-  test("photo bleeds to the page edge; name and photo never overlap", async ({ page }) => {
+  test("the framed photo sits inside the gutters; name and photo never overlap", async ({ page }) => {
     for (const width of [375, 1280, 1920]) {
       await page.setViewportSize({ width, height: 900 });
       await page.goto(HOME, { waitUntil: "load" });
@@ -39,8 +39,10 @@ test.describe("main home", () => {
           overlap: [...names, intro].some((b) => hit(b, photo)),
         };
       });
-      expect(Math.abs(r.right - r.vw), `photo right edge at ${width}`).toBeLessThanOrEqual(1);
-      if (width < 900) expect(r.left, `photo left edge at ${width}`).toBeLessThanOrEqual(1);
+      // The two-ink frame (and its 3px offset line) stays inside the gutter.
+      expect(r.vw - r.right, `photo right edge at ${width}`).toBeGreaterThanOrEqual(12);
+      expect(r.vw - r.right, `photo right edge at ${width}`).toBeLessThanOrEqual(80);
+      if (width < 900) expect(r.left, `photo left edge at ${width}`).toBeGreaterThanOrEqual(12);
       expect(r.overlap, `text over the photo at ${width}`).toBe(false);
     }
   });

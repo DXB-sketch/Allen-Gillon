@@ -14,7 +14,14 @@
 .home-hero{padding-block:clamp(8px,2vw,24px) 0;row-gap:clamp(16px,2.4vw,36px);}
 .home-hero > h1{grid-row:1;font-size:clamp(4rem,11vw,13rem);}
 .home-name{white-space:nowrap;}
-.home-hero > .home-photo{grid-column:full;grid-row:2;min-width:0;}
+.home-hero > .home-photo{grid-column:wide;grid-row:2;min-width:0;}
+/* The photo hangs in the same two-ink frame as Ann's paintings: a paper mat,
+   a lead-ink line (red on this site) and the second ink offset 3px at 30%.
+   It sits inside the gutters so the offset line never touches the edge. */
+.home-photo{position:relative;background:var(--paper);
+  border:1.5px solid var(--art-lead);padding:clamp(6px,.9vw,14px);}
+.home-photo::before{content:"";position:absolute;inset:-1.5px;
+  border:1.5px solid var(--art-second);opacity:.3;transform:translate(3px,3px);pointer-events:none;}
 .home-photo img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;
   /* Keep his face and the headstock; the crop drops the watermark at the
      bottom of the frame. */
@@ -29,7 +36,7 @@
   .home-hero > h1{grid-row:2;align-self:end;}
   .home-name{display:block;width:fit-content;}
   .home-name + .home-name{margin-left:.62em;}
-  .home-hero > .home-photo{grid-column:8 / full-end;grid-row:1 / -1;justify-self:end;width:100%;max-width:720px;}
+  .home-hero > .home-photo{grid-column:8 / wide-end;grid-row:1 / -1;justify-self:end;width:100%;max-width:720px;}
   .home-hero > .home-intro{grid-column:wide-start / 7;grid-row:3;margin-top:clamp(20px,2.4vw,40px);}
 }
 
