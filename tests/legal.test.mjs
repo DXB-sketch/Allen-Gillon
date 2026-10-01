@@ -60,7 +60,7 @@ test("unpublished legal routes are not redirected on either host, so both 404", 
     // main: the page's notFound() (the (main) group's not-found).
     assert.equal(resolveRequest("allengillon.com", path, opts).action, "next", `allengillon.com${path}`);
     // other: rewritten to a path with no route, so global-not-found renders
-    // the 404 with the More on Allen chrome.
+    // the 404 with the the other site chrome.
     assert.deepEqual(resolveRequest("other.allengillon.com", path, opts), { site: "other", action: "rewrite", pathname: MISSING_PATH });
   }
 });

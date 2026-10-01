@@ -39,7 +39,7 @@ export default function DeliveryPage() {
           </p>
           <h2>Buying online</h2>
           <p>
-            Available paintings can be bought from <Link prefetch={false} href="/anns-art">Ann&rsquo;s art page</Link>. Stripe collects
+            Available paintings can be bought from <Link prefetch={false} href="/anns-art">Ann&rsquo;s Art Room</Link>. Stripe collects
             payment and the Australian delivery address. Because every painting is an original, its checkout closes
             after the first completed purchase.
           </p>

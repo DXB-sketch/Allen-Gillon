@@ -72,7 +72,7 @@ export default function MusicPage() {
 
       <section id="timeless" className="timeless-band band ink" aria-labelledby="timeless-title">
         <h2 id="timeless-title" className="script">
-          Timeless, with Ann
+          Timeless Duo, with Ann
         </h2>
         <div className="timeless-video timeless-video--lead">
           <video
@@ -107,15 +107,15 @@ export default function MusicPage() {
         <div className="timeless-text">
           <p>
             Allen and Ann have played together for many years. Their duet,{" "}
-            <CrossSiteLink site="other" path="/biography">Timeless</CrossSiteLink>, has taken them from Sydney clubs to a
+            <CrossSiteLink site="other" path="/biography">Timeless Duo</CrossSiteLink>, has taken them from Sydney clubs to a
             convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
           </p>
           <p>
             Ann also paints. You can see her work on{" "}
-            <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s art page</CrossSiteLink>.
+            <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s Art Room</CrossSiteLink>.
           </p>
           <p>
-            Their album together is <a href="#misty">Misty</a>, above. To have Timeless play your restaurant or event,
+            Their album together is <a href="#misty">Misty</a>, above. To have Timeless Duo play your restaurant or event,
             see <Link prefetch={false} href="/hire">Contact Allen</Link>.
           </p>
         </div>

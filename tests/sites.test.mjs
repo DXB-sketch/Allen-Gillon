@@ -200,7 +200,7 @@ test("other Home link is current on / and on /other-home", () => {
   assert.equal(isCurrentNav(home, "/"), true);
   assert.equal(isCurrentNav(home, "/other-home"), true);
   assert.equal(isCurrentNav(home, "/books"), false);
-  assert.equal(isCurrentNav(NAV.other[2], "/books"), true);
+  assert.equal(isCurrentNav(NAV.other[1], "/books"), true);
   assert.equal(isCurrentNav(NAV.main[0], "/other-home"), false);
 });
 

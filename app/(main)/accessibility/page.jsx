@@ -31,7 +31,7 @@ export default function AccessibilityPage() {
         <div className="prose measure">
           <h2>Our aim</h2>
           <p>
-            This statement covers allengillon.com and More on Allen (other.allengillon.com). We aim to meet the Web
+            This statement covers allengillon.com and other.allengillon.com. We aim to meet the Web
             Content Accessibility Guidelines (WCAG) 2.2 at level AA, and to go further where it helps older readers.
           </p>
 
@@ -61,7 +61,7 @@ export default function AccessibilityPage() {
               The <Link prefetch={false} href="/music#originals">original song videos</Link> are on YouTube, so their captions depend
               on YouTube.
             </li>
-            <li>The captions on the Timeless videos describe the music. Sung words there are still being checked with Allen and Ann.</li>
+            <li>The captions on the Timeless Duo videos describe the music. Sung words there are still being checked with Allen and Ann.</li>
             <li>Some older photos and scanned book pages are low resolution. The stories also have a text only version.</li>
           </ul>
 

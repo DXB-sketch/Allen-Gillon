@@ -124,7 +124,7 @@ test("pageMetadata carries Open Graph, the twitter card and absolute titles", ()
 
   const home = pageMetadata("other", "/");
   assert.equal(home.metadataBase, null, "the home page keeps its trailing-slash canonical");
-  assert.equal(home.openGraph.siteName, "More on Allen");
+  assert.equal(home.openGraph.siteName, "Allen Gillon");
   assert.equal(home.openGraph.images[0].url, "https://other.allengillon.com/og/other/home.jpg");
 
   const art = pageMetadata("other", `/anns-art/${artworks[0].id}`);
@@ -186,7 +186,7 @@ test("painting descriptions give the price only for works that are for sale", ()
 });
 
 test("fitTitle and fitDescription", () => {
-  assert.equal(fitTitle("Short", "other"), "Short · More on Allen");
+  assert.equal(fitTitle("Short", "other"), "Short · Allen Gillon");
   const long = "A".repeat(50);
   assert.equal(fitTitle(long, "main"), long);
   const text = fitDescription("x".repeat(140), ["one two three.", "four five six seven eight."]);

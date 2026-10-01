@@ -22,7 +22,7 @@ const HOSTS = {
   other: `http://other.localhost:${port}`,
 };
 const ORIGIN = { main: "https://allengillon.com", other: "https://other.allengillon.com" };
-const SITE_NAME = { main: "Allen Gillon", other: "More on Allen" };
+const SITE_NAME = { main: "Allen Gillon", other: "Allen Gillon" };
 // axe runs on every page this wiring touched (one painting page stands for all).
 const SAMPLE = {
   main: ["/", "/hire", "/music", "/reviews", "/shows", "/comments"],

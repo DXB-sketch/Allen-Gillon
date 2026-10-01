@@ -15,9 +15,9 @@ import { CROSS_LINK, NAV, SITES } from "../lib/sites.mjs";
 // Links to pages on the other host, rendered as absolute <a> elements.
 const AWAY_LINKS = {
   main: [
-    { site: "other", path: "/biography", label: "Timeless" },
     { site: "other", path: "/books", label: "Stories" },
-    { site: "other", path: "/anns-art", label: "Ann Gillon" },
+    { site: "other", path: "/biography", label: "Timeless Duo" },
+    { site: "other", path: "/anns-art", label: "Ann's Art Room" },
   ],
   other: [
     { site: "main", path: "/music", label: "Albums" },
@@ -31,7 +31,8 @@ const AWAY_LINKS = {
 // Human TODO: add a tel: link beside the text link if Allen accepts calls.
 export default function SiteFooter({ site = "main" }) {
   const key = site === "other" ? "other" : "main";
-  const cross = CROSS_LINK[key];
+  // Main links to the other site only from the bottom of its home page.
+  const cross = key === "other" ? CROSS_LINK.other : null;
   const legalNav = legalLinks(key, legal);
   return (
     <footer data-site={key}>
@@ -52,11 +53,13 @@ export default function SiteFooter({ site = "main" }) {
               </a>
             </p>
           </address>
-          <p>
-            <CrossSiteLink site={cross.site} path={cross.path}>
-              {cross.label}
-            </CrossSiteLink>
-          </p>
+          {cross ? (
+            <p>
+              <CrossSiteLink site={cross.site} path={cross.path}>
+                {cross.label}
+              </CrossSiteLink>
+            </p>
+          ) : null}
         </div>
         <div className="footer-links">
           <nav aria-label="Footer">

@@ -64,7 +64,7 @@ body{
 img,video{max-width:100%;}
 a{color:inherit;}
 p a{color:var(--red-deep);}
-/* More on Allen is blue-led, so its text links take the blue ink. :where()
+/* the other site is blue-led, so its text links take the blue ink. :where()
    keeps this at the specificity of "p a", so ink bands keep their paper links. */
 :where(.site[data-site="other"]) p a{color:var(--blue);}
 p{max-width:var(--measure);}
@@ -96,7 +96,7 @@ p{max-width:var(--measure);}
 .script{font-family:var(--script);font-weight:400;line-height:1.02;letter-spacing:0;margin:0;
   color:var(--red);text-shadow:var(--overprint);}
 h1.script{font-size:clamp(4rem,11vw,10rem);overflow-wrap:break-word;}
-/* Blue means the written work, and More on Allen is blue-led: its page titles
+/* Blue means the written work, and the other site is blue-led: its page titles
    take the blue ink with the red overprint (main keeps the red lead). */
 /* [data-site] is on the server-rendered .site wrapper (and on <html> once the
    marker script runs), so this holds without JS. */
@@ -152,7 +152,7 @@ img.gx-hero{width:100%;height:auto;object-fit:cover;display:block;}
 footer{margin-top:var(--band-space);background:var(--ink);color:var(--on);}
 .footer-inner{padding:36px var(--gutter) 44px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:baseline;}
 footer .fscript{font-family:var(--script);font-size:2.2rem;line-height:1.1;color:var(--red);text-shadow:0.045em 0.055em 0 oklch(0.455 0.150 262 / 0.45);}
-/* More on Allen: a light blue that holds 3:1 or better on the ink band. */
+/* the other site: a light blue that holds 3:1 or better on the ink band. */
 footer[data-site="other"] .fscript{color:oklch(0.74 0.11 262);text-shadow:0.045em 0.055em 0 oklch(0.615 0.195 33 / 0.40);}
 footer nav a:hover{color:oklch(0.78 0.13 33);}
 footer p{margin:0;color:oklch(0.80 0.02 92);font-size:1rem;}

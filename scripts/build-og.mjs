@@ -40,7 +40,7 @@ export const ALBUMS = [
 const MAIN_PAGES = [
   { route: "/", slug: "home", title: "Allen Gillon", subtitle: "Guitarist on Bribie Island" },
   { route: "/hire", slug: "hire", title: "Book a guitarist", subtitle: "Bribie Island, Moreton Bay, Brisbane and the Sunshine Coast" },
-  { route: "/music", slug: "music", title: "Free guitar albums", subtitle: "Jazz and easy listening by Allen Gillon" },
+  { route: "/music", slug: "music", title: "Albums", subtitle: "Play/download plus original songs" },
   { route: "/reviews", slug: "reviews", title: "Reviews", subtitle: "What listeners say about Allen Gillon" },
   { route: "/shows", slug: "shows", title: "Shows", subtitle: "Allen Gillon on stage, then and now" },
   { route: "/privacy", slug: "privacy", title: "Privacy", subtitle: "How allengillon.com handles your details" },
@@ -49,10 +49,10 @@ const MAIN_PAGES = [
 ];
 
 const OTHER_PAGES = [
-  { route: "/", slug: "home", title: "More on Allen", subtitle: "Stories, Timeless and Ann's art" },
-  { route: "/biography", slug: "biography", title: "Timeless", subtitle: "Ann and Allen Gillon, a life in music since 1967" },
-  { route: "/books", slug: "books", title: "Stories, plays and textbooks", subtitle: "By Allen Gillon" },
-  { route: "/anns-art", slug: "anns-art", title: "Ann Gillon", subtitle: "Original paintings. Free delivery in Australia" },
+  { route: "/", slug: "home", title: "Allen Gillon", subtitle: "Stories, Timeless Duo and Ann's Art Room" },
+  { route: "/biography", slug: "biography", title: "Timeless Duo", subtitle: "Ann and Allen Gillon, a life in music since 1967" },
+  { route: "/books", slug: "books", title: "Stories", subtitle: "Stories, plays and textbooks by Allen Gillon" },
+  { route: "/anns-art", slug: "anns-art", title: "Ann's Art Room", subtitle: "Original paintings. Free delivery in Australia" },
   { route: "/delivery", slug: "delivery", title: "Delivery and payment", subtitle: "Ann Gillon's original paintings" },
 ];
 
@@ -193,7 +193,7 @@ for (const page of MAIN_PAGES) {
   await emit("main", page.route, `${page.slug}.jpg`, await textJpeg({ site: "main", ...page }), `${page.title}. ${page.subtitle}`);
 }
 for (const album of ALBUMS) {
-  const buf = await imageCard({ site: "main", title: album.title, subtitle: `Free album by ${album.by}`, source: album.cover });
+  const buf = await imageCard({ site: "main", title: album.title, subtitle: `Album by ${album.by}`, source: album.cover });
   await emit("main", `/music#${album.id}`, `music/${album.id}.jpg`, buf, `${album.title} album cover`);
 }
 

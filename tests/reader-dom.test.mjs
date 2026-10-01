@@ -335,7 +335,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     assert.equal(r.q(".bkr-counter").getAttribute("aria-live"), "polite");
     assert.equal(r.counter(), "Page 1 of 6");
     assert.equal(r.button("Introduction"), undefined, "no Introduction when content starts on page 1");
-    assert.ok(r.q('[role="region"] a[href="https://www.youtube.com/watch?v=cEuPWVPPN0o"]'), "YouTube narration is a tertiary link inside the reader");
+    assert.equal(r.q('a[href*="youtube.com"]'), null, "no YouTube link in a story's reader");
     assert.ok(r.q(".bkr-listen svg"), "the play icon is drawn, not a text glyph");
     assert.doesNotMatch(r.q(".bkr-listen").textContent, /[\u25B6\u275A]/, "no emoji-prone glyphs");
     await r.unmount();

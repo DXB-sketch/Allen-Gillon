@@ -645,13 +645,6 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
             : null}
         </div>
 
-        {book.video ? (
-          <p className="bkr-tertiary">
-            <a href={`https://www.youtube.com/watch?v=${book.video}`} target="_blank" rel="noreferrer">
-              Watch the original narration on YouTube<span className="visually-hidden"> (opens in a new tab)</span>
-            </a>
-          </p>
-        ) : null}
       </div>
     </div>
   );

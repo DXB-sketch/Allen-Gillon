@@ -22,7 +22,7 @@ export default function AnnsArtPage() {
     <div>
       <script {...jsonLdProps(JSON_LD)} />
       <header className="pagehead band art-head">
-        <h1 className="script">Ann Gillon</h1>
+        <h1 className="script">Ann&rsquo;s Art Room</h1>
         <p className="plain">Ann is an experienced stage and restaurant singer. She also plays piano and flute. Ann also plays solo gigs with piano and headphones. When she is not making music, she paints.</p>
         <p className="art-terms">Originals, A$100-250, free delivery in Australia</p>
         <ArtEasel className="art-easel" draw />

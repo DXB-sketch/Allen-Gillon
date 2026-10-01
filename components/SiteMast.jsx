@@ -11,7 +11,8 @@ export default function SiteMast({ site = "main" }) {
   const pathname = usePathname();
   const links = NAV[site] || NAV.main;
   const home = links[0];
-  const cross = CROSS_LINK[site] || CROSS_LINK.main;
+  // Main links to the other site only from the bottom of its home page.
+  const cross = site === "other" ? CROSS_LINK.other : null;
   const isHome = isCurrentNav(home, pathname);
   return (
     <header className={`mast${isHome ? " home-mast" : ""}`} data-site={site}>
@@ -30,9 +31,11 @@ export default function SiteMast({ site = "main" }) {
             {l.label}
           </Link>
         ))}
-        <CrossSiteLink className="nav-cross" site={cross.site} path={cross.path}>
-          {cross.label}
-        </CrossSiteLink>
+        {cross ? (
+          <CrossSiteLink className="nav-cross" site={cross.site} path={cross.path}>
+            {cross.label}
+          </CrossSiteLink>
+        ) : null}
       </nav>
     </header>
   );

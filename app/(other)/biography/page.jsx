@@ -12,7 +12,7 @@ export const metadata = pageMetadata("other", "/biography");
 
 // timelessGroup() is already in the layout's site graph. No VideoObject: the
 // Steakout video's upload date is unknown.
-const JSON_LD = breadcrumbs([{ name: "Home", url: "/" }, { name: "Timeless" }], "other");
+const JSON_LD = breadcrumbs([{ name: "Home", url: "/" }, { name: "Timeless Duo" }], "other");
 
 // Timeless (/biography) on other.allengillon.com. The eras are laid out as
 // scenes: a large Dynalight year in the outer margin, the text at the
@@ -41,7 +41,7 @@ export default function BiographyPage() {
       <script {...jsonLdProps(JSON_LD)} />
       <header className="pagehead band timeless-head">
         <TimelessCurtain className="bleed" />
-        <h1 className="script">Timeless</h1>
+        <h1 className="script">Timeless Duo</h1>
         <p className="plain">Allen met Ann in 1967 while his band, The New Breed, was playing in Parramatta. They have shared a life in music ever since.</p>
       </header>
 
@@ -130,8 +130,8 @@ export default function BiographyPage() {
           <div className="prose">
             <p className="scene-year">Today</p>
             <div className="scene-text">
-              <h2 id="era-timeless">Timeless</h2>
-              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link prefetch={false} href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless, they enjoy playing for diners around Bribie Island. You can <CrossSiteLink site="main" path="/hire">book them here</CrossSiteLink>.</p>
+              <h2 id="era-timeless">Timeless Duo</h2>
+              <p>Allen and Ann remain close to their three now-married children. Allen still plays the Trini Lopez Gibson he bought in Parramatta in 1967. Ann sings lead and plays piano. She also paints; you can see <Link prefetch={false} href="/anns-art">Ann&rsquo;s art here</Link>. As Timeless Duo, they enjoy playing for diners around Bribie Island. You can <CrossSiteLink site="main" path="/hire">book them here</CrossSiteLink>.</p>
               <figure className="scene-video">
                 <video
                   controls

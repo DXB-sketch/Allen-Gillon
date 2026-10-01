@@ -96,7 +96,7 @@ export default function BooksPage() {
     <div className="writing-page">
       <script {...jsonLdProps(booksJsonLd(shelves))} />
       <header className="writing-head band">
-        <h1 className="script">Stories, plays and textbooks</h1>
+        <h1 className="script">Stories</h1>
         <p className="writing-intro">Allen wrote for children, school stages and classrooms. His work is gathered here in one place.</p>
         <nav className="writing-nav" aria-label="Shelves on this page">
           <a href="#stories">Stories</a>

@@ -141,7 +141,7 @@ test.describe("main home", () => {
     await expect(page.locator("main blockquote")).toHaveCount(1);
     await expect(page.locator("main figure cite")).toHaveText("Jan Hanson");
     const cross = page.locator(".home-cross a[data-cross-site='other']");
-    await expect(cross).toHaveText("More on Allen: stories, Timeless and Ann's art");
+    await expect(cross).toHaveText("But wait, there's more 😊");
     expect(await cross.getAttribute("href")).toMatch(/^https?:\/\/other\./);
   });
 

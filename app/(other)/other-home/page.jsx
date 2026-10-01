@@ -40,8 +40,8 @@ export default function OtherHome() {
       {/* React hoists this into <head>. */}
       <link rel="preload" as="image" href={LCP} imageSrcSet={LCP_SRCSET} imageSizes={PAGE_SIZES} fetchPriority="high" />
       <header className="sideboard-head">
-        <h1 className="script">More on Allen</h1>
-        <p>Allen&rsquo;s personal side: family, writing, Timeless and Ann&rsquo;s art.</p>
+        <h1 className="script">Allen Gillon</h1>
+        <p>Allen&rsquo;s personal side: family, writing, Timeless Duo and Ann&rsquo;s Art Room.</p>
       </header>
 
       <div className="doorways">
@@ -62,7 +62,7 @@ export default function OtherHome() {
 
         <Link prefetch={false} className="doorway doorway-frame" href="/anns-art">
           <span className="doorway-label">
-            <span className="doorway-title">Ann Gillon</span>
+            <span className="doorway-title">Ann&rsquo;s Art Room</span>
             <span className="doorway-sub">Ann&rsquo;s original paintings</span>
           </span>
           <span className="doorway-object" aria-hidden="true">
@@ -85,7 +85,7 @@ export default function OtherHome() {
 
         <Link prefetch={false} className="doorway doorway-photo" href="/biography">
           <span className="doorway-label">
-            <span className="doorway-title">Timeless</span>
+            <span className="doorway-title">Timeless Duo</span>
             <span className="doorway-sub">Allen and Ann&rsquo;s story</span>
           </span>
           <span className="doorway-object" aria-hidden="true">

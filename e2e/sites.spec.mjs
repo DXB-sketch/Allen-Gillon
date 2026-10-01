@@ -14,7 +14,7 @@ test.describe("other.localhost", () => {
     await page.waitForLoadState("networkidle");
     await page.goto(`${OTHER}/`);
     await page.waitForLoadState("networkidle");
-    await expect(page).toHaveTitle(/More on Allen/);
+    await expect(page).toHaveTitle(/Allen Gillon/);
     const nav = page.getByRole("navigation", { name: "Site" });
     const home = nav.getByRole("link", { name: "Home", exact: true });
     await expect(home).toHaveAttribute("aria-current", "page");
@@ -91,12 +91,11 @@ test.describe("POST /api/reviews", () => {
 });
 
 test.describe("localhost (main)", () => {
-  test("main nav has the cross-site link with an absolute URL", async ({ page }) => {
+  test("main nav has no cross-site link (it lives at the bottom of the home page)", async ({ page }) => {
     await page.goto(`${MAIN}/`);
     const nav = page.getByRole("navigation", { name: "Site" });
     await expect(nav.getByRole("link", { name: "Home", exact: true })).toHaveAttribute("aria-current", "page");
-    const cross = nav.getByRole("link", { name: "More on Allen: stories, Timeless and Ann's art" });
-    await expect(cross).toHaveAttribute("href", `${OTHER}/`);
+    await expect(nav.locator("a[data-cross-site]")).toHaveCount(0);
     await expect(page.locator("html")).toHaveAttribute("data-site", "main");
   });
 });

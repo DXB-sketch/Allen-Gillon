@@ -6,7 +6,7 @@ import { SITES, siteForHost } from "../lib/sites.mjs";
 
 // Unmatched URLs on either host. vinext would otherwise wrap route misses in
 // the (main) layout, because (main) owns "/"; this page reads the Host header
-// so a miss on other.allengillon.com gets the More on Allen mast and footer.
+// so a miss on other.allengillon.com gets the other-site mast and footer.
 // No robots entry: vinext already adds <meta name="robots" content="noindex"> to 404s.
 export async function generateMetadata() {
   const site = siteForHost((await headers()).get("host"));

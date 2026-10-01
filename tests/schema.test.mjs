@@ -90,7 +90,7 @@ test("websiteSchema: one WebSite per host with the right names", () => {
   assert.equal(main.name, "Allen Gillon");
   assert.equal(other["@id"], IDS.otherWebsite);
   assert.equal(other.url, `${OTHER}/`);
-  assert.equal(other.name, "More on Allen");
+  assert.equal(other.name, "Allen Gillon");
   assert.equal(main.inLanguage, "en-AU");
   assert.equal(main.publisher["@id"], IDS.allen);
   assert.equal(other.publisher["@id"], IDS.allen);
@@ -269,7 +269,7 @@ test("collectionPage: ItemList with absolute URLs", () => {
 });
 
 test("breadcrumbs: positions and absolute items, last crumb may omit url", () => {
-  const b = breadcrumbs([{ name: "More on Allen", url: "/" }, { name: "Stories", url: "/books" }, { name: "Little Ray" }], "other");
+  const b = breadcrumbs([{ name: "Allen Gillon", url: "/" }, { name: "Stories", url: "/books" }, { name: "Little Ray" }], "other");
   assert.equal(b["@type"], "BreadcrumbList");
   assert.deepEqual(b.itemListElement.map((i) => i.position), [1, 2, 3]);
   assert.equal(b.itemListElement[1].item, `${OTHER}/books`);

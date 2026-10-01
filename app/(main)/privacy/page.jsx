@@ -32,8 +32,8 @@ export default function PrivacyPage() {
         <div className="prose measure">
           <h2>Who we are</h2>
           <p>
-            This policy covers allengillon.com and More on Allen (other.allengillon.com). Allen Gillon runs both
-            websites from Bribie Island, Queensland. Ann Gillon sells her paintings through More on Allen. In this
+            This policy covers allengillon.com and other.allengillon.com. Allen Gillon runs both
+            websites from Bribie Island, Queensland. Ann Gillon sells her paintings through other.allengillon.com. In this
             policy &ldquo;we&rdquo; means Allen and Ann.
           </p>
           <p>

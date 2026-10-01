@@ -36,11 +36,11 @@ export default function TermsPage() {
           <ul>
             <li>
               <strong>Ann Gillon</strong> sells her original paintings, shown on{" "}
-              <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s art page</CrossSiteLink>.
+              <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s Art Room</CrossSiteLink>.
             </li>
             <li>
               <strong>Allen Gillon</strong> sells the school play scripts (PDF files) and everything else sold on
-              allengillon.com and More on Allen.
+              allengillon.com and other.allengillon.com.
             </li>
           </ul>
           <p>
@@ -119,7 +119,7 @@ export default function TermsPage() {
           <p>
             Allen&rsquo;s words, music, recordings, stories and plays are &copy; Allen Gillon. Ann&rsquo;s paintings,
             and the photos of them, are &copy; Ann Gillon. Buying a painting gives you the painting, not the right to
-            reproduce it. The free albums are for your own listening. Please ask before copying, sharing, selling or
+            reproduce it. The albums and original songs are for your own listening. Please ask before copying, sharing, selling or
             broadcasting anything from these websites.
           </p>
 

@@ -55,7 +55,7 @@ export default function Page() {
           />
         </div>
         <p className="home-intro">
-          Allen plays smooth guitar in restaurants around Bribie Island. There is no microphone and no fuss, just his Gibson at a comfortable dinner volume. Diners have called the music &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.
+          Allen plays smooth guitar in restaurants around Bribie Island. Diners have called the music &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.
         </p>
       </header>
 
@@ -69,7 +69,7 @@ export default function Page() {
           <Link prefetch={false} className="door" href="/music">
             <Record className="door-art door-art--record" draw delay={150} />
             <span className="door-word">Albums</span>
-            <span className="door-line">Four albums to hear free, and his original songs</span>
+            <span className="door-line">Play/download plus original songs</span>
           </Link>
         </div>
       </nav>
@@ -77,7 +77,7 @@ export default function Page() {
       <section className="home-bill band" aria-labelledby="home-bill-title">
         <div className="bill">
           <h2 id="home-bill-title" className="bill-title">
-            Venues where Allen has played
+            Venues
           </h2>
           <ul className="bill-venues">
             {VENUES.map(([name, size, ink, lineStart]) => (

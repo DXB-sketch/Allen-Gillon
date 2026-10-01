@@ -9,7 +9,7 @@ import NotFoundContent from "../../components/NotFoundContent";
 // in the group, and reading the request would make every page dynamic
 // ("no-store"). The site is known from the group. The unpublished legal paths
 // on other are rewritten to a missing path (lib/sites.mjs MISSING_PATH), so
-// they get global-not-found and the More on Allen chrome.
+// they get global-not-found and the other-site chrome.
 // No robots entry: vinext already adds <meta name="robots" content="noindex"> to 404s.
 export const metadata = {
   title: { absolute: "Page not found · Allen Gillon" },

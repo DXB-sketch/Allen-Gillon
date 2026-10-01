@@ -16,8 +16,8 @@ import sharp from "sharp";
 import { PALETTE, ROOT, monogramSvg } from "./brand-art.mjs";
 
 const HOSTS = {
-  main: { name: "Allen Gillon", shortName: "Allen Gillon", description: "Allen Gillon, guitarist on Bribie Island: bookings and free albums." },
-  other: { name: "More on Allen", shortName: "More on Allen", description: "Allen Gillon's personal side: stories, Timeless and Ann Gillon's art." },
+  main: { name: "Allen Gillon", shortName: "Allen Gillon", description: "Allen Gillon, guitarist on Bribie Island: bookings, albums and original songs." },
+  other: { name: "Allen Gillon", shortName: "Allen Gillon", description: "Allen Gillon's personal side: Stories, Timeless Duo and Ann's Art Room." },
 };
 
 async function png(svg, size) {
