@@ -19,9 +19,11 @@
    - Plays show pages 1 to previewPages, then an "end of the preview" page
      with the Buy link and a stage-curtain drawing.
    - The toolbar is as wide as the book (--book-w), so it sits over it.
-   - Auto-turn with the narration follows lib/reader-follow.mjs exactly. */
+   - Auto-turn with the narration follows lib/reader-follow.mjs exactly: it is
+     always on for a story with signed-off cues, and the book goes to the
+     narrated page each time the narration reaches a new page. */
 
-import { useCallback, useEffect, useId, useMemo, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePlayer } from "../Player";
 import PurchaseLink from "../PurchaseLink";
@@ -29,17 +31,7 @@ import TwoInk from "../illustrations/TwoInk";
 import StageCurtain from "./StageCurtain";
 import { audiobookTrack } from "../Audiobook";
 import { fitBook, visiblePages, numbering, counterText, openIndex, pageHeading, PORTRAIT_RATIO } from "../../lib/reader-pages.mjs";
-import {
-  followAvailable,
-  followPrompt,
-  followReducer,
-  initialFollow,
-  isFollowing,
-  listenAction,
-  pageForTime,
-  turnTarget,
-  TURN_LEAD,
-} from "../../lib/reader-follow.mjs";
+import { followAvailable, followStep, isFollowing, listenAction, narratedPage, TURN_LEAD } from "../../lib/reader-follow.mjs";
 import { paragraphs } from "../../lib/book-text.mjs";
 import { pageSrcSet, READER_PAGE_SIZES } from "../../lib/books.mjs";
 
@@ -93,7 +85,6 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   const goId = useId();
   const goInputId = useId();
   const wordsId = useId();
-  const followNoteId = useId();
 
   /* ---------- player and follow state ---------- */
   const { track, status, audioRef, togglePause, seek, playAt } = usePlayer();
@@ -103,9 +94,11 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   );
   const isThisBook = Boolean(bookTrack && track && track.src === bookTrack.src);
   const available = followAvailable({ cues, verified });
-  const [follow, dispatch] = useReducer(followReducer, { available, isThisBook }, initialFollow);
-  const following = isFollowing(follow, { isThisBook, status });
-  const prompt = followPrompt(follow, { isThisBook, status });
+  const following = isFollowing({ available, isThisBook, status });
+  /* The page being narrated as of the last step of following (null before
+     the first). Kept through a pause, so a seek while paused still turns. */
+  const lastNarratedRef = useRef(null);
+  const [narrated, setNarrated] = useState(null);
 
   /* ---------- page state ---------- */
   const [index, setIndex] = useState(0);
@@ -125,21 +118,9 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   const goToggleRef = useRef(null);
   const indexRef = useRef(0);
   const visibleRef = useRef(visible);
-  /* Pages the reader itself is turning to (the cover opening, following the
-     narration, Back to the narration), each with an expiry time. More than
-     one can be pending: page-flip finishes a turn still in progress when a
-     new one starts, and that older turn's onFlip must not read as the
-     visitor's own turn (which would suspend following). */
-  const programmaticRef = useRef(new Map());
   const reducedRef = useRef(false);
   const openedRef = useRef(startIndex === 0);
-  const liveRef = useRef({ isThisBook, status });
-  const followRef = useRef(follow);
-  const modeRef = useRef(mode);
-  modeRef.current = mode;
   visibleRef.current = visible;
-  liveRef.current = { isThisBook, status };
-  followRef.current = follow;
 
   /* Reduced motion, and the page-flip code (client only). */
   useEffect(() => {
@@ -232,7 +213,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   const api = () => flipRef.current?.pageFlip?.() || null;
 
   const goTo = useCallback(
-    (target, { programmatic = false } = {}) => {
+    (target) => {
       const t = Math.min(Math.max(0, target), total - 1);
       if (visiblePages(indexRef.current, total, size?.mode).includes(t) && api()) return;
       const flip = api();
@@ -240,10 +221,8 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
         /* Plain image reader: no animation, same rules. */
         indexRef.current = t;
         setIndex(t);
-        if (!programmatic) dispatch({ type: "manualFlip", ...liveRef.current });
         return;
       }
-      if (programmatic) programmaticRef.current.set(t, Date.now() + 3 * TURN_MS + 500);
       if (reducedRef.current) flip.turnToPage(t);
       else flip.flip(t);
     },
@@ -258,17 +237,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     const i = Number(e.data) || 0;
     indexRef.current = i;
     setIndex(i);
-    const pending = programmaticRef.current;
-    const now = Date.now();
-    for (const [t, expires] of pending) if (expires < now) pending.delete(t);
-    const shown = visiblePages(i, total, modeRef.current);
-    const mine = [...pending.keys()].filter((t) => shown.includes(t));
-    if (mine.length) {
-      mine.forEach((t) => pending.delete(t));
-      return;
-    }
-    dispatch({ type: "manualFlip", ...liveRef.current });
-  }, [total]);
+  }, []);
 
   /* The cover opens once, when the book is first well in view. (react-pageflip
      attaches its init handler too late to rely on, so this waits for the API.) */
@@ -289,7 +258,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
             return;
           }
           openedRef.current = true;
-          if (indexRef.current === 0) goTo(startIndex, { programmatic: true });
+          if (indexRef.current === 0) goTo(startIndex);
         };
         timer = window.setTimeout(open, reducedRef.current ? 0 : 450);
       },
@@ -304,19 +273,28 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
 
   /* ---------- following the narration ---------- */
   useEffect(() => {
+    if (isThisBook) return;
+    lastNarratedRef.current = null;
+    setNarrated(null);
+  }, [isThisBook]);
+
+  /* The book turns each time the narration reaches a new page, wherever the
+     visitor has turned to in the meantime (see lib/reader-follow.mjs). */
+  useEffect(() => {
     if (!following) return;
     const audio = audioRef.current;
     if (!audio) return;
     const sync = () => {
-      const target = turnTarget(followRef.current, {
-        ...liveRef.current,
+      const { page, target } = followStep({
+        last: lastNarratedRef.current,
         time: audio.currentTime,
         cues,
         visible: visibleRef.current,
         lead: reducedRef.current ? 0 : TURN_LEAD,
       });
-      if (target === null || (programmaticRef.current.get(target) || 0) > Date.now()) return;
-      goTo(target, { programmatic: true });
+      lastNarratedRef.current = page;
+      setNarrated(page);
+      if (target !== null) goTo(target);
     };
     sync();
     const types = ["timeupdate", "seeking", "seeked"];
@@ -342,13 +320,11 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
     if (action.type === "toggle") togglePause();
     else if (action.type === "seek") seek(action.time);
     else playAt(bookTrack, action.time);
-    dispatch({ type: "listen" });
   };
 
   const backToNarration = () => {
-    dispatch({ type: "resume" });
     const audio = audioRef.current;
-    if (audio && available) goTo(pageForTime(cues, audio.currentTime), { programmatic: true });
+    if (audio && available) goTo(narratedPage(cues, audio.currentTime));
   };
 
   /* ---------- keyboard, only inside the region ---------- */
@@ -470,7 +446,8 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
       ? book.audio.kind === "preview" ? "Pause the preview" : "Pause the audiobook"
       : book.audio.label;
   const wordsFor = visible.filter((p) => p < shownPages);
-  const hasFollow = Boolean(book.audio && Array.isArray(cues) && !isPlay);
+  const hasFollow = Boolean(book.audio && available && !isPlay);
+  const awayFromNarration = following && narrated !== null && !visible.includes(narrated);
 
   return (
     <div
@@ -510,15 +487,10 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
           {hasFollow ? (
             <div className="bkr-follow">
               <div className="bkr-follow-live" aria-live="polite">
-                {prompt?.kind === "following" ? <p className="bkr-follow-note">Following the narration.</p> : null}
-                {prompt?.kind === "mount" ? (
+                {following && !awayFromNarration ? <p className="bkr-follow-note">Following the narration.</p> : null}
+                {awayFromNarration ? (
                   <p className="bkr-follow-actions">
-                    <span>The narration is playing on another page.</span>
-                    <button type="button" className="bkr-textbtn" onClick={backToNarration}>Follow the narration</button>
-                  </p>
-                ) : null}
-                {prompt?.kind === "flip" ? (
-                  <p className="bkr-follow-actions">
+                    <span className="bkr-follow-note">The book goes back to the narration at its next page.</span>
                     <button type="button" className="bkr-textbtn" onClick={playFromHere}>Play from this page</button>
                     <button type="button" className="bkr-textbtn" onClick={backToNarration}>Back to the narration</button>
                   </p>
@@ -605,28 +577,6 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
             {showWords ? "Hide the words" : "Show the words on this page"}
           </button>
         </div>
-
-        {/* The setting sits under the book with the other controls, so the
-            first screen is the toolbar and the book. */}
-        {hasFollow ? (
-          <div className="bkr-follow-setting">
-            <label className="bkr-check">
-              <input
-                type="checkbox"
-                checked={available && follow.enabled}
-                disabled={!available}
-                aria-describedby={available ? undefined : followNoteId}
-                onChange={(e) => dispatch({ type: "toggle", on: e.target.checked })}
-              />
-              <span>Turn pages with the narration</span>
-            </label>
-            {!available ? (
-              <p className="bkr-follow-note" id={followNoteId}>
-                Page turning starts once the narration timings have been checked by ear. Until then, turn the pages yourself.
-              </p>
-            ) : null}
-          </div>
-        ) : null}
 
         <div id={wordsId} className="bkr-words" hidden={!showWords}>
           {showWords

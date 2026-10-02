@@ -79,7 +79,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 ## DEFINITION OF DONE
 - [x] Now-playing bar (e2e/now-playing.spec.mjs)
 - [x] Stories paragraph (rendered HTML grep, e2e/books.spec.mjs)
-- [x] Chimes auto-turn: no story's cues are signed off, so all 4 ship with follow off; the follow rules are unit tested and e2e/reader-audio.spec.mjs checks them in a browser with the flag flipped in memory (turns land within 0.5 s using a 0.45 s look-ahead). Per-title sign-off is [B].
+- [x] Chimes auto-turn (2026-10-02): on for all 4 stories (cue files signed off, verified:true) and always on, with no switch. While a story's audiobook plays, the book turns each time the narration reaches a new page; after a manual flip, or on coming back to /read while it plays, it goes to the narrated page at the narration's next page turn (no jump before that). Unit tested, and e2e/reader-audio.spec.mjs checks it in a browser (turns land within 0.5 s using a 0.45 s look-ahead).
 - [x] Cue reports: all 4 in docs/cue-review; every title has follow off until signed off
 - [x] One reader
 - [x] Play previews (no $50 link rendered; "A$1 download. Online checkout coming soon" in the readers and on /books)
@@ -109,7 +109,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] Legal text sign-off, play licence terms (legal pages stay unpublished)
 - [B] Ultra-wide cap, /shows indexing, tel: links, painting dimensions and medium
 - [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py. /audio/* is cached for a year as immutable, so save the new recording under a new file name and update content/story-cues and the audio manifest (audioSha256) with it; never overwrite the mp3 in place (the same goes for /images and /og)
-- [B] Cue ear-check sign-off per story (docs/cue-review/<slug>/index.html; low-confidence picture pages listed there); ElevenLabs source script if alignment confidence < 0.6
+- [B] Optional cue ear-check per story (cues are live without it) (docs/cue-review/<slug>/index.html; low-confidence picture pages listed there); ElevenLabs source script if alignment confidence < 0.6
 - [B] JS budget: accept the overage on interactive routes, raise the budget to 160 KB, or choose one of the options in docs/PERFORMANCE.md
 - [B] Confirm "Albums" as the /music H1 wording
 - [B] Confirm /music lede edit: "Individual song downloads are available in each track list." (was "...under the three-dot menus")

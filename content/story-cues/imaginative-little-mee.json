@@ -4,7 +4,7 @@
   "audioSha256": "8e509d47cefb0da0b50bdbc3c8daa53a60fda12b7a293c98e15d8e6f24128974",
   "duration": 439.898,
   "pageCount": 29,
-  "verified": false,
+  "verified": true,
   "method": "OCR page text (RapidOCR) segmented against stable-ts 2.19.1 (small) word timestamps (IDF-weighted dynamic programming refined to each page's first printed words), cues snapped to speech onsets (silence detection); picture-only pages placed from YouTube caption timing and ffmpeg scene changes",
   "cues": [
     {

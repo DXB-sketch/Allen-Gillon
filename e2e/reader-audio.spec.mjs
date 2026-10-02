@@ -5,14 +5,11 @@ import path from "node:path";
 // VERIFICATION > Audio, in a real browser (the rules themselves are unit
 // tested in tests/reader-dom.test.mjs against lib/reader-follow.mjs):
 // - paused or unplayed audio turns nothing
-// - with verified cues, narration turns land within 0.5 s of each cue
-// - a manual flip suspends following
-// - opening /read while the book is playing starts suspended
+// - narration turns land within 0.5 s of each cue, with no switch to turn on
+// - after a manual flip, the narration's next page turns the book back
+// - opening /read while the book is playing does not jump; the narration's
+//   next page turns the book to it
 // - Listen never seeks another source (an album track or another book)
-//
-// No story's cues are signed off yet (content/story-cues/*.json all have
-// verified:false), so the "verified" cases flip the flag in the page payload
-// in memory only; the files are never touched.
 //
 // The mp3s are served by a Range-aware route, so seeking works the same on
 // vinext dev and on the local Worker preview (wrangler dev answers Range
@@ -77,26 +74,6 @@ async function serveAudioWithRanges(context) {
   });
 }
 
-/* In memory only: the page payload says this title's cues are signed off.
-   The server HTML still says unverified, so React reports a hydration
-   mismatch; on vinext dev its error overlay would cover the page, so it is
-   hidden (the Worker preview has no overlay). */
-function hideDevOverlay() {
-  const style = document.createElement("style");
-  style.textContent = "#__vinext_dev_error_overlay_root{display:none!important}";
-  document.addEventListener("DOMContentLoaded", () => document.head.appendChild(style));
-}
-
-async function pretendVerified(context) {
-  await context.route(/\/read\/little-ray(\?.*)?$/, async (route) => {
-    const res = await route.fetch();
-    const body = (await res.text())
-      .replace(/\\"verified\\":false/g, '\\"verified\\":true')
-      .replace(/"verified":false/g, '"verified":true');
-    await route.fulfill({ response: res, body, headers: { ...res.headers(), "content-length": String(Buffer.byteLength(body)) } });
-  });
-}
-
 const counter = (page) => page.locator(".bkr-counter").textContent();
 const audio = (page) =>
   page.evaluate(() => {
@@ -110,121 +87,96 @@ const ready = async (page) => {
 };
 const playing = (page) =>
   page.waitForFunction(() => document.querySelector("#nowname")?.textContent.startsWith("Playing"), null, { timeout: 30_000 });
+/* Index of the page narrated at time t. */
+const pageAt = (t) => CUES.reduce((page, cue, i) => (t + 0.05 >= cue ? i : page), 0);
 
 test.beforeEach(async ({ context }) => {
   await context.addInitScript(instrument);
   await serveAudioWithRanges(context);
 });
 
-test("unverified cues: unplayed and playing audio turn nothing, and follow is off", async ({ page }) => {
+test("turns land within 0.5 s of each cue; paused audio turns nothing", async ({ page }) => {
   await page.goto(`${OTHER}${LITTLE_RAY}`, { waitUntil: "load" });
   await ready(page);
-  const follow = page.getByRole("checkbox", { name: "Turn pages with the narration" });
-  await expect(follow).toBeDisabled();
-  await expect(follow).not.toBeChecked();
+  await expect(page.getByRole("checkbox")).toHaveCount(0); /* always on: no switch */
 
   const start = await counter(page);
   await page.waitForTimeout(1500);
-  expect(await counter(page), "unplayed audio turns no page").toBe(start);
+  expect(await counter(page), "unplayed: no turn").toBe(start);
 
   await page.locator(".bkr-listen").click();
   await playing(page);
-  await page.waitForTimeout(500);
-  const atPlay = await counter(page);
-  await setTime(page, CUES[6] + 1);
-  await page.waitForTimeout(2500);
-  expect(await counter(page), "playing and seeking past cues turns no page without signed-off cues").toBe(atPlay);
+  await expect(page.getByText("Following the narration.")).toBeVisible();
+
+  // Single-page cues well apart, so each lands on its own page in a spread.
+  for (const k of [4, 7, 10]) {
+    await setTime(page, CUES[k] - 2.5);
+    await page.waitForTimeout(1200);
+    await page.evaluate(() => { window.__turns = []; });
+    await page.waitForTimeout(3000);
+    const first = (await page.evaluate(() => window.__turns))[0];
+    expect(first, `page ${k + 1}: no turn near its cue ${CUES[k]}`).toBeTruthy();
+    const delta = first.t - CUES[k];
+    expect(Math.abs(delta), `page ${k + 1}: landed ${delta.toFixed(3)} s from its cue`).toBeLessThanOrEqual(0.5);
+  }
+
+  await page.locator("#nowplay").click(); /* pause */
+  await page.waitForTimeout(400);
+  const paused = await counter(page);
+  await setTime(page, CUES[15] + 1);
+  await page.waitForTimeout(2000);
+  expect(await counter(page), "paused audio: seeking past a cue turns no page").toBe(paused);
 });
 
-test.describe("verified cues (flag flipped in memory)", () => {
-  test.beforeEach(async ({ context }) => {
-    await context.addInitScript(hideDevOverlay);
-    await pretendVerified(context);
-  });
+test("after a manual flip, the narration's next page turns the book back", async ({ page }) => {
+  await page.goto(`${OTHER}${LITTLE_RAY}`, { waitUntil: "load" });
+  await ready(page);
+  await page.locator(".bkr-listen").click();
+  await playing(page);
+  await setTime(page, CUES[12] - 4);
+  await page.waitForTimeout(1300);
 
-  test("turns land within 0.5 s of each cue; paused audio turns nothing", async ({ page }) => {
-    await page.goto(`${OTHER}${LITTLE_RAY}`, { waitUntil: "load" });
-    await ready(page);
-    await expect(page.getByRole("checkbox", { name: "Turn pages with the narration" })).toBeChecked();
+  await page.getByRole("button", { name: "Previous page" }).click();
+  await page.getByRole("button", { name: "Previous page" }).click();
+  await page.waitForTimeout(1300);
+  const flipped = await counter(page);
+  await expect(page.getByRole("button", { name: "Back to the narration" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Play from this page" })).toBeVisible();
 
-    const start = await counter(page);
-    await page.waitForTimeout(1500);
-    expect(await counter(page), "verified but unplayed: no turn").toBe(start);
+  await page.evaluate(() => { window.__turns = []; });
+  await page.waitForTimeout(3500); /* past cue 12 */
+  const turns = await page.evaluate(() => window.__turns);
+  expect(turns.length, "the next cue turned the book").toBeGreaterThan(0);
+  expect(await counter(page)).not.toBe(flipped);
+  await expect(page.getByText("Following the narration.")).toBeVisible();
+});
 
-    await page.locator(".bkr-listen").click();
-    await playing(page);
-    await expect(page.getByText("Following the narration.")).toBeVisible();
+test("opening /read while the book plays: no jump, then the next page catches up", async ({ page }) => {
+  await page.goto(`${OTHER}${LITTLE_RAY}`, { waitUntil: "load" });
+  await ready(page);
+  await page.locator(".bkr-listen").click();
+  await playing(page);
+  await setTime(page, CUES[8] + 1);
 
-    // Single-page cues well apart, so each lands on its own page in a spread.
-    for (const k of [4, 7, 10]) {
-      await setTime(page, CUES[k] - 2.5);
-      await page.waitForTimeout(1200);
-      await page.evaluate(() => { window.__turns = []; });
-      await page.waitForTimeout(3000);
-      const first = (await page.evaluate(() => window.__turns))[0];
-      expect(first, `page ${k + 1}: no turn near its cue ${CUES[k]}`).toBeTruthy();
-      const delta = first.t - CUES[k];
-      expect(Math.abs(delta), `page ${k + 1}: landed ${delta.toFixed(3)} s from its cue`).toBeLessThanOrEqual(0.5);
-    }
+  // Client-side navigation keeps the shared player playing.
+  await page.getByRole("link", { name: "Back to the stories" }).click();
+  await page.waitForURL(/\/books/);
+  await page.getByRole("link", { name: "Read and listen to Little Ray" }).click();
+  await page.waitForURL(/\/read\/little-ray/);
+  await ready(page);
+  expect((await audio(page)).paused).toBe(false);
 
-    await page.locator("#nowplay").click(); /* pause */
-    await page.waitForTimeout(400);
-    const paused = await counter(page);
-    await setTime(page, CUES[15] + 1);
-    await page.waitForTimeout(2000);
-    expect(await counter(page), "paused audio: seeking past a cue turns no page").toBe(paused);
-  });
+  const mounted = await counter(page);
+  await expect(page.getByRole("button", { name: "Back to the narration" })).toBeVisible();
+  // Move within the narrated page only (not a page change), 2.5 s before the next cue.
+  const k = pageAt((await audio(page)).t);
+  await setTime(page, CUES[k + 1] - 2.5);
+  await page.waitForTimeout(1200);
+  expect(await counter(page), "no jump on mount while playing").toBe(mounted);
 
-  test("a manual flip suspends following until Back to the narration", async ({ page }) => {
-    await page.goto(`${OTHER}${LITTLE_RAY}`, { waitUntil: "load" });
-    await ready(page);
-    await page.locator(".bkr-listen").click();
-    await playing(page);
-    await page.waitForTimeout(800);
-
-    await page.getByRole("button", { name: "Next page" }).click();
-    await page.waitForTimeout(1300);
-    const flipped = await counter(page);
-    const back = page.getByRole("button", { name: "Back to the narration" });
-    await expect(back).toBeVisible();
-    await expect(page.getByRole("button", { name: "Play from this page" })).toBeVisible();
-
-    await page.evaluate(() => { window.__turns = []; });
-    await setTime(page, CUES[12] - 1);
-    await page.waitForTimeout(2500);
-    expect(await page.evaluate(() => window.__turns), "suspended: crossing a cue turns nothing").toEqual([]);
-    expect(await counter(page)).toBe(flipped);
-
-    await back.click();
-    await page.waitForTimeout(1500);
-    expect(await counter(page)).not.toBe(flipped);
-    await expect(page.getByText("Following the narration.")).toBeVisible();
-  });
-
-  test("opening /read while the book plays starts suspended, with no jump", async ({ page }) => {
-    await page.goto(`${OTHER}${LITTLE_RAY}`, { waitUntil: "load" });
-    await ready(page);
-    await page.locator(".bkr-listen").click();
-    await playing(page);
-    await setTime(page, CUES[8] + 1);
-
-    // Client-side navigation keeps the shared player playing.
-    await page.getByRole("link", { name: "Back to the stories" }).click();
-    await page.waitForURL(/\/books/);
-    await page.getByRole("link", { name: "Read and listen to Little Ray" }).click();
-    await page.waitForURL(/\/read\/little-ray/);
-    await ready(page);
-    expect((await audio(page)).paused).toBe(false);
-
-    const mounted = await counter(page);
-    await expect(page.getByText("The narration is playing on another page.")).toBeVisible();
-    await page.waitForTimeout(2500);
-    expect(await counter(page), "no jump on mount while playing").toBe(mounted);
-
-    await page.getByRole("button", { name: "Follow the narration" }).click();
-    await page.waitForTimeout(1500);
-    expect(await counter(page)).not.toBe(mounted);
-  });
+  await page.waitForTimeout(2500); /* past the next cue */
+  expect(await counter(page)).not.toBe(mounted);
+  await expect(page.getByText("Following the narration.")).toBeVisible();
 });
 
 test("Listen never seeks another source", async ({ page }) => {

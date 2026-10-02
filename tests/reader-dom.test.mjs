@@ -18,13 +18,11 @@ import { createRequire } from "node:module";
 import { JSDOM } from "jsdom";
 import {
   followAvailable,
-  followPrompt,
-  followReducer,
-  initialFollow,
+  followStep,
   isFollowing,
   listenAction,
+  narratedPage,
   pageForTime,
-  turnTarget,
   TURN_LEAD,
 } from "../lib/reader-follow.mjs";
 import { counterText, fitBook, numbering, openIndex, pageHeading, visiblePages } from "../lib/reader-pages.mjs";
@@ -34,10 +32,10 @@ const nodeRequire = createRequire(import.meta.url);
 const CUES = [0, 10, 20, 30, 40, 50];
 
 /* ---------------------------------------------------------------------------
-   Auto-turn state machine */
+   Auto-turn rules */
 
 describe("follow the narration: pure rules", () => {
-  const on = initialFollow({ available: true, isThisBook: false });
+  const step = (last, time, visible, lead = 0) => followStep({ last, time, cues: CUES, visible, lead });
 
   test("follow is available only for signed-off cues", () => {
     assert.equal(followAvailable({ cues: CUES, verified: true }), true);
@@ -56,66 +54,33 @@ describe("follow the narration: pure rules", () => {
     assert.equal(pageForTime(CUES, NaN), 0);
   });
 
-  test("never turns without audio: another source or nothing loaded", () => {
-    for (const status of ["idle", "playing", "paused"]) {
-      assert.equal(turnTarget(on, { isThisBook: false, status, time: 35, cues: CUES, visible: [0] }), null);
-    }
-  });
-
-  test("never turns on pause, loading, ended or error", () => {
+  test("follows only while this book's audio plays, with no switch", () => {
+    assert.equal(isFollowing({ available: true, isThisBook: true, status: "playing" }), true);
     for (const status of ["paused", "loading", "ended", "error", "idle"]) {
-      assert.equal(turnTarget(on, { isThisBook: true, status, time: 35, cues: CUES, visible: [0] }), null, status);
+      assert.equal(isFollowing({ available: true, isThisBook: true, status }), false, status);
     }
+    assert.equal(isFollowing({ available: true, isThisBook: false, status: "playing" }), false, "another source");
+    assert.equal(isFollowing({ available: false, isThisBook: true, status: "playing" }), false, "unverified cues");
   });
 
-  test("turns to the narrated page while this book plays", () => {
-    assert.equal(turnTarget(on, { isThisBook: true, status: "playing", time: 35, cues: CUES, visible: [0] }), 3);
-    assert.equal(turnTarget(on, { isThisBook: true, status: "playing", time: 35, cues: CUES, visible: [3, 4] }), null, "already showing");
+  test("the first step only records the narrated page: no jump on arrival", () => {
+    assert.deepEqual(step(null, 45, [0]), { page: 4, target: null });
+  });
+
+  test("turns when the narration reaches a new page, wherever the visitor is", () => {
+    assert.deepEqual(step(1, 15, [1]), { page: 1, target: null }, "same page: stays");
+    assert.deepEqual(step(1, 15, [4]), { page: 1, target: null }, "turned away by hand: waits for the next page");
+    assert.deepEqual(step(1, 21, [4]), { page: 2, target: 2 }, "next page of narration: goes there");
+    assert.deepEqual(step(1, 21, [2, 3]), { page: 2, target: null }, "already on screen");
+    assert.deepEqual(step(1, 45, [1]), { page: 4, target: 4 }, "a seek to another page turns too");
   });
 
   test("an animated turn looks ahead by TURN_LEAD so the page lands on its cue", () => {
-    const at = (time, lead) => turnTarget(on, { isThisBook: true, status: "playing", time, cues: CUES, visible: [0], lead });
     assert.equal(TURN_LEAD > 0 && TURN_LEAD + 0.05 <= 0.5 + 1e-9, true, "with the 0.05 s cue slack the turn never starts more than 0.5 s early");
-    assert.equal(at(CUES[1] - TURN_LEAD - 0.1, TURN_LEAD), null, "too early: stays on page 0");
-    assert.equal(at(CUES[1] - TURN_LEAD + 0.01, TURN_LEAD), 1, "starts the turn just ahead of the cue");
-    assert.equal(at(CUES[1] - TURN_LEAD + 0.01, 0), null, "no lead for instant (reduced-motion) turns");
-  });
-
-  test("never on mount: opening while this book plays starts suspended", () => {
-    const mounted = initialFollow({ available: true, isThisBook: true });
-    assert.equal(mounted.suspended, true);
-    assert.equal(turnTarget(mounted, { isThisBook: true, status: "playing", time: 45, cues: CUES, visible: [0] }), null);
-    assert.deepEqual(followPrompt(mounted, { isThisBook: true, status: "playing" }), { kind: "mount" });
-    const resumed = followReducer(mounted, { type: "resume" });
-    assert.equal(turnTarget(resumed, { isThisBook: true, status: "playing", time: 45, cues: CUES, visible: [0] }), 4);
-  });
-
-  test("a manual flip during playback suspends; resume and Listen follow again", () => {
-    const flipped = followReducer(on, { type: "manualFlip", isThisBook: true, status: "playing" });
-    assert.equal(flipped.suspended, true);
-    assert.equal(isFollowing(flipped, { isThisBook: true, status: "playing" }), false);
-    assert.equal(turnTarget(flipped, { isThisBook: true, status: "playing", time: 25, cues: CUES, visible: [4] }), null);
-    assert.deepEqual(followPrompt(flipped, { isThisBook: true, status: "playing" }), { kind: "flip" });
-    assert.equal(followReducer(flipped, { type: "resume" }).suspended, false);
-    assert.equal(followReducer(flipped, { type: "listen" }).suspended, false);
-  });
-
-  test("a flip while reading without this book's audio changes nothing", () => {
-    assert.equal(followReducer(on, { type: "manualFlip", isThisBook: false, status: "playing" }), on);
-    assert.equal(followReducer(on, { type: "manualFlip", isThisBook: true, status: "idle" }), on);
-  });
-
-  test("only when verified: unverified cues never turn a page", () => {
-    const off = initialFollow({ available: false, isThisBook: false });
-    assert.equal(turnTarget(off, { isThisBook: true, status: "playing", time: 35, cues: CUES, visible: [0] }), null);
-    assert.equal(followPrompt(off, { isThisBook: true, status: "playing" }), null);
-  });
-
-  test("the toggle switches following off and on", () => {
-    const off = followReducer(on, { type: "toggle", on: false });
-    assert.equal(turnTarget(off, { isThisBook: true, status: "playing", time: 35, cues: CUES, visible: [0] }), null);
-    const back = followReducer(off, { type: "toggle", on: true });
-    assert.equal(turnTarget(back, { isThisBook: true, status: "playing", time: 35, cues: CUES, visible: [0] }), 3);
+    assert.equal(step(0, CUES[1] - TURN_LEAD - 0.1, [0], TURN_LEAD).target, null, "too early: stays on page 0");
+    assert.equal(step(0, CUES[1] - TURN_LEAD + 0.01, [0], TURN_LEAD).target, 1, "starts the turn just ahead of the cue");
+    assert.equal(step(0, CUES[1] - TURN_LEAD + 0.01, [0], 0).target, null, "no lead for instant (reduced-motion) turns");
+    assert.equal(narratedPage(CUES, 9.6, TURN_LEAD), 1);
   });
 
   test("Listen seeks only this book, otherwise loads this book at the page's cue", () => {
@@ -430,22 +395,21 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     await r.unmount();
   });
 
-  test("unverified cues: the toggle is disabled with a reason, and pages never turn", async () => {
+  test("unverified cues: no follow note, and pages never turn", async () => {
     player.reset();
     const r = await mount({ book: story, pagesText: words, cues: CUES, verified: false });
-    const box = r.q('.bkr-check input[type="checkbox"]');
-    assert.equal(box.disabled, true);
-    assert.match(document.getElementById(box.getAttribute("aria-describedby")).textContent, /checked by ear/);
+    assert.equal(r.q('input[type="checkbox"]'), null, "no page-turning switch");
     await act(async () => player.set({ track: { src: story.audio.src }, status: "playing" }));
     await time(45);
     assert.equal(r.counter(), "Page 1 of 6");
+    assert.equal(r.q(".bkr-follow"), null);
     await r.unmount();
   });
 
-  test("verified cues: pages follow only while this book plays", async () => {
+  test("verified cues: pages follow by default, only while this book plays", async () => {
     player.reset();
     const r = await mount({ book: story, pagesText: words, cues: CUES, verified: true });
-    assert.equal(r.q('.bkr-check input').checked, true, "Turn pages with the narration is on by default");
+    assert.equal(r.q('input[type="checkbox"]'), null, "always on: there is no switch");
     await time(35);
     assert.equal(r.counter(), "Page 1 of 6", "reading without audio never turns");
     await act(async () => player.set({ track: { src: "/audio/misty/08-misty.mp3" }, status: "playing" }));
@@ -455,42 +419,52 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     await time(35);
     assert.equal(r.counter(), "Page 1 of 6", "paused never turns");
     await act(async () => player.set({ status: "playing" }));
-    await time(35);
-    assert.equal(r.counter(), "Page 4 of 6", "playing turns to the narrated page");
+    assert.equal(r.counter(), "Page 1 of 6", "starting playback does not jump");
+    await time(41);
+    assert.equal(r.counter(), "Page 5 of 6", "the narration's next page turns the book");
     await time(52);
-    assert.equal(r.counter(), "Page 6 of 6", "a NowBar seek turns the page while following");
+    assert.equal(r.counter(), "Page 6 of 6", "a NowBar seek turns the page too");
     await r.unmount();
   });
 
-  test("opening while this book plays starts suspended, with Follow the narration", async () => {
+  test("coming back while this book plays: no jump, then the next page turn catches up", async () => {
     player.reset();
     player.set({ track: { src: story.audio.src }, status: "playing" });
     player.audio.currentTime = 45;
     const r = await mount({ book: story, pagesText: words, cues: CUES, verified: true });
     assert.equal(r.counter(), "Page 1 of 6", "no jump on mount");
     await time(46);
-    assert.equal(r.counter(), "Page 1 of 6");
-    await click(r.button("Follow the narration"));
-    assert.equal(r.counter(), "Page 5 of 6");
+    assert.equal(r.counter(), "Page 1 of 6", "same narrated page: stays");
+    assert.ok(r.button("Back to the narration"), "offers to go now");
+    await time(50);
+    assert.equal(r.counter(), "Page 6 of 6", "the next page of narration takes the book there");
+    assert.equal(r.button("Back to the narration"), undefined);
     await r.unmount();
   });
 
-  test("a manual flip during playback suspends, with Play from this page and Back to the narration", async () => {
+  test("a manual flip during playback: the next page turn brings the book back", async () => {
     player.reset();
     const r = await mount({ book: story, pagesText: words, cues: CUES, verified: true });
     await act(async () => player.set({ track: { src: story.audio.src }, status: "playing" }));
+    await time(5);
     await time(12);
     assert.equal(r.counter(), "Page 2 of 6");
     await click(r.q(".bkr-next"));
-    assert.equal(r.counter(), "Page 3 of 6");
+    await click(r.q(".bkr-next"));
+    assert.equal(r.counter(), "Page 4 of 6");
     assert.ok(r.button("Play from this page") && r.button("Back to the narration"));
     await time(15);
-    assert.equal(r.counter(), "Page 3 of 6", "suspended: the narration no longer turns pages");
-    await click(r.button("Play from this page"));
-    assert.deepEqual(player.calls.at(-1), { type: "seek", time: 20 }, "same source: seek to this page's cue");
+    assert.equal(r.counter(), "Page 4 of 6", "same narrated page: the visitor's page stays");
+    await time(21);
+    assert.equal(r.counter(), "Page 3 of 6", "the next page of narration turns the book to it");
     await click(r.q(".bkr-next"));
-    await click(r.button("Back to the narration"));
+    await click(r.button("Play from this page"));
+    assert.deepEqual(player.calls.at(-1), { type: "seek", time: 30 }, "same source: seek to this page's cue");
+    await click(r.q(".bkr-prev"));
+    await click(r.q(".bkr-prev"));
     assert.equal(r.counter(), "Page 2 of 6");
+    await click(r.button("Back to the narration"));
+    assert.equal(r.counter(), "Page 3 of 6");
     await r.unmount();
   });
 
@@ -514,7 +488,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     await act(async () => player.set({ track: { src: play.audio.src }, status: "playing" }));
     await time(40);
     assert.equal(r.counter(), "Preview: page 1 of 6 (full script 47 pages)");
-    assert.equal(r.q(".bkr-check"), null, "no follow toggle for a preview clip");
+    assert.equal(r.q(".bkr-follow"), null, "no following for a preview clip");
     await r.unmount();
   });
 
@@ -529,7 +503,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     await act(async () => flipPlayer.timeTo(22));
     await act(async () => new Promise((res) => setTimeout(res, 120)));
     assert.equal(r.counter(), "Page 3 of 6", "the book follows to the second target");
-    assert.equal(r.button("Play from this page"), undefined, "following was not suspended");
+    assert.equal(r.button("Back to the narration"), undefined, "the book is on the narrated page");
     await act(async () => flipPlayer.timeTo(33));
     await act(async () => new Promise((res) => setTimeout(res, 120)));
     assert.equal(r.counter(), "Page 4 of 6", "and keeps following");
