@@ -58,7 +58,7 @@ ROOT = Path(__file__).resolve().parent.parent
 STORIES = {
     "little-ray": "/audio/chinese-chimes-audiobooks/little-ray.mp3",
     "little-hi-doh": "/audio/chinese-chimes-audiobooks/hi-doh.mp3",
-    "funny-fah-learns-when-to-stop": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop.mp3",
+    "funny-fah-learns-when-to-stop": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop-v2.mp3",
     "imaginative-little-mee": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
 }
 

@@ -108,7 +108,7 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] Allen: click the Cloudflare verification email sent to allen0295@gmail.com, or support@ mail will not forward
 - [B] Legal text sign-off, play licence terms (legal pages stay unpublished)
 - [B] Ultra-wide cap, /shows indexing, tel: links, painting dimensions and medium
-- [B] funny-fah mp3 repeats 338-537 s after 541 s (pages 23-34 read twice): trim at ~541 s or re-render, then re-run scripts/align-story-cues.py. /audio/* is cached for a year as immutable, so save the new recording under a new file name and update content/story-cues and the audio manifest (audioSha256) with it; never overwrite the mp3 in place (the same goes for /images and /og)
+- [x] funny-fah mp3 repeat removed (2026-10-02): trimmed at 540.75 s (stream copy, in the pause after "...was not a monster?"; the repeat began at 540.98 s with "Boom!") and saved as funny-fah-learns-when-to-stop-v2.mp3; cue file audio, audioSha256 and duration updated (cues unchanged, all before the cut); old mp3 removed
 - [B] Optional cue ear-check per story (cues are live without it) (docs/cue-review/<slug>/index.html; low-confidence picture pages listed there); ElevenLabs source script if alignment confidence < 0.6
 - [B] JS budget: accept the overage on interactive routes, raise the budget to 160 KB, or choose one of the options in docs/PERFORMANCE.md
 - [B] Confirm "Albums" as the /music H1 wording

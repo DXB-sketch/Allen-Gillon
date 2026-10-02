@@ -1,14 +1,11 @@
 {
   "slug": "funny-fah-learns-when-to-stop",
-  "audio": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop.mp3",
-  "audioSha256": "39545ad9559858c9d0912b381cbd6bd5f937d0169a0be541b1480bca5c140b13",
-  "duration": 746.862,
+  "audio": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop-v2.mp3",
+  "audioSha256": "dab5a4b2a1ea759b5b83358e35ea9467ea8d66a90591e173183bd72fe06a7919",
+  "duration": 540.774,
   "pageCount": 34,
   "verified": true,
   "method": "OCR page text (RapidOCR) segmented against stable-ts 2.19.1 (small) word timestamps (IDF-weighted dynamic programming refined to each page's first printed words), cues snapped to speech onsets (silence detection); picture-only pages placed from YouTube caption timing and ffmpeg scene changes",
-  "warnings": [
-    "The mp3 repeats part of the story from 541.0 s to the end. Cues follow the first reading, so the last page stays up while the repeat plays; trim the audio at about 541.0 s (then rerun this script) or re-render it."
-  ],
   "cues": [
     {
       "page": 1,
