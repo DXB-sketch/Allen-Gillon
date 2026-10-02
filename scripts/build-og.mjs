@@ -27,6 +27,15 @@ const H = 630;
 const QUALITY = 80;
 const FONT = "'Times New Roman', Times, 'Liberation Serif', serif";
 const HOST_LABEL = { main: "allengillon.com", other: "other.allengillon.com" };
+/* /og/* is cached for a year as immutable, so a book whose cover changes gets
+   a new file name: bump its number here. (2026-10-02: the Chime Time series
+   numbers were changed on these four covers.) */
+const COVER_REVISION = {
+  "little-hi-doh": 2,
+  "little-ray": 2,
+  "imaginative-little-mee": 2,
+  "funny-fah-learns-when-to-stop": 2,
+};
 
 // Albums shown on /music (app/(main)/music/page.jsx). The hidden Tim Hughes
 // album is left out on purpose, like on the page.
@@ -212,7 +221,9 @@ for (const book of books()) {
   const buf = book.cover
     ? await imageCard({ site: "other", title: book.title, subtitle, source: book.cover })
     : await textJpeg({ site: "other", title: book.title, subtitle });
-  await emit("other", `/read/${book.slug}`, `read/${book.slug}.jpg`, buf, `Cover of ${book.title}`, [`/read/${book.slug}/text`]);
+  const rev = COVER_REVISION[book.slug];
+  const file = rev ? `read/${book.slug}-v${rev}.jpg` : `read/${book.slug}.jpg`;
+  await emit("other", `/read/${book.slug}`, file, buf, `Cover of ${book.title}`, [`/read/${book.slug}/text`]);
 }
 
 await writeFile(path.join(ROOT, "content", "og-images.json"), `${JSON.stringify(manifest, null, 2)}\n`);

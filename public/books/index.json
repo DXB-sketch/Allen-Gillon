@@ -143,68 +143,6 @@
     "textRoute": null
   },
   {
-    "slug": "funny-fah-learns-when-to-stop",
-    "title": "Funny Fah Learns When to Stop",
-    "author": "Allen Gillon",
-    "section": "childrens",
-    "status": "free",
-    "blurb": "A Chinese Chimes story about knowing when to stop.",
-    "download": "public",
-    "pdf": "/books/funny-fah-learns-when-to-stop/funny-fah-learns-when-to-stop.pdf",
-    "pdfBytes": 7824080,
-    "price": 0,
-    "pageCount": 34,
-    "shownPages": 34,
-    "previewPages": null,
-    "contentStartPage": 2,
-    "firstPageNumber": 4,
-    "layout": "single",
-    "aspect": [
-      1080,
-      607
-    ],
-    "cover": "/books/funny-fah-learns-when-to-stop/p001.webp",
-    "audio": {
-      "src": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop-v2.mp3",
-      "kind": "audiobook",
-      "label": "Listen to the audiobook"
-    },
-    "video": "OAu1PmILqeA",
-    "readRoute": "/read/funny-fah-learns-when-to-stop",
-    "textRoute": "/read/funny-fah-learns-when-to-stop/text"
-  },
-  {
-    "slug": "imaginative-little-mee",
-    "title": "Imaginative Little Mee",
-    "author": "Allen Gillon",
-    "section": "childrens",
-    "status": "free",
-    "blurb": "A Chinese Chimes story about imagination and listening.",
-    "download": "public",
-    "pdf": "/books/imaginative-little-mee/imaginative-little-mee.pdf",
-    "pdfBytes": 6327910,
-    "price": 0,
-    "pageCount": 29,
-    "shownPages": 29,
-    "previewPages": null,
-    "contentStartPage": 2,
-    "firstPageNumber": 1,
-    "layout": "single",
-    "aspect": [
-      1080,
-      607
-    ],
-    "cover": "/books/imaginative-little-mee/p001.webp",
-    "audio": {
-      "src": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
-      "kind": "audiobook",
-      "label": "Listen to the audiobook"
-    },
-    "video": "ZwzVEIQp3Cw",
-    "readRoute": "/read/imaginative-little-mee",
-    "textRoute": "/read/imaginative-little-mee/text"
-  },
-  {
     "slug": "little-hi-doh",
     "title": "Hi-Doh",
     "author": "Allen Gillon",
@@ -213,7 +151,7 @@
     "blurb": "A Chinese Chimes story about learning to listen to others.",
     "download": "public",
     "pdf": "/books/little-hi-doh/little-hi-doh.pdf",
-    "pdfBytes": 5788669,
+    "pdfBytes": 5796531,
     "price": 0,
     "pageCount": 25,
     "shownPages": 25,
@@ -244,7 +182,7 @@
     "blurb": "A Chinese Chimes story about anger, friendship and making amends.",
     "download": "public",
     "pdf": "/books/little-ray/little-ray.pdf",
-    "pdfBytes": 5010824,
+    "pdfBytes": 5019853,
     "price": 0,
     "pageCount": 19,
     "shownPages": 19,
@@ -265,6 +203,68 @@
     "video": "cEuPWVPPN0o",
     "readRoute": "/read/little-ray",
     "textRoute": "/read/little-ray/text"
+  },
+  {
+    "slug": "imaginative-little-mee",
+    "title": "Imaginative Little Mee",
+    "author": "Allen Gillon",
+    "section": "childrens",
+    "status": "free",
+    "blurb": "A Chinese Chimes story about imagination and listening.",
+    "download": "public",
+    "pdf": "/books/imaginative-little-mee/imaginative-little-mee.pdf",
+    "pdfBytes": 6341401,
+    "price": 0,
+    "pageCount": 29,
+    "shownPages": 29,
+    "previewPages": null,
+    "contentStartPage": 2,
+    "firstPageNumber": 1,
+    "layout": "single",
+    "aspect": [
+      1080,
+      607
+    ],
+    "cover": "/books/imaginative-little-mee/p001.webp",
+    "audio": {
+      "src": "/audio/chinese-chimes-audiobooks/imaginative-little-mee.mp3",
+      "kind": "audiobook",
+      "label": "Listen to the audiobook"
+    },
+    "video": "ZwzVEIQp3Cw",
+    "readRoute": "/read/imaginative-little-mee",
+    "textRoute": "/read/imaginative-little-mee/text"
+  },
+  {
+    "slug": "funny-fah-learns-when-to-stop",
+    "title": "Funny Fah Learns When to Stop",
+    "author": "Allen Gillon",
+    "section": "childrens",
+    "status": "free",
+    "blurb": "A Chinese Chimes story about knowing when to stop.",
+    "download": "public",
+    "pdf": "/books/funny-fah-learns-when-to-stop/funny-fah-learns-when-to-stop.pdf",
+    "pdfBytes": 7832917,
+    "price": 0,
+    "pageCount": 34,
+    "shownPages": 34,
+    "previewPages": null,
+    "contentStartPage": 2,
+    "firstPageNumber": 4,
+    "layout": "single",
+    "aspect": [
+      1080,
+      607
+    ],
+    "cover": "/books/funny-fah-learns-when-to-stop/p001.webp",
+    "audio": {
+      "src": "/audio/chinese-chimes-audiobooks/funny-fah-learns-when-to-stop-v2.mp3",
+      "kind": "audiobook",
+      "label": "Listen to the audiobook"
+    },
+    "video": "OAu1PmILqeA",
+    "readRoute": "/read/funny-fah-learns-when-to-stop",
+    "textRoute": "/read/funny-fah-learns-when-to-stop/text"
   },
   {
     "slug": "practice-in-communication-book-1",

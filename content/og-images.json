@@ -380,53 +380,53 @@
       "height": 630,
       "alt": "Cover of Breakout"
     },
-    "/read/funny-fah-learns-when-to-stop": {
-      "url": "/og/other/read/funny-fah-learns-when-to-stop.jpg",
-      "width": 1200,
-      "height": 630,
-      "alt": "Cover of Funny Fah Learns When to Stop"
-    },
-    "/read/funny-fah-learns-when-to-stop/text": {
-      "url": "/og/other/read/funny-fah-learns-when-to-stop.jpg",
-      "width": 1200,
-      "height": 630,
-      "alt": "Cover of Funny Fah Learns When to Stop"
-    },
-    "/read/imaginative-little-mee": {
-      "url": "/og/other/read/imaginative-little-mee.jpg",
-      "width": 1200,
-      "height": 630,
-      "alt": "Cover of Imaginative Little Mee"
-    },
-    "/read/imaginative-little-mee/text": {
-      "url": "/og/other/read/imaginative-little-mee.jpg",
-      "width": 1200,
-      "height": 630,
-      "alt": "Cover of Imaginative Little Mee"
-    },
     "/read/little-hi-doh": {
-      "url": "/og/other/read/little-hi-doh.jpg",
+      "url": "/og/other/read/little-hi-doh-v2.jpg",
       "width": 1200,
       "height": 630,
       "alt": "Cover of Hi-Doh"
     },
     "/read/little-hi-doh/text": {
-      "url": "/og/other/read/little-hi-doh.jpg",
+      "url": "/og/other/read/little-hi-doh-v2.jpg",
       "width": 1200,
       "height": 630,
       "alt": "Cover of Hi-Doh"
     },
     "/read/little-ray": {
-      "url": "/og/other/read/little-ray.jpg",
+      "url": "/og/other/read/little-ray-v2.jpg",
       "width": 1200,
       "height": 630,
       "alt": "Cover of Little Ray"
     },
     "/read/little-ray/text": {
-      "url": "/og/other/read/little-ray.jpg",
+      "url": "/og/other/read/little-ray-v2.jpg",
       "width": 1200,
       "height": 630,
       "alt": "Cover of Little Ray"
+    },
+    "/read/imaginative-little-mee": {
+      "url": "/og/other/read/imaginative-little-mee-v2.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Imaginative Little Mee"
+    },
+    "/read/imaginative-little-mee/text": {
+      "url": "/og/other/read/imaginative-little-mee-v2.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Imaginative Little Mee"
+    },
+    "/read/funny-fah-learns-when-to-stop": {
+      "url": "/og/other/read/funny-fah-learns-when-to-stop-v2.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Funny Fah Learns When to Stop"
+    },
+    "/read/funny-fah-learns-when-to-stop/text": {
+      "url": "/og/other/read/funny-fah-learns-when-to-stop-v2.jpg",
+      "width": 1200,
+      "height": 630,
+      "alt": "Cover of Funny Fah Learns When to Stop"
     },
     "/read/practice-in-communication-book-1": {
       "url": "/og/other/read/practice-in-communication-book-1.jpg",

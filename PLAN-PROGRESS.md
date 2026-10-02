@@ -123,3 +123,4 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - [B] After the legal pages are published: `npm run a11y:pa11y`, the axe sweep and Lighthouse on /privacy, /terms and /accessibility
 - [B] Legal check: the paintings' JSON-LD return policy (MerchantReturnNotPermitted), see LEGAL-TODO.md
 - [B] Desktop only: opening a play preview's cover in a two-page spread shifts layout by about 0.10 once (react-pageflip's hard cover). Accept, use a soft cover, or stop the automatic opening (docs/PERFORMANCE.md)
+- [x] Chime Time stories reordered (2026-10-02): Hi-Doh, Little Ray, Little Mee, Funny Fah (content/books.config.json and STORY_ORDER on /books). Covers relabelled BOOK ONE to BOOK FOUR to match (cover image in each PDF, p001 page images, page-1 text, and OG images renamed -v2 via COVER_REVISION in scripts/build-og.mjs because /og is immutable).

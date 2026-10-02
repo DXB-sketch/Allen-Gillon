@@ -9,7 +9,7 @@
 
 import { playPrice } from "../../../lib/storefront.mjs";
 
-export const STORY_ORDER = ["funny-fah-learns-when-to-stop", "imaginative-little-mee", "little-hi-doh", "little-ray"];
+export const STORY_ORDER = ["little-hi-doh", "little-ray", "imaginative-little-mee", "funny-fah-learns-when-to-stop"];
 export const PLAY_ORDER = ["melting-pot", "the-other-mans-grass", "tribute-to-calamity-jane", "three-heroes-of-sherwood", "breakout"];
 export const TEXTBOOK_ORDER = ["practice-in-communication-book-1", "practice-in-communication-book-2", "riddled-with-language"];
 
