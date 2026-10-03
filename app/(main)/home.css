@@ -12,7 +12,8 @@
    is held to 720px (1.2x) and the home name is set larger than other pages'
    L1 (13rem cap, not 10rem) so the left of the hero is filled, not empty. */
 .home-hero{padding-block:clamp(8px,2vw,24px) 0;row-gap:clamp(16px,2.4vw,36px);}
-.home-hero > h1{grid-row:1;font-size:clamp(4rem,11vw,13rem);}
+.home-hero > h1{grid-row:1;font-size:clamp(4rem,11vw,13rem);
+  color:var(--blue);text-shadow:var(--overprint-red);}
 .home-name{white-space:nowrap;}
 .home-hero > .home-photo{grid-column:wide;grid-row:2;min-width:0;}
 /* The photo hangs in the same two-ink frame as Ann's paintings: a paper mat,
