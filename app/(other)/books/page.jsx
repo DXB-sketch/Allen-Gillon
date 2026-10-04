@@ -160,7 +160,7 @@ export default function BooksPage() {
       <section className="shelf-section texts-section band ink" id="classroom-texts" aria-labelledby="texts-title">
         <div className="shelf-open texts-open">
           <h2 className="shelf-title" id="texts-title"><span className="shelf-qual">Classroom</span> <span className="shelf-word">textbooks</span></h2>
-          <p>These books come from Allen&rsquo;s twenty-five years of teaching. They were published for use in schools.</p>
+          <p>In the 1980&rsquo;s Allen wrote the following books for primary school teachers. His texts encouraged pupils to appreciate grammar and literature skills.</p>
           <ShelfInkwell className="shelf-art inkwell-art" ground="ink" draw />
         </div>
         <ul className="shelf texts-shelf">
