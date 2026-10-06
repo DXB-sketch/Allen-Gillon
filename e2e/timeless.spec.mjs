@@ -11,7 +11,21 @@ test("every photo and video renders once, and the sticky aside is gone", async (
   const srcs = await page.$$eval("main img, main video source", (els) => els.map((e) => e.getAttribute("src")));
   expect(srcs.length).toBeGreaterThanOrEqual(6);
   expect(new Set(srcs).size, `duplicates in ${srcs.join(", ")}`).toBe(srcs.length);
-  expect(await page.locator("main video").count()).toBe(1);
+  expect(await page.locator("main .scene video").count()).toBe(1);
+});
+
+test("Timeless Duo, with Ann sits under Today on an ink band, linking back to the main site", async ({ page }) => {
+  await page.goto(URL, { waitUntil: "load" });
+  const band = page.locator("#timeless-duo");
+  await expect(band).toHaveClass(/\bink\b/);
+  expect(await band.evaluate((el) => el.previousElementSibling.id)).toBe("timeless");
+  await expect(band.locator("h2")).toHaveText("Timeless Duo, with Ann");
+  await expect(band.locator("video")).toHaveCount(2);
+  const cross = band.locator("a[data-cross-site='main']");
+  await expect(cross).toHaveCount(2);
+  for (const href of await cross.evaluateAll((els) => els.map((a) => a.getAttribute("href")))) {
+    expect(href).not.toMatch(/\/\/other\./);
+  }
 });
 
 test("alt text describes each image instead of repeating its caption", async ({ page }) => {
@@ -28,7 +42,7 @@ test("alt text describes each image instead of repeating its caption", async ({ 
 
 test("the video has a poster, lazy preload and a captions track that loads", async ({ page, request }) => {
   await page.goto(URL, { waitUntil: "load" });
-  const video = page.locator("main video");
+  const video = page.locator("main .scene video");
   await expect(video).toHaveAttribute("poster", /\.jpg$/);
   expect(["none", "metadata"]).toContain(await video.getAttribute("preload"));
   const track = video.locator('track[kind="captions"]');

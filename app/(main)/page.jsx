@@ -55,7 +55,7 @@ export default function Page() {
           />
         </div>
         <p className="home-intro">
-          Allen plays smooth guitar in restaurants around Bribie Island. Diners have called the music &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.
+          Allen plays smooth guitar memories in restaurants on Bribie Island. Visiting diners have commented that his music is &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.
         </p>
       </header>
 

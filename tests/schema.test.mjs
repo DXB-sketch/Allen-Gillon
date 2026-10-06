@@ -159,17 +159,17 @@ test("musicAlbum: MusicRecording tracks and a free Offer from Allen", () => {
   assert.deepEqual(m.byArtist.map((p) => p["@id"]), [IDS.allen, IDS.ann], "Misty is Ann and Allen");
 });
 
-test("book: plays cost A$1.00 from Allen, preview audio, teacher audience", () => {
+test("book: plays cost A$10.00 from Allen, preview audio, teacher audience", () => {
   assert.equal(playNode["@type"], "Book");
   assert.equal(playNode.url, `${OTHER}/read/melting-pot`);
-  assert.equal(playNode.offers.price, "1.00");
+  assert.equal(playNode.offers.price, "10.00");
   assert.equal(playNode.offers.priceCurrency, "AUD");
   assert.equal(playNode.offers.seller["@id"], IDS.allen);
   assert.equal(playNode.offers.seller.name, "Allen Gillon");
   assert.equal(
     playNode.offers.availability,
     playLinksCurrent ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
-    "no in-stock claim while the A$1 play links are not live",
+    "no in-stock claim while the A$10 play links are not live",
   );
   assert.equal(playNode.isAccessibleForFree, false);
   assert.equal(playNode.audience.suggestedMinAge, 10);

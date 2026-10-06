@@ -2,9 +2,9 @@ import Link from "next/link";
 
 // The one quiet comment link for a section or a page. It opens /comments with
 // the subject filled in and a "Back to" link that returns here.
-export default function SectionComment({ subject, returnTo, returnLabel, lead = null, children = "Leave a comment" }) {
+export default function SectionComment({ subject, returnTo, returnLabel, lead = null, children = "Leave a comment", ...rest }) {
   return (
-    <p className="section-comment">
+    <p className="section-comment" {...rest}>
       {lead ? <>{lead} </> : null}
       <Link prefetch={false} href={{ pathname: "/comments", query: { subject, returnTo, returnLabel } }}>{children}</Link>
     </p>

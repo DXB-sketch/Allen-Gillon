@@ -4,6 +4,7 @@ import TimelessCurtain from "../../../components/illustrations/TimelessCurtain";
 import TimelessGibson from "../../../components/illustrations/TimelessGibson";
 import TimelessMics from "../../../components/illustrations/TimelessMics";
 import TimelessCorner from "../../../components/illustrations/TimelessCorner";
+import MusicMic from "../../../components/illustrations/MusicMic";
 import { pageMetadata } from "../../../lib/seo.mjs";
 import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "./biography.css";
@@ -169,6 +170,60 @@ export default function BiographyPage() {
               alt="A close-up of Allen smiling, white-haired, in gold-rimmed glasses and a striped shirt."
               caption="Allen today, Bribie Island."
             />
+          </div>
+        </section>
+
+        <section id="timeless-duo" className="timeless-band band ink" aria-labelledby="timeless-title">
+          <h2 id="timeless-title" className="script">
+            Timeless Duo, with Ann
+          </h2>
+          <div className="timeless-video timeless-video--lead">
+            <video
+              controls
+              playsInline
+              preload="none"
+              poster="/images/videos/timeless-masquerade.webp"
+              width="1024"
+              height="576"
+              aria-label="Ann and Allen performing This Masquerade"
+            >
+              <source src="/videos/timeless-masquerade.mp4" type="video/mp4" />
+              <track kind="captions" src="/videos/timeless-masquerade.v1.en.vtt" srcLang="en" label="English" default />
+              Your browser does not support video playback.
+            </video>
+          </div>
+          <div className="timeless-video timeless-video--duet">
+            <video
+              controls
+              playsInline
+              preload="none"
+              poster="/images/videos/timeless-unforgettable.webp"
+              width="1920"
+              height="1080"
+              aria-label="Ann and Allen performing Unforgettable"
+            >
+              <source src="/videos/timeless-unforgettable.mp4" type="video/mp4" />
+              <track kind="captions" src="/videos/timeless-unforgettable.v1.en.vtt" srcLang="en" label="English" default />
+              Your browser does not support video playback.
+            </video>
+          </div>
+          <div className="timeless-text">
+            <p>
+              Allen and Ann have played together for many years. Their duet, Timeless Duo, has taken them from Sydney
+              clubs to a convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
+            </p>
+            <p>
+              Ann also paints. You can see her work on{" "}
+              <Link prefetch={false} href="/anns-art">Ann&rsquo;s Art Room</Link>.
+            </p>
+            <p>
+              Their album together is <CrossSiteLink site="main" path="/music#misty">Misty</CrossSiteLink>. To have
+              Timeless Duo play your restaurant or event, see{" "}
+              <CrossSiteLink site="main" path="/hire">Contact Allen</CrossSiteLink>.
+            </p>
+          </div>
+          <div className="instrument instrument--mic" data-motion="from-right">
+            <MusicMic ground="ink" />
           </div>
         </section>
       </div>

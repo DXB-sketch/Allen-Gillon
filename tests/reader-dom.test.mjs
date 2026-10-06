@@ -256,7 +256,7 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
   };
   const play = {
     ...story, slug: "melting-pot", title: "Melting Pot", section: "plays", status: "preview", download: "paid", pdf: null,
-    pdfBytes: null, price: 100, pageCount: 47, shownPages: 6, previewPages: 6, contentStartPage: 6, layout: "auto",
+    pdfBytes: null, price: 1000, pageCount: 47, shownPages: 6, previewPages: 6, contentStartPage: 6, layout: "auto",
     aspect: [1080, 1526], audio: { src: "/audio/school-play-previews/melting-pot.mp3", kind: "preview", label: "Listen to a preview" },
     video: null, textRoute: null,
   };
@@ -311,13 +311,13 @@ describe("BookReader in the DOM", { skip: esbuild ? false : "esbuild is not inst
     const r = await mount({ book: play, pagesText: words, buyHref: "" });
     assert.equal(r.q("a.bkr-download"), null);
     assert.equal(r.q('a[download]'), null);
-    assert.match(r.q(".bkr-toolbar").textContent, /A\$1 download\. Online checkout coming soon/);
+    assert.match(r.q(".bkr-toolbar").textContent, /A\$10 download\. Online checkout coming soon/);
     assert.ok(r.button("Listen to a preview"));
     assert.equal(r.counter(), "Preview: page 1 of 6 (full script 47 pages)");
     assert.equal(r.button("Introduction"), undefined, "a play preview has no Introduction link: it opens on page 2");
     await key(r.q(".bkr-next"), "End");
     assert.equal(r.counter(), "End of the preview (full script 47 pages)");
-    assert.match(r.q(".bkr-end").textContent, /That’s the preview\.Buy the full script \(A\$1\)/);
+    assert.match(r.q(".bkr-end").textContent, /That’s the preview\.Buy the full script \(A\$10\)/);
     assert.equal(r.q(".bkr-end a"), null, "no live checkout link while play links are off");
     await r.unmount();
   });

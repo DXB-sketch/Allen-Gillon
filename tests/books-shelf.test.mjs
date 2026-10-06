@@ -38,16 +38,16 @@ test("covers: p001.webp once the book is built, the scan until then", () => {
   assert.equal(coverFor({ slug: "x", cover: "/custom.webp" }), "/custom.webp");
 });
 
-test("plays show the A$1 price; the new manifest's price and page fields win", () => {
+test("plays show the A$10 price; the new manifest's price and page fields win", () => {
   assert.equal(priceLabel(100), "A$1");
   assert.equal(priceLabel(250), "A$2.50");
   const { plays } = buildShelves(index);
   for (const play of plays) {
-    assert.equal(play.price, 100);
+    assert.equal(play.price, 1000);
     assert.equal(play.previewPages, 6);
     assert.ok(play.fullPages > 0);
   }
-  const [play] = buildShelves([{ slug: "breakout", section: "plays", pageCount: 6, fullPageCount: 26, previewPages: 4, price: 100 }]).plays;
+  const [play] = buildShelves([{ slug: "breakout", section: "plays", pageCount: 6, fullPageCount: 26, previewPages: 4, price: 1000 }]).plays;
   assert.equal(play.fullPages, 26);
   assert.equal(play.previewPages, 4);
 });

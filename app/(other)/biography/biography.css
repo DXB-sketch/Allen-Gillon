@@ -144,3 +144,30 @@ figcaption{font-size:1rem;color:var(--soft);margin-top:8px;}
   .scene--r .scene-media:not(.scene-media--art){grid-column:5 / full-end;}
   .scene--l .scene-media{grid-column:full-start / 9;}
 }
+
+/* ---------- Timeless Duo, with Ann (ink band, under Today) ----------
+   Moved here from /music with its two videos and the microphone, which
+   slides in once from the right edge on laptops and up. */
+.timeless-band{margin-top:var(--band-space);overflow-x:clip;row-gap:clamp(24px,3vw,40px);}
+.timeless-band h2{margin:0;}
+.timeless-video{margin:0;min-width:0;}
+.timeless-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:oklch(0.17 0.01 300);}
+.timeless-text p{margin:0 0 16px;}
+.timeless-text p:last-child{margin-bottom:0;}
+.instrument{min-width:0;pointer-events:none;}
+.instrument svg{width:100%;height:auto;}
+html.motion-ok .instrument[data-motion="from-right"]:not(.is-in):not(.is-static){opacity:0;transform:translateX(35%);}
+html.motion-ok .instrument[data-motion].is-in{
+  transition:transform 1.2s var(--ease-out),opacity .8s var(--ease-out);
+  transition-delay:var(--motion-delay,0ms);
+}
+.instrument--mic{display:none;}
+@media (min-width:1024px){
+  .timeless-band h2{grid-column:wide-start / span 8;grid-row:1;}
+  .timeless-video--lead{grid-column:wide-start / span 7;grid-row:2;}
+  .timeless-video--duet{grid-column:9 / wide-end;grid-row:2;align-self:end;}
+  .timeless-text{grid-column:3 / span 6;grid-row:3;}
+  .instrument--mic{display:block;grid-column:10 / full-end;grid-row:3;align-self:start;justify-self:end;
+    width:clamp(110px,50%,180px);}
+  .instrument--mic svg{transform:translateX(24%);}
+}
