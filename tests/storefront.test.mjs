@@ -7,9 +7,9 @@ import { stripePaymentLinks } from "../content/stripe-payment-links.mjs";
 
 test("storefront prices match Allen's instructions", () => {
   assert.equal(albumPrice, 1000);
-  assert.equal(playPrice, 100);
+  assert.equal(playPrice, 1000);
   assert.equal(formatAud(albumPrice), "$10 AUD");
-  assert.equal(formatAud(playPrice), "$1 AUD");
+  assert.equal(formatAud(playPrice), "$10 AUD");
 });
 
 test("checkout accepts only configured Stripe Payment Links", () => {

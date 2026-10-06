@@ -55,7 +55,7 @@ export default function Page() {
           />
         </div>
         <p className="home-intro">
-          Allen plays smooth guitar in restaurants around Bribie Island. Diners have called the music &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.
+          Allen plays smooth guitar memories in restaurants on Bribie Island. Visiting diners have commented that his music is &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.
         </p>
       </header>
 
@@ -74,7 +74,7 @@ export default function Page() {
         </div>
       </nav>
 
-      <section className="home-bill band" aria-labelledby="home-bill-title">
+      <section className="home-bill band" aria-labelledby="home-bill-title" data-reader-skip>
         <div className="bill">
           <h2 id="home-bill-title" className="bill-title">
             Venues
@@ -91,7 +91,7 @@ export default function Page() {
         <HomeUmbrella className="bill-umbrella" draw />
       </section>
 
-      <section className="home-quote band" aria-label="From the audience">
+      <section className="home-quote band" aria-label="From the audience" data-reader-skip>
         <figure>
           <span className="home-quote-mark" aria-hidden="true">&ldquo;</span>
           <blockquote>

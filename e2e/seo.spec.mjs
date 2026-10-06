@@ -118,14 +118,14 @@ for (const [site, base] of Object.entries(HOSTS)) {
         const books = await nodes("/books");
         expect(types(books)).toContain("CollectionPage");
         // A Book node for every title readable here: stories and textbooks
-        // are free with their PDF, plays are A$1 from Allen with no PDF.
+        // are free with their PDF, plays are A$10 from Allen with no PDF.
         const bookNodes = books.filter((n) => n["@type"] === "Book");
         expect(bookNodes.map((n) => n.url).sort()).toEqual(bookIndex.map((b) => `${ORIGIN.other}/read/${b.slug}`).sort());
         for (const b of bookIndex) {
           const node = bookNodes.find((n) => n.url.endsWith(`/read/${b.slug}`));
           expect(node.offers.seller.name).toBe("Allen Gillon");
           if (b.section === "plays") {
-            expect(node.offers.price).toBe("1.00");
+            expect(node.offers.price).toBe("10.00");
             expect(node.encoding).toBeUndefined();
           } else {
             expect(node.offers.price).toBe("0.00");

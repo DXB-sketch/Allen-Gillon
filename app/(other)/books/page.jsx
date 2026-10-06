@@ -27,7 +27,7 @@ export const metadata = pageMetadata("other", "/books");
 
 /* Every title with pages to read here gets a Book node: stories and
    textbooks are free (status "free", with the PDF), plays are previews
-   (status "preview") with the A$1 offer. A title that cannot be read here
+   (status "preview") with the A$10 offer. A title that cannot be read here
    (the old closed textbook shape, or no pages shown) gets none. */
 const readable = (b) =>
   (b.status === undefined || b.status === "free" || b.status === "preview") && b.shownPages !== 0;
@@ -153,7 +153,7 @@ export default function BooksPage() {
           Read the first pages of any play online before buying it.
           {checkoutOpen
             ? " After checkout, Allen will email the PDF to the address used for payment."
-            : ` Every play is an ${priceLabel(plays[0]?.price ?? 100)} download. Online checkout coming soon. After it opens, Allen will email the PDF to the address used for payment.`}
+            : ` Every play is an ${priceLabel(plays[0]?.price ?? 1000)} download. Online checkout coming soon. After it opens, Allen will email the PDF to the address used for payment.`}
         </p>
       </section>
 

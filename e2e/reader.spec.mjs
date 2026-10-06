@@ -66,8 +66,8 @@ test.describe("reader, reduced motion", () => {
     const end = page.locator(".bkr-end");
     await expect(end).toBeVisible();
     await expect(end).toContainText("That’s the preview.");
-    await expect(end).toContainText("Buy the full script (A$1)");
-    await expect(end).toContainText("A$1 download. Online checkout coming soon");
+    await expect(end).toContainText("Buy the full script (A$10)");
+    await expect(end).toContainText("A$10 download. Online checkout coming soon");
     await expect(page.locator('a[href*="buy.stripe.com"]')).toHaveCount(0);
     await expect(page.locator(".bkr a[download]")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Listen to a preview" })).toBeVisible();

@@ -1,9 +1,7 @@
-import Link from "next/link";
 import SectionComment from "../../../components/SectionComment";
-import CrossSiteLink from "../../../components/CrossSiteLink";
 import AlbumShelf from "../../../components/Album";
 import MusicGibson from "../../../components/illustrations/MusicGibson";
-import MusicMic from "../../../components/illustrations/MusicMic";
+import MusicGuitar from "../../../components/illustrations/MusicGuitar";
 import MusicFlute from "../../../components/illustrations/MusicFlute";
 import MusicKeys from "../../../components/illustrations/MusicKeys";
 import ShelfPlank from "../../../components/illustrations/ShelfPlank";
@@ -32,9 +30,12 @@ const JSON_LD = [
    "Download album free" (albums are free: no Payment Link on this page).
    Instruments are two-ink line drawings at the page edges, partly off the
    page, in space that holds no text: Allen's Trini Lopez Gibson by the
-   title, a flute under the shelf, a microphone on the Timeless band and a
-   strip of piano keys by the original songs. Below 1024px only the Gibson
-   stays, peeking into the header beside the title. */
+   title, a flute under the shelf and a strip of piano keys by the original
+   songs. Below 1024px only a guitar stays: a smaller whole electric guitar
+   beside the title in place of the long Gibson.
+   The page reader stops after the last album, I Just Called: the comment
+   link and the original songs below it are marked data-reader-skip.
+   Timeless Duo, with Ann now lives on the Timeless page, under "Today". */
 
 const shelf = albums.map((album) => ({ ...album, shelfCover: `/images/albums/shelf/${album.id}.webp` }));
 
@@ -60,71 +61,20 @@ export default function MusicPage() {
         <div className="instrument instrument--gibson" data-motion="from-right">
           <MusicGibson />
         </div>
+        <div className="instrument instrument--guitar" data-motion="from-right">
+          <MusicGuitar />
+        </div>
       </header>
 
       <section className="albums-band band" aria-label="Albums">
         <AlbumShelf albums={shelf} shelf={<ShelfPlank className="album-shelf" draw />} />
-        <SectionComment subject="Allen's albums" returnTo="/music" returnLabel="the albums" />
+        <SectionComment subject="Allen's albums" returnTo="/music" returnLabel="the albums" data-reader-skip />
         <div className="instrument instrument--flute" data-motion="from-right">
           <MusicFlute />
         </div>
       </section>
 
-      <section id="timeless" className="timeless-band band ink" aria-labelledby="timeless-title">
-        <h2 id="timeless-title" className="script">
-          Timeless Duo, with Ann
-        </h2>
-        <div className="timeless-video timeless-video--lead">
-          <video
-            controls
-            playsInline
-            preload="none"
-            poster="/images/videos/timeless-masquerade.webp"
-            width="1024"
-            height="576"
-            aria-label="Ann and Allen performing This Masquerade"
-          >
-            <source src="/videos/timeless-masquerade.mp4" type="video/mp4" />
-            <track kind="captions" src="/videos/timeless-masquerade.v1.en.vtt" srcLang="en" label="English" default />
-            Your browser does not support video playback.
-          </video>
-        </div>
-        <div className="timeless-video timeless-video--duet">
-          <video
-            controls
-            playsInline
-            preload="none"
-            poster="/images/videos/timeless-unforgettable.webp"
-            width="1920"
-            height="1080"
-            aria-label="Ann and Allen performing Unforgettable"
-          >
-            <source src="/videos/timeless-unforgettable.mp4" type="video/mp4" />
-            <track kind="captions" src="/videos/timeless-unforgettable.v1.en.vtt" srcLang="en" label="English" default />
-            Your browser does not support video playback.
-          </video>
-        </div>
-        <div className="timeless-text">
-          <p>
-            Allen and Ann have played together for many years. Their duet,{" "}
-            <CrossSiteLink site="other" path="/biography">Timeless Duo</CrossSiteLink>, has taken them from Sydney clubs to a
-            convention stage in Chicago. Allen plays his Trini Lopez Gibson and Ann sings and plays piano.
-          </p>
-          <p>
-            Ann also paints. You can see her work on{" "}
-            <CrossSiteLink site="other" path="/anns-art">Ann&rsquo;s Art Room</CrossSiteLink>.
-          </p>
-          <p>
-            Their album together is <a href="#misty">Misty</a>, above. To have Timeless Duo play your restaurant or event,
-            see <Link prefetch={false} href="/hire">Contact Allen</Link>.
-          </p>
-        </div>
-        <div className="instrument instrument--mic" data-motion="from-right">
-          <MusicMic ground="ink" />
-        </div>
-      </section>
-
-      <section id="originals" className="originals-band band" aria-labelledby="originals-title">
+      <section id="originals" className="originals-band band" aria-labelledby="originals-title" data-reader-skip>
         <div className="instrument instrument--keys" data-motion="from-left">
           <MusicKeys />
         </div>

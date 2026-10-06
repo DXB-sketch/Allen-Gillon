@@ -163,7 +163,7 @@ test("dynamic route helpers", async () => {
   const story = BOOKS.find((b) => b.section === "childrens");
   const textbook = BOOKS.find((b) => b.section === "teaching");
   assert.equal(readMetadata(play.slug).alternates.canonical, `https://other.allengillon.com/read/${play.slug}`);
-  assert.match(readMetadata(play.slug).description, /A\$1/);
+  assert.match(readMetadata(play.slug).description, /A\$10/);
   assert.deepEqual(readTextMetadata(play.slug), {}, "plays have no text route");
   assert.ok(hasTextRoute(story) && hasTextRoute(textbook));
   assert.equal(readTextMetadata(story.slug).alternates.canonical, `https://other.allengillon.com/read/${story.slug}/text`);
@@ -224,7 +224,7 @@ test("play snippets match the play gate, and the /anns-art range is the for-sale
   assert.ok(plays.length > 0);
   for (const b of plays) {
     const d = routeMeta("other", `/read/${b.slug}`).description;
-    assert.match(d, playLinksCurrent ? /The full script is an A\$1 download\./ : /The full script will soon be an A\$1 download\./, b.slug);
+    assert.match(d, playLinksCurrent ? /The full script is an A\$10 download\./ : /The full script will soon be an A\$10 download\./, b.slug);
   }
   const sale = artworks.filter((a) => a.availability === "available" && Number(a.priceCents) > 0).map((a) => a.priceCents / 100);
   const range = `A$${Math.min(...sale)} to A$${Math.max(...sale)}`;

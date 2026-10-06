@@ -94,16 +94,14 @@ test("videos load nothing from YouTube until asked, then play from youtube-nocoo
   await expect(frame).toHaveAttribute("title", "Jamie");
 });
 
-test("Timeless stays here on an ink band with absolute links to the other site", async ({ page }) => {
+test("Timeless has moved to the Timeless page, and the reader stops after I Just Called", async ({ page }) => {
   await page.goto("/music", { waitUntil: "networkidle" });
-  const band = page.locator("#timeless");
-  await expect(band).toHaveClass(/\bink\b/);
-  const cross = band.locator("a[data-cross-site='other']");
-  await expect(cross).toHaveCount(2);
-  for (const href of await cross.evaluateAll((els) => els.map((a) => a.getAttribute("href")))) {
-    expect(href).toMatch(/^https?:\/\/other\./);
-  }
-  await expect(band.locator("video")).toHaveCount(2);
+  await expect(page.locator("#timeless")).toHaveCount(0);
+  // Original songs now follow the album shelf.
+  expect(await page.locator(".albums-band").evaluate((el) => el.nextElementSibling.id)).toBe("originals");
+  // The page reader skips everything after the last album.
+  await expect(page.locator(".albums-band > .section-comment")).toHaveAttribute("data-reader-skip", "true");
+  await expect(page.locator("#originals")).toHaveAttribute("data-reader-skip", "true");
 });
 
 test.describe("instruments", () => {
@@ -168,8 +166,8 @@ for (const width of [320, 375, 768, 1024, 1280, 1440, 1920, 2560]) {
     expect(result.hits).toEqual([]);
     expect(result.aria).toBe(true);
     expect(result.overflow).toBeLessThanOrEqual(0);
-    if (width < 1024) expect(result.shown).toEqual(["instrument instrument--gibson"]);
-    else expect(result.shown.length).toBe(4);
+    if (width < 1024) expect(result.shown).toEqual(["instrument instrument--guitar"]);
+    else expect(result.shown.length).toBe(3);
   });
 }
 
@@ -200,10 +198,6 @@ test("/music#misty scrolls to the Misty sleeve and opens it on the wide shelf", 
   await page.goto("/music#misty", { waitUntil: "networkidle" });
   const sleeve = page.getByRole("button", { name: "Show tracks for Misty", exact: true });
   await expect(sleeve).toHaveAttribute("aria-expanded", "true");
-  await expect(sleeve).toBeInViewport();
-  // The in-page link in the Timeless text goes back up to it too.
-  await page.getByRole("button", { name: "Show tracks for That's The Time", exact: true }).click();
-  await page.locator("#timeless a[href='#misty']").click();
   await expect(sleeve).toBeInViewport();
 });
 

@@ -363,7 +363,7 @@ export default function BookReader({ book, pagesText = [], cues = null, verified
   }, [goOpen, goInputId]);
 
   /* ---------- the pages ---------- */
-  const price = aud(book.price || 100);
+  const price = aud(book.price || 1000);
   const pendingLabel = `${price} download. Online checkout coming soon`;
   const pages = useMemo(() => {
     const out = [];

@@ -118,8 +118,8 @@ for (const [site, base] of Object.entries(HOSTS)) {
 
 test.describe("media and the now-playing bar", () => {
   test("the self-hosted Timeless videos have posters and English captions", async ({ page, request }) => {
-    await page.goto(`${HOSTS.main}/music`);
-    const videos = page.locator("video");
+    await page.goto(`${HOSTS.other}/biography`);
+    const videos = page.locator("#timeless-duo video");
     await expect(videos).toHaveCount(2);
     for (const video of await videos.all()) {
       expect(await video.getAttribute("poster")).toMatch(/\.webp$/);

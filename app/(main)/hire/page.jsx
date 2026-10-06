@@ -58,7 +58,7 @@ export default function HirePage() {
         />
       </section>
 
-      <section className="diners band" aria-labelledby="diners-say">
+      <section className="diners band" aria-labelledby="diners-say" data-reader-skip>
         <h2 id="diners-say">Heard between courses</h2>
         <ul>
           {DINERS.map((line) => (
