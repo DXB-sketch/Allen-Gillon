@@ -41,7 +41,7 @@ export default function OtherHome() {
       <link rel="preload" as="image" href={LCP} imageSrcSet={LCP_SRCSET} imageSizes={PAGE_SIZES} fetchPriority="high" />
       <header className="sideboard-head">
         <h1 className="script">Allen Gillon</h1>
-        <p>Allen&rsquo;s personal side: family, writing, Timeless Duo and Ann&rsquo;s Art Room.</p>
+        <p>Allen and Ann&rsquo;s creative side</p>
       </header>
 
       <div className="doorways">

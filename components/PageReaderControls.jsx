@@ -3,22 +3,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { pageText } from "../lib/page-text.mjs";
-import { friendlyVoiceLabel, normaliseForSpeech } from "../lib/speech.mjs";
+import { friendlyVoiceLabel, normaliseForSpeech, readerVoices } from "../lib/speech.mjs";
 
-const maleNames = /\b(james|david|mark|george|guy|ryan|william|daniel|thomas|liam|michael|alex|duncan|male)\b/i;
-const femaleNames = /\b(catherine|zira|susan|hazel|samantha|karen|natasha|jenny|aria|sara|michelle|sonia|libby|female)\b/i;
 const PLAYBACK_EVENT = "allen:playback-start";
 const READER_SOURCE = "page-reader";
 
-function preferredVoice(voices, gender) {
-  const english = voices.filter((voice) => voice.lang.toLowerCase().startsWith("en"));
-  const score = (voice) =>
-    (gender === "male" && maleNames.test(voice.name) ? 20 : 0) +
-    (gender === "female" && femaleNames.test(voice.name) ? 20 : 0) +
-    (/natural|neural|enhanced|premium|online/i.test(voice.name) ? 10 : 0) +
-    (/en-AU/i.test(voice.lang) ? 3 : 0) +
-    (/google|microsoft|apple/i.test(voice.name) ? 1 : 0);
-  return [...english].sort((a, b) => score(b) - score(a))[0] || voices[0];
+/* The best woman's voice on this device (lib/speech.mjs readerVoices), or
+   undefined, which leaves the device's default voice. */
+function preferredVoice(voices) {
+  return readerVoices(voices)[0];
 }
 
 /* "Listen to this page": reads the page aloud with the browser's own voices.
@@ -29,13 +22,10 @@ function preferredVoice(voices, gender) {
 
    Props:
      autoStart  start reading on mount (the press that loaded this module).
-     voice  "male" | "female" (default "female"). The preferred narrator for
-            the site the page belongs to. Each site's layout sets it: the
-            music and bookings site (allengillon.com) passes "male", the
-            stories, Timeless and Ann's art site passes "female". The listener
-            can still pick another voice once playback starts. Each site's chrome (components/SiteChrome.jsx) passes it: main "male", other "female". */
-export default function PageReaderControls({ voice = "female", autoStart = false }) {
-  const preferredGender = voice;
+
+   Allen asked for the reader to only ever use a woman's voice, on both
+   sites. The Voice list offers only the women's voices on the device. */
+export default function PageReaderControls({ autoStart = false }) {
   const pathname = usePathname();
   const [supported, setSupported] = useState(true);
   const [status, setStatus] = useState("idle");
@@ -53,13 +43,13 @@ export default function PageReaderControls({ voice = "female", autoStart = false
     }
     const refresh = () => {
       const available = window.speechSynthesis.getVoices();
-      setVoices(available.filter((item) => item.lang.toLowerCase().startsWith("en")));
-      setVoiceName(preferredVoice(available, preferredGender)?.name || "");
+      setVoices(readerVoices(available));
+      setVoiceName(preferredVoice(available)?.name || "");
     };
     refresh();
     window.speechSynthesis.addEventListener("voiceschanged", refresh);
     return () => window.speechSynthesis.removeEventListener("voiceschanged", refresh);
-  }, [preferredGender]);
+  }, []);
 
   const stop = useCallback(() => {
     run.current += 1;
@@ -90,7 +80,7 @@ export default function PageReaderControls({ voice = "female", autoStart = false
     window.dispatchEvent(new CustomEvent(PLAYBACK_EVENT, { detail: { source: READER_SOURCE } }));
     const currentRun = run.current;
     // Voices can still be loading on the very first press (autoStart).
-    const pool = voices.length ? voices : window.speechSynthesis.getVoices();
+    const pool = voices.length ? voices : readerVoices(window.speechSynthesis.getVoices());
     const chosen = pool.find((item) => item.name === name);
     let index = Math.min(startIndex, chunks.length - 1);
     setStatus("playing");
@@ -141,7 +131,7 @@ export default function PageReaderControls({ voice = "female", autoStart = false
   useEffect(() => {
     if (!autoStart || !("speechSynthesis" in window)) return;
     keepFocus.current = true;
-    speakFrom(0, preferredVoice(window.speechSynthesis.getVoices(), preferredGender)?.name || "");
+    speakFrom(0, preferredVoice(window.speechSynthesis.getVoices())?.name || "");
     // Once, on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
