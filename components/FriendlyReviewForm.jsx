@@ -44,6 +44,8 @@ export default function FriendlyReviewForm() {
       setPlace("");
       setReview("");
       setStatus(data.message);
+      // Show the new review in the list above straight away (ApprovedReviews).
+      if (data.review) window.dispatchEvent(new CustomEvent("allen:review-added", { detail: data.review }));
       startedAt.current = Date.now();
     } catch (error) {
       setStatus(error.message || "Your review could not be sent. Please try again.");
@@ -56,7 +58,7 @@ export default function FriendlyReviewForm() {
     <section className="addReview" aria-labelledby="add-review-title">
       <div className="reviewFormIntro">
         <h2 id="add-review-title">Add a friendly review</h2>
-        <p>Share a memory of hearing Allen play. Reviews are checked before they appear here.</p>
+        <p>Share a memory of hearing Allen play. Your review appears here as soon as you send it.</p>
       </div>
 
       <form className="friendlyReviewForm" onSubmit={submit}>
@@ -89,8 +91,7 @@ export default function FriendlyReviewForm() {
             link is left out. It is an absolute main-host URL so it stays right
             wherever the form is used. */}
         <p className="reviewPrivacy">
-          Once Allen approves it, your review appears here with your name and
-          where you heard him.
+          Your review appears here with your name and where you heard him.
           {privacyPublished ? (
             <>
               {" "}The{" "}

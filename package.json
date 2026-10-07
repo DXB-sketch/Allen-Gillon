@@ -13,7 +13,7 @@
     "deploy:vinext": "vinext-cloudflare deploy --config dist/server/wrangler.json",
     "reviews:migrate:local": "wrangler d1 migrations apply allen-gillon-reviews --local",
     "reviews:migrate:remote": "wrangler d1 migrations apply allen-gillon-reviews --remote",
-    "reviews:pending": "wrangler d1 execute allen-gillon-reviews --remote --command \"SELECT id, name, place, body, created_at FROM reviews WHERE status = 'pending' ORDER BY created_at ASC\"",
+    "reviews:list": "wrangler d1 execute allen-gillon-reviews --remote --command \"SELECT id, status, name, place, body, created_at FROM reviews ORDER BY created_at DESC\"",
     "a11y:pa11y": "pa11y-ci --config .pa11yci"
   },
   "dependencies": {
