@@ -6,11 +6,8 @@ import { useEffect, useState } from "react";
    reader shows when idle and loads the real reader (PageReaderControls, with
    the text extraction and voice handling) only when the button is pressed,
    so none of that is in any page's first-load JavaScript (docs/PERFORMANCE.md).
-
-   Props:
-     voice  "male" | "female": the preferred narrator for the site (set by
-            components/SiteChrome.jsx: main "male", other "female"). */
-export default function PageReader({ voice = "female" }) {
+   The reader always uses a woman's voice (lib/speech.mjs readerVoices). */
+export default function PageReader() {
   const [supported, setSupported] = useState(true);
   const [Controls, setControls] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -20,7 +17,7 @@ export default function PageReader({ voice = "female" }) {
   }, []);
 
   if (!supported) return null;
-  if (Controls) return <Controls voice={voice} autoStart />;
+  if (Controls) return <Controls autoStart />;
 
   function load() {
     if (loading) return;

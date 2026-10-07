@@ -25,6 +25,10 @@ const is3xx = (result) => result.action === "redirect" && result.status >= 300 &
 const table = [
   // www to apex
   ["www root goes to apex", "www.allengillon.com", "/", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/" }],
+  ["http main goes to https", "allengillon.com", "/music?x=1", { env: PROD, protocol: "http" }, { action: "redirect", status: 301, location: "https://allengillon.com/music?x=1" }],
+  ["http other goes to https", "other.allengillon.com", "/", { env: PROD, protocol: "http:" }, { action: "redirect", status: 301, location: "https://other.allengillon.com/" }],
+  ["http www goes straight to https apex", "www.allengillon.com", "/hire", { env: PROD, protocol: "http" }, { action: "redirect", status: 301, location: "https://allengillon.com/hire" }],
+  ["http localhost is left alone", "localhost:3001", "/", { env: PROD, protocol: "http" }, { action: "next" }],
   ["www robots.txt goes to apex", "www.allengillon.com", "/robots.txt", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/robots.txt" }],
   ["www sitemap.xml goes to apex", "www.allengillon.com", "/sitemap.xml", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/sitemap.xml" }],
   ["www favicon goes to apex", "www.allengillon.com", "/favicon.ico", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/favicon.ico" }],

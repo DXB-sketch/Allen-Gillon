@@ -30,6 +30,9 @@ export async function proxy(request: NextRequest) {
     // unknown hosts are sent to production; see isPreviewEnv().
     env: runtimeEnv(),
     legalPublished: legal.published === true,
+    // The scheme the visitor used. Behind Cloudflare request.url keeps it;
+    // x-forwarded-proto covers any proxy that terminates TLS in front.
+    protocol: request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || request.nextUrl.protocol,
   });
 
   if (result.action === "redirect") {

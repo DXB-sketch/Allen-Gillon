@@ -74,3 +74,31 @@ test("friendly voice labels", () => {
   assert.equal(friendlyVoiceLabel({ name: "Karen", lang: "en-AU" }), "Karen, Australian");
   assert.equal(friendlyVoiceLabel({ name: "Microsoft David - English (United States)", lang: "en-US" }), "David, American");
 });
+
+test("the page reader only offers women's voices", async () => {
+  const { readerVoices, isFemaleVoice } = await import("../lib/speech.mjs");
+  const voices = [
+    { name: "Daniel", lang: "en-GB" },
+    { name: "Karen", lang: "en-AU" },
+    { name: "Microsoft William Online (Natural) - English (Australia)", lang: "en-AU" },
+    { name: "Microsoft Natasha Online (Natural) - English (Australia)", lang: "en-AU" },
+    { name: "Google UK English Male", lang: "en-GB" },
+    { name: "Google UK English Female", lang: "en-GB" },
+    { name: "Google US English", lang: "en-US" },
+    { name: "Amélie", lang: "fr-CA" },
+  ];
+  const names = readerVoices(voices).map((v) => v.name);
+  assert.equal(names[0], "Microsoft Natasha Online (Natural) - English (Australia)");
+  assert.deepEqual([...names].sort(), ["Google UK English Female", "Google US English", "Karen", "Microsoft Natasha Online (Natural) - English (Australia)"].sort());
+  assert.equal(isFemaleVoice({ name: "Google UK English Male" }), false);
+});
+
+test("with no known women's voices, men's voices are still left out", async () => {
+  const { readerVoices } = await import("../lib/speech.mjs");
+  const voices = [
+    { name: "Daniel", lang: "en-GB" },
+    { name: "English (Australia)", lang: "en-AU" },
+  ];
+  assert.deepEqual(readerVoices(voices).map((v) => v.name), ["English (Australia)"]);
+  assert.deepEqual(readerVoices([{ name: "Fred", lang: "en-US" }]), []);
+});

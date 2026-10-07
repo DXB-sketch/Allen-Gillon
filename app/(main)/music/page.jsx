@@ -55,7 +55,7 @@ export default function MusicPage() {
       <header className="pagehead band music-head">
         <h1 className="script">Albums</h1>
         <p className="plain">
-          Listen to Allen&rsquo;s four studio albums here: click a cover to open the track list, then choose a song,
+          Listen to four studio albums here: click a cover to open the track list, then choose a song,
           or download the whole album free.
         </p>
         <div className="instrument instrument--gibson" data-motion="from-right">
