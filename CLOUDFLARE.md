@@ -82,24 +82,24 @@ curl -s  -H "Host: other.allengillon.com" http://localhost:8787/ | grep -o '<lin
 
 ## Review moderation
 
-New visitor reviews are saved as `pending`, so nothing appears publicly without approval.
+New visitor reviews publish straight away (saved as `approved`). Older rows still marked `pending` are shown too. Only `rejected` reviews are hidden.
 
-List pending reviews:
-
-```sh
-npm run reviews:pending
-```
-
-Approve a review after copying its ID from that list:
+List the reviews on the site, newest first:
 
 ```sh
-npx wrangler d1 execute allen-gillon-reviews --remote --command "UPDATE reviews SET status = 'approved', approved_at = CURRENT_TIMESTAMP WHERE id = 'REVIEW_ID'"
+npm run reviews:list
 ```
 
-Reject a review:
+Hide a review after copying its ID from that list (it stays in the database and can be shown again by setting the status back to `approved`):
 
 ```sh
 npx wrangler d1 execute allen-gillon-reviews --remote --command "UPDATE reviews SET status = 'rejected' WHERE id = 'REVIEW_ID'"
 ```
 
-The public API returns approved reviews only. The form also includes a hidden honeypot and a minimum completion time to block basic automated submissions without interrupting visitors.
+Or delete it for good:
+
+```sh
+npx wrangler d1 execute allen-gillon-reviews --remote --command "DELETE FROM reviews WHERE id = 'REVIEW_ID'"
+```
+
+Without the command line: Cloudflare dashboard → Storage & Databases → D1 → `allen-gillon-reviews` → Console, and run the same SQL there. The form also includes a hidden honeypot and a minimum completion time to block basic automated submissions without interrupting visitors.

@@ -23,10 +23,13 @@ export async function GET() {
     const reviewsDb = await database();
     const result = await reviewsDb
       .prepare(
+        // Reviews publish as soon as they are sent. Anything still marked
+        // 'pending' from before that change shows too; only 'rejected'
+        // (hidden by hand, see CLOUDFLARE.md) stays off the page.
         `SELECT id, name, place, body, approved_at
          FROM reviews
-         WHERE status = 'approved'
-         ORDER BY approved_at DESC, created_at DESC
+         WHERE status IN ('approved', 'pending')
+         ORDER BY COALESCE(approved_at, created_at) DESC, created_at DESC
          LIMIT 100`,
       )
       .all();
@@ -48,7 +51,7 @@ export async function POST(request) {
 
   // A quiet honeypot catches basic form bots without making visitors solve a puzzle.
   if (clean(input.website, 200)) {
-    return json({ ok: true, message: "Thanks. Your review has been sent to Allen." }, 202);
+    return json({ ok: true, message: "Thanks. Your review is now on the page." }, 202);
   }
 
   const name = clean(input.name, 80);
@@ -67,15 +70,19 @@ export async function POST(request) {
 
   try {
     const reviewsDb = await database();
+    const id = crypto.randomUUID();
     await reviewsDb
       .prepare(
-        `INSERT INTO reviews (id, name, place, body, status)
-         VALUES (?, ?, ?, ?, 'pending')`,
+        `INSERT INTO reviews (id, name, place, body, status, approved_at)
+         VALUES (?, ?, ?, ?, 'approved', CURRENT_TIMESTAMP)`,
       )
-      .bind(crypto.randomUUID(), name, place, body)
+      .bind(id, name, place, body)
       .run();
 
-    return json({ ok: true, message: "Thanks. Your review has been sent to Allen for approval." }, 201);
+    return json(
+      { ok: true, message: "Thanks. Your review is now on the page.", review: { id, name, place, body } },
+      201,
+    );
   } catch (error) {
     console.error("Unable to save review", error);
     return json({ error: "Your review could not be saved just now. Please try again shortly." }, 503);

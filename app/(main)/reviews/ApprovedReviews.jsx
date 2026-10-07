@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-// Reviews that Allen has approved, loaded from /api/reviews (D1). Renders
+// Visitor reviews, loaded from /api/reviews (D1). They publish as soon as
+// they are sent; a review just sent from the form on this page is added at
+// the top without a reload (the "allen:review-added" event). Renders
 // nothing until there is at least one, so the page never shows an empty
 // heading.
 //
@@ -26,6 +28,15 @@ export default function ApprovedReviews() {
       clearTimeout(timer);
       controller.abort();
     };
+  }, []);
+
+  useEffect(() => {
+    const added = (event) => {
+      const review = event.detail;
+      if (review?.id) setReviews((current) => [review, ...current.filter((entry) => entry.id !== review.id)]);
+    };
+    window.addEventListener("allen:review-added", added);
+    return () => window.removeEventListener("allen:review-added", added);
   }, []);
 
   if (!reviews.length) return null;
