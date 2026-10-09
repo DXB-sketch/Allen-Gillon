@@ -90,7 +90,12 @@ export default function SiteFooter({ site = "main" }) {
             </nav>
           ) : null}
         </div>
-        <p className="footer-copy">{copyrightLine()}</p>
+        <p className="footer-copy">
+          {copyrightLine()} · Site&nbsp;built&nbsp;by&nbsp;
+          <a href="https://monolithstudio.au" target="_blank" rel="noopener">
+            Dexter&nbsp;Bell<span className="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        </p>
       </div>
     </footer>
   );
