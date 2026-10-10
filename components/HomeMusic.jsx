@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
      tries to start at once and otherwise starts on the first tap, click or
      key press anywhere.
    - The page reader can still read over it: the music drops lower while the
-     reader speaks and fades out when the reader stops or finishes.
+     reader speaks and fades back up when the reader stops or finishes.
    - Playing an album track (the shared player) fades it out straight away.
    - The Pause/Play music button is the WCAG 1.4.2 control for audio that
      starts by itself. Pausing is remembered on this device, so the music
@@ -183,7 +183,8 @@ function Music() {
       gestureTypes.forEach((type) => window.removeEventListener(type, onGesture, true));
     }
 
-    /* The reader speaks over it, quieter; another player fades it out. */
+    /* The reader speaks over it, quieter, and the music comes back up when
+       the reader stops or finishes; another player fades it out. */
     const onPlayback = (event) => {
       if (event.detail?.source === READER_SOURCE) {
         readerActive = true;
@@ -196,8 +197,7 @@ function Music() {
     const onReaderStop = () => {
       if (!readerActive) return;
       readerActive = false;
-      removeGestureListeners();
-      fadeOutAndPause();
+      if (!audio.paused) fadeTo(VOLUME, FADE_IN);
     };
     window.addEventListener(PLAYBACK_EVENT, onPlayback);
     window.addEventListener(READER_STOP_EVENT, onReaderStop);
