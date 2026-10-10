@@ -1,6 +1,7 @@
 import SiteMast from "./SiteMast";
 import SiteFooter from "./SiteFooter";
 import PageReader from "./PageReader";
+import HomeMusic from "./HomeMusic";
 import MotionObserver from "./illustrations/MotionObserver";
 
 // Mast, page content and footer for one site. Used by the (main) and (other)
@@ -16,7 +17,11 @@ export default function SiteChrome({ site, children }) {
   return (
     <div className="site" data-site={site}>
       <SiteMast site={site} />
-      <PageReader />
+      {/* The page reader, plus the music button on the main home page. */}
+      <div className="reader-bar">
+        <PageReader />
+        <HomeMusic site={site} />
+      </div>
       <main id="main" tabIndex={-1}>
         {children}
       </main>

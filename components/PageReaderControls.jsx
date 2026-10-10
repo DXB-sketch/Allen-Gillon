@@ -117,6 +117,14 @@ export default function PageReaderControls({ autoStart = false }) {
 
   const active = status !== "idle";
 
+  /* Tell the page the reader has stopped or finished (the home page music
+     fades out on it: components/HomeMusic.jsx). */
+  const wasActive = useRef(false);
+  useEffect(() => {
+    if (wasActive.current && !active) window.dispatchEvent(new CustomEvent("allen:reader-stop"));
+    wasActive.current = active;
+  }, [active]);
+
   /* The pressed button is swapped for another set of controls, so keep focus
      inside the reader rather than dropping it on the page body. */
   useEffect(() => {

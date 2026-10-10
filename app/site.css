@@ -135,6 +135,10 @@ img.gx-hero{width:100%;height:auto;object-fit:cover;display:block;}
 .page-reader .page-reader-listen{background:var(--blue);border-color:var(--blue);color:var(--on);}
 .page-reader label{display:flex;align-items:center;gap:6px;}
 .page-reader select{max-width:min(180px,100%);}
+/* The home page music button sits on the reader's row (components/HomeMusic.jsx). */
+.reader-bar{display:flex;flex-wrap:wrap;align-items:center;}
+.reader-bar > .page-reader:not(:last-child){padding-right:4px;}
+.reader-bar > .home-music{padding-left:4px;}
 
 /* ---------- Page opening ---------- */
 .pagehead{padding-block:clamp(28px,4vw,64px) 8px;}
