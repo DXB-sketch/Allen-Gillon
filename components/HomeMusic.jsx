@@ -17,19 +17,26 @@ import { usePathname } from "next/navigation";
      starts by itself. Pausing is remembered on this device, so the music
      does not start again on the next visit until Play music is pressed.
 
-   Volume runs through a Web Audio gain node, because iOS ignores
-   audio.volume; audio.volume is the fallback where Web Audio is missing. */
+   SRC is a prepared copy of the track (made with ffmpeg from the album
+   file): it starts at 0:26, where the higher notes come in, is 12 dB
+   quieter and fades in over 3 s. So there is no seek on start, and the
+   music is soft even where audio.volume is ignored (iPhone and iPad).
+   A plain media element, not Web Audio: Safari could play a Web Audio
+   routed element twice, slightly apart, which sounded like two pieces at
+   once. Only one copy ever plays (`current` below). */
 
-const SRC = "/audio/thats-the-time/11-one-day-i-ll-fly-away.mp3";
-const START_AT = 26; // seconds: the higher notes come in here
-const VOLUME = 0.25; // "lightly playing"
-const UNDER_READER = 0.1; // while the page reader speaks
+const SRC = "/audio/home/one-day-i-ll-fly-away-from-26s.mp3";
+const VOLUME = 1; // the file itself is already soft
+const UNDER_READER = 0.4; // while the page reader speaks
 const FADE_IN = 3;
 const FADE_OUT = 3;
 const PLAYBACK_EVENT = "allen:playback-start";
 const READER_SOURCE = "page-reader";
 const READER_STOP_EVENT = "allen:reader-stop";
 const OFF_KEY = "allen:home-music";
+
+/* The one playing copy: a new mount stops any earlier one first. */
+let current = null;
 
 function rememberedOff() {
   try {
@@ -65,79 +72,53 @@ function Music() {
   const sound = useRef(null);
 
   useEffect(() => {
+    current?.stop();
     const audio = new Audio();
     audio.preload = "auto";
     audio.src = SRC;
-    let ctx = null;
-    let gain = null;
     let fadeTimer = 0;
     let disposed = false;
-    let started = false;
     let readerActive = false;
+    let starting = null;
 
-    function setupGraph() {
-      if (ctx || !(window.AudioContext || window.webkitAudioContext)) return;
-      try {
-        ctx = new (window.AudioContext || window.webkitAudioContext)();
-        gain = ctx.createGain();
-        gain.gain.value = 0;
-        ctx.createMediaElementSource(audio).connect(gain).connect(ctx.destination);
-      } catch {
-        ctx = null;
-        gain = null;
-      }
-    }
-
-    /* Ramp the volume to `target` over `seconds`, then run `done`. */
+    /* Ramp audio.volume to `target` over `seconds`, then run `done`. Where
+       volume is fixed (iOS) the ramp changes nothing and `done` still runs. */
     function fadeTo(target, seconds, done) {
       clearTimeout(fadeTimer);
-      if (gain && ctx) {
-        const now = ctx.currentTime;
-        gain.gain.cancelScheduledValues(now);
-        gain.gain.setValueAtTime(gain.gain.value, now);
-        gain.gain.linearRampToValueAtTime(target, now + seconds);
-      } else {
-        const from = audio.volume;
-        const steps = Math.max(1, Math.round(seconds * 20));
-        let step = 0;
-        const tick = () => {
-          step += 1;
-          audio.volume = Math.min(1, Math.max(0, from + ((target - from) * step) / steps));
-          if (step < steps) fadeTimer = setTimeout(tick, 50);
-        };
-        tick();
-      }
-      if (done) fadeTimer = setTimeout(done, seconds * 1000 + 50);
+      const from = audio.volume;
+      const steps = Math.max(1, Math.round(seconds * 20));
+      let step = 0;
+      const tick = () => {
+        step += 1;
+        audio.volume = Math.min(1, Math.max(0, from + ((target - from) * step) / steps));
+        if (step < steps) fadeTimer = setTimeout(tick, 50);
+        else if (done) done();
+      };
+      tick();
     }
 
     function play() {
       if (disposed) return Promise.resolve(false);
-      setupGraph();
-      if (!gain) audio.volume = 0;
-      if (!started && audio.currentTime < START_AT) {
-        try {
-          audio.currentTime = START_AT;
-        } catch {
-          /* Not seekable yet: loadedmetadata below moves it. */
-        }
-      }
+      if (!audio.paused) return Promise.resolve(true);
+      if (starting) return starting;
+      audio.volume = readerActive ? UNDER_READER : VOLUME;
       // play() is called straight away, inside the tap that allowed it;
       // Safari can refuse it once that tap's moment has passed.
-      const playing = audio.play();
-      const resumed = ctx && ctx.state === "suspended" ? ctx.resume() : Promise.resolve();
-      return Promise.all([playing, resumed])
+      starting = audio
+        .play()
         .then(() => {
-          // An element that plays into a still-suspended context is silent.
-          if (ctx && ctx.state !== "running") throw new Error("audio context suspended");
-          started = true;
+          if (disposed) {
+            audio.pause();
+            return false;
+          }
           setPlaying(true);
-          fadeTo(readerActive ? UNDER_READER : VOLUME, FADE_IN);
           return true;
         })
-        .catch(() => {
-          audio.pause();
-          return false;
+        .catch(() => false)
+        .finally(() => {
+          starting = null;
         });
+      return starting;
     }
 
     function fadeOutAndPause(seconds = FADE_OUT) {
@@ -152,6 +133,7 @@ function Music() {
       play: () => {
         remember(false);
         removeGestureListeners();
+        if (audio.ended) audio.currentTime = 0;
         play();
       },
       pause: () => {
@@ -161,12 +143,10 @@ function Music() {
       },
     };
 
-    const onMetadata = () => {
-      if (!started && audio.currentTime < START_AT) audio.currentTime = START_AT;
-    };
     const onEnded = () => setPlaying(false);
-    audio.addEventListener("loadedmetadata", onMetadata);
+    const onPause = () => setPlaying(false);
     audio.addEventListener("ended", onEnded);
+    audio.addEventListener("pause", onPause);
 
     /* First touch anywhere starts it (but not a press on the music button,
        which handles itself). */
@@ -202,26 +182,29 @@ function Music() {
     window.addEventListener(PLAYBACK_EVENT, onPlayback);
     window.addEventListener(READER_STOP_EVENT, onReaderStop);
 
+    function stop() {
+      disposed = true;
+      clearTimeout(fadeTimer);
+      removeGestureListeners();
+      window.removeEventListener(PLAYBACK_EVENT, onPlayback);
+      window.removeEventListener(READER_STOP_EVENT, onReaderStop);
+      audio.removeEventListener("ended", onEnded);
+      audio.removeEventListener("pause", onPause);
+      audio.pause();
+      audio.removeAttribute("src");
+      audio.load();
+      sound.current = null;
+      if (current?.stop === stop) current = null;
+    }
+    current = { stop };
+
     if (!rememberedOff() && !otherAudioPlaying(audio)) {
       play().then((ok) => {
         if (!ok && !disposed) gestureTypes.forEach((type) => window.addEventListener(type, onGesture, true));
       });
     }
 
-    return () => {
-      disposed = true;
-      clearTimeout(fadeTimer);
-      removeGestureListeners();
-      window.removeEventListener(PLAYBACK_EVENT, onPlayback);
-      window.removeEventListener(READER_STOP_EVENT, onReaderStop);
-      audio.removeEventListener("loadedmetadata", onMetadata);
-      audio.removeEventListener("ended", onEnded);
-      audio.pause();
-      audio.removeAttribute("src");
-      audio.load();
-      ctx?.close?.().catch(() => {});
-      sound.current = null;
-    };
+    return stop;
   }, []);
 
   return (
