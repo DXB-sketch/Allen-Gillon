@@ -5,6 +5,7 @@ import Record from "../../components/illustrations/Record";
 import OpenBook from "../../components/illustrations/OpenBook";
 import HomeUmbrella from "../../components/illustrations/HomeUmbrella";
 import HomeStar from "../../components/illustrations/HomeStar";
+import HeroPhotos from "../../components/HeroPhotos";
 import { CROSS_LINK } from "../../lib/sites.mjs";
 import { pageMetadata } from "../../lib/seo.mjs";
 import "./home.css";
@@ -19,7 +20,36 @@ const HERO = {
   src: "/images/personal/allen-playing-red-gibson-waterfront.jpg",
   width: 600,
   height: 600,
+  alt: "Allen playing his red Gibson on the Bribie Island waterfront",
 };
+
+// The hero photo cross-fades through these after the page loads
+// (components/HeroPhotos.jsx). Each is cropped to the frame's 10:9;
+// position keeps the subject in view in the narrower 3:2 crop on phones.
+const HERO_PHOTOS = [
+  HERO,
+  {
+    src: "/images/personal/allen-grey-hat-on-stage.jpg",
+    width: 720,
+    height: 648,
+    alt: "Allen in a grey hat, playing guitar on a darkened stage",
+    position: "50% 20%",
+  },
+  {
+    src: "/images/personal/allen-red-gibson-bigsby-close-up.jpg",
+    width: 720,
+    height: 648,
+    alt: "Close-up of Allen's hands on his red Gibson with its Bigsby tremolo",
+    position: "50% 55%",
+  },
+  {
+    src: "/images/personal/allen-black-hat-at-venue.jpg",
+    width: 720,
+    height: 648,
+    alt: "Allen in a black hat, smiling as he plays at a venue",
+    position: "50% 30%",
+  },
+];
 
 // The venue handbill: each name printed in one of the two inks, at one of
 // three sizes, set in three lines (the fourth field starts a line), so the
@@ -42,17 +72,11 @@ export default function Page() {
       {/* React hoists this into <head>. */}
       <link rel="preload" as="image" href={HERO.src} fetchPriority="high" />
       <header className="home-hero band">
-        <h1 className="script">
+        <h1 className="script" data-reader-inline>
           <span className="home-name">Allen</span> <span className="home-name">Gillon</span>
         </h1>
         <div className="home-photo" data-reader-skip>
-          <img
-            src={HERO.src}
-            width={HERO.width}
-            height={HERO.height}
-            fetchPriority="high"
-            alt="Allen playing his red Gibson on the Bribie Island waterfront"
-          />
+          <HeroPhotos photos={HERO_PHOTOS} />
         </div>
         <p className="home-intro">
           Allen plays smooth guitar memories in restaurants on Bribie Island. Visiting diners have commented that his music is &ldquo;beautiful&rdquo; and &ldquo;unforgettable&rdquo;.

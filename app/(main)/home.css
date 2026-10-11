@@ -31,6 +31,19 @@
 @media (min-width:600px){
   .home-photo img{aspect-ratio:10/9;}
 }
+/* The hero slideshow (components/HeroPhotos.jsx): the first photo holds the
+   space; the others lie over it and fade in and out. */
+.home-photo-stack{position:relative;}
+.home-photo .home-photo-next{position:absolute;inset:0;width:100%;height:100%;
+  opacity:0;transition:opacity 1.6s ease-in-out;}
+.home-photo .home-photo-next[data-shown]{opacity:1;}
+.home-photo-pause{position:absolute;right:8px;bottom:8px;width:36px;height:36px;padding:0;
+  display:grid;place-items:center;font:inherit;font-size:.8rem;line-height:1;cursor:pointer;
+  color:var(--ink);background:var(--paper);border:1px solid oklch(0.22 0.02 300 / .45);border-radius:0;opacity:.85;}
+.home-photo-pause:hover,.home-photo-pause:focus-visible{opacity:1;}
+@media (prefers-reduced-motion:reduce){
+  .home-photo .home-photo-next{transition:none;}
+}
 
 @media (min-width:900px){
   .home-hero{grid-template-rows:1fr auto auto 1.4fr;row-gap:0;padding-top:clamp(8px,1.4vw,24px);}
