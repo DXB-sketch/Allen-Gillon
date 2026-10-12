@@ -41,8 +41,18 @@
   display:grid;place-items:center;font:inherit;font-size:.8rem;line-height:1;cursor:pointer;
   color:var(--ink);background:var(--paper);border:1px solid oklch(0.22 0.02 300 / .45);border-radius:0;opacity:.85;}
 .home-photo-pause:hover,.home-photo-pause:focus-visible{opacity:1;}
+/* The caption is set on the mat under the photo, in the script face and the
+   blue ink with the red overprint, like the signature under the pull-quote.
+   All captions share one grid cell, so the mat keeps its height while they
+   cross-fade with the photos. */
+.home-photo-captions{display:grid;padding-top:clamp(6px,.9vw,14px);}
+.home-photo-caption{grid-area:1 / 1;margin:0;max-width:none;
+  font-family:var(--script);font-size:clamp(1.6rem,2.2vw,2.2rem);line-height:1.15;
+  color:var(--blue);text-shadow:var(--overprint-red);
+  opacity:0;transition:opacity 1.6s ease-in-out;}
+.home-photo-caption[data-shown]{opacity:1;}
 @media (prefers-reduced-motion:reduce){
-  .home-photo .home-photo-next{transition:none;}
+  .home-photo .home-photo-next,.home-photo-caption{transition:none;}
 }
 
 @media (min-width:900px){

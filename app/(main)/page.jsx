@@ -21,11 +21,13 @@ const HERO = {
   width: 600,
   height: 600,
   alt: "Allen playing his red Gibson on the Bribie Island waterfront",
+  caption: "Sunset Pier Cafe",
 };
 
 // The hero photo cross-fades through these after the page loads
 // (components/HeroPhotos.jsx). Each is cropped to the frame's 10:9;
 // position keeps the subject in view in the narrower 3:2 crop on phones.
+// The caption is printed under the photo and read by the page reader.
 const HERO_PHOTOS = [
   HERO,
   {
@@ -34,6 +36,7 @@ const HERO_PHOTOS = [
     height: 648,
     alt: "Allen in a grey hat, playing guitar on a darkened stage",
     position: "50% 20%",
+    caption: "Big conference night",
   },
   {
     src: "/images/personal/allen-red-gibson-bigsby-close-up.jpg",
@@ -41,6 +44,7 @@ const HERO_PHOTOS = [
     height: 648,
     alt: "Close-up of Allen's hands on his red Gibson with its Bigsby tremolo",
     position: "50% 55%",
+    caption: "Allen with his extendable tremolo arm",
   },
   {
     src: "/images/personal/allen-black-hat-at-venue.jpg",
@@ -48,6 +52,7 @@ const HERO_PHOTOS = [
     height: 648,
     alt: "Allen in a black hat, smiling as he plays at a venue",
     position: "50% 30%",
+    caption: "\u201CLove is in the air\u201D on Bribie.",
   },
 ];
 
@@ -75,7 +80,7 @@ export default function Page() {
         <h1 className="script" data-reader-inline>
           <span className="home-name">Allen</span> <span className="home-name">Gillon</span>
         </h1>
-        <div className="home-photo" data-reader-skip>
+        <div className="home-photo">
           <HeroPhotos photos={HERO_PHOTOS} />
         </div>
         <p className="home-intro">

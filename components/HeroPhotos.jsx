@@ -12,7 +12,10 @@ import { useEffect, useState } from "react";
      on opacity, app/(main)/home.css).
    - The small button in the corner pauses and restarts it (WCAG 2.2.2:
      content that moves by itself for more than five seconds needs a pause).
-   - With reduced motion requested, the first photo stays and nothing moves. */
+   - With reduced motion requested, the first photo stays and nothing moves.
+   - Each photo's caption is printed under it, on the mat, and fades with it.
+     Captions of hidden photos are aria-hidden, so the page reader and screen
+     readers read only the caption of the photo on show. */
 
 const SHOW_MS = 6000;
 
@@ -42,32 +45,48 @@ export default function HeroPhotos({ photos }) {
 
   const shown = more ? photos : photos.slice(0, 1);
   return (
-    <div className="home-photo-stack">
-      {shown.map((photo, i) => (
-        <img
-          key={photo.src}
-          className={i === 0 ? undefined : "home-photo-next"}
-          src={photo.src}
-          width={photo.width}
-          height={photo.height}
-          alt={photo.alt}
-          aria-hidden={i === index ? undefined : true}
-          fetchPriority={i === 0 ? "high" : "low"}
-          decoding={i === 0 ? undefined : "async"}
-          data-shown={i === index ? "" : undefined}
-          style={photo.position ? { objectPosition: photo.position } : undefined}
-        />
-      ))}
-      {more && (
-        <button
-          type="button"
-          className="home-photo-pause"
-          aria-label={paused ? "Play the photos" : "Pause the photos"}
-          onClick={() => setPaused((value) => !value)}
-        >
-          <span aria-hidden="true">{paused ? "▶" : "❚❚"}</span>
-        </button>
-      )}
-    </div>
+    <>
+      <div className="home-photo-stack">
+        {shown.map((photo, i) => (
+          <img
+            key={photo.src}
+            className={i === 0 ? undefined : "home-photo-next"}
+            src={photo.src}
+            width={photo.width}
+            height={photo.height}
+            alt={photo.alt}
+            aria-hidden={i === index ? undefined : true}
+            fetchPriority={i === 0 ? "high" : "low"}
+            decoding={i === 0 ? undefined : "async"}
+            data-shown={i === index ? "" : undefined}
+            style={photo.position ? { objectPosition: photo.position } : undefined}
+          />
+        ))}
+        {more && (
+          <button
+            type="button"
+            className="home-photo-pause"
+            aria-label={paused ? "Play the photos" : "Pause the photos"}
+            onClick={() => setPaused((value) => !value)}
+          >
+            <span aria-hidden="true">{paused ? "▶" : "❚❚"}</span>
+          </button>
+        )}
+      </div>
+      <div className="home-photo-captions">
+        {shown.map((photo, i) =>
+          photo.caption ? (
+            <p
+              key={photo.src}
+              className="home-photo-caption"
+              aria-hidden={i === index ? undefined : true}
+              data-shown={i === index ? "" : undefined}
+            >
+              {photo.caption}
+            </p>
+          ) : null,
+        )}
+      </div>
+    </>
   );
 }
