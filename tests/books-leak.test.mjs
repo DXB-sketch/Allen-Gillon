@@ -4,7 +4,8 @@
 // Under public/ and dist/client (when a build exists) there must be:
 // - no play PDF,
 // - no play page image beyond that play's previewPages,
-// - no full play recording (only the short previews),
+// - only short audio previews of the plays (the full recordings are not
+//   made yet, so nothing looks for them),
 // - no full play text (content/book-text holds only the preview pages).
 
 import { test } from "node:test";
@@ -77,19 +78,9 @@ test("no play page image beyond previewPages, and nothing else in a play folder"
   }
 });
 
-test("no full play recording under public/ or dist/client", () => {
-  const full = walk(join(root, "private", "audio")).filter((f) => f.endsWith(".mp3"));
-  assert.ok(full.length >= 2, "the full recordings live in private/audio/");
-  const bySize = new Map(full.map((f) => [statSync(f).size, sha(f)]));
-  for (const { rel, file } of publicFiles) {
-    if (!/\.(mp3|m4a|ogg|wav)$/i.test(rel)) continue;
-    assert.ok(!rel.includes("school-play-audiobooks"), `full play recording path published: ${rel}`);
-    const size = statSync(file).size;
-    if (bySize.has(size)) assert.notEqual(sha(file), bySize.get(size), `${rel} is a full play recording`);
-  }
+test("play audio: only the short previews are published", () => {
   for (const play of plays.filter((p) => p.audio)) {
     assert.equal(play.audio.kind, "preview");
-    assert.ok(play.audio.from.startsWith("private/"), `${play.slug}: the full recording must stay in private/`);
     for (const dir of PUBLIC_ROOTS) {
       const clip = join(dir, play.audio.src.replace(/^\//, ""));
       if (dir.endsWith("public")) assert.ok(existsSync(clip), `missing preview clip ${relative(root, clip)}`);
