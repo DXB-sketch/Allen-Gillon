@@ -58,7 +58,9 @@ test.describe("main home", () => {
         door: parseFloat(getComputedStyle(document.querySelector(".door-word")).fontSize),
       }));
       expect(r.photo, `photo width at ${width}`).toBeLessThanOrEqual(721);
-      expect(r.h1 / r.door, `name to door-word ratio at ${width}`).toBeGreaterThanOrEqual(1.8);
+      // The name was cut to 75% at Allen's request (8.25vw against the
+      // doors' 5.4vw), so it leads by about 1.5x rather than 2x.
+      expect(r.h1 / r.door, `name to door-word ratio at ${width}`).toBeGreaterThanOrEqual(1.5);
     }
   });
 

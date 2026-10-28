@@ -4,15 +4,26 @@
    12-column .band grid; grid lines: 1 full-start, 2 wide-start (column 1),
    14 wide-end, 15 full-end. */
 
+/* ---------- Sage wash ----------
+   The home page is printed on a calm sage-green sheet, from the mast down to
+   the pull-quote; the line to the other site ("But wait, there's more") and
+   the footer gap go back to plain paper, with a crisp printed edge between.
+   :has() lets the mast and reader bar (in SiteChrome) take the wash on this
+   page only. The wash keeps the paper grain. Ink on it is 14:1, soft 7.5:1,
+   blue 6:1, red-deep 5.3:1 (large text only). */
+.site:has(> main > .home){--wash:oklch(0.925 0.03 150);
+  background-color:var(--wash);background-image:var(--grain);}
+.site:has(> main > .home) > footer{margin-top:0;}
+
 /* ---------- Hero ----------
    Phone: name, then the photo edge to edge, then the intro.
    From 900px: the name and intro hang from the left of the wide area and the
    photo bleeds off the right edge of the page. The only copy of the photo is
    600px square, so this is a split rather than a full-width band: the photo
-   is held to 720px (1.2x) and the home name is set larger than other pages'
-   L1 (13rem cap, not 10rem) so the left of the hero is filled, not empty. */
+   is held to 720px (1.2x). The home name is set at 75% of its first size
+   (clamp(4rem,11vw,13rem)), at Allen's request. */
 .home-hero{padding-block:clamp(8px,2vw,24px) 0;row-gap:clamp(16px,2.4vw,36px);}
-.home-hero > h1{grid-row:1;font-size:clamp(4rem,11vw,13rem);
+.home-hero > h1{grid-row:1;font-size:clamp(3rem,8.25vw,9.75rem);
   color:var(--blue);text-shadow:var(--overprint-red);}
 .home-name{white-space:nowrap;}
 .home-hero > .home-photo{grid-column:wide;grid-row:2;min-width:0;}
@@ -142,7 +153,11 @@
 }
 
 /* ---------- Line to the other site ---------- */
-.home-cross{margin-top:var(--band-space);}
+/* The wash ends here: a paper band, full bleed, that also fills the gap down
+   to the footer (the footer's own margin is dropped on this page). */
+.home-quote{padding-bottom:calc(var(--band-space) * .6);}
+.home-cross{margin-top:0;background-color:var(--paper);background-image:var(--grain);
+  padding-block:calc(var(--band-space) * .5) var(--band-space);}
 .home-cross p{margin:0;display:flex;align-items:center;gap:clamp(14px,2vw,28px);flex-wrap:wrap;max-width:none;}
 .cross-art{width:clamp(72px,7vw,120px);height:auto;flex:none;}
 .home-cross a{font-size:1.25em;line-height:1.35;color:var(--blue);text-underline-offset:5px;text-decoration-thickness:1px;

@@ -4,8 +4,18 @@
    own small drawn shelf instead. No cards, no shadows except the book-spine
    inset. Drawings: components/illustrations/Sideboard*.jsx. */
 
+/* ---------- Sage wash ----------
+   As on the main home page (app/(main)/home.css): the page is printed on a
+   calm sage sheet from the mast down to the sideboard; the line back to the
+   main site and the footer gap are plain paper, with a crisp edge between. */
+.site:has(> main > .sideboard){--wash:oklch(0.925 0.03 150);
+  background-color:var(--wash);background-image:var(--grain);}
+.site:has(> main > .sideboard) > footer{margin-top:0;}
+
 .sideboard{padding-top:clamp(20px,3vw,48px);}
-.sideboard-head h1.script{color:var(--blue);text-shadow:var(--overprint-red);}
+/* The name is set at 75% of the site's L1 (clamp(4rem,11vw,10rem)), as on
+   the main home page, at Allen's request. */
+.sideboard-head h1.script{font-size:clamp(3rem,8.25vw,7.5rem);color:var(--blue);text-shadow:var(--overprint-red);}
 .sideboard-head p{margin:14px 0 0;font-size:1.1em;color:var(--soft);}
 @media (min-width:1024px){
   /* The lede steps in two columns from the title, as on other pages. */
@@ -63,7 +73,11 @@
 .sideboard-drawing{display:none;}
 
 /* ---------- Back to the main site ---------- */
-.sideboard-back{display:flex;align-items:flex-end;gap:14px;margin:clamp(56px,7vw,112px) 0 0;font-size:1.1em;}
+/* The wash ends here: the line runs full bleed on paper, and fills the gap
+   down to the footer (the footer's own margin is dropped on this page). */
+.band > .sideboard-back{display:flex;align-items:flex-end;gap:14px;margin:calc(var(--band-space) * .6) 0 0;font-size:1.1em;
+  grid-column:full;max-width:none;padding:calc(var(--band-space) * .5) var(--gutter) var(--band-space);
+  background-color:var(--paper);background-image:var(--grain);}
 .sideboard-back a{display:inline-flex;align-items:center;min-height:44px;color:var(--red-deep);text-underline-offset:4px;}
 .sideboard-back a:hover{color:var(--ink);}
 .back-headstock{flex:none;width:36px;height:auto;}

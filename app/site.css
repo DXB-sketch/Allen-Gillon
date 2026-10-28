@@ -35,6 +35,9 @@
   --blue:  oklch(0.455 0.150 262);
   --soft:  oklch(0.40 0.03 300);
   --on:    oklch(0.975 0.012 92);
+  /* Faint paper grain. It tiles and scrolls with the page. A variable so a
+     tinted band (the home page wash) can carry the same grain. */
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 
   --serif:"Times New Roman",Times,"Liberation Serif",serif;
   --script:"Dynalight","Dynalight fallback","Times New Roman",cursive;
@@ -58,8 +61,7 @@ body{
   font-family:var(--serif);
   font-size:20px;line-height:1.6;
   text-rendering:optimizeLegibility;
-  /* Faint paper grain. It tiles and scrolls with the page. */
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image:var(--grain);
 }
 img,video{max-width:100%;}
 a{color:inherit;}
