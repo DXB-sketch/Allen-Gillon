@@ -53,7 +53,7 @@ test.describe("reader, reduced motion", () => {
     expect(took).toBeLessThan(250);
   });
 
-  test("a play shows its preview, then an end page with the coming-soon Buy", async ({ page }) => {
+  test("a play shows its preview, then an end page with the A$10 Buy link", async ({ page }) => {
     await openReader(page, "melting-pot");
     const counter = page.locator(".bkr-counter");
     await expect(counter).toContainText("(full script 47 pages)");
@@ -67,8 +67,8 @@ test.describe("reader, reduced motion", () => {
     await expect(end).toBeVisible();
     await expect(end).toContainText("That’s the preview.");
     await expect(end).toContainText("Buy the full script (A$10)");
-    await expect(end).toContainText("A$10 download. Online checkout coming soon");
-    await expect(page.locator('a[href*="buy.stripe.com"]')).toHaveCount(0);
+    await expect(end).not.toContainText("coming soon");
+    await expect(end.locator('a[href^="https://buy.stripe.com/"]')).toHaveText("Buy the full script");
     await expect(page.locator(".bkr a[download]")).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Listen to a preview" })).toBeVisible();
   });

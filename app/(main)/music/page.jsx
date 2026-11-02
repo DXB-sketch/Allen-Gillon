@@ -9,6 +9,7 @@ import LiteYouTube from "./LiteYouTube";
 import { SHELF_SIZES, shelfSrcSet } from "../../../lib/album-shelf.mjs";
 import { albums, originals } from "./albums.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
+import { coffeeTipLink } from "../../../lib/storefront.mjs";
 import { collectionPage, jsonLdProps, musicAlbum } from "../../../lib/schema.mjs";
 import "./music.css";
 
@@ -27,7 +28,8 @@ const JSON_LD = [
 /* Albums (/music), W5.
    One primary thing: the shelf of four albums. Each sleeve is the only
    toggle for its track list; the open panel's one primary action is
-   "Download album free" (albums are free: no Payment Link on this page).
+   "Download album free" (albums are free: no album Payment Link on this
+   page; the open panel also carries the "Buy me a coffee" thank-you).
    Instruments are two-ink line drawings at the page edges, partly off the
    page, in space that holds no text: Allen's Trini Lopez Gibson by the
    title, a flute under the shelf and a strip of piano keys by the original
@@ -67,7 +69,7 @@ export default function MusicPage() {
       </header>
 
       <section className="albums-band band" aria-label="Albums">
-        <AlbumShelf albums={shelf} shelf={<ShelfPlank className="album-shelf" draw />} />
+        <AlbumShelf albums={shelf} shelf={<ShelfPlank className="album-shelf" draw />} coffeeHref={coffeeTipLink()} />
         <SectionComment subject="Allen's albums" returnTo="/music" returnLabel="the albums" data-reader-skip />
         <div className="instrument instrument--flute" data-motion="from-right">
           <MusicFlute />

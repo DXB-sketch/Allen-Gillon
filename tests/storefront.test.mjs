@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFile } from "node:fs/promises";
-import { albumPrice, formatAud, playLinksCurrent, playPrice, stripePaymentLink } from "../lib/storefront.mjs";
+import { albumPrice, coffeeTipLink, formatAud, playLinksCurrent, playPrice, stripePaymentLink } from "../lib/storefront.mjs";
 import { artworks } from "../content/artworks.mjs";
 import { stripePaymentLinks } from "../content/stripe-payment-links.mjs";
 
@@ -17,11 +17,34 @@ test("checkout accepts only configured Stripe Payment Links", () => {
   assert.equal(stripePaymentLink("not-a-product"), "");
 });
 
-test("the old $50 play Payment Links stay off until playLinksCurrent is set", () => {
-  assert.equal(playLinksCurrent, false);
+test("the A$10 play Payment Links are live, and none is an old A$50 link", () => {
+  assert.equal(playLinksCurrent, true);
   const playIds = Object.keys(stripePaymentLinks).filter((key) => key.startsWith("play-"));
   assert.equal(playIds.length, 5);
-  for (const id of playIds) assert.equal(stripePaymentLink(id), "", id);
+  /* The A$50 links created on 2026-10-01, kept here so they never come back. */
+  const oldA50 = [
+    "https://buy.stripe.com/fZufZjbojao0f2o4A0fMA04",
+    "https://buy.stripe.com/7sY4gB1NJ9jWf2o4A0fMA05",
+    "https://buy.stripe.com/fZu3cxfEz3ZCbQcaYofMA06",
+    "https://buy.stripe.com/3cIbJ3gID0Nq4nK9UkfMA07",
+    "https://buy.stripe.com/3cI4gB8c7fIkaM8eaAfMA08",
+  ];
+  for (const id of playIds) {
+    assert.match(stripePaymentLink(id), /^https:\/\/buy\.stripe\.com\//, id);
+    assert.ok(!oldA50.includes(stripePaymentLink(id)), `${id} still uses the A$50 link`);
+  }
+});
+
+test("the Stripe catalogue lists every play at A$10", async () => {
+  const products = JSON.parse(await readFile(new URL("../content/stripe-products.json", import.meta.url), "utf8"));
+  for (const play of products.filter((product) => product.id.startsWith("play-"))) {
+    assert.equal(play.unitAmount, playPrice, play.id);
+  }
+});
+
+test("the coffee link is a checked buy.stripe.com link, kept out of the catalogue", () => {
+  assert.match(coffeeTipLink(), /^https:\/\/buy\.stripe\.com\//);
+  assert.ok(!Object.values(stripePaymentLinks).includes(coffeeTipLink()));
 });
 
 test("Stripe catalogue covers every item currently offered for sale", async () => {

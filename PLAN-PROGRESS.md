@@ -103,7 +103,8 @@ Legend: `[x]` done and verified, `[ ]` open, `[B]` blocked on the human (see bot
 - Open questions from agents: docs/open-questions-raw.md
 
 ## Blocked on the human (TODO, not blocking other work)
-- [B] Create A$1 play Payment Links, then set `playLinksCurrent: true`
+- [x] A$10 play Payment Links created (2026-11-02) and `playLinksCurrent` set to true
+- [B] Deactivate the five old A$50 play Payment Links in the Stripe Dashboard (still active; the site no longer links to them)
 - [x] Cloudflare (2026-10-01): deployed overhaul (version 20e6c5ee); other.allengillon.com custom domain and DNS created by the deploy; remote D1 reviews migration applied (GET /api/reviews 200); Email Routing enabled with MX records live and support@allengillon.com forwarding to allen0295@gmail.com; Vercel copy (allengillon-mockups) paused. Live robots.txt shows only our rules, so no Managed robots.txt is prepended. No manual cache purge was needed: both hosts serve the new titles.
 - [B] Allen: click the Cloudflare verification email sent to allen0295@gmail.com, or support@ mail will not forward
 - [B] Legal text sign-off, play licence terms (legal pages stay unpublished)

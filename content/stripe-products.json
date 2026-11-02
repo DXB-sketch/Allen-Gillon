@@ -52,7 +52,7 @@
     "name": "Melting Pot",
     "description": "Downloadable PDF of the school play Melting Pot by Allen Gillon",
     "type": "digital",
-    "unitAmount": 5000,
+    "unitAmount": 1000,
     "currency": "aud",
     "digitalDelivery": true
   },
@@ -61,7 +61,7 @@
     "name": "The Other Man's Grass",
     "description": "Downloadable PDF of the school play The Other Man's Grass by Allen Gillon",
     "type": "digital",
-    "unitAmount": 5000,
+    "unitAmount": 1000,
     "currency": "aud",
     "digitalDelivery": true
   },
@@ -70,7 +70,7 @@
     "name": "Tribute to Calamity Jane",
     "description": "Downloadable PDF of the school play Tribute to Calamity Jane by Allen Gillon",
     "type": "digital",
-    "unitAmount": 5000,
+    "unitAmount": 1000,
     "currency": "aud",
     "digitalDelivery": true
   },
@@ -79,7 +79,7 @@
     "name": "Three Heroes of Sherwood",
     "description": "Downloadable PDF of the school play Three Heroes of Sherwood by Allen Gillon",
     "type": "digital",
-    "unitAmount": 5000,
+    "unitAmount": 1000,
     "currency": "aud",
     "digitalDelivery": true
   },
@@ -88,7 +88,7 @@
     "name": "Breakout",
     "description": "Downloadable PDF of the school play Breakout by Allen Gillon",
     "type": "digital",
-    "unitAmount": 5000,
+    "unitAmount": 1000,
     "currency": "aud",
     "digitalDelivery": true
   },

@@ -5,11 +5,11 @@ export const stripePaymentLinks = {
   "album-wonderful-world": "https://buy.stripe.com/3cIcN7boj8fS3jG0jKfMA01",
   "album-misty": "https://buy.stripe.com/00w5kF2RNao09I4eaAfMA02",
   "album-i-just-called": "https://buy.stripe.com/14A3cx0JF2VyaM88QgfMA03",
-  "play-melting-pot": "https://buy.stripe.com/fZufZjbojao0f2o4A0fMA04",
-  "play-the-other-mans-grass": "https://buy.stripe.com/7sY4gB1NJ9jWf2o4A0fMA05",
-  "play-tribute-to-calamity-jane": "https://buy.stripe.com/fZu3cxfEz3ZCbQcaYofMA06",
-  "play-three-heroes-of-sherwood": "https://buy.stripe.com/3cIbJ3gID0Nq4nK9UkfMA07",
-  "play-breakout": "https://buy.stripe.com/3cI4gB8c7fIkaM8eaAfMA08",
+  "play-melting-pot": "https://buy.stripe.com/7sY4gB783ao0f2o1nOfMA0C",
+  "play-the-other-mans-grass": "https://buy.stripe.com/7sYdRbdwr3ZC3jG7McfMA0D",
+  "play-tribute-to-calamity-jane": "https://buy.stripe.com/eVq00lgID0Nq2fC6I8fMA0E",
+  "play-three-heroes-of-sherwood": "https://buy.stripe.com/9B628t63Z3ZCf2ofeEfMA0F",
+  "play-breakout": "https://buy.stripe.com/aFacN7akf9jWcUg9UkfMA0G",
   "art-ann-426502619623139": "https://buy.stripe.com/28E28t9gb8fScUgaYofMA09",
   "art-ann-736815624413901": "https://buy.stripe.com/eVqeVfcsndAccUgaYofMA0a",
   "art-ann-736813651080765": "https://buy.stripe.com/cNidRbakfdAc2fC7McfMA0b",
@@ -40,3 +40,9 @@ export const stripePaymentLinks = {
   "art-ann-127394872022649": "https://buy.stripe.com/14AfZj7831Ruf2o2rSfMA0A",
   "art-ann-105021430926660": "https://buy.stripe.com/8x228t0JF2Vy3jG3vWfMA0B"
 };
+
+/* "Buy me a coffee" beside the album track lists on /music (components/
+   CoffeeTip.jsx). A pay-what-you-like Price (A$5 suggested, A$2 to A$500) on
+   the Stripe product "Buy Allen a coffee". It is a thank-you, not a product,
+   so it stays out of stripePaymentLinks and content/stripe-products.json. */
+export const coffeeLink = "https://buy.stripe.com/aFa7sN1NJ1Ru2fC2rSfMA0H";

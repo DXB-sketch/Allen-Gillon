@@ -4,6 +4,7 @@ import { Fragment, useEffect, useState } from "react";
 import { usePlayer } from "./Player";
 import { PREVIEW_LABEL, isPreviewTrack } from "../lib/player-state.mjs";
 import { SHELF_SIZES, shelfSrcSet } from "../lib/album-shelf.mjs";
+import { CoffeeCard, CoffeePopup } from "./CoffeeTip";
 
 /* The albums shelf on /music (W5).
 
@@ -12,7 +13,10 @@ import { SHELF_SIZES, shelfSrcSet } from "../lib/album-shelf.mjs";
      pulling one record off the shelf.
    - The open panel holds the album's one primary action, "Download album
      free", and the track rows: play, title, time and a download link.
-     Albums are free: no Payment Link is ever rendered here.
+     Albums are free: no album Payment Link is ever rendered here. The
+     only Stripe link is the optional "Buy me a coffee" thank-you
+     (components/CoffeeTip.jsx), right of the tracks from 1024px and a
+     once-per-visit centred popup below that.
    - The record slides out while the album is open or its track is loaded,
      and turns only while that album's status is "playing" (paused keeps it
      still where it stopped).
@@ -63,7 +67,7 @@ function safeName(text) {
   return text.replace(/[\\/:*?"<>|]/g, "");
 }
 
-function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, onToggle }) {
+function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, onToggle, coffeeHref }) {
   const [downloadState, setDownloadState] = useState("idle");
   const { track, status, toggle } = usePlayer();
   const holdsTrack = Boolean(track) && tracks.some((t) => t.src === track.src);
@@ -206,12 +210,13 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
             );
           })}
         </ol>
+        <CoffeeCard href={coffeeHref} headingId={`coffee-${id}`} />
       </section>
     </div>
   );
 }
 
-export default function AlbumShelf({ albums, shelf = null }) {
+export default function AlbumShelf({ albums, shelf = null, coffeeHref = "" }) {
   const [openId, setOpenId] = useState(null);
   // A link to /music#<album> (the Timeless "Misty" link, schema and share
   // URLs) opens that album as well as scrolling to its sleeve.
@@ -232,11 +237,13 @@ export default function AlbumShelf({ albums, shelf = null }) {
           index={index}
           {...album}
           open={openId === album.id}
+          coffeeHref={coffeeHref}
           onToggle={() => setOpenId((prev) => (prev === album.id ? null : album.id))}
         />
       ))}
       {/* The drawn shelf board the sleeves stand on (server-rendered, laptops and up). */}
       {shelf}
+      <CoffeePopup href={coffeeHref} trigger={openId} />
     </div>
   );
 }

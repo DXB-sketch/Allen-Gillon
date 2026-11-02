@@ -38,13 +38,12 @@ test.describe("/books shelves", () => {
     for (const book of await plays.all()) {
       await expect(book.locator(".book-action")).toHaveText(["Read a preview"]);
       await expect(book.locator(".book-price strong")).toHaveText("A$10");
-      // The storefront gate: play links are off, so no Buy and no per-book
-      // "coming soon"; the note is said once, in the coda.
+      // The A$10 play links are live: one Buy link per play, no "coming soon".
       await expect(book.locator(".purchase-pending")).toHaveCount(0);
-      await expect(book.locator("a.btn")).toHaveCount(0);
+      await expect(book.locator("a.btn")).toHaveAttribute("href", /^https:\/\/buy\.stripe\.com\//);
     }
-    await expect(page.locator("#school-plays")).toContainText("A$10 download. Online checkout coming soon.");
-    expect(await page.locator("main").innerText()).not.toMatch(/coming soon[\s\S]*coming soon/i);
+    await expect(page.locator("#school-plays")).toContainText("After checkout, Allen will email the PDF");
+    expect(await page.locator("main").innerText()).not.toMatch(/coming soon/i);
     // The price is on each play, not repeated in the lede.
     await expect(page.locator(".plays-lede")).not.toContainText("A$");
 

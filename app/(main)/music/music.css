@@ -167,8 +167,44 @@ html.motion-ok .instrument[data-motion].is-in{
   .album > .album-title{margin-top:30px;}
 }
 @media (min-width:1280px){
-  .trklist{columns:2;column-gap:clamp(32px,4vw,72px);}
+  /* Two columns of tracks only when the panel has no coffee card beside them. */
+  .trkpanel:not(:has(.coffee-tip)) .trklist{columns:2;column-gap:clamp(32px,4vw,72px);}
 }
+
+/* ---------- "Buy me a coffee" (components/CoffeeTip.jsx) ----------
+   A quiet thank-you, not a second primary action: no box, the cup drawing,
+   a few lines and an outlined red-deep button (the panel's one filled button
+   stays "Download album free"). Below 1024px it follows the track list and
+   also opens once per visit as a centred dialog; from 1024px it stands in
+   the panel's last column, to the right of the tracks. */
+.coffee-tip{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:clamp(28px,5vw,40px);max-width:30rem;}
+.coffee-art{width:clamp(84px,22%,112px);height:auto;margin-bottom:-4px;}
+.coffee-title{font-size:1.3rem;line-height:1.3;margin:0;color:var(--ink);}
+.coffee-text{margin:0;font-size:1em;line-height:1.5;max-width:34ch;}
+.coffee-small{margin:0;font-size:1rem;color:var(--soft);}
+.coffee-btn{display:inline-flex;align-items:center;min-height:48px;padding:8px 22px;
+  font-family:var(--serif);font-size:1.05rem;font-weight:700;letter-spacing:.01em;text-decoration:none;
+  color:var(--red-deep);background:var(--paper);border:2px solid var(--red-deep);border-radius:0;
+  transition:background-color .2s var(--ease-out),color .2s var(--ease-out);}
+.coffee-btn:hover{background:var(--red-deep);color:var(--on);}
+@media (min-width:1024px){
+  .album > .trkpanel:has(.coffee-tip) .trklist{grid-column:2 / span 2;}
+  .trkpanel .coffee-tip{grid-column:-2 / -1;grid-row:1;margin-top:0;}
+}
+
+/* The phone and tablet popup: a native <dialog>, centred by the browser.
+   Flat ink backdrop, no blur, as on the painting dialog. */
+.coffee-dialog{padding:0;border:0;border-radius:0;margin:auto;color:var(--ink);background-color:var(--paper);
+  width:min(26rem,calc(100% - 2 * var(--gutter)));max-height:calc(100% - 2 * var(--gutter));}
+.coffee-dialog::backdrop{background:oklch(0.22 0.02 300 / .82);}
+.coffee-dialog-inner{padding:12px clamp(20px,5vw,32px) clamp(24px,6vw,32px);}
+.coffee-dialog-close{display:flex;justify-content:flex-end;margin:0;}
+.coffee-close{font:inherit;font-size:1.05rem;font-weight:700;min-height:48px;padding:8px 18px;cursor:pointer;
+  color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;
+  transition:background-color .2s var(--ease-out),color .2s var(--ease-out);}
+.coffee-close:hover{background:var(--ink);color:var(--on);}
+.coffee-dialog .coffee-tip{margin-top:0;}
+.coffee-dialog .coffee-title{font-size:1.45rem;}
 
 /* Under the shelf: the comment link, and the flute lying at the right-hand
    edge (laptops and up). */

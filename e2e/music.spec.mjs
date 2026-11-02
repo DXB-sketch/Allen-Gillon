@@ -39,11 +39,55 @@ test("each sleeve is the only toggle, named for its album, and opens its panel",
   await expect(page.locator(".trkpanel:visible")).toHaveCount(1);
 });
 
-test("albums are free: no Payment Link or price anywhere on the page", async ({ page }) => {
+test("albums are free: no album Payment Link or price; the only Stripe link is the coffee", async ({ page }) => {
   await page.goto("/music", { waitUntil: "networkidle" });
-  const html = await page.content();
+  const coffee = page.locator('.coffee-tip a[href^="https://buy.stripe.com/"]');
+  const coffeeHrefs = [...new Set(await coffee.evaluateAll((links) => links.map((a) => a.href)))];
+  expect(coffeeHrefs).toHaveLength(1);
+  // Everything outside the "Buy me a coffee" cards and popup, with the coffee
+  // URL itself removed (it also rides in the page's serialised props).
+  const html = (await page.evaluate(() => {
+    const copy = document.documentElement.cloneNode(true);
+    copy.querySelectorAll(".coffee-tip, .coffee-dialog").forEach((el) => el.remove());
+    return copy.outerHTML;
+  })).split(coffeeHrefs[0]).join("");
   expect(html).not.toMatch(/buy\.stripe\.com/);
   expect(html).not.toMatch(/A\$\s?\d|\$\d+\s?AUD/);
+});
+
+test("laptops: Buy me a coffee stands to the right of the open track list, with no popup", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/music", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Show tracks for Misty", exact: true }).click();
+  const panel = page.locator("#trk-misty");
+  const card = panel.locator(".coffee-tip");
+  await expect(card).toBeVisible();
+  await expect(card.getByRole("link", { name: /Buy me a coffee/ })).toHaveAttribute("target", "_blank");
+  const list = await panel.locator(".trklist").boundingBox();
+  const box = await card.boundingBox();
+  expect(box.x).toBeGreaterThanOrEqual(list.x + list.width);
+  await page.waitForTimeout(1500);
+  await expect(page.locator(".coffee-dialog")).not.toBeVisible();
+});
+
+test("phones: opening an album pops Buy me a coffee up in the centre, once per visit", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/music", { waitUntil: "networkidle" });
+  await page.getByRole("button", { name: "Show tracks for Misty", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Enjoying the music?" });
+  await expect(dialog).toBeVisible({ timeout: 5_000 });
+  const box = await dialog.boundingBox();
+  expect(Math.abs(box.x + box.width / 2 - 195)).toBeLessThan(3);
+  expect(Math.abs(box.y + box.height / 2 - 422)).toBeLessThan(3);
+  await expect(dialog.getByRole("link", { name: /Buy me a coffee/ })).toHaveAttribute("href", /^https:\/\/buy\.stripe\.com\//);
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  // The track list is still there, with the card after it.
+  await expect(page.locator("#trk-misty .coffee-tip")).toBeVisible();
+  // Another album in the same visit: no second popup.
+  await page.getByRole("button", { name: "Show tracks for I Just Called", exact: true }).click();
+  await page.waitForTimeout(1500);
+  await expect(dialog).not.toBeVisible();
 });
 
 test("the record turns only while that album is playing", async ({ page }) => {
