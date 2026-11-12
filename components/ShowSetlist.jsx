@@ -23,7 +23,7 @@ export default function ShowSetlist({ tracks }) {
               onClick={() => toggle({ album: "The Matthew Allen 5 at Chandler Theatre", ...track }, tracks)}
               aria-label={(isCurrentAndPlaying ? "Pause " : "Play ") + track.name + (preview ? `, ${PREVIEW_LABEL}` : "")}
             >
-              {isCurrentAndPlaying ? "❚❚" : "▶"}
+              {isCurrentAndPlaying ? "❚❚" : "\u25B6\uFE0E"}
             </button>
             <span className="tname">{track.name}</span>
             <span className="ttime">

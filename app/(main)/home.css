@@ -1,5 +1,5 @@
 /* Home (allengillon.com/). W5 art direction.
-   Order: hero (name + photo), two typographic doorways, the venue
+   Order: hero (name + photo), two typographic doorways, the videos, the venue
    handbill, one pull-quote, a line to the other site. Every band is the
    12-column .band grid; grid lines: 1 full-start, 2 wide-start (column 1),
    14 wide-end, 15 full-end. */
@@ -98,6 +98,27 @@
 @media (min-width:820px){
   /* Two equal tracks with the band's column gap: the same 6 + 6 split. */
   .home-doors{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+
+/* ---------- Videos ----------
+   Allen's own clips (components/HomeVideos.jsx), under one Dynalight title.
+   No frames: a video is its own object. One clip is held to a comfortable
+   width; two or more sit side by side from 700px. From 1024px the title
+   hangs in the left columns and the clips take the rest of the wide area. */
+.home-videos{margin-top:var(--band-space);row-gap:clamp(14px,2vw,24px);}
+.home-videos > h2{margin:0;}
+.home-videos-list{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,3vw,44px) var(--col-gap);}
+.home-videos-list[data-count="1"]{max-width:880px;}
+.home-video{display:flex;flex-direction:column;gap:10px;margin:0;min-width:0;}
+.home-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:var(--ink);}
+.home-video figcaption{font-size:1.1rem;font-weight:700;line-height:1.35;}
+.home-video figcaption small{display:block;color:var(--soft);font-size:1rem;font-weight:400;}
+@media (min-width:700px){
+  .home-videos-list:not([data-count="1"]){grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:1024px){
+  .home-videos > h2{grid-column:wide-start / span 3;}
+  .home-videos > .home-videos-list{grid-column:5 / wide-end;}
 }
 
 /* ---------- Venue handbill ----------

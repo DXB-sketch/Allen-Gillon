@@ -70,24 +70,47 @@ test("laptops: Buy me a coffee stands to the right of the open track list, with 
   await expect(page.locator(".coffee-dialog")).not.toBeVisible();
 });
 
-test("phones: opening an album pops Buy me a coffee up in the centre, once per visit", async ({ page }) => {
+test("phones: opening an album scrolls to its songs, and Buy me a coffee never pops up", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/music", { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "Show tracks for Misty", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "Enjoying the music?" });
-  await expect(dialog).toBeVisible({ timeout: 5_000 });
-  const box = await dialog.boundingBox();
-  expect(Math.abs(box.x + box.width / 2 - 195)).toBeLessThan(3);
-  expect(Math.abs(box.y + box.height / 2 - 422)).toBeLessThan(3);
-  await expect(dialog.getByRole("link", { name: /Buy me a coffee/ })).toHaveAttribute("href", /^https:\/\/buy\.stripe\.com\//);
-  await page.keyboard.press("Escape");
-  await expect(dialog).not.toBeVisible();
-  // The track list is still there, with the card after it.
-  await expect(page.locator("#trk-misty .coffee-tip")).toBeVisible();
-  // Another album in the same visit: no second popup.
-  await page.getByRole("button", { name: "Show tracks for I Just Called", exact: true }).click();
+  await page.getByRole("button", { name: "Show tracks for That's The Time", exact: true }).click();
+  // No dialog, at once or after a wait: Allen found it made the coffee feel compulsory.
   await page.waitForTimeout(1500);
-  await expect(dialog).not.toBeVisible();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.locator("dialog")).toHaveCount(0);
+  // The album's title is at the top of the window and the first songs are on screen.
+  const top = () => page.locator("#title-thats-the-time").evaluate((el) => el.getBoundingClientRect().top);
+  await expect.poll(top).toBeLessThan(40);
+  expect(await top()).toBeGreaterThanOrEqual(0);
+  await expect(page.locator("#trk-thats-the-time .trklist li").first()).toBeInViewport();
+  // The card is still there, after the track list.
+  const list = await page.locator("#trk-thats-the-time .trklist").boundingBox();
+  const card = await page.locator("#trk-thats-the-time .coffee-tip").boundingBox();
+  expect(card.y).toBeGreaterThanOrEqual(list.y + list.height);
+});
+
+test("every sleeve says Click to OPEN above it, and Click to close while open", async ({ page }) => {
+  for (const width of [390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/music", { waitUntil: "networkidle" });
+    const hints = page.locator(".sleeve .sleeve-hint");
+    await expect(hints).toHaveCount(4);
+    for (const hint of await hints.all()) {
+      await expect(hint).toHaveText("Click to OPEN");
+      await expect(hint).toBeVisible();
+      const r = await hint.evaluate((el) => {
+        const cover = el.parentElement.querySelector("img").getBoundingClientRect();
+        const box = el.getBoundingClientRect();
+        return { above: box.bottom <= cover.top + 1, px: parseFloat(getComputedStyle(el).fontSize) };
+      });
+      expect(r.above, `hint above the cover at ${width}`).toBe(true);
+      expect(r.px).toBeGreaterThanOrEqual(19);
+    }
+    // The button's name is unchanged for assistive tech.
+    const misty = page.getByRole("button", { name: "Show tracks for Misty", exact: true });
+    await misty.click();
+    await expect(misty.locator(".sleeve-hint")).toHaveText("Click to close");
+  }
 });
 
 test("the record turns only while that album is playing", async ({ page }) => {

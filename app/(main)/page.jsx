@@ -6,6 +6,7 @@ import OpenBook from "../../components/illustrations/OpenBook";
 import HomeUmbrella from "../../components/illustrations/HomeUmbrella";
 import HomeStar from "../../components/illustrations/HomeStar";
 import HeroPhotos from "../../components/HeroPhotos";
+import HomeVideos from "../../components/HomeVideos";
 import { CROSS_LINK } from "../../lib/sites.mjs";
 import { pageMetadata } from "../../lib/seo.mjs";
 import "./home.css";
@@ -21,7 +22,7 @@ const HERO = {
   width: 600,
   height: 600,
   alt: "Allen playing his red Gibson on the Bribie Island waterfront",
-  caption: "Sunset Pier Cafe",
+  caption: "Light Jazz, favourite memories",
 };
 
 // The hero photo cross-fades through these after the page loads
@@ -70,6 +71,24 @@ const VENUES = [
   ["Sandstone Tavern", "l", "b"],
 ];
 
+// The "Videos" band (components/HomeVideos.jsx). Each clip is a 720p copy of
+// the file Allen sent, with a poster frame and a captions track. The home
+// page music makes way while one plays and comes back when it stops.
+// "Fly Me To The Moon" joins "Take Five" here once Allen exports it as an mp4.
+const VIDEOS = [
+  {
+    src: "/videos/allen-take-five.mp4",
+    poster: "/videos/allen-take-five-poster.jpg",
+    captions: "/videos/allen-take-five.en.vtt",
+    width: 1280,
+    height: 720,
+    title: "Take Five",
+    credit: "Allen, playing live",
+    label:
+      "Allen playing Take Five live on his red Gibson. The camera moves from a venue poster reading “Allen & Ann” to Allen on stage in a black hat, then to the diners. Video, 17 seconds, captioned.",
+  },
+];
+
 export default function Page() {
   const cross = CROSS_LINK.main;
   return (
@@ -102,6 +121,13 @@ export default function Page() {
           </Link>
         </div>
       </nav>
+
+      <section className="home-videos band" aria-labelledby="home-videos-title" data-reader-skip>
+        <h2 id="home-videos-title" className="script">
+          Videos
+        </h2>
+        <HomeVideos videos={VIDEOS} />
+      </section>
 
       <section className="home-bill band" aria-labelledby="home-bill-title" data-reader-skip>
         <div className="bill">

@@ -34,7 +34,7 @@ export default function Audiobook({ title, src, kind = "audiobook" }) {
       onClick={() => toggle(track, [track])}
       aria-label={`${busy ? "Pause" : "Play"} ${title} ${noun}`}
     >
-      <span className="audiobook-play-icon" aria-hidden="true">{busy ? "❚❚" : "▶"}</span>
+      <span className="audiobook-play-icon" aria-hidden="true">{busy ? "❚❚" : "\u25B6\uFE0E"}</span>
       <span>{action}</span>
     </button>
   );

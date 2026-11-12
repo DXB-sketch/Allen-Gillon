@@ -174,6 +174,65 @@ test.describe("main home", () => {
     await ctx.close();
   });
 
+  test("the first hero caption is Allen's line, not a venue", async ({ page }) => {
+    await page.goto(HOME, { waitUntil: "load" });
+    await expect(page.locator(".home-photo-caption").first()).toHaveText("Light Jazz, favourite memories");
+    await expect(page.locator(".home-photo-captions")).not.toContainText("Sunset Pier");
+  });
+
+  test("Videos: a titled band of captioned clips that load nothing until played", async ({ page, request }) => {
+    for (const width of [375, 1280]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto(HOME, { waitUntil: "load" });
+      const band = page.locator("section.home-videos");
+      await expect(band.getByRole("heading", { level: 2, name: "Videos" })).toBeVisible();
+      const videos = band.locator("video");
+      expect(await videos.count()).toBeGreaterThanOrEqual(1);
+      for (const video of await videos.all()) {
+        await expect(video).toHaveAttribute("preload", "none");
+        await expect(video).toHaveAttribute("controls", "");
+        await expect(video).toHaveAttribute("playsinline", "");
+        expect((await video.getAttribute("aria-label")).length).toBeGreaterThan(20);
+        for (const url of [
+          await video.getAttribute("poster"),
+          await video.locator("source").getAttribute("src"),
+          await video.locator('track[kind="captions"][srclang="en"]').getAttribute("src"),
+        ]) {
+          expect((await request.head(`http://localhost:${port}${url}`)).status(), url).toBe(200);
+        }
+        const box = await video.boundingBox();
+        expect(Math.abs(box.width / box.height - 16 / 9)).toBeLessThan(0.02);
+        expect(box.x).toBeGreaterThanOrEqual(12);
+        expect(box.x + box.width).toBeLessThanOrEqual(width - 12);
+      }
+    }
+  });
+
+  test("the home page music makes way for a video and comes back when it stops", async ({ page }) => {
+    await page.goto(HOME, { waitUntil: "networkidle" });
+    const music = page.getByRole("group", { name: "Background music" }).getByRole("button");
+    // The first touch starts the music where autoplay is refused.
+    await page.locator(".home-intro").click();
+    await expect(music).toHaveText("Pause music", { timeout: 15_000 });
+    // The video's own play, pause and ended events drive the hand-over.
+    const fire = (type) => page.locator(".home-videos video").first().evaluate((el, t) => el.dispatchEvent(new Event(t)), type);
+    await fire("play");
+    await expect(music).toHaveText("Play music", { timeout: 5_000 });
+    await fire("pause");
+    await expect(music).toHaveText("Pause music", { timeout: 5_000 });
+    await fire("play");
+    await expect(music).toHaveText("Play music", { timeout: 5_000 });
+    await fire("ended");
+    await expect(music).toHaveText("Pause music", { timeout: 5_000 });
+    // Turned off by the visitor: a video never turns it back on.
+    await music.click();
+    await expect(music).toHaveText("Play music", { timeout: 5_000 });
+    await fire("play");
+    await fire("pause");
+    await page.waitForTimeout(1500);
+    await expect(music).toHaveText("Play music");
+  });
+
   for (const reducedMotion of ["no-preference", "reduce"]) {
     test(`axe: no WCAG 2.2 AA violations (${reducedMotion})`, async ({ browser }) => {
       for (const width of [375, 1280]) {

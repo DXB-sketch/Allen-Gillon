@@ -13,6 +13,8 @@ import { usePathname } from "next/navigation";
    - The page reader can still read over it: the music drops lower while the
      reader speaks and fades back up when the reader stops or finishes.
    - Playing an album track (the shared player) fades it out straight away.
+   - Playing a home page video (components/HomeVideos.jsx) fades it out too,
+     and it starts up again when the video is paused or finishes.
    - The Pause/Play music button is the WCAG 1.4.2 control for audio that
      starts by itself. Pausing is remembered on this device, so the music
      does not start again on the next visit until Play music is pressed.
@@ -33,6 +35,8 @@ const FADE_OUT = 3;
 const PLAYBACK_EVENT = "allen:playback-start";
 const READER_SOURCE = "page-reader";
 const READER_STOP_EVENT = "allen:reader-stop";
+const VIDEO_SOURCE = "home-video"; // components/HomeVideos.jsx
+const VIDEO_STOP_EVENT = "allen:video-stop";
 const OFF_KEY = "allen:home-music";
 
 /* The one playing copy: a new mount stops any earlier one first. */
@@ -80,6 +84,8 @@ function Music() {
     let disposed = false;
     let readerActive = false;
     let starting = null;
+    let waitingForGesture = false; // autoplay was refused: the first touch starts it
+    let heldForVideo = false; // paused for a home page video, to resume after it
 
     /* Ramp audio.volume to `target` over `seconds`, then run `done`. Where
        volume is fixed (iOS) the ramp changes nothing and `done` still runs. */
@@ -160,19 +166,40 @@ function Music() {
       play().then((ok) => ok && removeGestureListeners());
     };
     function removeGestureListeners() {
+      waitingForGesture = false;
       gestureTypes.forEach((type) => window.removeEventListener(type, onGesture, true));
     }
 
     /* The reader speaks over it, quieter, and the music comes back up when
        the reader stops or finishes; another player fades it out. */
     const onPlayback = (event) => {
-      if (event.detail?.source === READER_SOURCE) {
+      const source = event.detail?.source;
+      if (source === READER_SOURCE) {
         readerActive = true;
         if (!audio.paused) fadeTo(UNDER_READER, 1);
+      } else if (source === VIDEO_SOURCE) {
+        /* A home page video: make way for it, and come back when it stops
+           (onVideoStop), if the music was playing or was about to start. */
+        heldForVideo = heldForVideo || !audio.paused || Boolean(starting) || waitingForGesture;
+        removeGestureListeners();
+        fadeOutAndPause(1);
       } else {
+        heldForVideo = false;
         removeGestureListeners();
         fadeOutAndPause(1);
       }
+    };
+    const onVideoStop = () => {
+      if (!heldForVideo) return;
+      heldForVideo = false;
+      if (rememberedOff() || otherAudioPlaying(audio)) return;
+      clearTimeout(fadeTimer);
+      if (audio.ended) return; // the song had already run to its end
+      if (audio.paused) {
+        play();
+        audio.volume = 0; // come back in gently, from where it left off
+      }
+      fadeTo(readerActive ? UNDER_READER : VOLUME, FADE_IN);
     };
     const onReaderStop = () => {
       if (!readerActive) return;
@@ -181,6 +208,7 @@ function Music() {
     };
     window.addEventListener(PLAYBACK_EVENT, onPlayback);
     window.addEventListener(READER_STOP_EVENT, onReaderStop);
+    window.addEventListener(VIDEO_STOP_EVENT, onVideoStop);
 
     function stop() {
       disposed = true;
@@ -188,6 +216,7 @@ function Music() {
       removeGestureListeners();
       window.removeEventListener(PLAYBACK_EVENT, onPlayback);
       window.removeEventListener(READER_STOP_EVENT, onReaderStop);
+      window.removeEventListener(VIDEO_STOP_EVENT, onVideoStop);
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("pause", onPause);
       audio.pause();
@@ -200,7 +229,9 @@ function Music() {
 
     if (!rememberedOff() && !otherAudioPlaying(audio)) {
       play().then((ok) => {
-        if (!ok && !disposed) gestureTypes.forEach((type) => window.addEventListener(type, onGesture, true));
+        if (ok || disposed || heldForVideo) return;
+        waitingForGesture = true;
+        gestureTypes.forEach((type) => window.addEventListener(type, onGesture, true));
       });
     }
 

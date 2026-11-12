@@ -1,22 +1,29 @@
 "use client";
 
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { usePlayer } from "./Player";
 import { PREVIEW_LABEL, isPreviewTrack } from "../lib/player-state.mjs";
 import { SHELF_SIZES, shelfSrcSet } from "../lib/album-shelf.mjs";
-import { CoffeeCard, CoffeePopup } from "./CoffeeTip";
+import { CoffeeCard } from "./CoffeeTip";
 
 /* The albums shelf on /music (W5).
 
    - The sleeve is the only toggle: a <button> named "Show tracks for <album>"
      with aria-expanded and aria-controls. One album is open at a time, like
-     pulling one record off the shelf.
+     pulling one record off the shelf. "Click to OPEN" is printed above every
+     sleeve (Allen's wording: a friend missed it in the lede), and reads
+     "Click to close" on the open one. It is part of the button, and hidden
+     from assistive tech, which already has the button's name and state.
+   - Opening an album scrolls its title to the top of the window when the
+     track list would otherwise be out of view, so the song names are there
+     to choose from (phones especially).
    - The open panel holds the album's one primary action, "Download album
      free", and the track rows: play, title, time and a download link.
      Albums are free: no album Payment Link is ever rendered here. The
      only Stripe link is the optional "Buy me a coffee" thank-you
-     (components/CoffeeTip.jsx), right of the tracks from 1024px and a
-     once-per-visit centred popup below that.
+     (components/CoffeeTip.jsx), right of the tracks from 1024px and after
+     them below that. It never pops up: Allen found a popup on his phone made
+     the coffee feel compulsory.
    - The record slides out while the album is open or its track is loaded,
      and turns only while that album's status is "playing" (paused keeps it
      still where it stopped).
@@ -72,6 +79,24 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
   const { track, status, toggle } = usePlayer();
   const holdsTrack = Boolean(track) && tracks.some((t) => t.src === track.src);
   const albumStatus = holdsTrack ? status : "idle";
+  const titleRef = useRef(null);
+  const panelRef = useRef(null);
+  const openedByPress = useRef(false);
+
+  // Opened by a press on the sleeve: bring the song names into view. The
+  // title goes to the top of the window (so the album's name, the download
+  // button and the tracks follow), unless the whole list is already on show.
+  useEffect(() => {
+    if (!open || !openedByPress.current) return;
+    openedByPress.current = false;
+    const list = panelRef.current?.querySelector(".trklist");
+    const title = titleRef.current;
+    if (!list || !title) return;
+    const box = list.getBoundingClientRect();
+    if (box.top >= 0 && box.bottom <= window.innerHeight) return;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    title.scrollIntoView({ block: "start", behavior: calm ? "auto" : "smooth" });
+  }, [open]);
 
   async function downloadAlbum() {
     if (downloadState === "preparing") return;
@@ -124,7 +149,7 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
 
   return (
     <div className={classes.join(" ")} style={{ "--col": index + 1 }}>
-      <h2 className="album-title" id={`title-${id}`}>
+      <h2 className="album-title" id={`title-${id}`} ref={titleRef}>
         {title}
       </h2>
       <p className="meta">
@@ -144,8 +169,14 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
         className="sleeve"
         aria-expanded={open ? "true" : "false"}
         aria-controls={`trk-${id}`}
-        onClick={onToggle}
+        onClick={() => {
+          openedByPress.current = !open;
+          onToggle();
+        }}
       >
+        <span className="sleeve-hint" aria-hidden="true">
+          {open ? "Click to close" : "Click to OPEN"}
+        </span>
         <span className="disc" aria-hidden="true"></span>
         {/* The first sleeve is the page's LCP image (preloaded by the page);
             the other sleeves load lazily. */}
@@ -162,7 +193,7 @@ function Album({ index, id, title, meta, cover, shelfCover, note, tracks, open, 
         />
         <span className="visually-hidden">Show tracks for {title}</span>
       </button>
-      <section className="trkpanel" id={`trk-${id}`} hidden={!open} aria-labelledby={`title-${id}`}>
+      <section className="trkpanel" id={`trk-${id}`} hidden={!open} aria-labelledby={`title-${id}`} ref={panelRef}>
         <div className="trkpanel-lead">
           {/* A visual echo of the open album's name for the wide shelf, where
               the panel sits under all four sleeves. The heading above names
@@ -243,7 +274,6 @@ export default function AlbumShelf({ albums, shelf = null, coffeeHref = "" }) {
       ))}
       {/* The drawn shelf board the sleeves stand on (server-rendered, laptops and up). */}
       {shelf}
-      <CoffeePopup href={coffeeHref} trigger={openId} />
     </div>
   );
 }

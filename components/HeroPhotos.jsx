@@ -69,7 +69,7 @@ export default function HeroPhotos({ photos }) {
             aria-label={paused ? "Play the photos" : "Pause the photos"}
             onClick={() => setPaused((value) => !value)}
           >
-            <span aria-hidden="true">{paused ? "▶" : "❚❚"}</span>
+            <span aria-hidden="true">{paused ? "\u25B6\uFE0E" : "❚❚"}</span>
           </button>
         )}
       </div>

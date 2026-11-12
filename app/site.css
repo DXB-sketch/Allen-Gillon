@@ -105,6 +105,10 @@ h1.script{font-size:clamp(4rem,11vw,10rem);overflow-wrap:break-word;}
 [data-site="other"] h1.script{color:var(--blue);text-shadow:var(--overprint-red);}
 h2.script{font-size:clamp(2.4rem,6vw,3.6rem);line-height:1.08;margin:0 0 10px;}
 h3{font-size:1.35rem;line-height:1.3;margin:0;}
+/* Even out the lines of a wrapped title, and keep a lede from ending on one
+   stray word, where the browser supports it. */
+h1,h2,h3{text-wrap:balance;}
+.pagehead .plain{text-wrap:pretty;}
 .ink-r{color:var(--red);}
 .ink-b{color:var(--blue);}
 
@@ -256,6 +260,11 @@ html:has(.nowbar.on){scroll-padding-bottom:var(--nowbar-h);}
   footer nav{justify-content:center;}
 }
 @media (max-width:480px){
+  /* Phones: the other site's four links share one row, and its line to the
+     music site sits close under them, so the page starts sooner. */
+  .mnav{gap:0;}
+  .mnav a{padding-inline:7px;}
+  .mnav a.nav-cross{min-height:44px;padding-block:4px;line-height:1.35;}
   .mast.home-mast{padding-top:6px;}
   .mast.home-mast .logo{display:none;}
   :root{--nowbar-h:126px;}

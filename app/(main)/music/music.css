@@ -88,6 +88,16 @@ html.motion-ok .instrument[data-motion].is-in{
   .sleeve:hover img{border-color:var(--red-deep);}
 }
 .sleeve{scroll-margin-top:24px;}
+/* "Click to OPEN", printed above every sleeve and part of its button. It
+   hangs above the sleeve's box (the sleeve keeps room for it), so the record
+   and the cover stay where they were. */
+.sleeve{margin-top:2.1rem;}
+.sleeve-hint{position:absolute;left:0;bottom:100%;padding-bottom:6px;white-space:nowrap;
+  font-size:1.2rem;font-weight:700;line-height:1.4;color:var(--red-deep);
+  text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;}
+.album.open .sleeve-hint{color:var(--ink);}
+/* Opening an album scrolls its title to the top of the window. */
+.album-title{scroll-margin-top:16px;}
 /* Touch: the record peeks at rest, so the sleeve reads as something to pull. */
 @media (hover:none){
   .disc{transform:translateX(8%);}
@@ -174,9 +184,9 @@ html.motion-ok .instrument[data-motion].is-in{
 /* ---------- "Buy me a coffee" (components/CoffeeTip.jsx) ----------
    A quiet thank-you, not a second primary action: no box, the cup drawing,
    a few lines and an outlined red-deep button (the panel's one filled button
-   stays "Download album free"). Below 1024px it follows the track list and
-   also opens once per visit as a centred dialog; from 1024px it stands in
-   the panel's last column, to the right of the tracks. */
+   stays "Download album free"). Below 1024px it follows the track list; from
+   1024px it stands in the panel's last column, to the right of the tracks.
+   It never opens as a popup. */
 .coffee-tip{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:clamp(28px,5vw,40px);max-width:30rem;}
 .coffee-art{width:clamp(84px,22%,112px);height:auto;margin-bottom:-4px;}
 .coffee-title{font-size:1.3rem;line-height:1.3;margin:0;color:var(--ink);}
@@ -191,20 +201,6 @@ html.motion-ok .instrument[data-motion].is-in{
   .album > .trkpanel:has(.coffee-tip) .trklist{grid-column:2 / span 2;}
   .trkpanel .coffee-tip{grid-column:-2 / -1;grid-row:1;margin-top:0;}
 }
-
-/* The phone and tablet popup: a native <dialog>, centred by the browser.
-   Flat ink backdrop, no blur, as on the painting dialog. */
-.coffee-dialog{padding:0;border:0;border-radius:0;margin:auto;color:var(--ink);background-color:var(--paper);
-  width:min(26rem,calc(100% - 2 * var(--gutter)));max-height:calc(100% - 2 * var(--gutter));}
-.coffee-dialog::backdrop{background:oklch(0.22 0.02 300 / .82);}
-.coffee-dialog-inner{padding:12px clamp(20px,5vw,32px) clamp(24px,6vw,32px);}
-.coffee-dialog-close{display:flex;justify-content:flex-end;margin:0;}
-.coffee-close{font:inherit;font-size:1.05rem;font-weight:700;min-height:48px;padding:8px 18px;cursor:pointer;
-  color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:0;
-  transition:background-color .2s var(--ease-out),color .2s var(--ease-out);}
-.coffee-close:hover{background:var(--ink);color:var(--on);}
-.coffee-dialog .coffee-tip{margin-top:0;}
-.coffee-dialog .coffee-title{font-size:1.45rem;}
 
 /* Under the shelf: the comment link, and the flute lying at the right-hand
    edge (laptops and up). */
