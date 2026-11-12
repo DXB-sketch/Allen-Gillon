@@ -34,6 +34,19 @@ const table = [
   ["www favicon goes to apex", "www.allengillon.com", "/favicon.ico", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/favicon.ico" }],
   ["www keeps path and query", "www.allengillon.com", "/music?x=1", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/music?x=1" }],
 
+  // one redirect straight to the final URL, never a chain
+  ["http main /books goes straight to https other", MAIN, "/books", { env: PROD, protocol: "http" }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books" }],
+  ["http www /books goes straight to https other", "www.allengillon.com", "/books?x=1", { env: PROD, protocol: "http" }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books?x=1" }],
+  ["www /read/slug goes straight to other", "www.allengillon.com", "/read/little-ray", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/read/little-ray" }],
+  ["main trailing slash is dropped", MAIN, "/hire/", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/hire" }],
+  ["main /books/ goes straight to other without the slash", MAIN, "/books/?a=b", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books?a=b" }],
+  ["http www /hire/ is one redirect", "www.allengillon.com", "/hire/", { env: PROD, protocol: "http" }, { action: "redirect", status: 301, location: "https://allengillon.com/hire" }],
+  ["other /other-home/ goes to other /", OTHER, "/other-home/", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/" }],
+  ["main /plays/ goes to school plays", MAIN, "/plays/", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books#school-plays" }],
+  ["http main /plays goes to school plays", MAIN, "/plays", { env: PROD, protocol: "http" }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books#school-plays" }],
+  ["other /anns-art/ is dropped to /anns-art", OTHER, "/anns-art/", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/anns-art" }],
+  ["main / is left alone", MAIN, "/", { env: PROD }, { action: "next" }],
+
   // owned paths across hosts
   ["main /books goes to other", MAIN, "/books", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books" }],
   ["main /read/slug goes to other", MAIN, "/read/little-ray", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/read/little-ray" }],
@@ -77,7 +90,8 @@ const table = [
   ["unknown host in development never redirects", "preview.example.com", "/books", { env: DEV }, { action: "next" }],
   ["unknown host with preview flag never redirects", "preview.example.com", "/books", { env: { NODE_ENV: "production", SITE_PREVIEW: "1" } }, { action: "next" }],
   ["LAN IP with preview flag (start:vinext) never redirects", "192.168.1.5:8787", "/books", { env: { NODE_ENV: "production", SITE_PREVIEW: "1" } }, { action: "next" }],
-  ["LAN IP in production goes to main", "192.168.1.5:8787", "/books", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/books" }],
+  ["LAN IP in production goes to main", "192.168.1.5:8787", "/music", { env: PROD }, { action: "redirect", status: 301, location: "https://allengillon.com/music" }],
+  ["LAN IP in production goes straight to the owning host", "192.168.1.5:8787", "/books", { env: PROD }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books" }],
   ["Vercel deployment never redirects", "allen-gillon.vercel.app", "/music", { env: { NODE_ENV: "production", VERCEL: "1" } }, { action: "next" }],
   ["known host still routes with preview flag", MAIN, "/books", { env: { NODE_ENV: "production", SITE_PREVIEW: "1" } }, { action: "redirect", status: 301, location: "https://other.allengillon.com/books" }],
   ["unknown other.* host in development rewrites home", "other.preview.example.com", "/", { env: DEV }, { action: "rewrite", pathname: "/other-home" }],

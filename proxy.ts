@@ -19,7 +19,8 @@ export async function proxy(request: NextRequest) {
   // Local previews only: drop a trailing slash on the same Host. The built
   // Worker under wrangler dev sees request.url as 127.0.0.1, so its own
   // trailing-slash redirect would send other.localhost visitors to main.
-  // Production hosts are left to the framework (request.url matches Host there).
+  // Production hosts drop the slash in resolveRequest, in the same single
+  // redirect as any host or https change.
   if (pathname.length > 1 && pathname.endsWith("/") && host && isLocalHost(host)) {
     const target = `http://${host}${pathname.replace(/\/+$/, "")}${search}`;
     return NextResponse.redirect(target, 308);
