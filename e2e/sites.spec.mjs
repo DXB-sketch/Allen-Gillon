@@ -67,16 +67,29 @@ test.describe("other.localhost", () => {
 test.describe("POST /api/reviews", () => {
   // resolveRequest ignores the method, so this sends real POSTs through
   // proxy.ts and the route handler with each production Host header.
-  test("the Host header reaches proxy.ts (control: GET /books on main is a 301)", async ({ request }) => {
+  // While the other site is down (OTHER_SITE_OFFLINE in lib/sites.mjs) the
+  // production other host, and main-host links into it, go to the main home.
+  test("the Host header reaches proxy.ts (control: GET /books on main goes home while other is down)", async ({ request }) => {
     const response = await request.get(`${MAIN}/books`, {
       headers: { host: `allengillon.com:${port}` },
       maxRedirects: 0,
     });
-    expect(response.status()).toBe(301);
-    expect(response.headers()["location"]).toBe("https://other.allengillon.com/books");
+    expect(response.status()).toBe(302);
+    expect(response.headers()["location"]).toBe("https://allengillon.com/");
   });
 
-  for (const host of ["allengillon.com", "other.allengillon.com", "localhost", "other.localhost"]) {
+  test("other.allengillon.com is taken down: every request goes to the main home", async ({ request }) => {
+    for (const path of ["/", "/books", "/api/reviews"]) {
+      const response = await request.get(`${MAIN}${path}`, {
+        headers: { host: `other.allengillon.com:${port}` },
+        maxRedirects: 0,
+      });
+      expect(response.status(), path).toBe(302);
+      expect(response.headers()["location"], path).toBe("https://allengillon.com/");
+    }
+  });
+
+  for (const host of ["allengillon.com", "localhost", "other.localhost"]) {
     test(`is not a redirect with Host: ${host}`, async ({ request }) => {
       const response = await request.post(`${MAIN}/api/reviews`, {
         headers: { host: `${host}:${port}` },

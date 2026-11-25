@@ -1,13 +1,10 @@
 import Link from "next/link";
-import CrossSiteLink from "../../components/CrossSiteLink";
 import Headstock from "../../components/illustrations/Headstock";
 import Record from "../../components/illustrations/Record";
-import OpenBook from "../../components/illustrations/OpenBook";
 import HomeUmbrella from "../../components/illustrations/HomeUmbrella";
 import HomeStar from "../../components/illustrations/HomeStar";
 import HeroPhotos from "../../components/HeroPhotos";
 import HomeVideos from "../../components/HomeVideos";
-import { CROSS_LINK } from "../../lib/sites.mjs";
 import { pageMetadata } from "../../lib/seo.mjs";
 import "./home.css";
 
@@ -71,10 +68,11 @@ const VENUES = [
   ["Sandstone Tavern", "l", "b"],
 ];
 
-// The "Videos" band (components/HomeVideos.jsx). Each clip is a 720p copy of
-// the file Allen sent, with a poster frame and a captions track. The home
-// page music makes way while one plays and comes back when it stops.
-// "Fly Me To The Moon" joins "Take Five" here once Allen exports it as an mp4.
+// The "Videos" band (components/HomeVideos.jsx): one player that plays these
+// in order, each starting when the one before ends. Each clip is a 720p copy
+// of the file Allen sent, with a poster frame and a captions track. The home
+// page music makes way while they play and comes back when they stop.
+// "Fly Me To The Moon" joins them here once Allen exports it as an mp4.
 const VIDEOS = [
   {
     src: "/videos/allen-take-five.mp4",
@@ -87,10 +85,20 @@ const VIDEOS = [
     label:
       "Allen playing Take Five live on his red Gibson. The camera moves from a venue poster reading “Allen & Ann” to Allen on stage in a black hat, then to the diners. Video, 17 seconds, captioned.",
   },
+  {
+    src: "/videos/allen-satin-doll.mp4",
+    poster: "/videos/allen-satin-doll-poster.jpg",
+    captions: "/videos/allen-satin-doll.en.vtt",
+    width: 1280,
+    height: 720,
+    title: "Satin Doll",
+    credit: "Allen, playing live",
+    label:
+      "Allen playing Satin Doll on stage in a black hat, on his red Gibson. On-screen titles read “Satin Doll” and “Guitarist Allen Gillon”, then a close-up of his hands reads “featuring the Trini Lopez ES-335 Gibson Classic Guitar”. Video, 16 seconds, captioned.",
+  },
 ];
 
 export default function Page() {
-  const cross = CROSS_LINK.main;
   return (
     <div className="home">
       {/* React hoists this into <head>. */}
@@ -161,14 +169,6 @@ export default function Page() {
         </p>
       </section>
 
-      <aside className="home-cross band" aria-label="Allen's other site">
-        <p>
-          <OpenBook className="cross-art" />
-          <CrossSiteLink site={cross.site} path={cross.path}>
-            {cross.label}
-          </CrossSiteLink>
-        </p>
-      </aside>
     </div>
   );
 }

@@ -231,3 +231,27 @@ test("comment returnTo is whitelisted per host", () => {
   assert.equal(safeReturnTo("other", "https://evil.example/"), "/books");
   assert.equal(safeReturnTo("main", "//evil.example"), "/shows");
 });
+
+test("while the other site is offline, its host and every way into it go home with a 302", () => {
+  const off = { env: PROD, otherOffline: true };
+  const home = { action: "redirect", status: 302, location: "https://allengillon.com/" };
+  for (const [host, path, options] of [
+    [OTHER, "/", off],
+    [OTHER, "/books", off],
+    [OTHER, "/read/little-ray?x=1", off],
+    [OTHER, "/api/reviews", off],
+    [OTHER, "/sitemap.xml", off],
+    [OTHER, "/hire", { ...off, protocol: "http" }],
+    [MAIN, "/books", off],
+    [MAIN, "/anns-art/", off],
+    [MAIN, "/plays", off],
+    [MAIN, "/other-home", off],
+    ["www.allengillon.com", "/biography", off],
+  ]) {
+    assert.deepEqual(resolveRequest(host, path, options), { site: siteForHost(host), ...home }, `${host}${path}`);
+  }
+  // The main site itself is untouched, and local previews still show the other site.
+  assert.equal(resolveRequest(MAIN, "/music", off).action, "next");
+  assert.equal(resolveRequest(MAIN, "/api/reviews", off).action, "next");
+  assert.deepEqual(resolveRequest("other.localhost:3001", "/", off), { site: "other", action: "rewrite", pathname: "/other-home" });
+});

@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 // W5 Home (allengillon.com/): the hero LCP image, two doorways, the venue
-// handbill, one pull-quote, the line to the other site, and accessibility.
+// handbill, one pull-quote, the videos, and accessibility.
 
 const port = Number(process.env.SITE_DEV_PORT || 3001);
 const HOME = `http://localhost:${port}/`;
@@ -138,13 +138,12 @@ test.describe("main home", () => {
     await expect(page.locator(".photoCollage, .venues")).toHaveCount(0);
   });
 
-  test("one pull-quote with a cite, and an absolute link to the other site", async ({ page }) => {
+  test("one pull-quote with a cite, and no link to the other site while it is down", async ({ page }) => {
     await page.goto(HOME, { waitUntil: "load" });
     await expect(page.locator("main blockquote")).toHaveCount(1);
     await expect(page.locator("main figure cite")).toHaveText("Jan Hanson");
-    const cross = page.locator(".home-cross a[data-cross-site='other']");
-    await expect(cross).toHaveText("But wait, there's more");
-    expect(await cross.getAttribute("href")).toMatch(/^https?:\/\/other\./);
+    await expect(page.locator(".home-cross")).toHaveCount(0);
+    await expect(page.locator("main a[data-cross-site='other']")).toHaveCount(0);
   });
 
   test("decorative SVG stays under 40KB and every drawing is hidden from AT", async ({ page }) => {
@@ -195,7 +194,7 @@ test.describe("main home", () => {
         expect((await video.getAttribute("aria-label")).length).toBeGreaterThan(20);
         for (const url of [
           await video.getAttribute("poster"),
-          await video.locator("source").getAttribute("src"),
+          await video.getAttribute("src"),
           await video.locator('track[kind="captions"][srclang="en"]').getAttribute("src"),
         ]) {
           expect((await request.head(`http://localhost:${port}${url}`)).status(), url).toBe(200);
@@ -206,6 +205,25 @@ test.describe("main home", () => {
         expect(box.x + box.width).toBeLessThanOrEqual(width - 12);
       }
     }
+  });
+
+  test("Satin Doll plays in the same player when Take Five ends, then it goes back to the start", async ({ page }) => {
+    // networkidle: the player's listeners are attached once the page hydrates.
+    await page.goto(HOME, { waitUntil: "networkidle" });
+    const video = page.locator(".home-videos video");
+    const caption = page.locator(".home-video figcaption");
+    await expect(video).toHaveCount(1);
+    await expect(video).toHaveAttribute("src", "/videos/allen-take-five.mp4");
+    await expect(caption).toContainText("Take Five");
+    await expect(caption.locator(".home-video-next")).toHaveText("Next: Satin Doll");
+    await video.evaluate((el) => el.dispatchEvent(new Event("ended")));
+    await expect(video).toHaveAttribute("src", "/videos/allen-satin-doll.mp4");
+    await expect(video).toHaveAttribute("poster", "/videos/allen-satin-doll-poster.jpg");
+    await expect(video.locator("track")).toHaveAttribute("src", "/videos/allen-satin-doll.en.vtt");
+    await expect(caption).toContainText("Satin Doll");
+    await expect(caption.locator(".home-video-next")).toHaveCount(0);
+    await video.evaluate((el) => el.dispatchEvent(new Event("ended")));
+    await expect(video).toHaveAttribute("src", "/videos/allen-take-five.mp4");
   });
 
   test("the home page music makes way for a video and comes back when it stops", async ({ page }) => {
@@ -222,7 +240,16 @@ test.describe("main home", () => {
     await expect(music).toHaveText("Pause music", { timeout: 5_000 });
     await fire("play");
     await expect(music).toHaveText("Play music", { timeout: 5_000 });
+    // Take Five ending starts Satin Doll: the music stays down.
     await fire("ended");
+    await expect(page.locator(".home-videos video")).toHaveAttribute("src", "/videos/allen-satin-doll.mp4");
+    await page.waitForTimeout(1000);
+    await expect(music).toHaveText("Play music");
+    // The last clip ending brings it back.
+    await page.locator(".home-videos video").evaluate((el) => {
+      el.pause();
+      el.dispatchEvent(new Event("ended"));
+    });
     await expect(music).toHaveText("Pause music", { timeout: 5_000 });
     // Turned off by the visitor: a video never turns it back on.
     await music.click();

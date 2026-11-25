@@ -1,6 +1,7 @@
 import SectionComment from "../../../components/SectionComment";
 import CrossSiteLink from "../../../components/CrossSiteLink";
 import ShowSetlist from "../../../components/ShowSetlist";
+import { OTHER_SITE_OFFLINE } from "../../../lib/sites.mjs";
 import { pageMetadata } from "../../../lib/seo.mjs";
 import { breadcrumbs, jsonLdProps } from "../../../lib/schema.mjs";
 import "./shows.css";
@@ -40,9 +41,11 @@ export default function ShowsPage() {
           <SectionComment subject="The Matthew Allen 5" returnTo="/shows" returnLabel="MA5" lead="Like what you hear?">
             Write a comment
           </SectionComment>
-          <p className="show-back">
-            <CrossSiteLink site="other" path="/biography">&larr; Back to the story</CrossSiteLink>
-          </p>
+          {OTHER_SITE_OFFLINE ? null : (
+            <p className="show-back">
+              <CrossSiteLink site="other" path="/biography">&larr; Back to the story</CrossSiteLink>
+            </p>
+          )}
         </div>
         <figure className="show-photo">
           <img

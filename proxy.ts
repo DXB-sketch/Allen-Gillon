@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { isLocalHost, resolveRequest, runtimeEnv } from "./lib/sites.mjs";
+import { isLocalHost, OTHER_SITE_OFFLINE, resolveRequest, runtimeEnv } from "./lib/sites.mjs";
 import legal from "./content/legal.config.json";
 import { mediaAssetPath, serveMedia } from "./lib/media-range.mjs";
 
@@ -31,6 +31,7 @@ export async function proxy(request: NextRequest) {
     // unknown hosts are sent to production; see isPreviewEnv().
     env: runtimeEnv(),
     legalPublished: legal.published === true,
+    otherOffline: OTHER_SITE_OFFLINE,
     // The scheme the visitor used. Behind Cloudflare request.url keeps it;
     // x-forwarded-proto covers any proxy that terminates TLS in front.
     protocol: request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || request.nextUrl.protocol,

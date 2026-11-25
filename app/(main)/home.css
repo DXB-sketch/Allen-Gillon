@@ -1,13 +1,12 @@
 /* Home (allengillon.com/). W5 art direction.
    Order: hero (name + photo), two typographic doorways, the videos, the venue
-   handbill, one pull-quote, a line to the other site. Every band is the
+   handbill, one pull-quote. Every band is the
    12-column .band grid; grid lines: 1 full-start, 2 wide-start (column 1),
    14 wide-end, 15 full-end. */
 
 /* ---------- Sage wash ----------
    The home page is printed on a calm sage-green sheet, from the mast down to
-   the pull-quote; the line to the other site ("But wait, there's more") and
-   the footer gap go back to plain paper, with a crisp printed edge between.
+   the pull-quote and the gap above the footer.
    :has() lets the mast and reader bar (in SiteChrome) take the wash on this
    page only. The wash keeps the paper grain. Ink on it is 14:1, soft 7.5:1,
    blue 6:1, red-deep 5.3:1 (large text only). */
@@ -102,20 +101,17 @@
 
 /* ---------- Videos ----------
    Allen's own clips (components/HomeVideos.jsx), under one Dynalight title.
-   No frames: a video is its own object. One clip is held to a comfortable
-   width; two or more sit side by side from 700px. From 1024px the title
+   No frames: a video is its own object. The one player (it plays the clips
+   in turn) is held to a comfortable width. From 1024px the title
    hangs in the left columns and the clips take the rest of the wide area. */
 .home-videos{margin-top:var(--band-space);row-gap:clamp(14px,2vw,24px);}
 .home-videos > h2{margin:0;}
-.home-videos-list{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(28px,3vw,44px) var(--col-gap);}
-.home-videos-list[data-count="1"]{max-width:880px;}
+.home-videos-list{max-width:880px;}
 .home-video{display:flex;flex-direction:column;gap:10px;margin:0;min-width:0;}
 .home-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:var(--ink);}
 .home-video figcaption{font-size:1.1rem;font-weight:700;line-height:1.35;}
 .home-video figcaption small{display:block;color:var(--soft);font-size:1rem;font-weight:400;}
-@media (min-width:700px){
-  .home-videos-list:not([data-count="1"]){grid-template-columns:repeat(2,minmax(0,1fr));}
-}
+.home-video figcaption .home-video-next{margin-top:2px;font-style:italic;}
 @media (min-width:1024px){
   .home-videos > h2{grid-column:wide-start / span 3;}
   .home-videos > .home-videos-list{grid-column:5 / wide-end;}
@@ -173,14 +169,6 @@
   .home-quote figure,.home-reviews{grid-column:3 / wide-end;}
 }
 
-/* ---------- Line to the other site ---------- */
-/* The wash ends here: a paper band, full bleed, that also fills the gap down
-   to the footer (the footer's own margin is dropped on this page). */
-.home-quote{padding-bottom:calc(var(--band-space) * .6);}
-.home-cross{margin-top:0;background-color:var(--paper);background-image:var(--grain);
-  padding-block:calc(var(--band-space) * .5) var(--band-space);}
-.home-cross p{margin:0;display:flex;align-items:center;gap:clamp(14px,2vw,28px);flex-wrap:wrap;max-width:none;}
-.cross-art{width:clamp(72px,7vw,120px);height:auto;flex:none;}
-.home-cross a{font-size:1.25em;line-height:1.35;color:var(--blue);text-underline-offset:5px;text-decoration-thickness:1px;
-  display:inline-flex;align-items:center;min-height:44px;}
-.home-cross a:hover{color:var(--red-deep);}
+/* The wash runs on down to the footer (whose own margin is dropped on this
+   page), so the quote band keeps the gap. */
+.home-quote{padding-bottom:var(--band-space);}

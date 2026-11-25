@@ -1,5 +1,5 @@
 import handler from "vinext/server/fetch-handler";
-import { resolveRequest, runtimeEnv } from "../lib/sites.mjs";
+import { OTHER_SITE_OFFLINE, resolveRequest, runtimeEnv } from "../lib/sites.mjs";
 import legal from "../content/legal.config.json" with { type: "json" };
 
 export * from "vinext/server/fetch-handler";
@@ -18,6 +18,7 @@ export default {
       const result = resolveRequest(request.headers.get("host") || url.host, `${url.pathname}${url.search}`, {
         env: runtimeEnv(),
         legalPublished: legal.published === true,
+        otherOffline: OTHER_SITE_OFFLINE,
         protocol: request.headers.get("x-forwarded-proto")?.split(",")[0]?.trim() || url.protocol,
       });
       if (result.action === "redirect") return Response.redirect(result.location, result.status);
