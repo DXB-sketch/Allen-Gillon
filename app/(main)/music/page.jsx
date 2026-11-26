@@ -29,7 +29,7 @@ const JSON_LD = [
    One primary thing: the shelf of four albums. Each sleeve is the only
    toggle for its track list; the open panel's one primary action is
    "Download album free" (albums are free: no album Payment Link on this
-   page; the open panel also carries the "Buy me a coffee" thank-you).
+   page; the open panel also carries the "Buy Allen a coffee" thank-you).
    Instruments are two-ink line drawings at the page edges, partly off the
    page, in space that holds no text: Allen's Trini Lopez Gibson by the
    title, a flute under the shelf and a strip of piano keys by the original

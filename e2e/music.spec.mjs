@@ -44,7 +44,7 @@ test("albums are free: no album Payment Link or price; the only Stripe link is t
   const coffee = page.locator('.coffee-tip a[href^="https://buy.stripe.com/"]');
   const coffeeHrefs = [...new Set(await coffee.evaluateAll((links) => links.map((a) => a.href)))];
   expect(coffeeHrefs).toHaveLength(1);
-  // Everything outside the "Buy me a coffee" cards and popup, with the coffee
+  // Everything outside the "Buy Allen a coffee" cards and popup, with the coffee
   // URL itself removed (it also rides in the page's serialised props).
   const html = (await page.evaluate(() => {
     const copy = document.documentElement.cloneNode(true);
@@ -55,14 +55,14 @@ test("albums are free: no album Payment Link or price; the only Stripe link is t
   expect(html).not.toMatch(/A\$\s?\d|\$\d+\s?AUD/);
 });
 
-test("laptops: Buy me a coffee stands to the right of the open track list, with no popup", async ({ page }) => {
+test("laptops: Buy Allen a coffee stands to the right of the open track list, with no popup", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/music", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Show tracks for Misty", exact: true }).click();
   const panel = page.locator("#trk-misty");
   const card = panel.locator(".coffee-tip");
   await expect(card).toBeVisible();
-  await expect(card.getByRole("link", { name: /Buy me a coffee/ })).toHaveAttribute("target", "_blank");
+  await expect(card.getByRole("link", { name: /Buy Allen a coffee/ })).toHaveAttribute("target", "_blank");
   const list = await panel.locator(".trklist").boundingBox();
   const box = await card.boundingBox();
   expect(box.x).toBeGreaterThanOrEqual(list.x + list.width);
@@ -70,7 +70,7 @@ test("laptops: Buy me a coffee stands to the right of the open track list, with 
   await expect(page.locator(".coffee-dialog")).not.toBeVisible();
 });
 
-test("phones: opening an album scrolls to its songs, and Buy me a coffee never pops up", async ({ page }) => {
+test("phones: opening an album scrolls to its songs, and Buy Allen a coffee never pops up", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/music", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Show tracks for That's The Time", exact: true }).click();

@@ -20,7 +20,7 @@ import { CoffeeCard } from "./CoffeeTip";
    - The open panel holds the album's one primary action, "Download album
      free", and the track rows: play, title, time and a download link.
      Albums are free: no album Payment Link is ever rendered here. The
-     only Stripe link is the optional "Buy me a coffee" thank-you
+     only Stripe link is the optional "Buy Allen a coffee" thank-you
      (components/CoffeeTip.jsx), right of the tracks from 1024px and after
      them below that. It never pops up: Allen found a popup on his phone made
      the coffee feel compulsory.

@@ -181,7 +181,7 @@ html.motion-ok .instrument[data-motion].is-in{
   .trkpanel:not(:has(.coffee-tip)) .trklist{columns:2;column-gap:clamp(32px,4vw,72px);}
 }
 
-/* ---------- "Buy me a coffee" (components/CoffeeTip.jsx) ----------
+/* ---------- "Buy Allen a coffee" (components/CoffeeTip.jsx) ----------
    A quiet thank-you, not a second primary action: no box, the cup drawing,
    a few lines and an outlined red-deep button (the panel's one filled button
    stays "Download album free"). Below 1024px it follows the track list; from

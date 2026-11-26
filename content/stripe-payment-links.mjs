@@ -41,7 +41,7 @@ export const stripePaymentLinks = {
   "art-ann-105021430926660": "https://buy.stripe.com/8x228t0JF2Vy3jG3vWfMA0B"
 };
 
-/* "Buy me a coffee" beside the album track lists on /music (components/
+/* "Buy Allen a coffee" beside the album track lists on /music (components/
    CoffeeTip.jsx). A pay-what-you-like Price (A$5 suggested, A$2 to A$500) on
    the Stripe product "Buy Allen a coffee". It is a thank-you, not a product,
    so it stays out of stripePaymentLinks and content/stripe-products.json. */
