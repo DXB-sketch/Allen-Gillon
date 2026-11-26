@@ -62,10 +62,12 @@ const VENUES = [
   ["Sunset Pier Cafe", "m", "b"],
   ["Cafe 191", "m", "r"],
   ["Coffee Club", "s", "b", true],
-  ["Steakout Restaurant", "l", "r"],
+  ["Steakout Pizzeria", "l", "r"],
   ["The Jetty", "m", "b"],
+  ["Pacific Hbr Golf", "s", "r"],
   ["Bowls Club", "m", "r", true],
   ["Sandstone Tavern", "l", "b"],
+  ["Bribie Island Golf", "m", "r"],
 ];
 
 // The "Videos" band (components/HomeVideos.jsx): one player that plays these
